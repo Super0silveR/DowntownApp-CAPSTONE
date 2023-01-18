@@ -23,18 +23,16 @@ A minimal viable product (MVP) has been created but is now in need of an overhau
 and re-platforming.
 
 
-## MEMBERS/ROLES
+## Members [Roles]
 
 **DRAFT**
 
-- Anys, Younes [Project Manager, Lead Developer]
-- Harvey, Vincent [Business Analyst, Architect]
-- Mahamane Sidi, Elias [Q/A Manager, Architect]
-- Wahbi, Nabil [Build Manager, Lead Developer]
+1. Anys, Younes [Project Manager, Lead Developer]
+2. Harvey, Vincent [Business Analyst, Architect]
+3. Mahamane Sidi, Elias [Q/A Manager, Architect]
+4. Wahbi, Nabil [Build Manager, Lead Developer]
 
-## OBJECTIVE
-
-### Goals
+## Objectives
 
 1. Help people to participate in social interactions, as well as creating social  
 events accessible both in-person and virtually.
@@ -52,7 +50,7 @@ simulitanely, live streaming.
 
 6. [...]
 
-### ANTICIPATED ARCHITECTURE
+## ANnticipated Architecture
 
 1. Backend:		.NET Core 6
 2. Frontend:	Blazor OR React with Typescript
@@ -60,7 +58,7 @@ simulitanely, live streaming.
 4. Database:	MySQL, SQL Server ($), PostgreSQL, etc.
 5. Cloud:		?
 
-### ANTICIPATED RISKS
+## Anticipated Risks
 
 1. Security: If paid memberships are to be implemented, it will be important to use **secure**  
 financial APIs for these transactions.
@@ -69,10 +67,10 @@ financial APIs for these transactions.
 
 3. [...]
 
-### LEGAL/SOCIAL ISSUES
+## Legal and Social Issues
 
 Todo.
 
-### INITIAL PLANS
+## Initial Plans
 
 Todo.
