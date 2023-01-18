@@ -36,38 +36,38 @@ and re-platforming.
 
 ### Goals
 
-1- Help people to participate in social interactions, as well as creating social  
+1. Help people to participate in social interactions, as well as creating social  
 events accessible both in-person and virtually.
 
-2- Create an administrative-oriented web application for the content creators and producers  
+2. Create an administrative-oriented web application for the content creators and producers  
 [artists, musicians, etc.] and user interfaces for the users/fans' interactions  
 with the platform and content.
 
-3- Integrating core workflow concept. Managing events and organizing live streams.
+3. Integrating core workflow concept. Managing events and organizing live streams.
 
-4- Artist to set up events, free, paid or both. Deploy these events to multiple worlds  
+4. Artist to set up events, free, paid or both. Deploy these events to multiple worlds  
 simulitanely, live streaming.
 
-5- (Ambition) Creating a more versatile mobile app for the users.
+5. (Ambition) Creating a more versatile mobile app for the users.
 
-6- [...]
+6. [...]
 
 ### ANTICIPATED ARCHITECTURE
 
-1- Backend:		.NET Core 6
-2- Frontend:	Blazor OR React with Typescript
-3- REST API:	CQRS with MediatR
-4- Database:	MySQL, SQL Server ($), PostgreSQL, etc.
-5- Cloud:		?
+1. Backend:		.NET Core 6
+2. Frontend:	Blazor OR React with Typescript
+3. REST API:	CQRS with MediatR
+4. Database:	MySQL, SQL Server ($), PostgreSQL, etc.
+5. Cloud:		?
 
 ### ANTICIPATED RISKS
 
-1- Security: If paid memberships are to be implemented, it will be important to use **secure**  
+1. Security: If paid memberships are to be implemented, it will be important to use **secure**  
 financial APIs for these transactions.
 
-2- Deployment architecture, Cloud, Azure, etc.?
+2. Deployment architecture, Cloud, Azure, etc.?
 
-3- [...]
+3. [...]
 
 ### LEGAL/SOCIAL ISSUES
 
