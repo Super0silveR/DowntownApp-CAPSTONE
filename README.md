@@ -50,7 +50,7 @@ simulitanely, live streaming.
 
 6. [...]
 
-## ANnticipated Architecture
+## Anticipated Architecture
 
 1. Backend:		.NET Core 6
 2. Frontend:	Blazor OR React with Typescript
