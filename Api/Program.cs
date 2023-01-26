@@ -1,14 +1,15 @@
-using MediatR;
+using Api.Installers.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+ConfigurationManager _config = builder.Configuration;
 
 // Add services to the container.
+//builder.Services.AddControllers();
+builder.Services.InstallerServicesInAssembly(_config);
 
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddMediatR(typeof(object)); //todo***
 
 var app = builder.Build();
 
@@ -19,9 +20,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 app.MapControllers();
 
