@@ -52,20 +52,22 @@ simulitanely, live streaming.
 
 ## Anticipated Architecture
 
-1. Backend:		.NET Core 6
-2. Frontend:	Blazor OR React with Typescript
-3. REST API:	CQRS with MediatR
-4. Database:	MySQL, SQL Server ($), PostgreSQL, etc.
-5. Cloud:		?
+1. Backend:		.NET Core 6.
+2. Frontend:	.NET MAUI Blazor App.
+3. REST API:	CQRS with MediatR.
+4. Database:	PostgreSQL.
+5. Cloud:     AWS Elastic Beanstalk, SimpleDB, etc.
 
 ## Anticipated Risks
 
 1. Security: If paid memberships are to be implemented, it will be important to use **secure**  
 financial APIs for these transactions.
 
-2. Deployment architecture, Cloud, Azure, etc.?
+2. Deployment architecture to AWS?
 
-3. [...]
+3. Github Actions - Tests, Deployement.
+
+4. [...]
 
 ## Legal and Social Issues
 
