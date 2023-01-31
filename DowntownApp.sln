@@ -11,12 +11,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "Persistence\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Api\Api.csproj", "{EE533C36-8674-4BD2-BD3E-B690AE2458B6}"
 EndProject
+<<<<<<< HEAD
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C71D9285-DF7C-48D9-8558-BF1F7C44EE7C}"
 	ProjectSection(SolutionItems) = preProject
 		buildspec.yml = buildspec.yml
 	EndProjectSection
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{64F5F748-EC89-473E-AE95-A94E7C3C36F1}"
+=======
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "client-app", "client-app\client-app.esproj", "{6C3A460A-6D5B-45D3-A674-DB2BD1381CA7}"
+>>>>>>> 828af2762ac7ead88c78c7235c651788b59072d4
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,10 +44,19 @@ Global
 		{EE533C36-8674-4BD2-BD3E-B690AE2458B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE533C36-8674-4BD2-BD3E-B690AE2458B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE533C36-8674-4BD2-BD3E-B690AE2458B6}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< HEAD
 		{64F5F748-EC89-473E-AE95-A94E7C3C36F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{64F5F748-EC89-473E-AE95-A94E7C3C36F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64F5F748-EC89-473E-AE95-A94E7C3C36F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64F5F748-EC89-473E-AE95-A94E7C3C36F1}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
+		{6C3A460A-6D5B-45D3-A674-DB2BD1381CA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C3A460A-6D5B-45D3-A674-DB2BD1381CA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C3A460A-6D5B-45D3-A674-DB2BD1381CA7}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{6C3A460A-6D5B-45D3-A674-DB2BD1381CA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C3A460A-6D5B-45D3-A674-DB2BD1381CA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C3A460A-6D5B-45D3-A674-DB2BD1381CA7}.Release|Any CPU.Deploy.0 = Release|Any CPU
+>>>>>>> 828af2762ac7ead88c78c7235c651788b59072d4
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
