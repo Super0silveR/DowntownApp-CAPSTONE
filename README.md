@@ -25,35 +25,35 @@ and re-platforming.
 
 ## Members [Roles]
 
-**DRAFT**
-
-1. Anys, Younes [Project Manager, Lead Developer]
-2. Harvey, Vincent [Business Analyst, Architect]
-3. Mahamane Sidi, Elias [Q/A Manager, Architect]
-4. Wahbi, Nabil [Build Manager, Lead Developer]
+1. Anys, Younes [Project Manager, Lead Developer, Backend]
+2. Harvey, Vincent [Business Analyst, Architect, Backend]
+3. Mahamane Sidi, Elias [Q/A Manager, Architect, Frontend]
+4. Wahbi, Nabil [Build Manager, Lead Developer, Frontend]
 
 ## Objectives
 
-1. Help people to participate in social interactions, as well as creating social  
+1.Create a Virtual "Bar" themed around events proposed by artists
+
+2. Help people to participate in social interactions, as well as creating social  
 events accessible both in-person and virtually.
 
-2. Create an administrative-oriented web application for the content creators and producers  
+3. Create an administrative-oriented web application for the content creators and producers  
 [artists, musicians, etc.] and user interfaces for the users/fans' interactions  
 with the platform and content.
 
-3. Integrating core workflow concept. Managing events and organizing live streams.
+5. Integrating core workflow concept. Managing events and organizing live streams.
 
-4. Artist to set up events, free, paid or both. Deploy these events to multiple worlds  
+6. Artist to set up events, free, paid or both. Deploy these events to multiple worlds  
 simulitanely, live streaming.
 
-5. (Ambition) Creating a more versatile mobile app for the users.
+7. (Ambition) Creating a more versatile mobile app for the users.
 
 6. [...]
 
 ## Anticipated Architecture
 
 1. Backend:		.NET Core 6.
-2. Frontend:	.NET MAUI Blazor App.
+2. Frontend:	Typescript REACT
 3. REST API:	CQRS with MediatR.
 4. Database:	PostgreSQL.
 5. Cloud:     AWS Elastic Beanstalk, SimpleDB, etc.
@@ -67,7 +67,11 @@ financial APIs for these transactions.
 
 3. Github Actions - Tests, Deployement.
 
-4. [...]
+4. User identification, avoiding catfish and finding ways to secure people's private information on the platform.
+
+5. Avoid service to underage users
+
+6. [...]
 
 ## Legal and Social Issues
 
@@ -76,3 +80,12 @@ Todo.
 ## Initial Plans
 
 Todo.
+
+
+## Current Developpement state 
+
+https://trello.com/b/1PL9nGHL/seg4910-main-board
+
+-> Level 1 UI skeching
+-> Skeleton for API
+-> UML Diagram for the app
