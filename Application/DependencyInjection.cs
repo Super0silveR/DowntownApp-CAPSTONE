@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
 using System.Reflection;
+using MediatR.Pipeline;
 
 namespace Application
 {
