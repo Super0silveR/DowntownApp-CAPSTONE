@@ -1,10 +1,7 @@
 ﻿using Api.Installers.Interfaces;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Persistence;
-using System.Text;
 
 namespace Api.Installers.Implementations
 {
