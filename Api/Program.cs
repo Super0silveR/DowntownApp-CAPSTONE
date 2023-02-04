@@ -14,7 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(opt =>
 {
-    var constr = _config.GetConnectionString("defaultconnection");
+    var constr = _config.GetConnectionString("DefaultConnection");
     opt.UseSqlite(constr);
 });
 
@@ -32,6 +32,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowSpecificOrigins");
 
 //app.UseHttpsRedirection();
 
