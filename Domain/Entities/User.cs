@@ -12,5 +12,6 @@ namespace Domain.Entities
     {
         public string? DisplayName { get; set; }
         public string? Bio { get; set; }
+        public string? PasswordSalt { get; set; }
     }
 }

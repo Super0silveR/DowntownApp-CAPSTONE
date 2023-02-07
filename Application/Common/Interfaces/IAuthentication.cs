@@ -1,6 +1,4 @@
-﻿using Application.Responses;
-
-namespace Application.Common.Interfaces
+﻿namespace Application.Common.Interfaces
 {
     public interface IAuthentication
     {

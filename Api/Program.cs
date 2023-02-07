@@ -1,5 +1,4 @@
-using Amazon.S3;
-using Api.Installers.Extensions;
+using Api.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -7,26 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager _config = builder.Configuration;
 
 // Add services to the container.
-builder.Services.InstallServicesInAssembly(_config);
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<DataContext>(opt =>
-{
-    var constr = _config.GetConnectionString("DefaultConnection");
-    opt.UseSqlite(constr);
-});
-
-// Adding AWS configuration
-var AWSoptions = _config.GetAWSOptions();
-
-builder.Services.AddDefaultAWSOptions(AWSoptions);
-//builder.Services.AddAWSService<IAmazonS3>(); /// S3 Bucket for file/bucket actions.
+builder.Services.AddControllers();
+builder.Services.AddApplicationServices(_config);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -34,11 +18,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowSpecificOrigins");
-
 //app.UseHttpsRedirection();
-
 //app.UseAuthorization();
-
 app.MapControllers();
 
 #region Context and Seed Data
