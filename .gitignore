@@ -9,6 +9,10 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.db-shm
+*.db-wal
+
+appsettings.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -475,3 +479,4 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/Api/appsettings.json
