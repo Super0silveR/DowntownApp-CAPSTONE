@@ -1,4 +1,5 @@
-﻿using Ardalis.GuardClauses;
+﻿using Application.Core;
+using Ardalis.GuardClauses;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -8,9 +9,9 @@ namespace Application.Handlers.Events
 {
     public class List
     {
-        public class Query : IRequest<List<Event>> { }
+        public class Query : IRequest<Result<List<Event>>> { }
 
-        public class Handler : IRequestHandler<Query, List<Event>>
+        public class Handler : IRequestHandler<Query, Result<List<Event>>>
         {
             private readonly DataContext _context;
 
@@ -19,11 +20,11 @@ namespace Application.Handlers.Events
                 _context = context;
             }
 
-            public async Task<List<Event>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<Event>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 Guard.Against.Null(_context.Events, nameof(_context.Events));
 
-                return await _context.Events.ToListAsync(cancellationToken);
+                return Result<List<Event>>.Success(await _context.Events.ToListAsync(cancellationToken));
             }
         }
     }

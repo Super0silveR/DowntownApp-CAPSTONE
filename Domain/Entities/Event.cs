@@ -13,6 +13,5 @@ namespace Domain.Entities
         public string? Category { get; set; }
         public string? City { get; set; }
         public string? Venue { get; set; }
-        // TODO. (Address & more attributes?)
     }
 }
