@@ -1,11 +1,7 @@
 ﻿using Api.Controllers.Base;
 using Application.Handlers.Events;
-using Application.Queries;
-using Ardalis.GuardClauses;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
 
 namespace Api.Controllers
 {
