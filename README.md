@@ -48,7 +48,7 @@ simulitanely, live streaming.
 
 7. (Ambition) Creating a more versatile mobile app for the users.
 
-6. [...]
+8. [...]
 
 ## Anticipated Architecture
 
