@@ -1,6 +1,7 @@
 ﻿using Api.Controllers.Base;
 using Application.Handlers.Events;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers

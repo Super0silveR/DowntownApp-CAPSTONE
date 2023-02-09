@@ -12,7 +12,7 @@ namespace Api.Extensions
     public static class ApplicationServiceExtensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, 
-                                                                IConfiguration config)
+                                                                IConfiguration configuration)
         {
             // Configure the HTTP request pipeline.
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -20,7 +20,7 @@ namespace Api.Extensions
             services.AddSwaggerGen();
             services.AddDbContext<DataContext>(opt =>
             {
-                var constr = config.GetConnectionString("DefaultConnection");
+                var constr = configuration["ConnectionStrings:DefaultConnection"];
                 opt.UseSqlite(constr);
             });
 
@@ -47,7 +47,7 @@ namespace Api.Extensions
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
             // Adding AWS configuration
-            var AWSoptions = config.GetAWSOptions();
+            var AWSoptions = configuration.GetAWSOptions();
 
             services.AddDefaultAWSOptions(AWSoptions);
             //services.AddAWSService<IAmazonS3>(); /// S3 Bucket for file/bucket actions.

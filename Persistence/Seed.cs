@@ -1,13 +1,30 @@
 ﻿using Ardalis.GuardClauses;
 using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Persistence
 {
     public class Seed
     {
-        public static async Task SeedData(DataContext context)
+        public static async Task SeedData(DataContext context, UserManager<User> userManager)
         {
             Guard.Against.Null(context.Events, nameof(context.Events));
+
+            if (!userManager.Users.Any())
+            {
+                var users = new List<User>
+                {
+                    new User { DisplayName = "Hephaestots", UserName = "vince", Email = "vinc@test.com" },
+                    new User { DisplayName = "SilveR", UserName = "elias", Email = "elias@test.com" },
+                    new User { DisplayName = "Nabil", UserName = "nabil", Email = "nabil@test.com" },
+                    new User { DisplayName = "Venomyox", UserName = "younes", Email = "younes@test.com" }
+                };
+
+                foreach (var user in users)
+                {
+                    await userManager.CreateAsync(user, "Pa$$w0rd");
+                }
+            }
 
             if (context.Events.Any()) return;
 
