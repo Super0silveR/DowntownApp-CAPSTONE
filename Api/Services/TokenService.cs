@@ -20,12 +20,17 @@ namespace Api.Services
 
         public string CreateToken(User user)
         {
+            var auth0Autority = _configuration["Accounts:Auth0:Authority"];
+            var auth0Audience = _configuration["Accounts:Auth0:Audience"];
+
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Email, user.Email)
             };
+
+            claims.Add(new Claim("scope", "read:events"));
 
             var securityKey = _configuration["Jwt:Secret"];
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
@@ -36,7 +41,9 @@ namespace Api.Services
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = creds
+                SigningCredentials = creds,
+                Issuer = auth0Autority,
+                Audience = auth0Audience,
             };
 
             var handler = new JwtSecurityTokenHandler();

@@ -12,13 +12,14 @@ namespace Api.Controllers
         public EventsController() { }
 
         #region Queries
-
+        [Authorize("read:events")]
         [HttpGet] //api/events
         public async Task<IActionResult> GetEvents()
         {
             return HandleResult(await Mediator.Send(new List.Query()));
         }
 
+        [Authorize("read:events")]
         [HttpGet("{id}")] //api/events/{id}
         public async Task<IActionResult> GetEvent(Guid id)
         {

@@ -1,8 +1,12 @@
-﻿using Api.Services;
+﻿using Api.Requirements;
+using Api.Requirements.Handlers;
+using Api.Services;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Persistence;
+using System.Security.Claims;
 using System.Text;
 
 namespace Api.Extensions
@@ -12,6 +16,9 @@ namespace Api.Extensions
         public static IServiceCollection AddIdentityServices(this IServiceCollection services,
                                                              IConfiguration configuration)
         {
+            var auth0Autority = configuration["Accounts:Auth0:Authority"];
+            var auth0Audience = configuration["Accounts:Auth0:Audience"];
+
             var securityKey = configuration["Jwt:Secret"];
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
 
@@ -35,16 +42,24 @@ namespace Api.Extensions
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
                     {
+                        options.Audience = auth0Audience;
+                        options.Authority = auth0Autority;
                         options.TokenValidationParameters = new TokenValidationParameters
                         {
-                            ValidateIssuerSigningKey = true,
                             IssuerSigningKey = key,
+                            ValidateAudience = true,
                             ValidateIssuer = false,
-                            ValidateAudience = false
+                            ValidateIssuerSigningKey = true
                         };
                     });
 
+            services.AddAuthorizationCore(options =>
+            {
+                options.AddPolicy("read:events", policy => policy.Requirements.Add(new HasScopeRequirement(auth0Autority, "read:events")));
+            });
+
             services.AddScoped<TokenService>();
+            services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
 
             return services;
         }

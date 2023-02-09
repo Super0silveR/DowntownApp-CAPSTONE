@@ -57,7 +57,7 @@ namespace Api.Controllers.Identity
             var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
 
             if (result)
-                CreateUserObject(user);
+                return CreateUserObject(user);
             return Unauthorized();
         }
 
@@ -83,7 +83,7 @@ namespace Api.Controllers.Identity
             var result = await _userManager.CreateAsync(newUser, registerDto.Password);
 
             if (result.Succeeded)
-                CreateUserObject(newUser);
+                return CreateUserObject(newUser);
             return BadRequest(result.Errors);
         }
 
