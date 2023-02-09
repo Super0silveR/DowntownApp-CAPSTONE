@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Policies = Api.Constants.AuthorizationPolicyConstants;
+using Domain.Entities;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -30,7 +31,9 @@ namespace Api.Services
                 new Claim(ClaimTypes.Email, user.Email)
             };
 
-            claims.Add(new Claim("scope", "read:events"));
+            /// We'll definetely need to had some more logic to scope assignement. AND change this IF.
+            if (user is not null) 
+                claims.Add(new Claim("scope", Policies.READ_EVENTS));
 
             var securityKey = _configuration["Jwt:Secret"];
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));

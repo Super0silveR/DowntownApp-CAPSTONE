@@ -1,4 +1,5 @@
-﻿using Api.Requirements;
+﻿using Policies = Api.Constants.AuthorizationPolicyConstants;
+using Api.Requirements;
 using Api.Requirements.Handlers;
 using Api.Services;
 using Domain.Entities;
@@ -6,7 +7,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Persistence;
-using System.Security.Claims;
 using System.Text;
 
 namespace Api.Extensions
@@ -48,14 +48,14 @@ namespace Api.Extensions
                         {
                             IssuerSigningKey = key,
                             ValidateAudience = true,
-                            ValidateIssuer = false,
+                            ValidateIssuer = true,
                             ValidateIssuerSigningKey = true
                         };
                     });
 
-            services.AddAuthorizationCore(options =>
+            services.AddAuthorization(options =>
             {
-                options.AddPolicy("read:events", policy => policy.Requirements.Add(new HasScopeRequirement(auth0Autority, "read:events")));
+                options.AddPolicy(Policies.READ_EVENTS, policy => policy.Requirements.Add(new HasScopeRequirement(auth0Autority, Policies.READ_EVENTS)));
             });
 
             services.AddScoped<TokenService>();
