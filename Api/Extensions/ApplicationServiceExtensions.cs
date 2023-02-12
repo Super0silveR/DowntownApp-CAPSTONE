@@ -22,6 +22,10 @@ namespace Api.Extensions
             {
                 var constr = configuration["ConnectionStrings:DefaultConnection"];
                 opt.UseSqlite(constr);
+
+                //TODO: PgSql connection.
+                //var constr = configuration["ConnectionStrings:PgAdminConnection"];
+                //opt.UseNpgsql(constr);
             });
 
             // Cors
