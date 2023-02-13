@@ -2,7 +2,7 @@
 
 SEG4910.11 - Downtown App - CAPSTONE
 
-*TRELLO BOARD*: https://trello.com/b/1PL9nGHL
+**TRELLO BOARD**: https://trello.com/b/1PL9nGHL
 
 **Note**: More key requirements will be added after the next meeting with client. [x] done.
 
