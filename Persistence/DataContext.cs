@@ -1,10 +1,11 @@
 ﻿using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence
 {
-    public class DataContext : IdentityDbContext<User, Role, Guid>
+    public class DataContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         public DataContext() { }
 

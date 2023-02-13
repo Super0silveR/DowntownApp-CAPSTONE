@@ -20,12 +20,13 @@ namespace Api.Extensions
             services.AddSwaggerGen();
             services.AddDbContext<DataContext>(opt =>
             {
-                var constr = configuration["ConnectionStrings:DefaultConnection"];
-                opt.UseSqlite(constr);
+                //var constr = configuration["ConnectionStrings:DefaultConnection"];
+                //opt.UseSqlite(constr);
 
                 //TODO: PgSql connection.
+                var constr = configuration["ConnectionStrings:PgAdminConnection"];
                 //var constr = configuration["ConnectionStrings:PgAdminConnection"];
-                //opt.UseNpgsql(constr);
+                opt.UseNpgsql(constr);
             });
 
             // Cors

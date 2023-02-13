@@ -8,7 +8,7 @@ namespace Domain.Entities
     public class Event : EntityBase
     {
         public string? Title { get; set; }
-        public DateTime? Date { get; set; }
+        public DateTime Date { get; set; } = DateTime.UtcNow;
         public string? Description { get; set; }
         public string? Category { get; set; }
         public string? City { get; set; }
