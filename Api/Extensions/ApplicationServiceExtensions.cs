@@ -1,6 +1,8 @@
 ﻿using Application.Common.Behaviors;
 using Application.Core;
 using Application.Handlers.Events;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -37,7 +39,10 @@ namespace Api.Extensions
             });
 
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+            services.AddFluentValidationAutoValidation();
             services.AddMediatR(typeof(Details.Handler).Assembly);
+            services.AddValidatorsFromAssemblyContaining<Create>();
+
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 

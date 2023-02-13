@@ -1,12 +1,10 @@
-﻿using Ardalis.GuardClauses;
+﻿using Application.Core;
+using Application.Validators;
+using Ardalis.GuardClauses;
 using Domain.Entities;
+using FluentValidation;
 using MediatR;
 using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Handlers.Events
 {
@@ -15,7 +13,7 @@ namespace Application.Handlers.Events
         /// <summary>
         /// Command class used to start the request for creating a new Event.
         /// </summary>
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
             public Event Event { get; set; } = new Event();
         }
@@ -23,7 +21,7 @@ namespace Application.Handlers.Events
         /// <summary>
         /// Handler class used to handle the creation of the new Event.
         /// </summary>
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _dataContext;
 
@@ -32,16 +30,29 @@ namespace Application.Handlers.Events
                 _dataContext = dataContext;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 Guard.Against.Null(_dataContext.Events, nameof(_dataContext.Events));
                 Guard.Against.Null(request.Event, nameof(request.Event));
 
                 _dataContext.Events.Add(request.Event);
-                await _dataContext.SaveChangesAsync(cancellationToken);
+                
+                bool result = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
 
-                /// Equivalent to nothing since Commands don't return anything.
-                return Unit.Value;
+                if (!result)
+                    return Result<Unit>.Failure("Failed to create a new Event.");
+                return Result<Unit>.Success(Unit.Value);
+            }
+        }
+
+        /// <summary>
+        /// Validator class used for synchronous validation during the process pipeline.
+        /// </summary>
+        public class Validator : AbstractValidator<Command>
+        {
+            public Validator()
+            {
+                RuleFor(x => x.Event).SetValidator(new EventValidator());
             }
         }
     }
