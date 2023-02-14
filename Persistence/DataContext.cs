@@ -21,7 +21,7 @@ namespace Persistence
             // Creating the relationship from the User perspective.
             builder.Entity<EventAttendee>()
                    .HasOne(ea => ea.Attendee)
-                   .WithMany(a => a.Events)
+                   .WithMany(a => a.AttendedEvents)
                    .HasForeignKey(ea => ea.AttendeeId);
 
             //Creating the relationship from the Event perspective.

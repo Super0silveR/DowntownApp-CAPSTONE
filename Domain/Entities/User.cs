@@ -7,6 +7,6 @@ namespace Domain.Entities
         public string? DisplayName { get; set; }
         public string? Bio { get; set; }
 
-        public virtual ICollection<EventAttendee>? Events { get; set; }
+        public virtual ICollection<EventAttendee> AttendedEvents { get; set; } = new List<EventAttendee>();
     }
 }
