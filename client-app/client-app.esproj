@@ -10,8 +10,4 @@
 		<!-- Folder where production build objects will be placed -->
 		<BuildOutputFolder>$(MSBuildProjectDirectory)\build</BuildOutputFolder>
 	</PropertyGroup>
-	<PropertyGroup>
-		<TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-		<TargetFrameworkMoniker>.NETFramework,Version=$(TargetFrameworkVersion)</TargetFrameworkMoniker>
-	</PropertyGroup>
 </Project>
