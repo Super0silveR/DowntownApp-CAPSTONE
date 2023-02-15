@@ -485,3 +485,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 /Api/appsettings.json
+/.editorconfig
