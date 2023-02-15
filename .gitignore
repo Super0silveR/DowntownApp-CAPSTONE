@@ -13,6 +13,7 @@
 *.db-shm
 *.db-wal
 
+*.editorconfig
 appsettings.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)

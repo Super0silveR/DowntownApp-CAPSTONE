@@ -55,6 +55,7 @@ namespace Api.Extensions
 
             services.AddAuthorization(options =>
             {
+                /// Policies oriented autorization.
                 options.AddPolicy(Policies.READ_EVENTS, policy => policy.Requirements.Add(new HasScopeRequirement(auth0Autority, Policies.READ_EVENTS)));
             });
 

@@ -6,7 +6,7 @@ namespace Domain.Entities
     /// Entity responsible for keeping track of attendees for specific events.
     /// </summary>
     [Serializable]
-    public class EventAttendee : EntityBase
+    public class EventAttendee : BaseEntity
     {
         public Guid AttendeeId { get; set; }
         public Guid EventId { get; set; }

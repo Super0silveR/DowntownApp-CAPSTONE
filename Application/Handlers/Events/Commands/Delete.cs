@@ -1,9 +1,9 @@
-﻿using Application.Core;
+﻿using Application.Common.Interfaces;
+using Application.Core;
 using Ardalis.GuardClauses;
 using MediatR;
-using Persistence;
 
-namespace Application.Handlers.Events
+namespace Application.Handlers.Events.Commands
 {
     public class Delete
     {
@@ -14,9 +14,9 @@ namespace Application.Handlers.Events
 
         public class Handler : IRequestHandler<Command, Result<Unit>?>
         {
-            private readonly DataContext _dataContext;
+            private readonly IDataContext _dataContext;
 
-            public Handler(DataContext dataContext)
+            public Handler(IDataContext dataContext)
             {
                 _dataContext = dataContext;
             }
@@ -30,11 +30,11 @@ namespace Application.Handlers.Events
 
                 if (@event is null) return null;
 
-                _dataContext.Remove(@event);
+                _dataContext.Events.Remove(@event);
 
                 var result = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
 
-                if (!result) 
+                if (!result)
                     return Result<Unit>.Failure("Failed to delete the Event.");
                 return Result<Unit>.Success(Unit.Value);
             }

@@ -1,11 +1,11 @@
-﻿using Application.Core;
+﻿using Application.Common.Interfaces;
+using Application.Core;
 using Ardalis.GuardClauses;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Persistence;
 
-namespace Application.Handlers.Events
+namespace Application.Handlers.Events.Queries
 {
     public class List
     {
@@ -13,9 +13,9 @@ namespace Application.Handlers.Events
 
         public class Handler : IRequestHandler<Query, Result<List<Event>>>
         {
-            private readonly DataContext _context;
+            private readonly IDataContext _context;
 
-            public Handler (DataContext context)
+            public Handler(IDataContext context)
             {
                 _context = context;
             }

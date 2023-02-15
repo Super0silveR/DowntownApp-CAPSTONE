@@ -1,11 +1,19 @@
-﻿using Application.Common.Behaviors;
+﻿using Api.Services;
+using Application.Common.Behaviors;
+using Application.Common.Interfaces;
 using Application.Core;
-using Application.Handlers.Events;
+using Application.Handlers.Events.Commands;
+using Application.Handlers.Events.Queries;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using NSwag;
+using NSwag.Generation.Processors.Security;
 using Persistence;
+using OpenApiSecurityScheme = NSwag.OpenApiSecurityScheme;
 
 namespace Api.Extensions
 {
@@ -18,16 +26,40 @@ namespace Api.Extensions
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
+
+            services.AddOpenApiDocument(configure =>
+            {
+                configure.Title = "CleanArchitecture API";
+                configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
+                {
+                    Type = OpenApiSecuritySchemeType.ApiKey,
+                    Name = "Authorization",
+                    In = OpenApiSecurityApiKeyLocation.Header,
+                    Description = "Type into the textbox: Bearer {your JWT token}."
+                });
+
+                configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+            });
+
             services.AddDbContext<DataContext>(opt =>
             {
-                //var constr = configuration["ConnectionStrings:DefaultConnection"];
-                //opt.UseSqlite(constr);
+                var constr = configuration["ConnectionStrings:DefaultConnection"];
+                opt.UseSqlite(constr, 
+                              builder => builder.MigrationsAssembly(typeof(DataContext).Assembly.FullName));
 
-                //TODO: PgSql connection.
-                var constr = configuration["ConnectionStrings:PgAdminConnection"];
+                //TODO: PgSql connection. (Prod vs Env)
                 //var constr = configuration["ConnectionStrings:PgAdminConnection"];
-                opt.UseNpgsql(constr);
+                //opt.UseNpgsql(constr);
             });
+
+            services.AddSingleton<ICurrentUserService, CurrentUserService>();
+
+            services.AddHttpContextAccessor();
+
+            services.AddScoped<IDataContext>(provider => provider.GetRequiredService<DataContext>());
+
+            services.Configure<ApiBehaviorOptions>(options =>
+                options.SuppressModelStateInvalidFilter = true);
 
             // Cors
             services.AddCors(options =>
@@ -50,12 +82,6 @@ namespace Api.Extensions
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-
-            // Adding AWS configuration
-            var AWSoptions = configuration.GetAWSOptions();
-
-            services.AddDefaultAWSOptions(AWSoptions);
-            //services.AddAWSService<IAmazonS3>(); /// S3 Bucket for file/bucket actions.
 
             return services;
         }

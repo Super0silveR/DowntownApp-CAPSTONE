@@ -1,5 +1,6 @@
 ﻿using Api.Controllers.Base;
-using Application.Handlers.Events;
+using Application.Handlers.Events.Commands;
+using Application.Handlers.Events.Queries;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

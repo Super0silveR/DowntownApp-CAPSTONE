@@ -1,13 +1,13 @@
-﻿using Application.Core;
+﻿using Application.Common.Interfaces;
+using Application.Core;
 using Application.Validators;
 using Ardalis.GuardClauses;
 using AutoMapper;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
-using Persistence;
 
-namespace Application.Handlers.Events
+namespace Application.Handlers.Events.Commands
 {
     public class Edit
     {
@@ -18,10 +18,10 @@ namespace Application.Handlers.Events
 
         public class Handler : IRequestHandler<Command, Result<Unit>?>
         {
-            private readonly DataContext _dataContext;
+            private readonly IDataContext _dataContext;
             private readonly IMapper _mapper;
 
-            public Handler(DataContext dataContext, IMapper mapper)
+            public Handler(IDataContext dataContext, IMapper mapper)
             {
                 _dataContext = dataContext;
                 _mapper = mapper;
