@@ -484,3 +484,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 /Api/appsettings.json
+/client-app/client-app.esproj
