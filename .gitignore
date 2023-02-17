@@ -13,6 +13,8 @@
 *.db-shm
 *.db-wal
 
+*drawio.bkp
+
 appsettings.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)
