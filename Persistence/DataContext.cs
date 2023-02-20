@@ -6,18 +6,22 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Persistence.Common;
+using Persistence.Interceptors;
 
 namespace Persistence
 {
-    public class DataContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>, 
+    public class DataContext : IdentityDbContext<User, Role, Guid>, 
                                IDataContext
     {
         private readonly IMediator _mediator;
+        private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
 
         public DataContext(DbContextOptions options,
-                           IMediator mediator) : base(options)
+                           IMediator mediator,
+                           AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
         {
             _mediator = mediator;
+            _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
         }
 
         /// <summary>
@@ -31,6 +35,27 @@ namespace Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<User>()
+                .ToTable("Users");
+
+            builder.Entity<Role>()
+                .ToTable("Roles");
+
+            builder.Entity<IdentityRoleClaim<Guid>>()
+                .ToTable("RoleClaims");
+
+            builder.Entity<IdentityUserClaim<Guid>>()
+                .ToTable("UserClaims");
+
+            builder.Entity<IdentityUserLogin<Guid>>()
+                .ToTable("UserLogins");
+
+            builder.Entity<IdentityUserRole<Guid>>()
+                .ToTable("UserRoles");
+
+            builder.Entity<IdentityUserToken<Guid>>()
+                .ToTable("UserTokens");
 
             // Creating the key as the combinaison of userId and eventId.
             builder.Entity<EventAttendee>(ea => ea.HasKey(ea => new { ea.AttendeeId, ea.EventId }));
@@ -48,6 +73,11 @@ namespace Persistence
                    .HasForeignKey(ea => ea.EventId);
 
             //todo.
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

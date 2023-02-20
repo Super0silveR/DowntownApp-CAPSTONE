@@ -14,6 +14,6 @@ namespace Domain.Entities
         public string? City { get; set; }
         public string? Venue { get; set; }
 
-        public virtual ICollection<EventAttendee> Attendees { get; set; } = new List<EventAttendee>();
+        public ICollection<EventAttendee> Attendees { get; set; } = new List<EventAttendee>();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Core;
+using Application.DTOs;
 using Application.Validators;
 using Ardalis.GuardClauses;
 using AutoMapper;
@@ -13,7 +14,8 @@ namespace Application.Handlers.Events.Commands
     {
         public class Command : IRequest<Result<Unit>?>
         {
-            public Event Event { get; set; } = new Event();
+            public Guid Id { get; set; }
+            public EventDto Event { get; set; } = new EventDto();
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>?>
@@ -32,7 +34,7 @@ namespace Application.Handlers.Events.Commands
                 Guard.Against.Null(_dataContext.Events, nameof(_dataContext.Events));
                 Guard.Against.Null(request.Event, nameof(request.Event));
 
-                var @event = await _dataContext.Events.FindAsync(new object?[] { request.Event.Id },
+                var @event = await _dataContext.Events.FindAsync(new object?[] { request.Id },
                                                                  cancellationToken: cancellationToken);
 
                 if (@event is null) return null;
@@ -54,7 +56,7 @@ namespace Application.Handlers.Events.Commands
         {
             public Validator()
             {
-                RuleFor(x => x.Event).SetValidator(new EventValidator());
+                RuleFor(x => x.Event).SetValidator(new EventDtoValidator());
             }
         }
     }

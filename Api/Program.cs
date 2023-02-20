@@ -1,10 +1,7 @@
 using Api.Extensions;
 using Api.Middlewares;
-using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +26,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseOpenApi();
     app.UseSwaggerUi3();
+
+
 }
 
 app.UseCors("AllowSpecificOrigins");
@@ -44,11 +43,9 @@ var services = scope.ServiceProvider;
 
 try
 {
-    var context = services.GetRequiredService<DataContext>();
-    var userManager = services.GetRequiredService<UserManager<User>>();
-
-    await context.Database.MigrateAsync();
-    await Seed.SeedData(context, userManager);
+    var initializer = services.GetRequiredService<DataContextInitializer>();
+    await initializer.InitializeAsync();
+    await initializer.SeedAsync();
 }
 catch (Exception ex)
 {

@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.DTOs;
+using Domain.Entities;
 using FluentValidation;
 
 namespace Application.Validators
@@ -6,9 +7,9 @@ namespace Application.Validators
     /// <summary>
     /// Event Validation Class.
     /// </summary>
-    public class EventValidator : AbstractValidator<Event>
+    public class EventDtoValidator : AbstractValidator<EventDto>
     {
-        public EventValidator()
+        public EventDtoValidator()
         {
             RuleFor(x => x.Title).NotEmpty();
             RuleFor(x => x.Description)

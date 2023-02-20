@@ -1,5 +1,6 @@
 ﻿using Api.DTOs.Identity;
 using Api.Services;
+using Application.Common.Interfaces;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,10 +20,10 @@ namespace Api.Controllers.Identity
     public class AccountController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
-        private readonly TokenService _tokenService;
+        private readonly ITokenService _tokenService;
 
         public AccountController(UserManager<User> userManager,
-                                 TokenService tokenService)
+                                 ITokenService tokenService)
         {
             _userManager = userManager;
             _tokenService = tokenService;

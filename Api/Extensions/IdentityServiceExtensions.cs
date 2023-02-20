@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Persistence;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
+using Application.Common.Interfaces;
 
 namespace Api.Extensions
 {
@@ -37,6 +39,7 @@ namespace Api.Extensions
 
                         opt.User.RequireUniqueEmail = true;
                     })
+                    .AddRoles<Role>()
                     .AddEntityFrameworkStores<DataContext>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -59,7 +62,7 @@ namespace Api.Extensions
                 options.AddPolicy(Policies.READ_EVENTS, policy => policy.Requirements.Add(new HasScopeRequirement(auth0Autority, Policies.READ_EVENTS)));
             });
 
-            services.AddScoped<TokenService>();
+            services.AddScoped<ITokenService, TokenService>();
             services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
 
             return services;

@@ -13,6 +13,8 @@ using Microsoft.OpenApi.Models;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using Persistence;
+using Persistence.Interceptors;
+using Persistence.Services;
 using OpenApiSecurityScheme = NSwag.OpenApiSecurityScheme;
 
 namespace Api.Extensions
@@ -41,6 +43,8 @@ namespace Api.Extensions
                 configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
             });
 
+            services.AddScoped<AuditableEntitySaveChangesInterceptor>();
+
             services.AddDbContext<DataContext>(opt =>
             {
                 var constr = configuration["ConnectionStrings:DefaultConnection"];
@@ -57,6 +61,10 @@ namespace Api.Extensions
             services.AddHttpContextAccessor();
 
             services.AddScoped<IDataContext>(provider => provider.GetRequiredService<DataContext>());
+
+            services.AddScoped<DataContextInitializer>();
+
+            services.AddTransient<IDateTimeService, DateTimeService>();
 
             services.Configure<ApiBehaviorOptions>(options =>
                 options.SuppressModelStateInvalidFilter = true);

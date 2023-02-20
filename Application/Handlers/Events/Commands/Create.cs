@@ -1,7 +1,9 @@
 ﻿using Application.Common.Interfaces;
 using Application.Core;
+using Application.DTOs;
 using Application.Validators;
 using Ardalis.GuardClauses;
+using AutoMapper;
 using Domain.Entities;
 using Domain.Events.Events;
 using FluentValidation;
@@ -16,7 +18,7 @@ namespace Application.Handlers.Events.Commands
         /// </summary>
         public class Command : IRequest<Result<Unit>>
         {
-            public Event Event { get; set; } = new Event();
+            public EventDto Event { get; set; } = new EventDto();
         }
 
         /// <summary>
@@ -25,10 +27,12 @@ namespace Application.Handlers.Events.Commands
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly IDataContext _dataContext;
+            private readonly IMapper _mapper;
 
-            public Handler(IDataContext dataContext)
+            public Handler(IDataContext dataContext, IMapper mapper)
             {
                 _dataContext = dataContext;
+                _mapper = mapper;
             }
 
             /// <summary>
@@ -42,7 +46,8 @@ namespace Application.Handlers.Events.Commands
                 Guard.Against.Null(_dataContext.Events, nameof(_dataContext.Events));
                 Guard.Against.Null(request.Event, nameof(request.Event));
 
-                Event @event= request.Event;
+                Event @event = new Event();
+                _mapper.Map(request.Event, @event);
 
                 @event.AddDomainEvent(new CreatedEvent(@event));
 
@@ -63,7 +68,7 @@ namespace Application.Handlers.Events.Commands
         {
             public Validator()
             {
-                RuleFor(x => x.Event).SetValidator(new EventValidator());
+                RuleFor(x => x.Event).SetValidator(new EventDtoValidator());
             }
         }
     }

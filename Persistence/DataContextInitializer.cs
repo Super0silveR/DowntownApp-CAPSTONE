@@ -1,16 +1,69 @@
 ﻿using Ardalis.GuardClauses;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Persistence
 {
-    public class Seed
+    public class DataContextInitializer
     {
-        public static async Task SeedData(DataContext context, UserManager<User> userManager)
-        {
-            Guard.Against.Null(context.Events, nameof(context.Events));
+        private readonly ILogger<DataContextInitializer> _logger;
+        private readonly DataContext _context;
+        private readonly RoleManager<Role> _roleManager;
+        private readonly UserManager<User> _userManager;
 
-            if (!userManager.Users.Any())
+        public DataContextInitializer(ILogger<DataContextInitializer> logger,
+                                      DataContext context,
+                                      RoleManager<Role> roleManager,
+                                      UserManager<User> userManager)
+        {
+            _logger = logger;
+            _context = context;
+            _roleManager = roleManager;
+            _userManager = userManager;
+        }
+
+        public async Task InitializeAsync()
+        {
+            try
+            {
+                if (_context.Database.IsSqlite())
+                    await _context.Database.MigrateAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while initializing the Sqlite Database.");
+                throw;
+            }
+        }
+
+        public async Task SeedAsync()
+        {
+            try
+            {
+                await TrySeedAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while seeding the Database.");
+                throw;
+            }
+        }
+
+        public async Task TrySeedAsync()
+        {
+            Guard.Against.Null(_context.Events, nameof(_context.Events));
+
+            var adminRole = new Role { Name = "admin" };
+
+            if (!_roleManager.Roles.Any(role => role.Name == adminRole.Name))
+            {
+                await _roleManager.CreateAsync(adminRole);
+                await _context.SaveChangesAsync();
+            }
+
+            if (!_userManager.Users.Any())
             {
                 var users = new List<User>
                 {
@@ -22,11 +75,12 @@ namespace Persistence
 
                 foreach (var user in users)
                 {
-                    await userManager.CreateAsync(user, "Pa$$w0rd");
+                    await _userManager.CreateAsync(user, "Pa$$w0rd");
+                    await _userManager.AddToRoleAsync(user, adminRole.Name);
                 }
             }
 
-            if (context.Events.Any()) return;
+            if (_context.Events.Any()) return;
 
             var events = new List<Event>
             {
@@ -122,8 +176,8 @@ namespace Persistence
                 }
             };
 
-            await context.Events.AddRangeAsync(events);
-            await context.SaveChangesAsync();
+            await _context.Events.AddRangeAsync(events);
+            await _context.SaveChangesAsync();
         }
     }
 }

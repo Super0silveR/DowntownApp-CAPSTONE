@@ -1,4 +1,5 @@
 ﻿using Api.Controllers.Base;
+using Application.DTOs;
 using Application.Handlers.Events.Commands;
 using Application.Handlers.Events.Queries;
 using Domain.Entities;
@@ -32,17 +33,15 @@ namespace Api.Controllers
         #region Commands
 
         [HttpPost] //api/events
-        public async Task<IActionResult> CreateEvent(Event @event)
+        public async Task<IActionResult> CreateEvent(EventDto @event)
         {
             return HandleResult(await Mediator.Send(new Create.Command { Event = @event }));
         }
 
         [HttpPut("{id}")] //api/events/{id}
-        public async Task<IActionResult> EditEvent(Guid id, Event @event)
+        public async Task<IActionResult> EditEvent(Guid id, EventDto @event)
         {
-            @event.Id = id;
-
-            return HandleResult(await Mediator.Send(new Edit.Command { Event = @event }));
+            return HandleResult(await Mediator.Send(new Edit.Command { Id = id, Event = @event }));
         }
 
         [HttpDelete("{id}")] //api/events/{id}
