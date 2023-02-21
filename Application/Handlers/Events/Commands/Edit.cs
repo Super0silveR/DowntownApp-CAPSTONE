@@ -1,27 +1,29 @@
-﻿using Application.Core;
+﻿using Application.Common.Interfaces;
+using Application.Core;
+using Application.DTOs;
 using Application.Validators;
 using Ardalis.GuardClauses;
 using AutoMapper;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
-using Persistence;
 
-namespace Application.Handlers.Events
+namespace Application.Handlers.Events.Commands
 {
     public class Edit
     {
         public class Command : IRequest<Result<Unit>?>
         {
-            public Event Event { get; set; } = new Event();
+            public Guid Id { get; set; }
+            public EventDto Event { get; set; } = new EventDto();
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>?>
         {
-            private readonly DataContext _dataContext;
+            private readonly IDataContext _dataContext;
             private readonly IMapper _mapper;
 
-            public Handler(DataContext dataContext, IMapper mapper)
+            public Handler(IDataContext dataContext, IMapper mapper)
             {
                 _dataContext = dataContext;
                 _mapper = mapper;
@@ -32,7 +34,7 @@ namespace Application.Handlers.Events
                 Guard.Against.Null(_dataContext.Events, nameof(_dataContext.Events));
                 Guard.Against.Null(request.Event, nameof(request.Event));
 
-                var @event = await _dataContext.Events.FindAsync(new object?[] { request.Event.Id },
+                var @event = await _dataContext.Events.FindAsync(new object?[] { request.Id },
                                                                  cancellationToken: cancellationToken);
 
                 if (@event is null) return null;
@@ -54,7 +56,7 @@ namespace Application.Handlers.Events
         {
             public Validator()
             {
-                RuleFor(x => x.Event).SetValidator(new EventValidator());
+                RuleFor(x => x.Event).SetValidator(new EventDtoValidator());
             }
         }
     }

@@ -1,25 +1,39 @@
 using Api.Extensions;
-using Microsoft.EntityFrameworkCore;
+using Api.Middlewares;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager _config = builder.Configuration;
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser()
+                                                 .Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
+});
+
 builder.Services.AddApplicationServices(_config);
+builder.Services.AddIdentityServices(_config);
 
 var app = builder.Build();
 
+app.UseMiddleware<ExceptionMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseOpenApi();
+    app.UseSwaggerUi3();
+
+
 }
 
 app.UseCors("AllowSpecificOrigins");
-//app.UseHttpsRedirection();
-//app.UseAuthorization();
+app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 #region Context and Seed Data
@@ -29,10 +43,9 @@ var services = scope.ServiceProvider;
 
 try
 {
-    var context = services.GetRequiredService<DataContext>();
-
-    await context.Database.MigrateAsync();
-    await Seed.SeedData(context);
+    var initializer = services.GetRequiredService<DataContextInitializer>();
+    await initializer.InitializeAsync();
+    await initializer.SeedAsync();
 }
 catch (Exception ex)
 {

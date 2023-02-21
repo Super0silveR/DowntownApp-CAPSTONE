@@ -1,6 +1,9 @@
 ﻿using Api.Controllers.Base;
-using Application.Handlers.Events;
+using Application.DTOs;
+using Application.Handlers.Events.Commands;
+using Application.Handlers.Events.Queries;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -11,13 +14,14 @@ namespace Api.Controllers
         public EventsController() { }
 
         #region Queries
-
+        [Authorize("read:events")]
         [HttpGet] //api/events
         public async Task<IActionResult> GetEvents()
         {
             return HandleResult(await Mediator.Send(new List.Query()));
         }
 
+        [Authorize("read:events")]
         [HttpGet("{id}")] //api/events/{id}
         public async Task<IActionResult> GetEvent(Guid id)
         {
@@ -29,17 +33,15 @@ namespace Api.Controllers
         #region Commands
 
         [HttpPost] //api/events
-        public async Task<IActionResult> CreateEvent(Event @event)
+        public async Task<IActionResult> CreateEvent(EventDto @event)
         {
             return HandleResult(await Mediator.Send(new Create.Command { Event = @event }));
         }
 
         [HttpPut("{id}")] //api/events/{id}
-        public async Task<IActionResult> EditEvent(Guid id, Event @event)
+        public async Task<IActionResult> EditEvent(Guid id, EventDto @event)
         {
-            @event.Id = id;
-
-            return HandleResult(await Mediator.Send(new Edit.Command { Event = @event }));
+            return HandleResult(await Mediator.Send(new Edit.Command { Id = id, Event = @event }));
         }
 
         [HttpDelete("{id}")] //api/events/{id}

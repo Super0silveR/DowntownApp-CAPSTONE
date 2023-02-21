@@ -1,17 +1,12 @@
-﻿using Domain.Common;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Entities
 {
-    public class User : IdentityUser
+    public class User : IdentityUser<Guid>
     {
         public string? DisplayName { get; set; }
         public string? Bio { get; set; }
-        public string? PasswordSalt { get; set; }
+
+        public virtual ICollection<EventAttendee> AttendedEvents { get; set; } = new List<EventAttendee>();
     }
 }

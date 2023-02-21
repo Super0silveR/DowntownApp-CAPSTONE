@@ -1,11 +1,10 @@
-﻿using Application.Core;
+﻿using Application.Common.Interfaces;
+using Application.Core;
 using Ardalis.GuardClauses;
 using Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
 
-namespace Application.Handlers.Events
+namespace Application.Handlers.Events.Queries
 {
     public class Details
     {
@@ -16,9 +15,9 @@ namespace Application.Handlers.Events
 
         public class Handler : IRequestHandler<Query, Result<Event?>>
         {
-            private readonly DataContext _context;
+            private readonly IDataContext _context;
 
-            public Handler(DataContext context)
+            public Handler(IDataContext context)
             {
                 _context = context;
             }
@@ -27,7 +26,7 @@ namespace Application.Handlers.Events
             {
                 Guard.Against.Null(_context.Events, nameof(_context.Events));
 
-                Event? @event = await _context.Events.FindAsync(new object?[] { request.Id }, 
+                Event? @event = await _context.Events.FindAsync(new object?[] { request.Id },
                                                        cancellationToken: cancellationToken);
 
                 return Result<Event?>.Success(@event);
