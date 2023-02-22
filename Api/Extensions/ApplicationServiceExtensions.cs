@@ -4,6 +4,7 @@ using Application.Common.Interfaces;
 using Application.Core;
 using Application.Handlers.Events.Commands;
 using Application.Handlers.Events.Queries;
+using Application.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
@@ -64,6 +65,7 @@ namespace Api.Extensions
 
             services.AddScoped<DataContextInitializer>();
 
+            services.AddTransient<IColorService, ColorService>();
             services.AddTransient<IDateTimeService, DateTimeService>();
 
             services.Configure<ApiBehaviorOptions>(options =>
