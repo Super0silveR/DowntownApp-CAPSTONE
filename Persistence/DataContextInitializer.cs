@@ -33,8 +33,11 @@ namespace Persistence
         {
             try
             {
-                if (_context.Database.IsSqlite())
-                    await _context.Database.MigrateAsync();
+                if (_context.Database.IsSqlite() || _context.Database.IsNpgsql())
+                {
+                    await _context.Database.EnsureCreatedAsync();
+                    //await _context.Database.MigrateAsync();
+                }
             }
             catch (Exception ex)
             {

@@ -49,7 +49,7 @@ namespace Api.Extensions
             services.AddDbContext<DataContext>(opt =>
             {
                 var constr = configuration["ConnectionStrings:DefaultConnection"];
-                opt.UseSqlite(constr, 
+                opt.UseSqlite(constr,
                               builder => builder.MigrationsAssembly(typeof(DataContext).Assembly.FullName));
 
                 //TODO: PgSql connection. (Prod vs Env)
