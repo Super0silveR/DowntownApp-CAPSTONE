@@ -2,6 +2,7 @@
 {
     public interface ICurrentUserService
     {
-        string? UserId { get; }
+        string? GetUserId();
+        string? GetUserName();
     }
 }

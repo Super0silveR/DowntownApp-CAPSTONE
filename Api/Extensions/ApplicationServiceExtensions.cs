@@ -1,15 +1,15 @@
-﻿using Api.Services;
-using Application.Common.Behaviors;
+﻿using Application.Common.Behaviors;
 using Application.Common.Interfaces;
 using Application.Core;
 using Application.Handlers.Events.Commands;
 using Application.Handlers.Events.Queries;
+using Application.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Infrastructure.Security;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using Persistence;
@@ -43,12 +43,14 @@ namespace Api.Extensions
                 configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
             });
 
+            // Interceptors.
             services.AddScoped<AuditableEntitySaveChangesInterceptor>();
+            services.AddScoped<UserFollowingSaveChangesInterceptor>();
 
             services.AddDbContext<DataContext>(opt =>
             {
                 var constr = configuration["ConnectionStrings:DefaultConnection"];
-                opt.UseSqlite(constr, 
+                opt.UseSqlite(constr,
                               builder => builder.MigrationsAssembly(typeof(DataContext).Assembly.FullName));
 
                 //TODO: PgSql connection. (Prod vs Env)
@@ -64,6 +66,7 @@ namespace Api.Extensions
 
             services.AddScoped<DataContextInitializer>();
 
+            services.AddTransient<IColorService, ColorService>();
             services.AddTransient<IDateTimeService, DateTimeService>();
 
             services.Configure<ApiBehaviorOptions>(options =>
