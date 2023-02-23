@@ -1,5 +1,7 @@
 ﻿using Application.Common.Interfaces;
+using Ardalis.GuardClauses;
 using Domain.Common;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -28,13 +30,13 @@ namespace Persistence.Interceptors
 
         public void UpdateEntities(DbContext? context)
         {
-            if (context == null) return;
+            Guard.Against.Null(context, nameof(context));
 
             foreach (var entry in context.ChangeTracker.Entries<BaseAuditableEntity>())
             {
                 if (entry.State == EntityState.Added)
                 {
-                    entry.Entity.CreatedBy = _currentUserService.UserId;
+                    entry.Entity.CreatedBy = _currentUserService.GetUserId();
                     entry.Entity.Created = _dateTimeService.Now;
                 }
 
@@ -42,7 +44,7 @@ namespace Persistence.Interceptors
                     entry.State == EntityState.Modified ||
                     entry.HasChangedOwnedEntities())
                 {
-                    entry.Entity.LastModifiedBy = _currentUserService.UserId;
+                    entry.Entity.LastModifiedBy = _currentUserService.GetUserId();
                     entry.Entity.LastModified = _dateTimeService.Now;
                 }
             }

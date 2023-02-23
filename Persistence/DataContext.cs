@@ -18,13 +18,16 @@ namespace Persistence
     {
         private readonly IMediator _mediator;
         private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
+        private readonly UserFollowingSaveChangesInterceptor _userFollowingSaveChangesInterceptor;
 
         public DataContext(DbContextOptions options,
                            IMediator mediator,
-                           AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
+                           AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor,
+                           UserFollowingSaveChangesInterceptor userFollowingSaveChangesInterceptor) : base(options)
         {
             _mediator = mediator;
             _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
+            _userFollowingSaveChangesInterceptor = userFollowingSaveChangesInterceptor;
         }
 
         /// <summary>
@@ -110,12 +113,14 @@ namespace Persistence
         /// <param name="optionsBuilder"></param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+            optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor,
+                                           _userFollowingSaveChangesInterceptor);
         }
 
         /// <summary>
         /// [override]
-        /// Method that is used for dispatching changes in the database.
+        /// Method is used for dispatching changes in the database.
+        /// Intercepted by the AuditableEntitySaveChangesInterceptor class.
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>

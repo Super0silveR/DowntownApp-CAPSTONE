@@ -14,12 +14,14 @@ namespace Persistence.Configurations
             builder.HasOne(uf => uf.Observer)
                    .WithMany(u => u.Followings)
                    .HasForeignKey(uf => uf.ObserverId)
-                   .HasConstraintName("FK_USER_FOLLOWING_OBSERVER_ID");
+                   .HasConstraintName("FK_USER_FOLLOWING_OBSERVER_ID")
+                   .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(uf => uf.Target)
                    .WithMany(u => u.Followers)
                    .HasForeignKey(uf => uf.TargetId)
-                   .HasConstraintName("FK_USER_FOLLOWING_TARGET_ID");
+                   .HasConstraintName("FK_USER_FOLLOWING_TARGET_ID")
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

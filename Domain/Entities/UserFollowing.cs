@@ -2,6 +2,9 @@
 
 namespace Domain.Entities
 {
+    /// <summary>
+    /// Join Entity that represents the `followers/followings` relationship.
+    /// </summary>
     public class UserFollowing : BaseEntity
     {
         public Guid ObserverId { get; set; }

@@ -29,6 +29,7 @@ namespace Application.Common.Interfaces
         DbSet<Group> Groups { get; }
         DbSet<Question> Questions { get; }
         DbSet<QuestionType> QuestionTypes { get; }
+        DbSet<User> Users { get; }
         DbSet<UserAddress> UserAddresses { get; }
         DbSet<UserChat> UserChats { get; }
         DbSet<UserChatRoom> UserChatRooms { get; }
