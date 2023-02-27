@@ -4,6 +4,7 @@ using Ardalis.GuardClauses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using System.Security.Claims;
 
 namespace Api.SignalR
 {
@@ -27,6 +28,7 @@ namespace Api.SignalR
             Guard.Against.Null(Context.UserIdentifier, nameof(Context.UserIdentifier));
 
             var userId = Guid.Parse(Context.UserIdentifier);
+            var userName = Context.User.FindFirstValue(ClaimTypes.Name);
             var connectionId = Context.ConnectionId;
 
             var groups = await _mediator.Send(new ListUserChatRooms.Query { UserId = userId });
@@ -36,6 +38,7 @@ namespace Api.SignalR
             foreach (var group in groups.Value)
             {
                 await Groups.AddToGroupAsync(connectionId, group.Id.ToString());
+                await Clients.OthersInGroup(group.Id.ToString()).SendAsync("NewConnection", userName.ToUpper() + " just joined!");
             }
 
             await Clients.Caller.SendAsync("LinkedToGroups", groups);
