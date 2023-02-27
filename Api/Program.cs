@@ -1,5 +1,6 @@
 using Api.Extensions;
 using Api.Middlewares;
+using Api.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Persistence;
@@ -26,15 +27,15 @@ if (app.Environment.IsDevelopment())
 {
     app.UseOpenApi();
     app.UseSwaggerUi3();
-
-
 }
 
 app.UseCors("AllowSpecificOrigins");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
+app.MapHub<ChatHub>("/hubs/chats");
 
 #region Context and Seed Data
 

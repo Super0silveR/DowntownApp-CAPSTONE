@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,9 +11,10 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230226221307_ChangesInConfigs")]
+    partial class ChangesInConfigs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.13");
@@ -829,9 +831,9 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChatRoomId");
-
                     b.HasIndex("UserId");
+
+                    b.HasIndex("ChatRoomId", "UserId");
 
                     b.ToTable("UserChats");
                 });
@@ -1347,11 +1349,10 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.UserChat", b =>
                 {
                     b.HasOne("Domain.Entities.ChatRoom", "ChatRoom")
-                        .WithMany("UserChats")
+                        .WithMany()
                         .HasForeignKey("ChatRoomId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_USER_CHAT_USER_CHAT_ROOM_ID");
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany("UserChats")
@@ -1360,9 +1361,18 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_USER_CHATS");
 
+                    b.HasOne("Domain.Entities.UserChatRoom", "UserChatRoom")
+                        .WithMany("UserChats")
+                        .HasForeignKey("ChatRoomId", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_USER_CHAT_ROOM_USER_CHAT_ID");
+
                     b.Navigation("ChatRoom");
 
                     b.Navigation("User");
+
+                    b.Navigation("UserChatRoom");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserChatRoom", b =>
@@ -1551,8 +1561,6 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.ChatRoom", b =>
                 {
                     b.Navigation("ChatRoomUsers");
-
-                    b.Navigation("UserChats");
                 });
 
             modelBuilder.Entity("Domain.Entities.ChatRoomType", b =>
@@ -1626,6 +1634,11 @@ namespace Persistence.Migrations
 
                     b.Navigation("UserChatRooms");
 
+                    b.Navigation("UserChats");
+                });
+
+            modelBuilder.Entity("Domain.Entities.UserChatRoom", b =>
+                {
                     b.Navigation("UserChats");
                 });
 #pragma warning restore 612, 618

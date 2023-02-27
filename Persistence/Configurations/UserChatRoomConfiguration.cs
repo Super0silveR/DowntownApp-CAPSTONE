@@ -20,12 +20,6 @@ namespace Persistence.Configurations
                    .WithMany(u => u.UserChatRooms)
                    .HasForeignKey(ucr => ucr.UserId)
                    .HasConstraintName("FK_USER_CHAT_ROOM_USER_ID");
-
-            builder.HasMany(ucr => ucr.UserChats)
-                   .WithOne(uc => uc.UserChatRoom)
-                   .HasForeignKey(uc => new { uc.ChatRoomId, uc.UserId })
-                   .HasConstraintName("FK_USER_CHAT_ROOM_USER_CHAT_ID")
-                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
