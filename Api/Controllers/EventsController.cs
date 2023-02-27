@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
+    [AllowAnonymous]
     [Route("api/[controller]")]
     public class EventsController : BaseApiController
     {

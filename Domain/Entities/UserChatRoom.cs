@@ -12,7 +12,5 @@ namespace Domain.Entities
 
         public virtual ChatRoom? ChatRoom { get; set; }
         public virtual User? User { get; set; }
-
-        public virtual ICollection<UserChat> UserChats { get; set; } = new HashSet<UserChat>();
     }
 }

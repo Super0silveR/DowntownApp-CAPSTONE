@@ -72,6 +72,11 @@ namespace Api.Extensions
             services.Configure<ApiBehaviorOptions>(options =>
                 options.SuppressModelStateInvalidFilter = true);
 
+            services.AddSignalR(options =>
+            {
+                options.EnableDetailedErrors = true;
+            });
+
             // Cors
             services.AddCors(options =>
             {
