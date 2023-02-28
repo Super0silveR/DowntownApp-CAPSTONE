@@ -28,5 +28,12 @@ namespace Infrastructure.Security
         /// </summary>
         public string? GetUserName() => 
             _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name);
+
+        /// <summary>
+        /// Fetching the current user's claims from the http context.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Claim>? GetUserClaims() =>
+            _httpContextAccessor.HttpContext?.User?.Claims!;
     }
 }

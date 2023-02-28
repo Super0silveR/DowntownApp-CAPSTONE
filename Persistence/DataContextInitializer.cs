@@ -35,6 +35,7 @@ namespace Persistence
             {
                 if (_context.Database.IsSqlite() || _context.Database.IsNpgsql())
                 {
+                    await _context.Database.EnsureDeletedAsync();
                     await _context.Database.EnsureCreatedAsync();
                     //await _context.Database.MigrateAsync();
                 }
@@ -117,9 +118,73 @@ namespace Persistence
                 foreach (var user in users)
                 {
                     await _userManager.CreateAsync(user, "Pa$$w0rd");
+
+                    if (user.UserName.Equals("nabil")) continue;
+
                     await _userManager.AddToRoleAsync(user, adminRole.Name);
                 }
             }
+
+            var chatRoomTypes = new List<ChatRoomType>
+            {
+                new ChatRoomType { Name = "Private" },
+                new ChatRoomType { Name = "Public" }
+            };
+            await _context.ChatRoomTypes.AddRangeAsync(chatRoomTypes);
+
+            var chatRooms = new List<ChatRoom>
+            {
+                new ChatRoom
+                {
+                    ChatRoomType = chatRoomTypes[0],
+                    Name = "My First ChatRoom"
+                },
+                new ChatRoom
+                {
+                    ChatRoomType = chatRoomTypes[0],
+                    Name = "My Second ChatRoom"
+                }
+            };
+            await _context.ChatRooms.AddRangeAsync(chatRooms);
+
+            var userChatRooms = new List<UserChatRoom>
+            {
+                new UserChatRoom
+                {
+                    ChatRoom = chatRooms[0],
+                    User = users[0]
+                },
+                new UserChatRoom
+                {
+                    ChatRoom = chatRooms[0],
+                    User = users[1]
+                },
+                new UserChatRoom
+                {
+                    ChatRoom = chatRooms[1],
+                    User = users[0]
+                }
+            };
+            await _context.UserChatRooms.AddRangeAsync(userChatRooms);
+
+            var userChats = new List<UserChat>
+            {
+                new UserChat
+                {
+                    Sent = DateTime.UtcNow,
+                    Message = "Hi Elias!",
+                    ChatRoom = chatRooms[0],
+                    User = users[0]
+                },
+                new UserChat
+                {
+                    Sent = DateTime.UtcNow.AddSeconds(5),
+                    Message = "Hi Vincent! How are you?",
+                    ChatRoom = chatRooms[0],
+                    User = users[1]
+                }
+            };
+            await _context.UserChats.AddRangeAsync(userChats);
 
             if (!_context.Events.Any())
             {
@@ -239,67 +304,6 @@ namespace Persistence
                 await _context.Events.AddRangeAsync(events);
                 await _context.SaveChangesAsync();
             }
-
-            var chatRoomTypes = new List<ChatRoomType>
-            {
-                new ChatRoomType { Name = "Private" },
-                new ChatRoomType { Name = "Public" }
-            };
-            await _context.ChatRoomTypes.AddRangeAsync(chatRoomTypes);
-
-            var chatRooms = new List<ChatRoom>
-            {
-                new ChatRoom
-                {
-                    ChatRoomType = chatRoomTypes[0],
-                    Name = "My First ChatRoom"
-                },
-                new ChatRoom
-                {
-                    ChatRoomType = chatRoomTypes[0],
-                    Name = "My Second ChatRoom"
-                }
-            };
-            await _context.ChatRooms.AddRangeAsync(chatRooms);
-
-            var userChatRooms = new List<UserChatRoom>
-            {
-                new UserChatRoom
-                {
-                    ChatRoom = chatRooms[0],
-                    User = users[0]
-                },
-                new UserChatRoom
-                {
-                    ChatRoom = chatRooms[0],
-                    User = users[1]
-                },
-                new UserChatRoom
-                {
-                    ChatRoom = chatRooms[1],
-                    User = users[0]
-                }
-            };
-            await _context.UserChatRooms.AddRangeAsync(userChatRooms);
-
-            var userChats = new List<UserChat>
-            {
-                new UserChat
-                {
-                    Sent = DateTime.UtcNow,
-                    Message = "Hi Elias!",
-                    ChatRoom = chatRooms[0],
-                    User = users[0]
-                },
-                new UserChat
-                {
-                    Sent = DateTime.UtcNow.AddSeconds(5),
-                    Message = "Hi Vincent! How are you?",
-                    ChatRoom = chatRooms[0],
-                    User = users[1]
-                }
-            };
-            await _context.UserChats.AddRangeAsync(userChats);
 
             await _context.SaveChangesAsync();
         }

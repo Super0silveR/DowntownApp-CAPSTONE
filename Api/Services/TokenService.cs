@@ -1,10 +1,10 @@
-﻿using Policies = Api.Constants.AuthorizationPolicyConstants;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Application.Common.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace Api.Services
 {
@@ -14,27 +14,24 @@ namespace Api.Services
     public class TokenService : ITokenService
     {
         private readonly IConfiguration _configuration;
+        private readonly ICurrentUserService _userService;
+        private readonly IUserClaimsPrincipalFactory<User> _claimsPrincipalFactory;
 
-        public TokenService(IConfiguration configuration)
+        public TokenService(IConfiguration configuration,
+                            ICurrentUserService userService,
+                            IUserClaimsPrincipalFactory<User> claimsPrincipalFactory)
         {
             _configuration = configuration;
+            _userService = userService;
+            _claimsPrincipalFactory = claimsPrincipalFactory;
         }
 
-        public string CreateToken(User user)
+        public async Task<string> CreateToken(User user)
         {
             var auth0Autority = _configuration["Accounts:Auth0:Authority"];
             var auth0Audience = _configuration["Accounts:Auth0:Audience"];
 
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email)
-            };
-
-            /// We'll definetely need to had some more logic to scope assignement. AND change this IF.
-            if (user is not null) 
-                claims.Add(new Claim("scope", Policies.READ_EVENTS));
+            var claims = await _claimsPrincipalFactory.CreateAsync(user);
 
             var securityKey = _configuration["Jwt:Secret"];
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
@@ -43,7 +40,7 @@ namespace Api.Services
 
             var descriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(claims),
+                Subject = new ClaimsIdentity(claims.Claims),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = creds,
                 Issuer = auth0Autority,

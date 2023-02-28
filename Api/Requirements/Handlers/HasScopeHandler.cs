@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace Api.Requirements.Handlers
 {
@@ -11,12 +12,11 @@ namespace Api.Requirements.Handlers
                 return Task.CompletedTask;
 
             var scopes = context.User
-                                .FindFirst(claim => claim.Type == "scope" && claim.Issuer == requirement.Issuer)!
-                                .Value
-                                .Split(" ");
+                                .FindAll(claim => claim.Type == "scope" && claim.Issuer == requirement.Issuer)!;
 
-            if (scopes.Any(scope => scope == requirement.Scope))
+            if (scopes.Any(scope => scope.Value == requirement.Scope))
                 context.Succeed(requirement);
+
             return Task.CompletedTask;
         }
     }
