@@ -39,7 +39,7 @@ namespace Api.Controllers.Identity
             var emailClaim = User.FindFirstValue(ClaimTypes.Email);
             var user = await _userManager.FindByEmailAsync(emailClaim);
 
-            return CreateUserObject(user);
+            return await CreateUserObject(user);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Api.Controllers.Identity
             var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
 
             if (result)
-                return CreateUserObject(user);
+                return await CreateUserObject(user);
             return Unauthorized();
         }
 
@@ -84,7 +84,7 @@ namespace Api.Controllers.Identity
             var result = await _userManager.CreateAsync(newUser, registerDto.Password);
 
             if (result.Succeeded)
-                return CreateUserObject(newUser);
+                return await CreateUserObject(newUser);
             return BadRequest(result.Errors);
         }
 
@@ -93,12 +93,12 @@ namespace Api.Controllers.Identity
         /// </summary>
         /// <param name="user">User entity.</param>
         /// <returns></returns>
-        private UserDto CreateUserObject(User user) =>
+        private async Task<UserDto> CreateUserObject(User user) =>
             new()
             {
                 DisplayName = user.DisplayName,
                 Photo = null,
-                Token = _tokenService.CreateToken(user),
+                Token = await _tokenService.CreateToken(user),
                 UserName = user.UserName
             };
     }

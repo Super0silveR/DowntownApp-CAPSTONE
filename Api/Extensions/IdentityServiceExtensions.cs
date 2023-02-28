@@ -10,6 +10,7 @@ using Persistence;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Application.Common.Interfaces;
+using Api.Factories;
 
 namespace Api.Extensions
 {
@@ -40,7 +41,8 @@ namespace Api.Extensions
                         opt.User.RequireUniqueEmail = true;
                     })
                     .AddRoles<Role>()
-                    .AddEntityFrameworkStores<DataContext>();
+                    .AddEntityFrameworkStores<DataContext>()
+                    .AddClaimsPrincipalFactory<AppClaimsPrincipalFactory>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
@@ -74,7 +76,11 @@ namespace Api.Extensions
             services.AddAuthorization(options =>
             {
                 /// Policies oriented autorization.
+                options.AddPolicy(Policies.ADMIN, policy => policy.Requirements.Add(new HasScopeRequirement(auth0Autority, Policies.ADMIN)));
+                options.AddPolicy(Policies.READ_BARS, policy => policy.Requirements.Add(new HasScopeRequirement(auth0Autority, Policies.READ_BARS)));
                 options.AddPolicy(Policies.READ_EVENTS, policy => policy.Requirements.Add(new HasScopeRequirement(auth0Autority, Policies.READ_EVENTS)));
+                options.AddPolicy(Policies.WRITE_BARS, policy => policy.Requirements.Add(new HasScopeRequirement(auth0Autority, Policies.WRITE_BARS)));
+                options.AddPolicy(Policies.WRITE_EVENTS, policy => policy.Requirements.Add(new HasScopeRequirement(auth0Autority, Policies.WRITE_EVENTS)));
             });
 
             services.AddScoped<ITokenService, TokenService>();

@@ -15,7 +15,7 @@ namespace Application.Validators
             RuleFor(x => x.Description)
                 .MaximumLength(255)
                 .NotEmpty();
-            RuleFor(x => x.Category).NotEmpty();
+            //RuleFor(x => x.Category).NotEmpty();
         }
 
     }

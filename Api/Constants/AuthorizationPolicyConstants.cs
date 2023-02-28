@@ -9,5 +9,10 @@
     {
         public const string READ_EVENTS = "read:events";
         public const string WRITE_EVENTS = "write:events";
+
+        public const string READ_BARS = "read:bars";
+        public const string WRITE_BARS = "write:bars";
+
+        public const string ADMIN = "admin";
     }
 }
