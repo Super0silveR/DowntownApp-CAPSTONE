@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;
+using System.Linq.Expressions;
 
 namespace Persistence.Interceptors
 {
@@ -23,20 +24,22 @@ namespace Persistence.Interceptors
 
         public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
         {
-            UpdateEntities(eventData.Context);
+            UpdateEntitiesAsync(eventData.Context);
 
             return base.SavingChangesAsync(eventData, result, cancellationToken);
         }
 
-        public void UpdateEntities(DbContext? context)
+        public void UpdateEntitiesAsync(DbContext? context)
         {
             Guard.Against.Null(context, nameof(context));
+
+            var userId = _currentUserService.GetUserId() ?? Guid.Empty.ToString();
 
             foreach (var entry in context.ChangeTracker.Entries<BaseAuditableEntity>())
             {
                 if (entry.State == EntityState.Added)
                 {
-                    entry.Entity.CreatedBy = _currentUserService.GetUserId();
+                    entry.Entity.CreatedBy = Guid.Parse(userId);
                     entry.Entity.Created = _dateTimeService.Now;
                 }
 
@@ -44,7 +47,7 @@ namespace Persistence.Interceptors
                     entry.State == EntityState.Modified ||
                     entry.HasChangedOwnedEntities())
                 {
-                    entry.Entity.LastModifiedBy = _currentUserService.GetUserId();
+                    entry.Entity.LastModifiedBy = Guid.Parse(userId);
                     entry.Entity.LastModified = _dateTimeService.Now;
                 }
             }

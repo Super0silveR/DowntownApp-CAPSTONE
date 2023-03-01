@@ -49,13 +49,14 @@ namespace Api.Extensions
 
             services.AddDbContext<DataContext>(opt =>
             {
-                var constr = configuration["ConnectionStrings:DefaultConnection"];
-                opt.UseSqlite(constr,
-                              builder => builder.MigrationsAssembly(typeof(DataContext).Assembly.FullName));
+                //var constr = configuration["ConnectionStrings:DefaultConnection"];
+                //opt.UseSqlite(constr,
+                //              builder => builder.MigrationsAssembly(typeof(DataContext).Assembly.FullName));
 
                 //TODO: PgSql connection. (Prod vs Env)
-                //var constr = configuration["ConnectionStrings:PgAdminConnection"];
-                //opt.UseNpgsql(constr);
+                var constr = configuration["ConnectionStrings:PgAdminConnection"];
+                opt.UseNpgsql(constr,
+                    builder => builder.MigrationsAssembly(typeof(DataContext).Assembly.FullName));
             });
 
             services.AddSingleton<ICurrentUserService, CurrentUserService>();

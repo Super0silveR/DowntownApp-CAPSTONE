@@ -20,7 +20,13 @@ namespace Application.Core
             CreateMap<EventDto, Event>()
                 .ForAllMembers(options =>
                 {
-                    options.Condition((src, dest, srcMember) => srcMember != null);
+                    options.Condition((src, dest, srcMember) => srcMember is not null);
+                });
+
+            CreateMap<EventCategory, EventCategoryDto>()
+                .ForAllMembers(options =>
+                {
+                    options.Condition((src, dest, srcMember) => srcMember is not null);
                 });
         }
     }

@@ -15,6 +15,7 @@ namespace Api.Controllers
         public EventsController() { }
 
         #region Queries
+
         [Authorize(Policies.READ_EVENTS)]
         [HttpGet] //api/events
         public async Task<IActionResult> GetEvents()

@@ -45,6 +45,7 @@ var services = scope.ServiceProvider;
 try
 {
     var initializer = services.GetRequiredService<DataContextInitializer>();
+
     await initializer.InitializeAsync();
     await initializer.SeedAsync();
 }

@@ -44,6 +44,12 @@ namespace Persistence.Configurations
                    .HasConstraintName("FK_USER_CREATED_EVENTS")
                    .OnDelete(DeleteBehavior.Cascade);
 
+            builder.HasMany(u => u.CreatedEventCategories)
+                   .WithOne(ec => ec.Creator)
+                   .HasForeignKey(ec => ec.CreatorId)
+                   .HasConstraintName("FK_USER_CREATED_EVENT_CATEGORIES")
+                   .OnDelete(DeleteBehavior.Cascade);
+
             builder.HasMany(u => u.Followers)
                    .WithOne(uf => uf.Target)
                    .HasForeignKey(uf => uf.TargetId)
