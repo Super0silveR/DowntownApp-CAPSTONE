@@ -13,6 +13,11 @@ namespace Persistence.Configurations
                    .HasForeignKey(e => e.EventCategoryId)
                    .HasConstraintName("FK_EVENT_CATEGORY_ID")
                    .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(ec => ec.Creator)
+                   .WithMany(u => u.CreatedEventCategories)
+                   .HasForeignKey(ec => ec.CreatorId)
+                   .HasConstraintName("FK_EVENT_CATEGORY_CREATED_BY");
         }
     }
 }

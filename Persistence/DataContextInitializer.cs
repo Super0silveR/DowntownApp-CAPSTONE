@@ -3,6 +3,7 @@ using Ardalis.GuardClauses;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Drawing;
 
@@ -11,18 +12,21 @@ namespace Persistence
     public class DataContextInitializer
     {
         private readonly IColorService _colorService;
+        private readonly IConfiguration _configuration;
         private readonly ILogger<DataContextInitializer> _logger;
         private readonly DataContext _context;
         private readonly RoleManager<Role> _roleManager;
         private readonly UserManager<User> _userManager;
 
         public DataContextInitializer(IColorService colorService,
+                                      IConfiguration configuration,
                                       ILogger<DataContextInitializer> logger,
                                       DataContext context,
                                       RoleManager<Role> roleManager,
                                       UserManager<User> userManager)
         {
             _colorService = colorService;
+            _configuration = configuration;
             _logger = logger;
             _context = context;
             _roleManager = roleManager;
@@ -64,43 +68,11 @@ namespace Persistence
         {
             Guard.Against.Null(_context.Events, nameof(_context.Events));
 
-            var adminRole = new Role { Name = "admin" };
-
-            var eventCategories = new List<EventCategory>
-            {
-                new EventCategory
-                {
-                    Title = "Music",
-                    Description = "Awesome music at this event!",
-                    Color = _colorService.RgbConverter(Color.Coral)
-                },
-                new EventCategory
-                {
-                    Title = "Art",
-                    Description = "Awesome art at this event!",
-                    Color = _colorService.RgbConverter(Color.Honeydew)
-                },
-                new EventCategory
-                {
-                    Title = "Dating",
-                    Description = "Awesome dating at this event!",
-                    Color = _colorService.RgbConverter(Color.Indigo)
-                },
-            };
-
-            var eventTypes = new List<EventType>
-            {
-                new EventType { Title = "Speed Dating", Color = _colorService.RgbConverter(Color.DeepPink) },
-                new EventType { Title = "Local Artists", Color = _colorService.RgbConverter(Color.LightGoldenrodYellow) },
-                new EventType { Title = "Music Artists", Color = _colorService.RgbConverter(Color.MediumOrchid) }
-            };
-
-            await _context.EventCategories.AddRangeAsync(eventCategories);
-            await _context.EventTypes.AddRangeAsync(eventTypes);
-            await _context.SaveChangesAsync();
+            var adminRole = new Role { Name = "admin", NormalizedName = "ADMIN" };
 
             var users = new List<User>
             {
+                new User { DisplayName = "Admin", UserName = "Admin", Email = "admin@test.com" },
                 new User { DisplayName = "Hephaestots", UserName = "vince", Email = "vinc@test.com" },
                 new User { DisplayName = "SilveR", UserName = "elias", Email = "elias@test.com" },
                 new User { DisplayName = "Nabil", UserName = "nabil", Email = "nabil@test.com" },
@@ -123,7 +95,44 @@ namespace Persistence
 
                     await _userManager.AddToRoleAsync(user, adminRole.Name);
                 }
+                await _context.SaveChangesAsync();
             }
+
+            var eventCategories = new List<EventCategory>
+            {
+                new EventCategory
+                {
+                    Title = "Music",
+                    Description = "Awesome music at this event!",
+                    Color = _colorService.RgbConverter(Color.Coral),
+                    CreatorId = users[0].Id
+                },
+                new EventCategory
+                {
+                    Title = "Art",
+                    Description = "Awesome art at this event!",
+                    Color = _colorService.RgbConverter(Color.Honeydew),
+                    CreatorId = users[0].Id
+                },
+                new EventCategory
+                {
+                    Title = "Dating",
+                    Description = "Awesome dating at this event!",
+                    Color = _colorService.RgbConverter(Color.Indigo),
+                    CreatorId = users[0].Id
+                },
+            };
+
+            await _context.EventCategories.AddRangeAsync(eventCategories);
+            await _context.SaveChangesAsync();
+
+            var eventTypes = new List<EventType>
+            {
+                new EventType { Title = "Speed Dating", Color = _colorService.RgbConverter(Color.DeepPink) },
+                new EventType { Title = "Local Artists", Color = _colorService.RgbConverter(Color.LightGoldenrodYellow) },
+                new EventType { Title = "Music Artists", Color = _colorService.RgbConverter(Color.MediumOrchid) }
+            };
+            await _context.EventTypes.AddRangeAsync(eventTypes);
 
             var chatRoomTypes = new List<ChatRoomType>
             {
