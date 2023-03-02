@@ -3,6 +3,7 @@ using Application.Core;
 using Application.DTOs;
 using Ardalis.GuardClauses;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -31,8 +32,9 @@ namespace Application.Handlers.EventCategories.Queries
             {
                 Guard.Against.Null(_context.EventCategories, nameof(_context.EventCategories));
 
-                EventCategory? eventCategory = await _context.EventCategories.FirstOrDefaultAsync(ec => ec.Id == request.Id, cancellationToken);
-                var categoryDto = _mapper.Map<EventCategoryDto>(eventCategory);
+                var categoryDto = await _context.EventCategories
+                                                .ProjectTo<EventCategoryDto>(_mapper.ConfigurationProvider)
+                                                .FirstOrDefaultAsync(ec => ec.Id == request.Id, cancellationToken);
 
                 return Result<EventCategoryDto?>.Success(categoryDto);
             }

@@ -42,11 +42,11 @@ namespace Application.Handlers.Chats.Queries
 
                 var userChatRooms = await _context.ChatRooms
                                                   .Join(
-                                                        _context.UserChatRooms,
-                                                        cr => cr.Id,
-                                                        ucr => ucr.ChatRoomId,
-                                                        (cr, ucr) => new { ChatRoom = cr, UserChatRoom = ucr }
-                                                        )
+                                                    _context.UserChatRooms,
+                                                    cr => cr.Id,
+                                                    ucr => ucr.ChatRoomId,
+                                                    (cr, ucr) => new { ChatRoom = cr, UserChatRoom = ucr }
+                                                  )
                                                   .Where(crucr => crucr.UserChatRoom.UserId == request.UserId)
                                                   .OrderByDescending(crucr => crucr.ChatRoom.Created)
                                                   .Select(crucr => new ChatRoom

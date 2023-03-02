@@ -5,6 +5,7 @@ using Application.Validators;
 using Ardalis.GuardClauses;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Events.Events;
 using FluentValidation;
 using MediatR;
@@ -26,13 +27,13 @@ namespace Application.Handlers.Events.Commands
         /// </summary>
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
-            private readonly IDataContext _dataContext;
+            private readonly IDataContext _context;
             private readonly IMapper _mapper;
             private readonly ICurrentUserService _userService;
 
-            public Handler(IDataContext dataContext, IMapper mapper, ICurrentUserService userService)
+            public Handler(IDataContext context, IMapper mapper, ICurrentUserService userService)
             {
-                _dataContext = dataContext;
+                _context = context;
                 _mapper = mapper;
                 _userService = userService;
             }
@@ -45,19 +46,36 @@ namespace Application.Handlers.Events.Commands
             /// <returns>Result<Unit></returns>
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                Guard.Against.Null(_dataContext.Events, nameof(_dataContext.Events));
+                Guard.Against.Null(_context.Events, nameof(_context.Events));
+
+                var userId = new object?[] { Guid.Parse(_userService.GetUserId()!) };
+                var user = await _context.Users.FindAsync(userId, cancellationToken);
+
+                if (user is null) return Result<Unit>.Failure("The current user does not exist.");
 
                 /// Make sure the creatorId is always populated. (FK_CONSTRAINT)
-                request.Event.CreatorId ??= Guid.Parse(_userService.GetUserId()!);
+                request.Event.CreatorId ??= user.Id;
 
                 var @event = _mapper.Map<Event>(request.Event);
+
+                var eventContributor = new EventContributor
+                {
+                    Event = @event,
+                    User = user,
+                    IsActive = true,
+                    IsAdmin = true,
+                    Status = ContributorStatus.Creator
+                };
+
+                /// Adding the default contributor, which is the creator.
+                @event.Contributors.Add(eventContributor);
+
+                _context.Events.Add(@event);
 
                 /// Add a domain event to the entity so our INotification handler can perform some work.
                 @event.AddDomainEvent(new CreatedEvent(@event));
 
-                _dataContext.Events.Add(@event);
-
-                bool result = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
+                bool result = await _context.SaveChangesAsync(cancellationToken) > 0;
 
                 if (!result)
                     return Result<Unit>.Failure("Failed to create a new Event.");
