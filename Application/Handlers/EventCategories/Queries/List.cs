@@ -3,6 +3,7 @@ using Application.Core;
 using Application.DTOs;
 using Ardalis.GuardClauses;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,8 +37,9 @@ namespace Application.Handlers.EventCategories.Queries
             {
                 Guard.Against.Null(_context.EventCategories, nameof(_context.EventCategories));
 
-                var categories = await _context.EventCategories.ToListAsync(cancellationToken);
-                var categoriesDto = _mapper.Map<List<EventCategoryDto>>(categories);
+                var categoriesDto = await _context.EventCategories
+                                                  .ProjectTo<EventCategoryDto>(_mapper.ConfigurationProvider)
+                                                  .ToListAsync(cancellationToken);
 
                 return Result<List<EventCategoryDto>>.Success(categoriesDto);
             }

@@ -14,8 +14,7 @@ namespace Domain.Entities
         public string? Title { get; set; }
         public DateTime Date { get; set; } = DateTime.UtcNow;
         public string? Description { get; set; }
-        public string? City { get; set; }
-        public string? Venue { get; set; }
+        public bool IsActive { get; set; } = true;
 
         public virtual User? Creator { get; set; }
         public virtual EventCategory? Category { get; set; }

@@ -1,4 +1,5 @@
 ﻿using Domain.Common;
+using Domain.Enums;
 
 namespace Domain.Entities
 {
@@ -11,6 +12,7 @@ namespace Domain.Entities
         public Guid UserId { get; set; }
         public bool IsActive { get; set; }
         public bool IsAdmin { get; set; }
+        public ContributorStatus Status { get; set; }
 
         public virtual Event? Event { get; set; }
         public virtual User? User { get; set; }

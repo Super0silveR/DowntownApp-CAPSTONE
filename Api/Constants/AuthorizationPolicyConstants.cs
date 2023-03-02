@@ -14,5 +14,6 @@
         public const string WRITE_BARS = "write:bars";
 
         public const string ADMIN = "admin";
+        public const string CREATOR = "creator";
     }
 }
