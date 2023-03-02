@@ -27,11 +27,12 @@ namespace Api.Factories
             bool isAdmin = await _userManager.IsInRoleAsync(user, Policies.ADMIN);
 
             if (isAdmin)
-            {
                 claims.AddClaim(new Claim("scope", Policies.ADMIN));
-            }
 
-            if (user.EmailConfirmed || isAdmin)
+            if (user.IsContentCreator || isAdmin)
+                claims.AddClaim(new Claim("scope", Policies.CREATOR));
+
+            if (user.EmailConfirmed || user.IsContentCreator || isAdmin)
             {
                 claims.AddClaim(new Claim("scope", Policies.WRITE_BARS));
                 claims.AddClaim(new Claim("scope", Policies.WRITE_EVENTS));

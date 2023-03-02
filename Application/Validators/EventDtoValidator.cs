@@ -5,7 +5,7 @@ using FluentValidation;
 namespace Application.Validators
 {
     /// <summary>
-    /// Event Validation Class.
+    /// EventDto Validation Class.
     /// </summary>
     public class EventDtoValidator : AbstractValidator<EventDto>
     {

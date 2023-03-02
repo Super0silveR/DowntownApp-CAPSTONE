@@ -4,34 +4,33 @@ using Application.DTOs;
 using Application.Validators;
 using Ardalis.GuardClauses;
 using AutoMapper;
-using Domain.Entities;
 using FluentValidation;
 using MediatR;
 
-namespace Application.Handlers.Events.Commands
+namespace Application.Handlers.EventCategories.Commands
 {
     public class Edit
     {
         /// <summary>
-        /// Command class used to start the request for editing an Event.
+        /// Command class used to start the request for editing an EventCategory.
         /// </summary>
         public class Command : IRequest<Result<Unit>?>
         {
             public Guid Id { get; set; }
-            public EventDto Event { get; set; } = new EventDto();
+            public EventCategoryDto EventCategory { get; set; } = new EventCategoryDto();
         }
 
         /// <summary>
-        /// Handler class used to handle the editing of the Event.
+        /// Handler class used to handle the editing of the EventCategory.
         /// </summary>
         public class Handler : IRequestHandler<Command, Result<Unit>?>
         {
-            private readonly IDataContext _dataContext;
+            private readonly IDataContext _context;
             private readonly IMapper _mapper;
 
-            public Handler(IDataContext dataContext, IMapper mapper)
+            public Handler(IDataContext context, IMapper mapper)
             {
-                _dataContext = dataContext;
+                _context = context;
                 _mapper = mapper;
             }
 
@@ -43,19 +42,18 @@ namespace Application.Handlers.Events.Commands
             /// <returns>Result<Unit></returns>
             public async Task<Result<Unit>?> Handle(Command request, CancellationToken cancellationToken)
             {
-                Guard.Against.Null(_dataContext.Events, nameof(_dataContext.Events));
+                Guard.Against.Null(_context.EventCategories, nameof(_context.EventCategories));
 
-                var @event = await _dataContext.Events.FindAsync(new object?[] { request.Id },
-                                                                 cancellationToken: cancellationToken);
+                var eventCat = await _context.EventCategories.FindAsync(new object?[] { request.Id }, cancellationToken);
 
-                if (@event is null) return null;
+                if (eventCat is null) return null;
 
-                _mapper.Map(request.Event, @event);
+                _mapper.Map(request.EventCategory, eventCat);
 
-                bool result = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
+                bool result = await _context.SaveChangesAsync(cancellationToken) > 0;
 
                 if (!result)
-                    return Result<Unit>.Failure("Failed to update an Event.");
+                    return Result<Unit>.Failure("Failed to update an EventCategory.");
                 return Result<Unit>.Success(Unit.Value);
             }
         }
@@ -67,7 +65,7 @@ namespace Application.Handlers.Events.Commands
         {
             public Validator()
             {
-                RuleFor(x => x.Event).SetValidator(new EventDtoValidator());
+                RuleFor(x => x.EventCategory).SetValidator(new EventCategoryDtoValidator());
             }
         }
     }

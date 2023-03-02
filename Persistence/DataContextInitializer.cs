@@ -73,8 +73,8 @@ namespace Persistence
             var users = new List<User>
             {
                 new User { DisplayName = "Admin", UserName = "Admin", Email = "admin@test.com" },
-                new User { DisplayName = "Hephaestots", UserName = "vince", Email = "vinc@test.com" },
-                new User { DisplayName = "SilveR", UserName = "elias", Email = "elias@test.com" },
+                new User { DisplayName = "Hephaestots", UserName = "vince", Email = "vinc@test.com", IsContentCreator = true },
+                new User { DisplayName = "SilveR", UserName = "elias", Email = "elias@test.com", IsContentCreator = true },
                 new User { DisplayName = "Nabil", UserName = "nabil", Email = "nabil@test.com" },
                 new User { DisplayName = "Venomyox", UserName = "younes", Email = "younes@test.com" }
             };

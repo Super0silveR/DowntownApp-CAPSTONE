@@ -1,15 +1,14 @@
 ﻿using Api.Controllers.Base;
 using Policies = Api.Constants.AuthorizationPolicyConstants;
 using Microsoft.AspNetCore.Mvc;
-using Application.Core;
-using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
-using MediatR;
-using Application.DTOs;
 using Application.Handlers.EventCategories.Queries;
+using Application.Handlers.EventCategories.Commands;
+using Application.DTOs;
 
 namespace Api.Controllers.Lookup
 {
+    [Authorize(Policies.CREATOR)]
     [Route("api/[controller]")]
     public class EventCategoriesController : BaseApiController
     {
@@ -24,20 +23,31 @@ namespace Api.Controllers.Lookup
         }
 
         [HttpGet("{id}")] //api/eventcategories/{id}
-        public async Task<IActionResult> GetEventCategory(Guid Id)
+        public async Task<IActionResult> GetEventCategoryDetails(Guid id)
         {
-            return HandleResult(new Result<EventCategory>());
+            return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
         }
 
         #endregion
 
         #region Commands
 
-        [Authorize(Policies.ADMIN)]
-        [HttpPost]
-        public async Task<IActionResult> CreateEventCategories(EventCategoryDto eventCategory)
+        [HttpPost] //api/eventcategories
+        public async Task<IActionResult> CreateEventCategory(EventCategoryDto categoryDto)
         {
-            return HandleResult(new Result<Unit>());
+            return HandleResult(await Mediator.Send(new Create.Command { EventCategory = categoryDto }));
+        }
+
+        [HttpPut("{id}")] //api/eventcategories/{id}
+        public async Task<IActionResult> UpdateEventCategory(Guid id, EventCategoryDto categoryDto)
+        {
+            return HandleResult(await Mediator.Send(new Edit.Command { Id = id, EventCategory = categoryDto }));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteEventCategory(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
         }
 
         #endregion

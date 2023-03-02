@@ -77,6 +77,7 @@ namespace Api.Extensions
             {
                 /// Policies oriented autorization.
                 options.AddPolicy(Policies.ADMIN, policy => policy.Requirements.Add(new HasScopeRequirement(auth0Autority, Policies.ADMIN)));
+                options.AddPolicy(Policies.CREATOR, policy => policy.Requirements.Add(new HasScopeRequirement(auth0Autority, Policies.CREATOR)));
                 options.AddPolicy(Policies.READ_BARS, policy => policy.Requirements.Add(new HasScopeRequirement(auth0Autority, Policies.READ_BARS)));
                 options.AddPolicy(Policies.READ_EVENTS, policy => policy.Requirements.Add(new HasScopeRequirement(auth0Autority, Policies.READ_EVENTS)));
                 options.AddPolicy(Policies.WRITE_BARS, policy => policy.Requirements.Add(new HasScopeRequirement(auth0Autority, Policies.WRITE_BARS)));
