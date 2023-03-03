@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Core;
 using Application.DTOs;
+using Application.DTOs.Commands;
 using Application.Validators;
 using Ardalis.GuardClauses;
 using AutoMapper;
@@ -17,7 +18,7 @@ namespace Application.Handlers.EventCategories.Commands
         /// </summary>
         public class Command : IRequest<Result<Unit>>
         {
-            public EventCategoryDto EventCategory { get; set; } = new EventCategoryDto();
+            public EventCategoryCommandDto EventCategory { get; set; } = new EventCategoryCommandDto();
         }
 
         /// <summary>
@@ -47,10 +48,8 @@ namespace Application.Handlers.EventCategories.Commands
                 Guard.Against.Null(_context.EventCategories, nameof(_context.EventCategories));
                 Guard.Against.Null(request.EventCategory, nameof(request.EventCategory));
 
-                /// Make sure the creatorId is always populated. (FK_CONSTRAINT)
-                request.EventCategory.CreatorId ??= Guid.Parse(_userService.GetUserId()!);
-
                 var eventCat = _mapper.Map<EventCategory>(request.EventCategory);
+                eventCat.CreatorId = Guid.Parse(_userService.GetUserId()!);
 
                 _context.EventCategories.Add(eventCat);
 
@@ -69,7 +68,7 @@ namespace Application.Handlers.EventCategories.Commands
         {
             public Validator()
             {
-                RuleFor(c => c.EventCategory).SetValidator(new EventCategoryDtoValidator());
+                RuleFor(c => c.EventCategory).SetValidator(new EventCategoryCommandDtoValidator());
             }
         }
     }

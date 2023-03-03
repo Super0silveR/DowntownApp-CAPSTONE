@@ -1,4 +1,4 @@
-﻿namespace Application.DTOs
+﻿namespace Application.DTOs.Queries
 {
     public class EventDto
     {
@@ -10,8 +10,8 @@
         public DateTime? Date { get; set; }
         public string? Description { get; set; }
         public string? CreatorUserName { get; set; }
-        public double? Rating { get; set; }
         public bool IsActive { get; set; } = true;
+        public EventRatingDto? Rating { get; set; }
 
         public virtual ICollection<EventContributorDto>? Contributors { get; set; }
     }

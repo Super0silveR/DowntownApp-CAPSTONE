@@ -1,4 +1,5 @@
 ﻿using Application.DTOs;
+using Application.DTOs.Commands;
 using FluentValidation;
 
 namespace Application.Validators
@@ -6,15 +7,13 @@ namespace Application.Validators
     /// <summary>
     /// EventCategoryDto Validation Class.
     /// </summary>
-    public class EventCategoryDtoValidator : AbstractValidator<EventCategoryDto>
+    public class EventCategoryCommandDtoValidator : AbstractValidator<EventCategoryCommandDto>
     {
         /// <summary>
         /// Constructor initialize the validation rules.
         /// </summary>
-        public EventCategoryDtoValidator()
+        public EventCategoryCommandDtoValidator()
         {
-            RuleFor(ec => ec.CreatorId);
-
             RuleFor(ec => ec.Title)
                 .MaximumLength(25)
                 .MinimumLength(5)

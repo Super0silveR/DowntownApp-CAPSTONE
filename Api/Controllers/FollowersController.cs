@@ -7,7 +7,7 @@ namespace Api.Controllers
     /// <summary>
     /// Public facing controller that handle the `Follower\Followee` logic.
     /// </summary>
-    public class FollowerController : BaseApiController
+    public class FollowersController : BaseApiController
     {
         [HttpPost("{username}")]
         public async Task<IActionResult> Follow(string username)

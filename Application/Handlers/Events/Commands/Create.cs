@@ -1,6 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Core;
-using Application.DTOs;
+using Application.DTOs.Commands;
 using Application.Validators;
 using Ardalis.GuardClauses;
 using AutoMapper;
@@ -17,15 +17,15 @@ namespace Application.Handlers.Events.Commands
         /// <summary>
         /// Command class used to start the request for creating a new Event.
         /// </summary>
-        public class Command : IRequest<Result<Unit>>
+        public class Command : IRequest<Result<Unit>?>
         {
-            public EventDto Event { get; set; } = new EventDto();
+            public EventCommandDto Event { get; set; } = new EventCommandDto();
         }
 
         /// <summary>
         /// Handler class used to handle the creation of the new Event.
         /// </summary>
-        public class Handler : IRequestHandler<Command, Result<Unit>>
+        public class Handler : IRequestHandler<Command, Result<Unit>?>
         {
             private readonly IDataContext _context;
             private readonly IMapper _mapper;
@@ -44,19 +44,18 @@ namespace Application.Handlers.Events.Commands
             /// <param name="request">IRequest object, i.e. Create.Command</param>
             /// <param name="cancellationToken"></param>
             /// <returns>Result<Unit></returns>
-            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>?> Handle(Command request, CancellationToken cancellationToken)
             {
                 Guard.Against.Null(_context.Events, nameof(_context.Events));
 
-                var userId = new object?[] { Guid.Parse(_userService.GetUserId()!) };
-                var user = await _context.Users.FindAsync(userId, cancellationToken);
+                if (!Guid.TryParse(_userService.GetUserId(), out Guid userId)) return null;
 
-                if (user is null) return Result<Unit>.Failure("The current user does not exist.");
+                var user = await _context.Users.FindAsync(new object?[] { userId }, cancellationToken);
 
-                /// Make sure the creatorId is always populated. (FK_CONSTRAINT)
-                request.Event.CreatorId ??= user.Id;
+                if (user is null) return null;
 
                 var @event = _mapper.Map<Event>(request.Event);
+                @event.CreatorId = user.Id;
 
                 var eventContributor = new EventContributor
                 {
@@ -90,7 +89,7 @@ namespace Application.Handlers.Events.Commands
         {
             public Validator()
             {
-                RuleFor(x => x.Event).SetValidator(new EventDtoValidator());
+                RuleFor(x => x.Event).SetValidator(new EventCommandDtoValidator());
             }
         }
     }

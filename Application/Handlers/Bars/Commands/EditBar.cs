@@ -1,6 +1,5 @@
 ﻿using Application.Common.Interfaces;
 using Application.Core;
-using Application.DTOs;
 using Application.DTOs.Commands;
 using Application.Validators;
 using Ardalis.GuardClauses;
@@ -8,21 +7,21 @@ using AutoMapper;
 using FluentValidation;
 using MediatR;
 
-namespace Application.Handlers.EventCategories.Commands
+namespace Application.Handlers.Bars.Commands
 {
-    public class Edit
+    public class EditBar
     {
         /// <summary>
-        /// Command class used to start the request for editing an EventCategory.
+        /// Command class used to start the request for editing a Bar.
         /// </summary>
         public class Command : IRequest<Result<Unit>?>
         {
             public Guid Id { get; set; }
-            public EventCategoryCommandDto EventCategory { get; set; } = new EventCategoryCommandDto();
+            public BarCommandDto Bar { get; set; } = new BarCommandDto();
         }
 
         /// <summary>
-        /// Handler class used to handle the editing of the EventCategory.
+        /// Handler class used to handle the editing of a Bar.
         /// </summary>
         public class Handler : IRequestHandler<Command, Result<Unit>?>
         {
@@ -43,18 +42,18 @@ namespace Application.Handlers.EventCategories.Commands
             /// <returns>Result<Unit></returns>
             public async Task<Result<Unit>?> Handle(Command request, CancellationToken cancellationToken)
             {
-                Guard.Against.Null(_context.EventCategories, nameof(_context.EventCategories));
+                Guard.Against.Null(_context.Bars, nameof(_context.Bars));
 
-                var eventCat = await _context.EventCategories.FindAsync(new object?[] { request.Id }, cancellationToken);
+                var bar = await _context.Bars.FindAsync(new object?[] { request.Id }, cancellationToken);
 
-                if (eventCat is null) return null;
+                if (bar is null) return null;
 
-                _mapper.Map(request.EventCategory, eventCat);
+                _mapper.Map(request.Bar, bar);
 
                 bool result = await _context.SaveChangesAsync(cancellationToken) > 0;
 
                 if (!result)
-                    return Result<Unit>.Failure("Failed to update an EventCategory.");
+                    return Result<Unit>.Failure("Failed to update a Bar.");
                 return Result<Unit>.Success(Unit.Value);
             }
         }
@@ -66,7 +65,7 @@ namespace Application.Handlers.EventCategories.Commands
         {
             public Validator()
             {
-                RuleFor(x => x.EventCategory).SetValidator(new EventCategoryCommandDtoValidator());
+                RuleFor(x => x.Bar).SetValidator(new BarCommandDtoValidator());
             }
         }
     }

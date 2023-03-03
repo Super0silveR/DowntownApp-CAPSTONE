@@ -1,5 +1,4 @@
-﻿using Application.DTOs;
-using Domain.Entities;
+﻿using Application.DTOs.Commands;
 using FluentValidation;
 
 namespace Application.Validators
@@ -7,15 +6,14 @@ namespace Application.Validators
     /// <summary>
     /// EventDto Validation Class.
     /// </summary>
-    public class EventDtoValidator : AbstractValidator<EventDto>
+    public class EventCommandDtoValidator : AbstractValidator<EventCommandDto>
     {
-        public EventDtoValidator()
+        public EventCommandDtoValidator()
         {
             RuleFor(x => x.Title).NotEmpty();
             RuleFor(x => x.Description)
                 .MaximumLength(255)
                 .NotEmpty();
-            //RuleFor(x => x.Category).NotEmpty();
         }
 
     }

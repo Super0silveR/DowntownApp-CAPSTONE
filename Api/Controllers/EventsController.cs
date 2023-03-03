@@ -1,15 +1,14 @@
 ﻿using Api.Controllers.Base;
 using Policies = Api.Constants.AuthorizationPolicyConstants;
-using Application.DTOs;
 using Application.Handlers.Events.Commands;
 using Application.Handlers.Events.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Application.DTOs.Commands;
 
 namespace Api.Controllers
 {
-    //[AllowAnonymous] // TODO: Temporarily for testing the frontend.
-    [Route("api/[controller]")]
+    [AllowAnonymous] // TODO: Temporarily for testing the frontend.
     public class EventsController : BaseApiController
     {
         public EventsController() { }
@@ -36,14 +35,14 @@ namespace Api.Controllers
 
         [Authorize(Policies.WRITE_EVENTS)]
         [HttpPost] //api/events
-        public async Task<IActionResult> CreateEvent(EventDto @event)
+        public async Task<IActionResult> CreateEvent(EventCommandDto @event)
         {
             return HandleResult(await Mediator.Send(new Create.Command { Event = @event }));
         }
 
         [Authorize(Policies.WRITE_EVENTS)]
         [HttpPut("{id}")] //api/events/{id}
-        public async Task<IActionResult> EditEvent(Guid id, EventDto @event)
+        public async Task<IActionResult> EditEvent(Guid id, EventCommandDto @event)
         {
             return HandleResult(await Mediator.Send(new Edit.Command { Id = id, Event = @event }));
         }

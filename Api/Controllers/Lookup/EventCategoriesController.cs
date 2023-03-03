@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Application.Handlers.EventCategories.Queries;
 using Application.Handlers.EventCategories.Commands;
 using Application.DTOs;
+using Application.DTOs.Commands;
 
 namespace Api.Controllers.Lookup
 {
@@ -33,13 +34,13 @@ namespace Api.Controllers.Lookup
         #region Commands
 
         [HttpPost] //api/eventcategories
-        public async Task<IActionResult> CreateEventCategory(EventCategoryDto categoryDto)
+        public async Task<IActionResult> CreateEventCategory(EventCategoryCommandDto categoryDto)
         {
             return HandleResult(await Mediator.Send(new Create.Command { EventCategory = categoryDto }));
         }
 
         [HttpPut("{id}")] //api/eventcategories/{id}
-        public async Task<IActionResult> UpdateEventCategory(Guid id, EventCategoryDto categoryDto)
+        public async Task<IActionResult> UpdateEventCategory(Guid id, EventCategoryCommandDto categoryDto)
         {
             return HandleResult(await Mediator.Send(new Edit.Command { Id = id, EventCategory = categoryDto }));
         }
