@@ -1,6 +1,6 @@
 ﻿using Application.Handlers.Profiles;
 
-namespace Application.DTOs
+namespace Application.DTOs.Queries
 {
     /// <summary>
     /// Class representing the data transfer object for the EventContributor entity.

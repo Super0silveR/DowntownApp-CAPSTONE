@@ -1,5 +1,4 @@
 ﻿using Domain.Common;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
@@ -12,7 +11,7 @@ namespace Domain.Entities
         public string? Title { get; set; }
         public string? Description { get; set; }
         public double CoverCost { get; set; } = 0.0;
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = false;
 
         public virtual User? Creator { get; set; }
 

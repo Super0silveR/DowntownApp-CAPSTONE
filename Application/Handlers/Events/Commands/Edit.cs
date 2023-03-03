@@ -1,10 +1,9 @@
 ﻿using Application.Common.Interfaces;
 using Application.Core;
-using Application.DTOs;
+using Application.DTOs.Commands;
 using Application.Validators;
 using Ardalis.GuardClauses;
 using AutoMapper;
-using Domain.Entities;
 using FluentValidation;
 using MediatR;
 
@@ -18,11 +17,11 @@ namespace Application.Handlers.Events.Commands
         public class Command : IRequest<Result<Unit>?>
         {
             public Guid Id { get; set; }
-            public EventDto Event { get; set; } = new EventDto();
+            public EventCommandDto Event { get; set; } = new EventCommandDto();
         }
 
         /// <summary>
-        /// Handler class used to handle the editing of the Event.
+        /// Handler class used to handle the editing of an Event.
         /// </summary>
         public class Handler : IRequestHandler<Command, Result<Unit>?>
         {
@@ -67,7 +66,7 @@ namespace Application.Handlers.Events.Commands
         {
             public Validator()
             {
-                RuleFor(x => x.Event).SetValidator(new EventDtoValidator());
+                RuleFor(x => x.Event).SetValidator(new EventCommandDtoValidator());
             }
         }
     }

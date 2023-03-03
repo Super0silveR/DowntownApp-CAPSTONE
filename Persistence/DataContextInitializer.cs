@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Ardalis.GuardClauses;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -40,12 +41,9 @@ namespace Persistence
             {
                 if (_context.Database.IsSqlite() || _context.Database.IsNpgsql())
                 {
-                    if (_context.Database.GetPendingMigrations().Count() > 0)
-                    {
-                        await _context.Database.EnsureDeletedAsync();
-                        await _context.Database.EnsureCreatedAsync();
-                    }
-                    //await _context.Database.MigrateAsync();
+                    await _context.Database.EnsureDeletedAsync();
+                    //await _context.Database.EnsureCreatedAsync();
+                    await _context.Database.MigrateAsync();
                 }
             }
             catch (Exception ex)
@@ -295,8 +293,16 @@ namespace Persistence
                     }
                 };
 
-                events[0].Contributors.Add(new EventContributor { Event = events[0], User = users[1], IsAdmin = true, Status = Domain.Enums.ContributorStatus.Creator });
-                events[0].Contributors.Add(new EventContributor { Event = events[0], User = users[2], Status = Domain.Enums.ContributorStatus.Accepted });
+                events[0].Contributors.Add(new EventContributor { Event = events[0], User = users[1], IsActive = true, IsAdmin = true, Status = ContributorStatus.Creator });
+                events[0].Contributors.Add(new EventContributor { Event = events[0], User = users[2], IsActive = true, Status = ContributorStatus.Accepted });
+                events[0].Contributors.Add(new EventContributor { Event = events[0], User = users[3], Status = ContributorStatus.Invited });
+                events[0].Contributors.Add(new EventContributor { Event = events[0], User = users[4], Status = ContributorStatus.Removed });
+
+                events[0].Ratings.Add(new EventRating { Event = events[0], User = users[0], Vote = 5, Review = "Wow, incredible experience!" });
+                events[0].Ratings.Add(new EventRating { Event = events[0], User = users[1], Vote = 4, Review = "Wow, incredible experience!" });
+                events[0].Ratings.Add(new EventRating { Event = events[0], User = users[2], Vote = 3, Review = "I would certainly return!" });
+                events[0].Ratings.Add(new EventRating { Event = events[0], User = users[3], Vote = 4, Review = "Wow, memorable experience!" });
+                events[0].Ratings.Add(new EventRating { Event = events[0], User = users[4], Vote = 5, Review = "Wow, incredible experience!" });
 
                 await _context.Events.AddRangeAsync(events);
                 await _context.SaveChangesAsync();

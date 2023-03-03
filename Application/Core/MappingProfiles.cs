@@ -1,6 +1,7 @@
-﻿using Application.DTOs;
-using AutoMapper;
+﻿using Application.DTOs.Commands;
+using Application.DTOs.Queries;
 using Domain.Entities;
+using Domain.Enums;
 
 namespace Application.Core
 {
@@ -8,12 +9,38 @@ namespace Application.Core
     /// Class that represents the mapping profiles for every entity in our Domain, that we need to specify.
     /// Mostly used when trying to map a Dto to the Entity of origin.
     /// </summary>
-    public class MappingProfiles : Profile
+    public class MappingProfiles : AutoMapper.Profile
     {
         public MappingProfiles()
         {
             CreateMap<Guid?, Guid>()
                 .ConvertUsing((src, dest) => src ?? dest);
+
+            /// Data transfert objects used for returning data.
+            #region Query DTOs
+
+            CreateMap<Bar, Bar>();
+
+            CreateMap<Bar, BarDto>();
+
+            CreateMap<BarEvent, BarEventDto>();
+            
+            CreateMap<Event, Event>();
+
+            CreateMap<Event, EventDto>()
+                .ForMember(edto => edto.Contributors, options => 
+                    options.MapFrom(e => e.Contributors.Where(c => !c.Status.Equals(ContributorStatus.Removed))))
+                .ForMember(edto => edto.CreatorUserName, options =>
+                    options.MapFrom(src => src.Contributors.FirstOrDefault(c => c.Status.Equals(ContributorStatus.Creator))!.User!.UserName))
+                .ForMember(edto => edto.Rating, options => options.MapFrom(e => e.Ratings))
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<Event, EventLightDto>()
+                .ForMember(edto => edto.CreatorUserName, options =>
+                    options.MapFrom(src => src.Contributors.FirstOrDefault(c => c.Status.Equals(ContributorStatus.Creator))!.User!.UserName));
+
+            CreateMap<EventCategory, EventCategoryDto>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 
             CreateMap<EventContributor, EventContributorDto>()
                 .ForMember(ec => ec.DisplayName, options => options.MapFrom(ec => ec.User!.DisplayName))
@@ -21,21 +48,35 @@ namespace Application.Core
                 .ForMember(ec => ec.Bio, options => options.MapFrom(ec => ec.User!.Bio))
                 .ForMember(ec => ec.Status, options => options.MapFrom(ec => ec.Status.ToString()));
 
-            CreateMap<Event, Event>();
+            CreateMap<EventRating, RatingDto>();
 
-            CreateMap<Event, EventDto>()
-                .ForMember(e => e.CreatorUserName, options => 
-                    options.MapFrom(src => src.Contributors.FirstOrDefault(c => c.IsAdmin)!.User!.UserName))
+            CreateMap<ICollection<BarLike>, BarLikeDto>()
+                .ForMember(bldto => bldto.Likes, options => options.MapFrom(bl => bl.Where(l => l.Vote).Count()))
+                .ForMember(bldto => bldto.Dislikes, options => options.MapFrom(bl => bl.Where(l => !l.Vote).Count()))
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => src is not null));
+
+            CreateMap<ICollection<EventRating>, EventRatingDto>()
+                .ForMember(erdto => erdto.Count, options => options.MapFrom(er => er.Count()))
+                .ForMember(erdto => erdto.Value, options => options.MapFrom(er => er.Average(r => r.Vote)))
+                .ForMember(erdto => erdto.Ratings, options => options.MapFrom(er => er))
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => src is not null));
+
+            CreateMap<User, Handlers.Profiles.Profile>();
+
+            #endregion
+
+            /// Data transfert objects used for writing data.
+            #region Command DTOs
+
+            CreateMap<BarCommandDto, Bar>();
+
+            CreateMap<EventCategoryCommandDto, EventCategory>()
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 
-            CreateMap<EventDto, Event>()
+            CreateMap<EventCommandDto, Event>()
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 
-            CreateMap<EventCategory, EventCategoryDto>()
-                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
-
-            CreateMap<EventCategoryDto, EventCategory>()
-                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+            #endregion
         }
     }
 }

@@ -17,12 +17,12 @@ namespace Api.Controllers.Identity
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class AccountController : ControllerBase
+    public class AccountsController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
         private readonly ITokenService _tokenService;
 
-        public AccountController(UserManager<User> userManager,
+        public AccountsController(UserManager<User> userManager,
                                  ITokenService tokenService)
         {
             _userManager = userManager;
