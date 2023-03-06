@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Application.Handlers.EventTypes.Queries;
 using Application.Handlers.EventTypes.Commands;
 using Application.DTOs;
+using Application.DTOs.Commands;
 
 namespace Api.Controllers.Lookup
 {
@@ -12,7 +13,14 @@ namespace Api.Controllers.Lookup
     [Route("api/[controller]")]
     public class EventTypesController : BaseApiController
     {
-	@@ -24,20 +23,31 @@ public async Task<IActionResult> GetEventTypes()
+        public EventTypesController() { }
+
+        #region Queries
+
+        [HttpGet] //api/eventtypes
+        public async Task<IActionResult> GetEventTypes()
+        {
+            return HandleResult(await Mediator.Send(new List.Query()));
         }
 
         [HttpGet("{id}")] //api/eventtypes/{id}
@@ -26,13 +34,13 @@ namespace Api.Controllers.Lookup
         #region Commands
 
         [HttpPost] //api/eventtypes
-        public async Task<IActionResult> CreateEventType(EventTypeDto typeDto)
+        public async Task<IActionResult> CreateEventType(EventTypeCommandDto categoryDto)
         {
             return HandleResult(await Mediator.Send(new Create.Command { EventType = typeDto }));
         }
 
         [HttpPut("{id}")] //api/eventtypes/{id}
-        public async Task<IActionResult> UpdateEventType(Guid id, EventTypeDto typeDto)
+        public async Task<IActionResult> UpdateEventType(Guid id, EventTypeCommandDto typeDto)
         {
             return HandleResult(await Mediator.Send(new Edit.Command { Id = id, EventType = typeDto }));
         }
