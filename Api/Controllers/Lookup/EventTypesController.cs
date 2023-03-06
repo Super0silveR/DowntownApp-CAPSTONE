@@ -25,13 +25,13 @@ namespace Api.Controllers.Lookup
 
         #region Commands
 
-        [HttpPost] //api/eventcategories
+        [HttpPost] //api/eventtypes
         public async Task<IActionResult> CreateEventType(EventTypeDto typeDto)
         {
             return HandleResult(await Mediator.Send(new Create.Command { EventType = typeDto }));
         }
 
-        [HttpPut("{id}")] //api/eventcategories/{id}
+        [HttpPut("{id}")] //api/eventtypes/{id}
         public async Task<IActionResult> UpdateEventType(Guid id, EventTypeDto typeDto)
         {
             return HandleResult(await Mediator.Send(new Edit.Command { Id = id, EventType = typeDto }));
