@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { Event } from '../models/event';
+import { User, UserFormValues } from '../models/user';
 
 /** Adding a `fake` delay to the app for testing the `loading` indicators after requests. */
 const sleep = (delay: number) => {
@@ -14,7 +15,7 @@ axios.defaults.baseURL = 'https://localhost:7246/api';
 /** Setting up an Axios interceptor for computing the response. [in this case] */
 axios.interceptors.response.use(async response => {
     try {
-        await sleep(2000);
+        await sleep(1000);
         return response;
     } catch (error) {
         console.log(error);
@@ -36,7 +37,7 @@ const requests = {
 }
 
 /**
- * Event [domain entity] requests.
+ * Event [domain entity] related requests.
  * */
 const Events = {
     list: () => requests.get<Event[]>('/events'),
@@ -47,9 +48,17 @@ const Events = {
 }
 
 /**
+ * Account related requests. 
+ */
+const Accounts = {
+    login: (user: UserFormValues) => requests.post<User>('/accounts/login', user)
+}
+
+/**
  * Building the `agent` object.
  * */
 const agent = {
+    Accounts,
     Events
 }
 

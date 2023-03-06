@@ -14,7 +14,7 @@ export default class EventStore {
     selectedEvent: Event | undefined = undefined;
     editMode = false;
     loading = false;
-    loadingInitial = true;
+    loadingInitial = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -46,45 +46,44 @@ export default class EventStore {
         console.log(this.selectedEvent?.rating);
     }
 
-    /** Action that sets the `selected event`. */
-    selectEvent = (id: string) => {
-        this.selectedEvent = this.eventRegistry.get(id);
-    }
-
-    /** Action that cancels the latest event selection. */
-    cancelSelectEvent = () => {
-        this.selectedEvent = undefined;
-    }
-
-    /** Action that handles the opening of the form to `edit` an event. */
-    openForm = (id?: string) => {
-        id ? this.selectEvent(id) : this.cancelSelectEvent();
-        this.editMode = true;
-    }
-
-    /** Action that handle the closing of the form. */
-    closeForm = () => {
-        this.editMode = false;
-    }
-
     /** ASYNC ACTIONS */
 
     /** Action that executes the loading of the events. */
     loadEvents = async () => {
+        this.setLoadingInitial(true);
         /** Asynchronous code has got to be in a try/catch block. */
         try {
             const events = await agent.Events.list();
             events.forEach(event => {
-                event.date = event.date.split('T')[0];
-
-                /** MobX uses mutable objects. */
-                this.eventRegistry.set(event.id, event);
+                this.setEvent(event);
             });
         } catch (e) {
             console.log(e);
         } finally {
             this.setLoadingInitial(false);
         }
+    }
+
+    /** Action that executes the loading of one specific event. */
+    loadEvent = async (id: string) => {
+        let event = this.getEvent(id);
+        if (event) {
+            this.selectedEvent = event;
+            return event;
+        } else {
+            this.setLoadingInitial(true);
+            try {
+                event = await agent.Events.details(id);
+                this.setEvent(event);
+                runInAction(() => this.selectedEvent = event);
+                return event;
+            } catch (e) {
+                console.log(e);
+            } finally {
+                this.setLoadingInitial(false);
+            }
+        }
+        this.setLoadingInitial(false);
     }
 
     /** Action that executes the creation of an event. */
@@ -130,7 +129,6 @@ export default class EventStore {
             await agent.Events.delete(id);
             runInAction(() => {
                 this.eventRegistry.delete(id);
-                if (this.selectedEvent?.id === id) this.cancelSelectEvent();
             });
         } catch (e) {
             console.log(e);
@@ -138,4 +136,15 @@ export default class EventStore {
             this.setLoading(false);
         }
     }
+
+    /** PRIVATE METHODS */
+
+    /** Fetch an event from the registry. */
+    private getEvent = (id: string) => this.eventRegistry.get(id);
+
+    /** Add an event to the registry. */
+    private setEvent = (event: Event) => {
+        event.date = event.date.split('T')[0];
+        this.eventRegistry.set(event.id, event);
+    };
 }

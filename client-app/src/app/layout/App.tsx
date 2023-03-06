@@ -1,27 +1,27 @@
-import React, { useEffect } from 'react';
-import EventDashboard from '../../features/events/dashboard/EventDashboard';
+import React from 'react';
 import ResponsiveAppBar from './NavBar';
-import LoadingComponent from './LoadingComponent';
-import { useStore } from '../stores/store';
 import { Container } from '@mui/material';
 import { observer } from 'mobx-react-lite';
+import { Outlet, useLocation } from 'react-router-dom';
+import HomePage from '../../features/home/HomePage';
 
+/** Main Application component. */
 function App() {
+    /** React Router hook that gives us which route has the user gone to. */
+    const location = useLocation();
 
-    /** Destructuring the event store from our StoreContext. */
-    const { eventStore } = useStore();
-
-    useEffect(() => {
-        eventStore.loadEvents();
-    }, [eventStore]);
-
-    if (eventStore.loadingInitial) return <LoadingComponent content='Loading App..' />
     return (
         <>
-            <ResponsiveAppBar />
-            <Container sx={{ my: '7em' }}>
-                <EventDashboard />
-            </Container>
+            {location.pathname === '/' ? <HomePage /> : (
+                <>
+                    <ResponsiveAppBar />
+                    <Container sx={{ my: '7em' }}>
+                        {/** Route Outlet so we can swap in/out react components 
+                         * when we navigate. */}
+                        <Outlet />
+                    </Container>
+                </>
+            )}
         </>
   );
 }

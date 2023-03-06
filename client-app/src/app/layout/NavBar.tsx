@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { NavLink } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -6,9 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
-import AdbIcon from '@mui/icons-material/Adb';
 import { Badge, Divider } from '@mui/material';
-
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -16,8 +14,11 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { Whatshot } from '@mui/icons-material';
 
 const pages = ['Bars', 'Events', 'Become a content creator!'];
-//const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
+/** 
+ * React Component used as our Application NavBar.
+ * Needs some rework.
+ */
 function ResponsiveAppBar() {
     return (
         <AppBar position="fixed">
@@ -29,8 +30,8 @@ function ResponsiveAppBar() {
                     <Typography
                         variant="h6"
                         noWrap
-                        component="a"
-                        href="/"
+                        component={NavLink}
+                        to='/'
                         sx={{
                             mr: 2,
                             display: { xs: 'none', md: 'flex' },
@@ -50,36 +51,26 @@ function ResponsiveAppBar() {
                             marginTop: 10,
                             marginRight: 10,
                             marginBottom: 10,
-                            borderWidth: '.15rem'
-                        }} />
-                    <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-                    <Typography
-                        variant="h5"
-                        noWrap
-                        component="a"
-                        href=""
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'flex', md: 'none' },
-                            flexGrow: 1,
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
-                    >
-                        LOGO
-                    </Typography>
+                            borderWidth: '.1rem'
+                        }} 
+                    />
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {pages.map((page) => (
-                            <Button
-                                key={page}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
-                            >
-                                {page}
-                            </Button>
-                        ))}
+                        <Button 
+                            component={NavLink}
+                            to='/bars'
+                            color='inherit'
+                            sx={{ my: 2, display: 'block' }}
+                        >
+                            {pages[0]}
+                        </Button>
+                        <Button 
+                            component={NavLink}
+                            to='/events'
+                            color='inherit'
+                            sx={{ my: 2, display: 'block' }}
+                        >
+                            {pages[1]}
+                        </Button>
                     </Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
