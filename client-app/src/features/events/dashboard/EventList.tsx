@@ -7,11 +7,13 @@ interface Props {
     events: Event[];
     selectEvent: (id: string) => void;
     deleteEvent: (id: string) => void;
+    submitting: boolean;
 }
 
 export default function EventList({ events,
         selectEvent,
-        deleteEvent
+        deleteEvent,
+        submitting
     }: Props) {
     return (
         <>
@@ -21,6 +23,7 @@ export default function EventList({ events,
                         event={event}
                         selectEvent={selectEvent}
                         deleteEvent={deleteEvent}
+                        submitting={submitting}
                         key={event.id}
                     />
                 ))}

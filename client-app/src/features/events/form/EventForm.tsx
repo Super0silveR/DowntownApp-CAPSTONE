@@ -1,21 +1,30 @@
 import { Button, Container, FormControl, Grid, Stack, TextField, Typography } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import React, { ChangeEvent, useState } from 'react';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { Event, newEvent } from '../../../app/models/event';
+import dayjs from 'dayjs';
+import { DesktopDateTimePicker } from '@mui/x-date-pickers';
 
 interface Props {
     event: Event | undefined;
     closeForm: () => void;
     createOrEdit: (event: Event) => void;
+    submitting: boolean;
 }
 
-export default function EventForm({ event: selectedEvent, closeForm, createOrEdit }: Props) {
+export default function EventForm({ event: selectedEvent, closeForm, createOrEdit, submitting }: Props) {
 
     const initialState = selectedEvent ?? newEvent();
 
     const [event, setEvent] = useState(initialState);
+    const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(dayjs(event.date !== '' ? event.date : Date.now()));
 
     function handleSubmit(e: any) {
         e.preventDefault();
+
+        event.date = startDate ? startDate.toISOString() : '';
         createOrEdit(event);
     }
 
@@ -52,10 +61,18 @@ export default function EventForm({ event: selectedEvent, closeForm, createOrEdi
                                         fullWidth
                                     />
                                 </FormControl>
+                                <FormControl sx={{ m: 0, minWidth: 120 }} size="small">
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DesktopDateTimePicker
+                                            value={startDate}
+                                            onChange={(newDate) => setStartDate(newDate)}
+                                        />
+                                    </LocalizationProvider>
+                                </FormControl>
                                 <Stack direction='row' spacing={2}>
-                                    <Button color="primary" variant="outlined" fullWidth type="submit">
+                                    <LoadingButton loading={submitting} color="primary" variant="outlined" fullWidth type="submit">
                                         Submit
-                                    </Button>
+                                    </LoadingButton>
                                     <Button color="warning" onClick={closeForm} variant="outlined" fullWidth type="submit">
                                         Cancel
                                     </Button>

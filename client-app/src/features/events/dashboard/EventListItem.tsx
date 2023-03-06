@@ -1,15 +1,24 @@
 import { Avatar, Button, Divider, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, Stack, Typography } from '@mui/material';
-import React from 'react';
+import React, { SyntheticEvent, useState } from 'react';
 import { Event } from '../../../app/models/event';
 import ImageIcon from '@mui/icons-material/Image';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 interface Props {
     event: Event;
     selectEvent: (id: string) => void;
     deleteEvent: (id: string) => void;
+    submitting: boolean;
 }
 
-export default function EventListItem({ event, selectEvent, deleteEvent }: Props) {
+export default function EventListItem({ event, selectEvent, deleteEvent, submitting }: Props) {
+    const [target, setTarget] = useState('');
+
+    function handleEventDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
+        setTarget(e.currentTarget.name);
+        deleteEvent(id);
+    }
+
     return (
         <>
             <ListItem key={event.id}
@@ -29,21 +38,37 @@ export default function EventListItem({ event, selectEvent, deleteEvent }: Props
                         <ImageIcon />
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText
-                    primary={event.title}
-                    secondary={
-                        <React.Fragment>
-                            <Typography
-                                sx={{ display: 'inline' }}
-                                component="span"
-                                variant="body2"
-                                color="text.secondary"
-                            >
-                                {event.description}
-                            </Typography>
-                        </React.Fragment>
-                    }
-                />
+                <Stack direction='column'>
+                    <ListItemText
+                        primary={event.title}
+                        secondary={
+                            <React.Fragment>
+                                <Typography
+                                    sx={{ display: 'inline' }}
+                                    component="span"
+                                    variant="body2"
+                                    color="text.secondary"
+                                >
+                                    {event.description}
+                                </Typography>
+                            </React.Fragment>
+                        }
+                    />
+                    <ListItemText
+                        secondary={
+                            <React.Fragment>
+                                <Typography
+                                    component='span'
+                                    variant='subtitle2'
+                                    fontWeight='100'
+                                    color="secondary.dark"
+                                >
+                                    {event.date.toLocaleString()}
+                                </Typography>
+                            </React.Fragment>
+                        }
+                    />
+                </Stack>
                 <ListItemSecondaryAction>
                     <Stack
                         direction="row"
@@ -58,15 +83,17 @@ export default function EventListItem({ event, selectEvent, deleteEvent }: Props
                         >
                             See More!
                         </Button>
-                        <Button
+                        <LoadingButton
+                            name={event.id}
+                            loading={submitting && target === event.id}
                             variant='outlined'
                             size="small"
                             sx={{ borderRadius: '0.2rem' }}
-                            onClick={() => deleteEvent(event.id)}
+                            onClick={(e) => handleEventDelete(e, event.id)}
                             color='error'
                         >
                             Delete
-                        </Button>
+                        </LoadingButton>
                     </Stack>
                 </ListItemSecondaryAction>
             </ListItem>

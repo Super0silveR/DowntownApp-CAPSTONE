@@ -45,7 +45,7 @@ export interface BaseEvent {
 
 export interface Event extends BaseEvent {
     creatorId: string;
-    date: Date;
+    date: string;
     creatorUserName: string;
     isActive: boolean;
     rating: Rating;
@@ -63,7 +63,7 @@ const emptyBaseEvent = (): BaseEvent => ({
 const emptyEvent = (): Event => ({
     ...emptyBaseEvent(),
     creatorId: '',
-    date: new Date(),
+    date: '',
     creatorUserName: '',
     isActive: true,
     rating: emptyRating(),
