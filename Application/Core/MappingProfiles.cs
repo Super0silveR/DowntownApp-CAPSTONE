@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Commands;
+﻿
+using Application.DTOs.Commands;
 using Application.DTOs.Queries;
 using Domain.Entities;
 using Domain.Enums;
@@ -28,6 +29,14 @@ namespace Application.Core
             CreateMap<Event, Event>();
 
             CreateMap<Event, EventDto>()
+                .ForMember(e => e.CreatorUserName, options => 
+                    options.MapFrom(src => src.Contributors.FirstOrDefault(c => c.IsAdmin)!.User!.UserName))
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<EventDto, Event>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<Event, EventDto>()
                 .ForMember(edto => edto.Contributors, options => 
                     options.MapFrom(e => e.Contributors.Where(c => !c.Status.Equals(ContributorStatus.Removed))))
                 .ForMember(edto => edto.CreatorUserName, options =>
@@ -40,6 +49,15 @@ namespace Application.Core
                     options.MapFrom(src => src.Contributors.FirstOrDefault(c => c.Status.Equals(ContributorStatus.Creator))!.User!.UserName));
 
             CreateMap<EventCategory, EventCategoryDto>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<EventCategoryDto, EventCategory>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<EventType, EventTypeDto>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<EventTypeDto, EventType>()
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 
             CreateMap<EventContributor, EventContributorDto>()
