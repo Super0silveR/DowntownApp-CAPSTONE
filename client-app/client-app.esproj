@@ -13,6 +13,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\app\models\" />
+    <Folder Include="src\app\api\" />
     <Folder Include="src\features\events\dashboard\" />
     <Folder Include="src\features\events\details\" />
     <Folder Include="src\features\events\form\" />

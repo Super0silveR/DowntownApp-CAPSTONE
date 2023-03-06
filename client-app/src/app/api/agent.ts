@@ -47,10 +47,13 @@ const Events = {
 }
 
 /**
- * Frontend Agent used to make the requests to the API.
+ * Building the `agent` object.
  * */
 const agent = {
     Events
 }
 
+/**
+ * Exporting the `agent` object that serves as our proxy to our API.
+ * */
 export default agent;

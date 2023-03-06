@@ -3,15 +3,17 @@ import React, { SyntheticEvent, useState } from 'react';
 import { Event } from '../../../app/models/event';
 import ImageIcon from '@mui/icons-material/Image';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { useStore } from '../../../app/stores/store';
+import { observer } from 'mobx-react-lite';
 
 interface Props {
     event: Event;
-    selectEvent: (id: string) => void;
-    deleteEvent: (id: string) => void;
-    submitting: boolean;
 }
 
-export default function EventListItem({ event, selectEvent, deleteEvent, submitting }: Props) {
+function EventListItem({ event }: Props) {
+    const { eventStore } = useStore();
+    const { deleteEvent, loading } = eventStore;
+
     const [target, setTarget] = useState('');
 
     function handleEventDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
@@ -79,13 +81,13 @@ export default function EventListItem({ event, selectEvent, deleteEvent, submitt
                             variant='outlined'
                             size="small"
                             sx={{ borderRadius: '0.2rem' }}
-                            onClick={() => selectEvent(event.id)}
+                            onClick={() => eventStore.selectEvent(event.id)}
                         >
                             See More!
                         </Button>
                         <LoadingButton
                             name={event.id}
-                            loading={submitting && target === event.id}
+                            loading={loading && target === event.id}
                             variant='outlined'
                             size="small"
                             sx={{ borderRadius: '0.2rem' }}
@@ -99,4 +101,6 @@ export default function EventListItem({ event, selectEvent, deleteEvent, submitt
             </ListItem>
         </>
     );
-}
+};
+
+export default observer(EventListItem);
