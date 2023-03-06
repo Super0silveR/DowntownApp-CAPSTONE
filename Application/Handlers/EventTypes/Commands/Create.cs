@@ -50,9 +50,9 @@ namespace Application.Handlers.EventTypes.Commands
                 /// Make sure the creatorId is always populated. (FK_CONSTRAINT)
                 request.EventType.CreatorId ??= Guid.Parse(_userService.GetUserId()!);
 
-                var eventCat = _mapper.Map<EventType>(request.EventType);
+                var eventType = _mapper.Map<EventType>(request.EventType);
 
-                _context.EventCategories.Add(eventCat);
+                _context.EventTypes.Add(eventType);
 
                 bool result = await _context.SaveChangesAsync(cancellationToken) > 0;
 
