@@ -1,27 +1,41 @@
 import { Button, Container, FormControl, Grid, Stack, TextField, Typography } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import React, { ChangeEvent, useState } from 'react';
-import { Event, newEvent } from '../../../app/models/event';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { newEvent } from '../../../app/models/event';
+import dayjs from 'dayjs';
+import { DesktopDateTimePicker } from '@mui/x-date-pickers';
+import { useStore } from '../../../app/stores/store';
+import { observer } from 'mobx-react-lite';
+import { runInAction } from 'mobx';
 
-interface Props {
-    event: Event | undefined;
-    closeForm: () => void;
-    createOrEdit: (event: Event) => void;
-}
+function EventForm() {
 
-export default function EventForm({ event: selectedEvent, closeForm, createOrEdit }: Props) {
+    const { eventStore } = useStore();
+    const { selectedEvent, closeForm, createEvent, updateEvent, loading } = eventStore;
 
     const initialState = selectedEvent ?? newEvent();
 
     const [event, setEvent] = useState(initialState);
+    const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(dayjs(event.date !== '' ? event.date : Date.now()));
+    const [disabled, setDisabled] = useState(true);
 
-    function handleSubmit(e: any) {
+    function handleSubmit(e: React.FormEvent<EventTarget>) {
+        console.log(e);
+        setDisabled(true);
         e.preventDefault();
-        createOrEdit(event);
+        runInAction(() => {
+            event.date = startDate ? startDate.toISOString() : '';
+        });
+        event.id ? updateEvent(event) : createEvent(event);
     }
 
+    /** Clean-up necessary with the date picker and onChange handler. */
     function handleInputChange(changeEvent: ChangeEvent<HTMLInputElement>) {
         const { name, value } = changeEvent.target;
-        setEvent({...event, [name]: value});
+        setEvent({ ...event, [name]: value });
+        setDisabled(false);
     }
 
     return (
@@ -52,10 +66,18 @@ export default function EventForm({ event: selectedEvent, closeForm, createOrEdi
                                         fullWidth
                                     />
                                 </FormControl>
+                                <FormControl sx={{ m: 0, minWidth: 120 }} size="small">
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DesktopDateTimePicker
+                                            value={startDate}
+                                            onChange={(newDate) => setStartDate(newDate)}
+                                        />
+                                    </LocalizationProvider>
+                                </FormControl>
                                 <Stack direction='row' spacing={2}>
-                                    <Button color="primary" variant="outlined" fullWidth type="submit">
+                                    <LoadingButton disabled={disabled} loading={loading} color="primary" variant="outlined" fullWidth type="submit">
                                         Submit
-                                    </Button>
+                                    </LoadingButton>
                                     <Button color="warning" onClick={closeForm} variant="outlined" fullWidth type="submit">
                                         Cancel
                                     </Button>
@@ -67,4 +89,6 @@ export default function EventForm({ event: selectedEvent, closeForm, createOrEdi
             </Container>
         </>
     );
-}
+};
+
+export default observer(EventForm);

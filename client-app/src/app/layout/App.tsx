@@ -1,70 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import EventDashboard from '../../features/events/dashboard/EventDashboard';
 import ResponsiveAppBar from './NavBar';
-import axios from 'axios';
-import { v4 as uuid } from 'uuid';
-
-import { Event } from '../../app/models/event';
+import LoadingComponent from './LoadingComponent';
+import { useStore } from '../stores/store';
+import { Container } from '@mui/material';
+import { observer } from 'mobx-react-lite';
 
 function App() {
-    const [events, setEvents] = useState<Event[]>([]);
-    const [selectedEvent, setSelectedEvent] = useState<Event | undefined>(undefined);
-    const [editMode, setEditMode] = useState(false);
+
+    /** Destructuring the event store from our StoreContext. */
+    const { eventStore } = useStore();
 
     useEffect(() => {
-      axios.get<Event[]>('https://localhost:7246/api/events')
-        .then(response => {
-          setEvents(response.data);
-        });
-    }, []);
+        eventStore.loadEvents();
+    }, [eventStore]);
 
-    function handleSelectEvent(id: string) {
-        setSelectedEvent(events.find(e => e.id === id));
-        setEditMode(false);
-    }
-
-    function handleCancelSelectEvent() {
-        setSelectedEvent(undefined);
-        setEditMode(false);
-    }
-
-    function handleFormOpen(id?: string) {
-        id ? handleSelectEvent(id) : handleCancelSelectEvent();
-        setEditMode(true);
-    }
-
-    function handleFormClose() {
-        setEditMode(false);
-    }
-
-    function handleCreateorEditEvent(event: Event) {
-        event.id
-            ? setEvents([...events.filter(e => e.id !== event.id), event])
-            : setEvents([...events, {...event, id: uuid()}]);
-        setEditMode(false);
-        setSelectedEvent(event);
-    }
-
-    function handleDeleteEvent(id: string) {
-        setEvents([...events.filter(e => e.id !== id)]);
-    }
-
+    if (eventStore.loadingInitial) return <LoadingComponent content='Loading App..' />
     return (
         <>
             <ResponsiveAppBar />
-            <EventDashboard
-                events={events}
-                selectedEvent={selectedEvent}
-                selectEvent={handleSelectEvent}
-                cancelSelectEvent={handleCancelSelectEvent}
-                editMode={editMode}
-                openForm={handleFormOpen}
-                closeForm={handleFormClose}
-                createOrEdit={handleCreateorEditEvent}
-                deleteEvent={handleDeleteEvent}
-            />
+            <Container sx={{ my: '7em' }}>
+                <EventDashboard />
+            </Container>
         </>
   );
 }
 
-export default App;
+/** Higher order function that add additional powers to our App component 
+ * allowing it to observe the observables in our stores. 
+ * */
+export default observer(App);

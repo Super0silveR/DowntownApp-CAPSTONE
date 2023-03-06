@@ -1,30 +1,23 @@
 import { List } from '@mui/material';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Event } from '../../../app/models/event';
+import { useStore } from '../../../app/stores/store';
 import EventListItem from './EventListItem';
 
-interface Props {
-    events: Event[];
-    selectEvent: (id: string) => void;
-    deleteEvent: (id: string) => void;
-}
+function EventList() {
+    const { eventStore } = useStore();
+    const { eventsByDate } = eventStore;
 
-export default function EventList({ events,
-        selectEvent,
-        deleteEvent
-    }: Props) {
     return (
         <>
             <List>
-                {events.map((event: Event) => (
-                    <EventListItem
-                        event={event}
-                        selectEvent={selectEvent}
-                        deleteEvent={deleteEvent}
-                        key={event.id}
-                    />
+                {eventsByDate.map((event: Event) => (
+                    <EventListItem key={event.id} event={event} />
                 ))}
             </List>         
         </>
     );
-}
+};
+
+export default observer(EventList);

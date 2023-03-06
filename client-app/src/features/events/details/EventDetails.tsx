@@ -1,8 +1,9 @@
 import { Avatar, Box, Button, Card, CardActions, CardContent, CardMedia, Divider, Rating, Stack, Typography } from '@mui/material';
-import React, { useState } from 'react';
-import { Event } from '../../../app/models/event';
+import React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import { Favorite, FavoriteBorder } from '@mui/icons-material';
+import { useStore } from '../../../app/stores/store';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
 
 // TEMPORARY.
 const faces = [
@@ -21,26 +22,12 @@ const StyledRating = styled(Rating)({
     },
 });
 
-interface Props {
-    event: Event;
-    cancelSelectEvent: () => void;
-    openForm: (id: string) => void;
-}
-
-export default function EventDetails({ event, cancelSelectEvent, openForm }: Props) {
+export default function EventDetails() {
     const theme = useTheme();
-    const { id, title, description } = event;
-    const { count, value } = event.rating;
+    const { eventStore } = useStore();
+    const { selectedEvent: event, cancelSelectEvent, openForm, setRating } = eventStore;
 
-    const [rating, setRating] = useState(value ?? 0);
-    const [votes, setCount] = useState(count);
-
-    function updateRating(newValue: any) {
-        var newAvg = (rating !== 0) ? (rating + ((newValue - rating) / (votes + 1))) : newValue;
-
-        setCount(votes + 1);
-        setRating(newAvg);
-    }
+    if (!event) return <LoadingComponent />;
 
     function randomIntFromInterval(min: number, max: number) { // min and max included 
         return Math.floor(Math.random() * (max - min + 1) + min);
@@ -49,7 +36,6 @@ export default function EventDetails({ event, cancelSelectEvent, openForm }: Pro
     return (
         <>
             <Card
-                key={id}
                 sx={{ml:2,my:1}}
             >
                 <CardMedia
@@ -72,7 +58,7 @@ export default function EventDetails({ event, cancelSelectEvent, openForm }: Pro
                             color: 'secondary.dark'
                         }}
                     >
-                        {title}
+                        {event.title}
                     </Typography>
                     <Typography
                         className={"MuiTypography--subheading"}
@@ -81,7 +67,7 @@ export default function EventDetails({ event, cancelSelectEvent, openForm }: Pro
                             color: 'secondary.light'
                         }}
                     >
-                        {description}
+                        {event.description}
                     </Typography>
                     <Divider
                         sx={{
@@ -116,12 +102,12 @@ export default function EventDetails({ event, cancelSelectEvent, openForm }: Pro
                     <StyledRating
                         sx={{ padding: theme.spacing(0.7) }}
                         name="customized-color"
-                        defaultValue={value}
+                        defaultValue={event.rating.value}
                         getLabelText={(value: number) => `${value} Heart${value !== 1 ? 's' : ''}`}
                         precision={0.1}
                         icon={<Favorite fontSize="inherit" />}
                         emptyIcon={<FavoriteBorder fontSize="inherit" />}
-                        onChange={(event, newValue) => { updateRating(newValue) }}
+                        onChange={(event, newValue) => {setRating(newValue ?? 0)}}
                     />
                     <Typography
                         className={"MuiTypography--subheading"}
@@ -131,7 +117,7 @@ export default function EventDetails({ event, cancelSelectEvent, openForm }: Pro
                             verticalAlign: 'top'
                         }}
                     >
-                        ({rating.toFixed(2)})
+                        ({event.rating.value})
                     </Typography>
                     <CardActions>
                         <Stack
