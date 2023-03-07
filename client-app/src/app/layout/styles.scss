@@ -1,4 +1,6 @@
-$bgcolor-violet: '#6B5B95';
+$bgcolor-violet: #6B5B95;
+$silver: #DDDDDD;
+$gray: rgba(221, 221, 221, 0.4);
 
 body {
   margin: 0;
@@ -7,6 +9,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: $gray;
 }
 
 code {

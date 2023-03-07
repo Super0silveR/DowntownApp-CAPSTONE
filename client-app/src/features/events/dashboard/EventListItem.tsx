@@ -11,6 +11,7 @@ interface Props {
     event: Event;
 }
 
+/** React component that represents an item in a list of events. */
 function EventListItem({ event }: Props) {
     const { eventStore } = useStore();
     const { deleteEvent, loading } = eventStore;
@@ -30,15 +31,16 @@ function EventListItem({ event }: Props) {
                 key={event.id}
                 sx={{
                     transition: "0.3s",
-                    boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
+                    boxShadow: "0 2px 10px -3px rgba(0,0,0,0.3)",
                     "&:hover": {
-                        boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)"
+                        boxShadow: "0 4px 13px -3.125px rgba(0,0,0,0.3)"
                     },
                     textAlign: "left",
                     mb: 2,
                     width: '100%',
-                    borderRadius: 1,
-                    color: 'primary.dark'
+                    borderRadius: '1em',
+                    color: 'primary.dark',
+                    backgroundColor: 'rgba(221,221,221,0.2)'
                 }}
             >
                 <ListItemAvatar>
@@ -53,7 +55,8 @@ function EventListItem({ event }: Props) {
                                 <Typography
                                     sx={{ 
                                         display: 'inline',
-                                        textDecoration: 'underline' 
+                                        textDecoration: 'underline',
+                                        fontFamily:'monospace' 
                                     }}
                                     component="span"
                                     variant="body2"
@@ -68,7 +71,8 @@ function EventListItem({ event }: Props) {
                                 <Typography
                                     sx={{ 
                                         display: 'inline',
-                                        textDecoration: 'none' 
+                                        textDecoration: 'none',
+                                        fontFamily:'monospace' 
                                     }}
                                     component="span"
                                     variant="body2"

@@ -26,6 +26,22 @@ export default class EventStore {
             Date.parse(e1.date) - Date.parse(e2.date));
     }
 
+    /** 
+     * Reducing the array of events so that we now have an array of objects.
+     * Each objects has a `key` and a `value` where the `key` is a date, and 
+     * the value is an array of Event.
+     * We could have 3 events [value] on the same day [key], for example.
+     */
+    get groupedEventsByDate() {
+        return Object.entries(
+            this.eventsByDate.reduce((events, event) => {
+                const date = event.date;
+                events[date] = events[date] ? [...events[date], event] : [event];
+                return events;
+            }, {} as {[key: string]: Event[]})
+        );
+    }
+
     /** Action that sets the `loadingInitial` property.  */
     setLoadingInitial = (state: boolean) => {
         this.loadingInitial = state;
@@ -93,7 +109,7 @@ export default class EventStore {
         try {
             await agent.Events.create(event);
             runInAction(() => {
-                this.eventRegistry.set(event.id, event);
+                this.setEvent(event);
                 this.selectedEvent = event;
                 this.editMode = false;
             });
@@ -111,7 +127,7 @@ export default class EventStore {
         try {
             await agent.Events.update(event);
             runInAction(() => {
-                this.eventRegistry.set(event.id, event);
+                this.setEvent(event);
                 this.selectedEvent = event;
                 this.editMode = false;
             });
