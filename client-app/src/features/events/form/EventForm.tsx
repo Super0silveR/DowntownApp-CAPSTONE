@@ -1,34 +1,61 @@
 import { Button, Container, FormControl, Grid, Stack, TextField, Typography } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { newEvent } from '../../../app/models/event';
+import { Event, newEvent } from '../../../app/models/event';
 import dayjs from 'dayjs';
 import { DesktopDateTimePicker } from '@mui/x-date-pickers';
 import { useStore } from '../../../app/stores/store';
 import { observer } from 'mobx-react-lite';
 import { runInAction } from 'mobx';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
+import { v4 as uuid } from 'uuid';
 
 function EventForm() {
 
     const { eventStore } = useStore();
-    const { selectedEvent, closeForm, createEvent, updateEvent, loading } = eventStore;
+    const { createEvent, updateEvent, 
+            loading, loadEvent, loadingInitial } = eventStore;
 
-    const initialState = selectedEvent ?? newEvent();
+    /** React Router hook for fetching url params. */
+    const { id } = useParams();
 
-    const [event, setEvent] = useState(initialState);
+    const [event, setEvent] = useState<Event>(newEvent());
+
     const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(dayjs(event.date !== '' ? event.date : Date.now()));
     const [disabled, setDisabled] = useState(true);
 
+    const navigate = useNavigate();
+
+    /** 
+     * Usage of the `!` operator because we KNOW the event will not be null.
+     * Else we need to deal with nullable warnings from TS.
+     */
+    useEffect(() => {
+        if (id) loadEvent(id).then(event => setEvent(event!));
+    }, [id, loadEvent]);
+
+    /** Handling the onSubmit logic. */
     function handleSubmit(e: React.FormEvent<EventTarget>) {
-        console.log(e);
         setDisabled(true);
         e.preventDefault();
         runInAction(() => {
             event.date = startDate ? startDate.toISOString() : '';
         });
-        event.id ? updateEvent(event) : createEvent(event);
+
+        /** Redirecting the user depending on the action. */
+        if (!event.id) {
+            event.id = uuid();
+            createEvent(event).then(() => {
+                navigate(`/events/${event.id}`);
+            });
+        } else {
+            updateEvent(event).then(() => {
+                navigate(`/events/${event.id}`);
+            });
+        }
     }
 
     /** Clean-up necessary with the date picker and onChange handler. */
@@ -37,6 +64,8 @@ function EventForm() {
         setEvent({ ...event, [name]: value });
         setDisabled(false);
     }
+
+    if (loadingInitial) return <LoadingComponent content='Loading Event..' />
 
     return (
         <>
@@ -78,7 +107,7 @@ function EventForm() {
                                     <LoadingButton disabled={disabled} loading={loading} color="primary" variant="outlined" fullWidth type="submit">
                                         Submit
                                     </LoadingButton>
-                                    <Button color="warning" onClick={closeForm} variant="outlined" fullWidth type="submit">
+                                    <Button component={Link} to='/events' color="warning" variant="outlined" fullWidth>
                                         Cancel
                                     </Button>
                                 </Stack>

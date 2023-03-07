@@ -1,15 +1,10 @@
-export interface User {
-    userName: string;
-    displayName: string;
-    bio?: any;
-    image?: any;
-}
+import { UserDto } from "./user";
 
 export interface Review {
     rated: Date;
     vote: number;
     review: string;
-    user: User;
+    user: UserDto;
 }
 
 export interface Rating {

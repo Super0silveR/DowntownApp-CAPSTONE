@@ -1,5 +1,6 @@
 import { Avatar, Button, Divider, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, Stack, Typography } from '@mui/material';
 import React, { SyntheticEvent, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Event } from '../../../app/models/event';
 import ImageIcon from '@mui/icons-material/Image';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -23,7 +24,10 @@ function EventListItem({ event }: Props) {
 
     return (
         <>
-            <ListItem key={event.id}
+            <ListItem 
+                component={Link}
+                to={`/events/${event.id}`}
+                key={event.id}
                 sx={{
                     transition: "0.3s",
                     boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
@@ -33,8 +37,10 @@ function EventListItem({ event }: Props) {
                     textAlign: "left",
                     mb: 2,
                     width: '100%',
-                    borderRadius: 1
-                }}>
+                    borderRadius: 1,
+                    color: 'primary.dark'
+                }}
+            >
                 <ListItemAvatar>
                     <Avatar>
                         <ImageIcon />
@@ -42,11 +48,28 @@ function EventListItem({ event }: Props) {
                 </ListItemAvatar>
                 <Stack direction='column'>
                     <ListItemText
-                        primary={event.title}
+                        primary={
+                            <React.Fragment>
+                                <Typography
+                                    sx={{ 
+                                        display: 'inline',
+                                        textDecoration: 'underline' 
+                                    }}
+                                    component="span"
+                                    variant="body2"
+                                    color="primary.dark"
+                                >
+                                    {event.title}
+                                </Typography>
+                            </React.Fragment>
+                        }
                         secondary={
                             <React.Fragment>
                                 <Typography
-                                    sx={{ display: 'inline' }}
+                                    sx={{ 
+                                        display: 'inline',
+                                        textDecoration: 'none' 
+                                    }}
                                     component="span"
                                     variant="body2"
                                     color="text.secondary"
@@ -78,10 +101,11 @@ function EventListItem({ event }: Props) {
                         spacing={1}
                     >
                         <Button
+                            component={Link}
+                            to={`/events/${event.id}`}
                             variant='outlined'
                             size="small"
                             sx={{ borderRadius: '0.2rem' }}
-                            onClick={() => eventStore.selectEvent(event.id)}
                         >
                             See More!
                         </Button>

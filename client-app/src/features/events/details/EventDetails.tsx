@@ -1,9 +1,11 @@
 import { Avatar, Box, Button, Card, CardActions, CardContent, CardMedia, Divider, Rating, Stack, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import { Favorite, FavoriteBorder } from '@mui/icons-material';
 import { useStore } from '../../../app/stores/store';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
+import { observer } from 'mobx-react-lite';
+import { Link, useParams } from 'react-router-dom';
 
 // TEMPORARY.
 const faces = [
@@ -22,12 +24,17 @@ const StyledRating = styled(Rating)({
     },
 });
 
-export default function EventDetails() {
+function EventDetails() {
     const theme = useTheme();
     const { eventStore } = useStore();
-    const { selectedEvent: event, cancelSelectEvent, openForm, setRating } = eventStore;
+    const { selectedEvent: event, setRating, loadEvent, loadingInitial } = eventStore;
+    const { id } = useParams();
 
-    if (!event) return <LoadingComponent />;
+    useEffect(() => {
+        if (id) loadEvent(id);
+    }, [id, loadEvent]);
+
+    if (loadingInitial || !event) return <LoadingComponent />;
 
     function randomIntFromInterval(min: number, max: number) { // min and max included 
         return Math.floor(Math.random() * (max - min + 1) + min);
@@ -130,7 +137,8 @@ export default function EventDetails() {
                                 color='primary'
                                 size="small"
                                 sx={{ borderRadius: '0.2rem' }}
-                                onClick={() => openForm(event.id)}
+                                component={Link}
+                                to={`/manage/${event.id}`}
                             >
                                 Edit
                             </Button>
@@ -139,7 +147,8 @@ export default function EventDetails() {
                                 color='warning'
                                 size="small"
                                 sx={{ borderRadius: '0.2rem' }}
-                                onClick={cancelSelectEvent}
+                                component={Link}
+                                to='/events'
                             >
                                 Close
                             </Button>
@@ -149,4 +158,6 @@ export default function EventDetails() {
             </Card>
         </>
     );
-}
+};
+
+export default observer(EventDetails);
