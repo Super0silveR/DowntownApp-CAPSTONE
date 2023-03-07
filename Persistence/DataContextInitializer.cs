@@ -100,32 +100,68 @@ namespace Persistence
                 await _context.SaveChangesAsync();
             }
 
+            var eventCategories = new List<EventCategory>
+            {
+                new EventCategory
+                {
+                    Title = "Music",
+                    Description = "Awesome music at this event!",
+                    Color = _colorService.RgbConverter(Color.Coral),
+                    CreatorId = users[0].Id
+                },
+                new EventCategory
+                {
+                    Title = "Art",
+                    Description = "Awesome art at this event!",
+                    Color = _colorService.RgbConverter(Color.Honeydew),
+                    CreatorId = users[0].Id
+                },
+                new EventCategory
+                {
+                    Title = "Dating",
+                    Description = "Awesome dating at this event!",
+                    Color = _colorService.RgbConverter(Color.Indigo),
+                    CreatorId = users[0].Id
+                },
+            };
+
+            await _context.EventCategories.AddRangeAsync(eventCategories);
+            await _context.SaveChangesAsync();
+
             var eventTypes = new List<EventType>
             {
-                new EventType 
-                { 
-                    Title = "Speed Dating", 
+                new EventType
+                {
+                    Title = "Music",
                     Description = "Awesome music at this event!",
-                    Color = _colorService.RgbConverter(Color.DeepPink),
+                    Color = _colorService.RgbConverter(Color.Coral),
                     CreatorId = users[0].Id
                 },
                 new EventType
-                { 
-                    Title = "Local Artists", 
-                    Description = "Awesome music at this event!",
-                    Color = _colorService.RgbConverter(Color.LightGoldenrodYellow),
+                {
+                    Title = "Art",
+                    Description = "Awesome art at this event!",
+                    Color = _colorService.RgbConverter(Color.Honeydew),
                     CreatorId = users[0].Id
                 },
                 new EventType
-                { 
-                    Title = "Music Artists", 
-                    Description = "Awesome music at this event!",
-                    Color = _colorService.RgbConverter(Color.MediumOrchid),
+                {
+                    Title = "Dating",
+                    Description = "Awesome dating at this event!",
+                    Color = _colorService.RgbConverter(Color.Indigo),
                     CreatorId = users[0].Id
                 },
+            };
 
-             };
             await _context.EventTypes.AddRangeAsync(eventTypes);
+            await _context.SaveChangesAsync();
+
+            var chatRoomTypes = new List<ChatRoomType>
+            {
+                new ChatRoomType { Name = "Private" },
+                new ChatRoomType { Name = "Public" }
+            };
+            await _context.ChatRoomTypes.AddRangeAsync(chatRoomTypes);
 
             var chatRooms = new List<ChatRoom>
             {

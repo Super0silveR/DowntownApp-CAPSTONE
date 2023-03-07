@@ -1,6 +1,7 @@
 using Application.Common.Interfaces;
 using Application.Core;
 using Application.DTOs;
+using Application.DTOs.Queries;
 using Ardalis.GuardClauses;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;

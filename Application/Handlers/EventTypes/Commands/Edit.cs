@@ -1,6 +1,7 @@
 using Application.Common.Interfaces;
 using Application.Core;
 using Application.DTOs;
+using Application.DTOs.Commands;
 using Application.Validators;
 using Ardalis.GuardClauses;
 using AutoMapper;
@@ -17,7 +18,7 @@ namespace Application.Handlers.EventTypes.Commands
         public class Command : IRequest<Result<Unit>?>
         {
             public Guid Id { get; set; }
-            public EventTypeDto EventType { get; set; } = new EventTypeDto();
+            public EventTypeCommandDto EventType { get; set; } = new EventTypeCommandDto();
         }
 
         /// <summary>
@@ -65,7 +66,7 @@ namespace Application.Handlers.EventTypes.Commands
         {
             public Validator()
             {
-                RuleFor(x => x.EventType).SetValidator(new EventTypeDtoValidator());
+                RuleFor(x => x.EventType).SetValidator(new EventTypeCommandDtoValidator());
             }
         }
     }

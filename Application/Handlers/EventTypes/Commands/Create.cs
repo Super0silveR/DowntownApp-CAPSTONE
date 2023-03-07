@@ -1,6 +1,7 @@
 using Application.Common.Interfaces;
 using Application.Core;
 using Application.DTOs;
+using Application.DTOs.Commands;
 using Application.Validators;
 using Ardalis.GuardClauses;
 using AutoMapper;
@@ -17,11 +18,11 @@ namespace Application.Handlers.EventTypes.Commands
         /// </summary>
         public class Command : IRequest<Result<Unit>>
         {
-            public EventTypeDto EventType { get; set; } = new EventTypeDto();
+            public EventTypeCommandDto EventType { get; set; } = new EventTypeCommandDto();
         }
 
         /// <summary>
-        /// Handler class used to handle the creation of the new EventCategory.
+        /// Handler class used to handle the creation of the new EventType.
         /// </summary>
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
@@ -48,9 +49,8 @@ namespace Application.Handlers.EventTypes.Commands
                 Guard.Against.Null(request.EventType, nameof(request.EventType));
 
                 /// Make sure the creatorId is always populated. (FK_CONSTRAINT)
-                request.EventType.CreatorId ??= Guid.Parse(_userService.GetUserId()!);
-
                 var eventType = _mapper.Map<EventType>(request.EventType);
+                eventType.CreatorId = Guid.Parse(_userService.GetUserId()!);
 
                 _context.EventTypes.Add(eventType);
 
@@ -69,7 +69,7 @@ namespace Application.Handlers.EventTypes.Commands
         {
             public Validator()
             {
-                RuleFor(c => c.EventType).SetValidator(new EventTypeDtoValidator());
+                RuleFor(c => c.EventType).SetValidator(new EventTypeCommandDtoValidator());
             }
         }
     }

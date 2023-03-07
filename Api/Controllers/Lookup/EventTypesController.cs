@@ -34,7 +34,7 @@ namespace Api.Controllers.Lookup
         #region Commands
 
         [HttpPost] //api/eventtypes
-        public async Task<IActionResult> CreateEventType(EventTypeCommandDto categoryDto)
+        public async Task<IActionResult> CreateEventType(EventTypeCommandDto typeDto)
         {
             return HandleResult(await Mediator.Send(new Create.Command { EventType = typeDto }));
         }
