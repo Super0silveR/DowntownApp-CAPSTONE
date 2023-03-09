@@ -48,13 +48,13 @@ function EventForm() {
         /** Redirecting the user depending on the action. */
         if (!event.id) {
             event.id = uuid();
-            createEvent(event).then(value => {
+            createEvent(event).then(() => {
                 navigate(`/events/${event.id}`);
-            }).catch(e => console.log(e));
+            });
         } else {
             updateEvent(event).then(() => {
                 navigate(`/events/${event.id}`);
-            }).catch(e => console.log(e));
+            });
         }
     }
 

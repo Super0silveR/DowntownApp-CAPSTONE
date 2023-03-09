@@ -58,7 +58,7 @@ export default class EventStore {
                 this.setEvent(event);
             });
         } catch (e) {
-            throw e;
+            console.log(e);
         } finally {
             this.setLoadingInitial(false);
         }
@@ -78,11 +78,12 @@ export default class EventStore {
                 runInAction(() => this.selectedEvent = event);
                 return event;
             } catch (e) {
-                throw e;
+                console.log(e);
             } finally {
                 this.setLoadingInitial(false);
             }
         }
+        this.setLoadingInitial(false);
     }
 
     /** Action that executes the creation of an event. */
@@ -97,7 +98,7 @@ export default class EventStore {
                 this.editMode = false;
             });
         } catch (e) {
-            return Promise.reject(e);
+            console.log(e);
         }
         finally {
             this.setLoading(false);
@@ -115,7 +116,7 @@ export default class EventStore {
                 this.editMode = false;
             });
         } catch (e) {
-            throw e;
+            console.log(e);
         } finally {
             this.setLoading(false);
         }
@@ -130,7 +131,7 @@ export default class EventStore {
                 this.eventRegistry.delete(id);
             });
         } catch (e) {
-            throw e;
+            console.log(e);
         } finally {
             this.setLoading(false);
         }

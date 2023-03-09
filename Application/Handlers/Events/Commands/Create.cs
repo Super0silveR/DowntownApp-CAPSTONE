@@ -23,17 +23,6 @@ namespace Application.Handlers.Events.Commands
         }
 
         /// <summary>
-        /// Validator class used for synchronous validation during the process pipeline.
-        /// </summary>
-        public class Validator : AbstractValidator<Command>
-        {
-            public Validator()
-            {
-                RuleFor(x => x.Event).SetValidator(new EventCommandDtoValidator());
-            }
-        }
-
-        /// <summary>
         /// Handler class used to handle the creation of the new Event.
         /// </summary>
         public class Handler : IRequestHandler<Command, Result<Unit>?>
@@ -59,11 +48,11 @@ namespace Application.Handlers.Events.Commands
             {
                 Guard.Against.Null(_context.Events, nameof(_context.Events));
 
-                //if (!Guid.TryParse(_userService.GetUserId(), out Guid userId)) return null;
+                if (!Guid.TryParse(_userService.GetUserId(), out Guid userId)) return null;
 
-                var user = await _context.Users.FindAsync(new object?[] { request.Event.CreatorId }, cancellationToken);
+                var user = await _context.Users.FindAsync(new object?[] { userId }, cancellationToken);
 
-                if (user is null) throw new Exception("This user is invalid.");
+                if (user is null) return null;
 
                 var @event = _mapper.Map<Event>(request.Event);
                 @event.CreatorId = user.Id;
@@ -90,6 +79,17 @@ namespace Application.Handlers.Events.Commands
                 if (!result)
                     return Result<Unit>.Failure("Failed to create a new Event.");
                 return Result<Unit>.Success(Unit.Value);
+            }
+        }
+
+        /// <summary>
+        /// Validator class used for synchronous validation during the process pipeline.
+        /// </summary>
+        public class Validator : AbstractValidator<Command>
+        {
+            public Validator()
+            {
+                RuleFor(x => x.Event).SetValidator(new EventCommandDtoValidator());
             }
         }
     }

@@ -1,11 +1,9 @@
 import React from 'react';
 import ResponsiveAppBar from './NavBar';
 import { Container } from '@mui/material';
+import { observer } from 'mobx-react-lite';
 import { Outlet, useLocation } from 'react-router-dom';
 import HomePage from '../../features/home/HomePage';
-import { Toaster } from 'react-hot-toast';
-
-/** https://react-hot-toast.com/docs/styling */
 
 /** Main Application component. */
 function App() {
@@ -14,17 +12,6 @@ function App() {
 
     return (
         <>
-            <Toaster
-                position='bottom-right'
-                gutter={8}
-                toastOptions={{
-                    style: {
-                        border: '1px solid #713200',
-                        padding: '16px',
-                        color: '#713200',
-                    }
-                }}
-            />
             {location.pathname === '/' ? <HomePage /> : (
                 <>
                     <ResponsiveAppBar />
@@ -42,4 +29,4 @@ function App() {
 /** Higher order function that add additional powers to our App component 
  * allowing it to observe the observables in our stores. 
  * */
-export default App;
+export default observer(App);

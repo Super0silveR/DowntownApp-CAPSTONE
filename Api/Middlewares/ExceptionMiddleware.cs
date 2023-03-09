@@ -1,7 +1,6 @@
 ﻿using AppException = Application.Common.Exceptions.ApplicationException;
 using System.Net;
 using System.Text.Json;
-using Application.Common.Exceptions;
 
 namespace Api.Middlewares
 {
@@ -25,30 +24,6 @@ namespace Api.Middlewares
             try
             {
                 await _next(context);
-            }
-            catch (ValidationException ex)
-            {
-                _logger.LogError(ex, ex.Message, ex.Errors);
-
-                context.Response.ContentType = "application/json";
-                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-
-                var response = _env.IsDevelopment()
-                    ? new AppException(context.Response.StatusCode,
-                                       ex.Message,
-                                       ex.StackTrace?.ToString(),
-                                       ex.Errors)
-                    : new AppException(context.Response.StatusCode,
-                                       "Internal Server Error");
-
-                var options = new JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                };
-
-                var json = JsonSerializer.Serialize(response, options);
-
-                await context.Response.WriteAsync(json);
             }
             catch (Exception ex)
             {

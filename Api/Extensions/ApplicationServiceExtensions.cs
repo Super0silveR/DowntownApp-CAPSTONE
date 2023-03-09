@@ -92,12 +92,12 @@ namespace Api.Extensions
                     });
             });
 
-            services.AddMediatR(typeof(Details.Handler).Assembly);
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddFluentValidationAutoValidation();
+            services.AddMediatR(typeof(Details.Handler).Assembly);
             services.AddValidatorsFromAssemblyContaining<Create>();
 
-            //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehavior<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
             return services;
