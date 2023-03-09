@@ -36,5 +36,8 @@ namespace Domain.Entities
 
         public virtual ICollection<EventType> CreatedEventTypes { get; set; } = new HashSet<EventType>();
 
+        public virtual ICollection<ChallengeType> CreatedChallengesTypes { get; set; } = new HashSet<ChallengeType>();
+
+
     }
 }
