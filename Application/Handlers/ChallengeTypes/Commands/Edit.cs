@@ -1,4 +1,4 @@
-/*using Application.Common.Interfaces;
+using Application.Common.Interfaces;
 using Application.Core;
 using Application.DTOs;
 using Application.DTOs.Commands;
@@ -72,4 +72,3 @@ namespace Application.Handlers.ChallengeTypes.Commands
     }
 }
 
-*/

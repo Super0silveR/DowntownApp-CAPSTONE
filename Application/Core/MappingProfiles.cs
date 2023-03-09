@@ -63,8 +63,8 @@ namespace Application.Core
             CreateMap<ChallengeType, ChallengeTypeDto>()
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 
-            /*CreateMap<ChallengeTypeDTO, ChallengeType>()
-                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));*/
+            CreateMap<ChallengeTypeDto, ChallengeType>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 
             CreateMap<EventContributor, EventContributorDto>()
                 .ForMember(ec => ec.DisplayName, options => options.MapFrom(ec => ec.User!.DisplayName))
@@ -101,6 +101,9 @@ namespace Application.Core
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
             
             CreateMap<EventTypeCommandDto, EventType>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<ChallengeTypeCommandDto, ChallengeType>()
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
             #endregion
         }

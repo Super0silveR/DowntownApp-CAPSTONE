@@ -156,6 +156,32 @@ namespace Persistence
             await _context.EventTypes.AddRangeAsync(eventTypes);
             await _context.SaveChangesAsync();
 
+
+            var challengeTypes = new List<ChallengeType>
+            {
+                new ChallengeType
+                {
+                    Name = "Music",
+                    Description = "Awesome music at this event!",
+                    CreatorId = users[0].Id
+                },
+                new ChallengeType
+                {
+                    Name = "Art",
+                    Description = "Awesome art at this event!",
+                    CreatorId = users[0].Id
+                },
+                new ChallengeType
+                {
+                    Name = "Dating",
+                    Description = "Awesome dating at this event!",
+                    CreatorId = users[0].Id
+                },
+            };
+
+            await _context.ChallengeTypes.AddRangeAsync(challengeTypes);
+            await _context.SaveChangesAsync();
+
             var chatRoomTypes = new List<ChatRoomType>
             {
                 new ChatRoomType { Name = "Private" },

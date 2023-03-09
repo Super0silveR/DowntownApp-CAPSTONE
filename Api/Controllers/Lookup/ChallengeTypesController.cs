@@ -1,4 +1,4 @@
-/*using Api.Controllers.Base;
+using Api.Controllers.Base;
 using Policies = Api.Constants.AuthorizationPolicyConstants;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -34,7 +34,7 @@ namespace Api.Controllers.Lookup
         #region Commands
 
         [HttpPost] //api/challengetypes
-        public async Task<IActionResult> CreateChallengeType(ChallengeTypesCommandDto challengeDto)
+        public async Task<IActionResult> CreateChallengeType(ChallengeTypeCommandDto challengeDto)
         {
             return HandleResult(await Mediator.Send(new Create.Command { ChallengeType = challengeDto }));
         }
@@ -54,4 +54,3 @@ namespace Api.Controllers.Lookup
         #endregion
     }
 }
-*/

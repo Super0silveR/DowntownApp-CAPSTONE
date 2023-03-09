@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Handlers.ChallengeTypes.Queries
 {
     /// <summary>
-    /// Class that serves as the base for fetching a list of EventCategories.
+    /// Class that serves as the base for fetching a list of ChallengesTypes.
     /// </summary>
     public class List
     {
