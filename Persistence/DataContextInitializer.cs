@@ -132,23 +132,23 @@ namespace Persistence
             {
                 new EventType
                 {
-                    Title = "Music",
-                    Description = "Awesome music at this event!",
-                    Color = _colorService.RgbConverter(Color.Coral),
+                    Title = "event type 1",
+                    Description = "Awesome event type1!",
+                    Color = _colorService.RgbConverter(Color.Blue),
                     CreatorId = users[0].Id
                 },
                 new EventType
                 {
-                    Title = "Art",
-                    Description = "Awesome art at this event!",
-                    Color = _colorService.RgbConverter(Color.Honeydew),
+                    Title = "event type 2",
+                    Description = "Awesome event type2!",
+                    Color = _colorService.RgbConverter(Color.Red),
                     CreatorId = users[0].Id
                 },
                 new EventType
                 {
-                    Title = "Dating",
-                    Description = "Awesome dating at this event!",
-                    Color = _colorService.RgbConverter(Color.Indigo),
+                    Title = "event type 3",
+                    Description = "Awesome event type3!",
+                    Color = _colorService.RgbConverter(Color.Green),
                     CreatorId = users[0].Id
                 },
             };
@@ -161,20 +161,20 @@ namespace Persistence
             {
                 new ChallengeType
                 {
-                    Name = "Music",
-                    Description = "Awesome music at this event!",
+                    Name = "Challenge1",
+                    Description = "Awesome challenge1!",
                     CreatorId = users[0].Id
                 },
                 new ChallengeType
                 {
-                    Name = "Art",
-                    Description = "Awesome art at this event!",
+                    Name = "Challenge2",
+                    Description = "Awesome challenge2!",
                     CreatorId = users[0].Id
                 },
                 new ChallengeType
                 {
-                    Name = "Dating",
-                    Description = "Awesome dating at this event!",
+                    Name = "Challenge3",
+                    Description = "Awesome challenge3!",
                     CreatorId = users[0].Id
                 },
             };
