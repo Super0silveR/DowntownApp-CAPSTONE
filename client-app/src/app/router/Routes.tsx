@@ -1,4 +1,7 @@
-import { createBrowserRouter, RouteObject } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouteObject } from "react-router-dom";
+import NotFound from "../../features/errors/NotFound";
+import ServerError from "../../features/errors/ServerError";
+import TestErrors from "../../features/errors/TestErrors";
 import EventDashboard from "../../features/events/dashboard/EventDashboard";
 import EventDetails from "../../features/events/details/EventDetails";
 import EventForm from "../../features/events/form/EventForm";
@@ -13,7 +16,12 @@ export const routes: RouteObject[] = [
             {path: 'events', element: <EventDashboard />},
             {path: 'events/:id', element: <EventDetails />},
             {path: 'createEvent', element: <EventForm key='create' />},
-            {path: 'manage/:id', element: <EventForm key='manage' />}
+            {path: 'manage/:id', element: <EventForm key='manage' />},
+            {path: 'errors', element: <TestErrors key='errors' />},
+            {path: 'not-found', element: <NotFound key='errors' />},
+            {path: 'server-error', element: <ServerError key='errors' />},
+            /** Any routes that doesn't match our own routes. */
+            {path: '*', element: <Navigate replace to='/not-found' key='not-foud' />}
         ]
     }
 ];
