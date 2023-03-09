@@ -1,6 +1,8 @@
 using Api.Extensions;
 using Api.Middlewares;
 using Api.SignalR;
+using Application.Handlers.Events.Commands;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Persistence;
