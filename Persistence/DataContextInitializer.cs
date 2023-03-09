@@ -130,11 +130,57 @@ namespace Persistence
 
             var eventTypes = new List<EventType>
             {
-                new EventType { Title = "Speed Dating", Color = _colorService.RgbConverter(Color.DeepPink) },
-                new EventType { Title = "Local Artists", Color = _colorService.RgbConverter(Color.LightGoldenrodYellow) },
-                new EventType { Title = "Music Artists", Color = _colorService.RgbConverter(Color.MediumOrchid) }
+                new EventType
+                {
+                    Title = "event type 1",
+                    Description = "Awesome event type1!",
+                    Color = _colorService.RgbConverter(Color.Blue),
+                    CreatorId = users[0].Id
+                },
+                new EventType
+                {
+                    Title = "event type 2",
+                    Description = "Awesome event type2!",
+                    Color = _colorService.RgbConverter(Color.Red),
+                    CreatorId = users[0].Id
+                },
+                new EventType
+                {
+                    Title = "event type 3",
+                    Description = "Awesome event type3!",
+                    Color = _colorService.RgbConverter(Color.Green),
+                    CreatorId = users[0].Id
+                },
             };
+
             await _context.EventTypes.AddRangeAsync(eventTypes);
+            await _context.SaveChangesAsync();
+
+
+            var challengeTypes = new List<ChallengeType>
+            {
+                new ChallengeType
+                {
+                    Name = "Challenge1",
+                    Description = "Awesome challenge1!",
+                    CreatorId = users[0].Id
+                },
+                new ChallengeType
+                {
+                    Name = "Challenge2",
+                    Description = "Awesome challenge2!",
+                    CreatorId = users[0].Id
+                },
+                new ChallengeType
+                {
+                    Name = "Challenge3",
+                    Description = "Awesome challenge3!",
+                    CreatorId = users[0].Id
+                },
+            };
+
+            await _context.ChallengeTypes.AddRangeAsync(challengeTypes);
+            await _context.SaveChangesAsync();
 
             var chatRoomTypes = new List<ChatRoomType>
             {
