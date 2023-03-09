@@ -33,5 +33,11 @@ namespace Domain.Entities
 
         /// Lookup Creations
         public virtual ICollection<EventCategory> CreatedEventCategories { get; set; } = new HashSet<EventCategory>();
+
+        public virtual ICollection<EventType> CreatedEventTypes { get; set; } = new HashSet<EventType>();
+
+        public virtual ICollection<ChallengeType> CreatedChallengesTypes { get; set; } = new HashSet<ChallengeType>();
+
+
     }
 }
