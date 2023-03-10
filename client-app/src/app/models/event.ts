@@ -46,23 +46,6 @@ export interface Event extends BaseEvent {
     rating: Rating;
     contributors: Contributor[];
 }
-export interface EventType extends BaseEvent {
-    creatorId: string;
-    date: string;
-    creatorUserName: string;
-    isActive: boolean;
-    rating: Rating;
-    contributors: Contributor[];
-}
-
-export interface EventCategory extends BaseEvent {
-  creatorId: string;
-  date: string;
-  creatorUserName: string;
-  isActive: boolean;
-  rating: Rating;
-  contributors: Contributor[];
-}
 
 const emptyBaseEvent = (): BaseEvent => ({
     id: '',
