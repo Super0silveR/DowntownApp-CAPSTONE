@@ -1,3 +1,4 @@
+import dayjs, { Dayjs } from "dayjs";
 import { UserDto } from "./user";
 
 export interface Review {
@@ -30,41 +31,30 @@ export interface Contributor {
     image?: any;
 }
 
-export interface BaseEvent {
+export interface Event {
     id: string;
     eventCategoryId: string;
     eventTypeId: string;
+    date: string;
     title: string;
     description: string;
-}
-
-export interface Event extends BaseEvent {
     creatorId: string;
-    date: string;
     creatorUserName: string;
     isActive: boolean;
     rating: Rating;
     contributors: Contributor[];
 }
 
-const emptyBaseEvent = (): BaseEvent => ({
+export const emptyEvent = (): Event => ({
     id: '',
     title: '',
+    date: '',
     description: '',
     eventTypeId: '',
-    eventCategoryId: ''
-});
-
-const emptyEvent = (): Event => ({
-    ...emptyBaseEvent(),
+    eventCategoryId: '',
     creatorId: '',
-    date: '',
     creatorUserName: '',
     isActive: true,
     rating: emptyRating(),
     contributors: []
 });
-
-export const newEvent = <T extends Partial<Event>>(event?: T): Event & T => {
-    return Object.assign(emptyEvent(), event);
-}

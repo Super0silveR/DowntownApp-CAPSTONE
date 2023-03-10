@@ -92,7 +92,7 @@ function EventListItem({ event }: Props) {
                                     fontWeight='100'
                                     color="secondary.dark"
                                 >
-                                    {event.date.toLocaleString()}
+                                    {event.date?.toString()}
                                 </Typography>
                             </React.Fragment>
                         }

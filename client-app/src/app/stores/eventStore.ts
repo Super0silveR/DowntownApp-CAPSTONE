@@ -3,6 +3,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Event } from "../models/event";
 import { v4 as uuid } from 'uuid';
+import dayjs from "dayjs";
 
 /**
  * MobX class that represents the state management (or store) for our event entities.
@@ -22,7 +23,7 @@ export default class EventStore {
 
     /** Computed Property */
     get eventsByDate() {
-        return Array.from(this.eventRegistry.values()).sort((e1, e2) =>
+        return Array.from(this.eventRegistry.values()).sort((e1, e2) => 
             Date.parse(e1.date) - Date.parse(e2.date));
     }
 
@@ -159,7 +160,7 @@ export default class EventStore {
 
     /** Add an event to the registry. */
     private setEvent = (event: Event) => {
-        event.date = event.date.split('T')[0];
+        //event.date = event.date.toString.split('T')[0];
         this.eventRegistry.set(event.id, event);
     };
 }
