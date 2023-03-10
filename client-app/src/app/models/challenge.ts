@@ -30,23 +30,13 @@ export interface Contributor {
     image?: any;
 }
 
-export interface BaseEvent {
+export interface BaseChallenge {
     id: string;
-    eventCategoryId: string;
-    eventTypeId: string;
-    title: string;
+    Name: string;
     description: string;
 }
 
-export interface Event extends BaseEvent {
-    creatorId: string;
-    date: string;
-    creatorUserName: string;
-    isActive: boolean;
-    rating: Rating;
-    contributors: Contributor[];
-}
-export interface EventType extends BaseEvent {
+export interface ChallengeType extends BaseChallenge {
     creatorId: string;
     date: string;
     creatorUserName: string;
@@ -55,25 +45,15 @@ export interface EventType extends BaseEvent {
     contributors: Contributor[];
 }
 
-export interface EventCategory extends BaseEvent {
-  creatorId: string;
-  date: string;
-  creatorUserName: string;
-  isActive: boolean;
-  rating: Rating;
-  contributors: Contributor[];
-}
 
-const emptyBaseEvent = (): BaseEvent => ({
+const emptyBaseChallengeType = (): BaseChallenge => ({
     id: '',
-    title: '',
+    Name: '',
     description: '',
-    eventTypeId: '',
-    eventCategoryId: ''
 });
 
-const emptyEvent = (): Event => ({
-    ...emptyBaseEvent(),
+const emptyChallengeType = (): ChallengeType => ({
+    ...emptyBaseChallengeType(),
     creatorId: '',
     date: '',
     creatorUserName: '',
@@ -82,6 +62,6 @@ const emptyEvent = (): Event => ({
     contributors: []
 });
 
-export const newEvent = <T extends Partial<Event>>(event?: T): Event & T => {
-    return Object.assign(emptyEvent(), event);
+export const newChallengeType = <T extends Partial<ChallengeType>>(challenge?: T): ChallengeType & T => {
+    return Object.assign(emptyChallengeType(), challenge);
 }
