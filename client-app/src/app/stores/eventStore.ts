@@ -21,10 +21,13 @@ export default class EventStore {
         makeAutoObservable(this);
     }
 
-    /** Computed Property */
+    /** 
+     * Usage of the `!` operator because we KNOW the event will not be null.
+     * Else we need to deal with nullable warnings from TS.
+     */
     get eventsByDate() {
         return Array.from(this.eventRegistry.values()).sort((e1, e2) => 
-            Date.parse(e1.date) - Date.parse(e2.date));
+            e1.date!.getTime() - e2.date!.getTime());
     }
 
     /** 
@@ -36,7 +39,7 @@ export default class EventStore {
     get groupedEventsByDate() {
         return Object.entries(
             this.eventsByDate.reduce((events, event) => {
-                const date = event.date;
+                const date = dayjs(event.date!).format('MMM d, YYYY');
                 events[date] = events[date] ? [...events[date], event] : [event];
                 return events;
             }, {} as {[key: string]: Event[]})
@@ -160,7 +163,7 @@ export default class EventStore {
 
     /** Add an event to the registry. */
     private setEvent = (event: Event) => {
-        //event.date = event.date.toString.split('T')[0];
+        event.date = new Date(event.date!);
         this.eventRegistry.set(event.id, event);
     };
 }

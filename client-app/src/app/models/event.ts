@@ -1,4 +1,3 @@
-import dayjs, { Dayjs } from "dayjs";
 import { UserDto } from "./user";
 
 export interface Review {
@@ -35,7 +34,7 @@ export interface Event {
     id: string;
     eventCategoryId: string;
     eventTypeId: string;
-    date: string;
+    date: Date | null;
     title: string;
     description: string;
     creatorId: string;
@@ -48,7 +47,7 @@ export interface Event {
 export const emptyEvent = (): Event => ({
     id: '',
     title: '',
-    date: '',
+    date: null,
     description: '',
     eventTypeId: '',
     eventCategoryId: '',

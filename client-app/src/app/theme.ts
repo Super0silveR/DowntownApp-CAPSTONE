@@ -8,6 +8,9 @@ import lightBlue from "@mui/material/colors/lightBlue";
 import grey from "@mui/material/colors/grey";
 
 const theme = (mode: any) => createTheme({
+    typography: {
+        fontFamily: 'monospace'
+    },
     palette: {
         mode: 'light',
         primary: {

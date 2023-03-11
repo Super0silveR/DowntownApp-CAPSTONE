@@ -1,18 +1,21 @@
-import { Button, Container, FormControl, Grid, Stack, TextField, Typography } from '@mui/material';
+import { Button, Container, Grid, Stack, Typography } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import React, { ChangeEvent, useEffect, useState } from 'react';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import React, { useEffect, useState } from 'react';
 import { Event, emptyEvent } from '../../../app/models/event';
-import dayjs, { Dayjs } from 'dayjs';
-import { DatePicker, DesktopDateTimePicker } from '@mui/x-date-pickers';
 import { useStore } from '../../../app/stores/store';
 import { observer } from 'mobx-react-lite';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { v4 as uuid } from 'uuid';
-import { Formik, Form, Field } from 'formik';
-import { TextFieldsRounded } from '@mui/icons-material';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
+import Divider from '@mui/material/Divider';
+import TextInput from '../../../app/common/form/TextInput';
+import TextArea from '../../../app/common/form/TextArea';
+import SelectInput from '../../../app/common/form/SelectInput';
+import { categoryOptions } from '../../../app/common/form/options/eventCategoryOptions';
+import { typeOptions } from '../../../app/common/form/options/eventTypeOptions';
+import DateTimeInput from '../../../app/common/form/DateTimeInput';
 
 function EventForm() {
 
@@ -20,55 +23,49 @@ function EventForm() {
     const { createEvent, updateEvent, 
             loading, loadEvent, loadingInitial } = eventStore;
 
-    /** React Router hook for fetching url params. */
+    /** React Router hooks for fetching url params. */
     const { id } = useParams();
+    const navigate = useNavigate();
+
+    /** Set a local state for the created/edited event. */
     const [currEvent, setEvent] = useState<Event>(emptyEvent);
-    //const [date, setDate] = useState<Dayjs | null>(null);
+    const [create, setCreate] = useState(true);
 
-    //const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(dayjs(event.date !== '' ? event.date : Date.now()));
-    //const [disabled, setDisabled] = useState(true);
+    /** Validation schema using Yup. */
+    const validationSchema = Yup.object<Event>({
+        title: Yup.string().required().min(5).max(50),
+        description: Yup.string().required().max(250),
+        eventCategoryId: Yup.string().uuid().required(),
+        eventTypeId: Yup.string().uuid().required(),
+        date: Yup.string().required()
+    });
 
-    //const navigate = useNavigate();
-
-    /** 
-     * Usage of the `!` operator because we KNOW the event will not be null.
-     * Else we need to deal with nullable warnings from TS.
-     */
     useEffect(() => {
         if (id) {
             loadEvent(id).then(event => {
                 setEvent(event);
+                setCreate(false);
             });
         }
     }, [id, loadEvent]);
 
     // /** Handling the onSubmit logic. */
-    // function handleSubmit(e: React.FormEvent<EventTarget>) {
-    //     setDisabled(true);
-    //     e.preventDefault();
-    //     runInAction(() => {
-    //         event.date = startDate ? startDate.toISOString() : '';
-    //     });
-
-    //     /** Redirecting the user depending on the action. */
-    //     if (!event.id) {
-    //         event.id = uuid();
-    //         createEvent(event).then(value => {
-    //             navigate(`/events/${event.id}`);
-    //         }).catch(e => console.log(e));
-    //     } else {
-    //         updateEvent(event).then(() => {
-    //             navigate(`/events/${event.id}`);
-    //         }).catch(e => console.log(e));
-    //     }
-    // }
-
-    // /** Clean-up necessary with the date picker and onChange handler. */
-    // function handleInputChange(changeEvent: ChangeEvent<HTMLInputElement>) {
-    //     const { name, value } = changeEvent.target;
-    //     setEvent({ ...event, [name]: value });
-    //     setDisabled(false);
-    // }
+    function handleFormSubmit(event: Event) {
+        /** Redirecting the user depending on the action. */
+        if (!event.id) {
+            let newEvent = {
+                ...event,
+                id: uuid()
+            };
+            createEvent(newEvent).then(value => {
+                navigate(`/events/${event.id}`);
+            }).catch(e => console.log(e));
+        } else {
+            updateEvent(event).then(() => {
+                navigate(`/events/${event.id}`);
+            }).catch(e => console.log(e));
+        }
+    }
 
     if (loadingInitial) return <LoadingComponent content='Loading Event..' />
 
@@ -77,47 +74,52 @@ function EventForm() {
             <Container maxWidth="md" sx={{my:3}}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
-                        <Typography>Create/Edit an Event!</Typography>
+                        <Typography
+                            variant='h4'
+                            fontFamily='monospace'
+                            sx={{textDecoration:'underline'}}
+                            mb={2}
+                        >
+                            {create ? 'Create a new' : 'Edit an'} event!
+                        </Typography>
                     </Grid>
                     <Grid item xs={12}>
-                        <Formik<Event> enableReinitialize initialValues={currEvent} onSubmit={(values) => console.log(values)}>
+                        <Formik<Event> 
+                            enableReinitialize 
+                            initialValues={currEvent} 
+                            onSubmit={(values) => handleFormSubmit(values)}
+                            validationSchema={validationSchema}
+                        >
                             {/** Deconstructing properties and functions form Formik that we'll use for our form. */}
-                            {({ values, handleChange, handleSubmit, setFieldValue }) => (
-                                <Form onSubmit={handleSubmit} autoComplete='off'>
-                                    <Stack direction='column' spacing={2}>
-                                        <FormControl sx={{ m: 0, minWidth: 120 }} size="small">
-                                            <Field placeholder='Category' name='eventCategoryId' />
-                                        </FormControl>
-                                        <FormControl sx={{ m: 0, minWidth: 120 }} size="small">
-                                            <Field placeholder='Type' name='eventTypeId' />                                            </FormControl>
-                                        <FormControl sx={{ m: 0, minWidth: 120 }} size="small">
-                                            <Field placeholder='Title' name='title'
-                                            />
-                                        </FormControl>
-                                        <FormControl sx={{ m: 0, minWidth: 120 }} size="small">
-                                            <Field placeholder='Description' name='description'
-                                            />
-                                        </FormControl>
-                                        <FormControl sx={{ m: 0, minWidth: 120 }} size="small">
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <DatePicker
-                                                    format='DD MMMM, YYYY'
-                                                    value={dayjs(values.date)}
-                                                    onChange={(value) => setFieldValue('date', value)}
-                                                />
-                                            </LocalizationProvider>
-                                        </FormControl>
-                                        <Stack direction='row' spacing={2}>
-                                            <LoadingButton loading={loading} color="primary" variant="outlined" fullWidth type="submit">
-                                                Submit
-                                            </LoadingButton>
-                                            <Button component={Link} to='/events' color="warning" variant="outlined" fullWidth>
-                                                Cancel
-                                            </Button>
+                            {({ handleSubmit, isValid, isSubmitting, dirty }) => { 
+                                return (
+                                    <Form onSubmit={handleSubmit} autoComplete='off'>
+                                        <Stack direction='column' spacing={3}>                                          
+                                            <TextInput name='title' placeholder='Title' label='Title' />
+                                            <TextArea name='description' placeholder='Description' label='Description' />
+                                            <SelectInput label='Category' placeholder='Category' name='eventCategoryId' options={categoryOptions} />
+                                            <SelectInput label='Type' placeholder='Type' name='eventTypeId' options={typeOptions} />        
+                                            <DateTimeInput name='date' label='Date' />                                 
+                                            <Divider />
+                                            <Stack direction='row' spacing={2}>
+                                                <LoadingButton 
+                                                    disabled={isSubmitting || !dirty || !isValid}
+                                                    loading={loading} 
+                                                    color="primary" 
+                                                    variant="outlined" 
+                                                    fullWidth 
+                                                    type="submit"
+                                                >
+                                                    <Typography fontFamily='monospace'>Submit</Typography>
+                                                </LoadingButton>
+                                                <Button component={Link} to='/events' color="warning" variant="outlined" fullWidth>
+                                                    <Typography fontFamily='monospace'>Cancel</Typography>
+                                                </Button>
+                                            </Stack>
                                         </Stack>
-                                    </Stack>
-                                </Form>                                
-                            )}
+                                    </Form>                                
+                                )
+                            }}
                         </Formik>
                     </Grid>
                 </Grid>

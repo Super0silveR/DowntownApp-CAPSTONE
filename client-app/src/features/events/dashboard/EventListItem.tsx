@@ -6,6 +6,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useStore } from '../../../app/stores/store';
 import { observer } from 'mobx-react-lite';
+import dayjs from 'dayjs';
 
 interface Props {
     event: Event;
@@ -92,7 +93,8 @@ function EventListItem({ event }: Props) {
                                     fontWeight='100'
                                     color="secondary.dark"
                                 >
-                                    {event.date?.toString()}
+                                    {/** DayJs is our Date library */}
+                                    {dayjs(event.date!).format('MMMM d, YYYY — h:mm A')}
                                 </Typography>
                             </React.Fragment>
                         }
