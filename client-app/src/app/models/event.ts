@@ -10,13 +10,13 @@ export interface Review {
 export interface Rating {
     value: number;
     count: number;
-    reviews: Review[];
+    ratings: Review[];
 }
 
 const emptyRating = (): Rating => ({
     value: 0,
     count: 0,
-    reviews: []
+    ratings: []
 });
 
 export interface Contributor {

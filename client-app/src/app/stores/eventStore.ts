@@ -61,9 +61,7 @@ export default class EventStore {
         const { value, count } = this.selectedEvent?.rating!;
         var newAvg = (this.selectedEvent?.rating.value !== 0) ? (value + ((newValue - value) / (count + 1))) : newValue;
         this.selectedEvent!.rating!.count = count + 1;
-        this.selectedEvent!.rating!.value = newAvg;
-
-        console.log(this.selectedEvent?.rating);
+        this.selectedEvent!.rating!.value = Number.parseFloat(newAvg.toFixed(1));
     }
 
     /** ASYNC ACTIONS */

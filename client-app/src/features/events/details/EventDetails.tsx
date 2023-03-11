@@ -1,48 +1,96 @@
-import { Avatar, Box, Button, Card, CardActions, CardContent, CardMedia, Divider, Rating, Stack, Typography } from '@mui/material';
-import React, { useEffect } from 'react';
-import { styled, useTheme } from '@mui/material/styles';
-import { Favorite, FavoriteBorder } from '@mui/icons-material';
+import { Grid, Paper, Typography } from '@mui/material';
+import { useEffect } from 'react';
+import { useTheme } from '@mui/material/styles';
 import { useStore } from '../../../app/stores/store';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { observer } from 'mobx-react-lite';
-import { Link, useParams } from 'react-router-dom';
-
-// TEMPORARY.
-const faces = [
-    "http://i.pravatar.cc/300?img=1",
-    "http://i.pravatar.cc/300?img=2",
-    "http://i.pravatar.cc/300?img=3",
-    "http://i.pravatar.cc/300?img=4"
-];
-
-const StyledRating = styled(Rating)({
-    '& .MuiRating-iconFilled': {
-        color: '#ff6d75',
-    },
-    '& .MuiRating-iconHover': {
-        color: '#ff3d47',
-    },
-});
+import { useParams } from 'react-router-dom';
+import EventContributors from './EventContributors';
+import EventRatings from './EventRatings';
+import EventRatingReviews from './EventRatingReviews';
 
 function EventDetails() {
-    const theme = useTheme();
     const { eventStore } = useStore();
-    const { selectedEvent: event, setRating, loadEvent, loadingInitial } = eventStore;
+    const { selectedEvent: event, loadEvent, loadingInitial } = eventStore;
     const { id } = useParams();
+    const theme = useTheme();
 
     useEffect(() => {
         if (id) loadEvent(id);
     }, [id, loadEvent]);
 
     if (loadingInitial || !event) return <LoadingComponent />;
-
-    function randomIntFromInterval(min: number, max: number) { // min and max included 
-        return Math.floor(Math.random() * (max - min + 1) + min);
-    }
-
+    
     return (
         <>
-            <Card
+            <Grid container>
+                <Grid container sx={{mb:2}} spacing={2}>
+                    <Grid item xs={12} md={9} sm={6}>
+                        <Typography
+                            sx={{ 
+                                display: 'inline',
+                                textDecoration: 'none',
+                                fontFamily:'monospace'
+                            }}
+                            component="span"
+                            variant="h6"
+                            color="text.secondary"
+                        >
+                            Your Event!
+                        </Typography>
+                        <Paper 
+                            sx={{
+                                textAlign: 'center',
+                                fontFamily: 'monospace',
+                                padding: theme.spacing(2),
+                                fontSize: 16
+                            }} 
+                            elevation={3}
+                        >
+                            Your event main informations and details.
+                        </Paper>   
+                    </Grid>
+                    <Grid item xs={12} md={3} sm={6}>
+                        <Typography
+                            sx={{ 
+                                display: 'inline',
+                                textDecoration: 'none',
+                                fontFamily:'monospace'
+                            }}
+                            component="span"
+                            variant="h6"
+                            color="text.secondary"
+                        >
+                            Upcoming!
+                        </Typography>
+                        <Paper 
+                            sx={{
+                                textAlign: 'center',
+                                fontFamily: 'monospace',
+                                padding: theme.spacing(2),
+                                fontSize: 16
+                            }} 
+                            elevation={3}
+                        >
+                            Your event upcoming schedule.
+                        </Paper>         
+                    </Grid>
+                </Grid>
+                <Grid container sx={{mb:2}} spacing={2}>
+                    <Grid item xs={12} md={9} sm={6}>
+                        <EventContributors contributors={event.contributors} /> 
+                    </Grid>
+                    <Grid item xs={12} md={3} sm={6}>
+                        <EventRatings rating={event.rating} />            
+                    </Grid>
+                </Grid>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <EventRatingReviews ratings={event.rating.ratings} />
+                    </Grid>
+                </Grid>
+            </Grid>
+            {/* <Card
                 sx={{ml:2,my:1}}
             >
                 <CardMedia
@@ -76,56 +124,8 @@ function EventDetails() {
                     >
                         {event.description}
                     </Typography>
-                    <Divider
-                        sx={{
-                            margin: `${theme.spacing(3)}`
-                        }}
-                        className="divider"
-                        light />
-                    <Box
-                        sx={{
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            display: 'flex'
-                        }}>
-                        {faces.map((face, index) => (
-                            <Avatar
-                                sx={{
-                                    display: 'inline-block',
-                                    border: `2px solid ${index % 2 === 0 ? 'green' : 'darkred'}`,
-                                    "&:not(:first-of-type)": {
-                                        marginLeft: '0.2em'
-                                    }
-                                }}
-                                className="avatar"
-                                key={index}
-                                src={face}
-                                sizes='small'
-                            />
-                        ))}
-                    </Box>
                 </CardContent>
                 <Box sx={{ padding: theme.spacing(1.5) }}>
-                    <StyledRating
-                        sx={{ padding: theme.spacing(0.7) }}
-                        name="customized-color"
-                        defaultValue={event.rating.value}
-                        getLabelText={(value: number) => `${value} Heart${value !== 1 ? 's' : ''}`}
-                        precision={0.1}
-                        icon={<Favorite fontSize="inherit" />}
-                        emptyIcon={<FavoriteBorder fontSize="inherit" />}
-                        onChange={(event, newValue) => {setRating(newValue ?? 0)}}
-                    />
-                    <Typography
-                        className={"MuiTypography--subheading"}
-                        variant={"caption"}
-                        sx={{
-                            color: 'secondary.dark',
-                            verticalAlign: 'top'
-                        }}
-                    >
-                        ({event.rating.value})
-                    </Typography>
                     <CardActions>
                         <Stack
                             direction="row"
@@ -155,7 +155,7 @@ function EventDetails() {
                         </Stack>
                     </CardActions>
                 </Box>
-            </Card>
+            </Card> */}
         </>
     );
 };

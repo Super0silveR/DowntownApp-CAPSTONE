@@ -4,6 +4,7 @@ import { Container } from '@mui/material';
 import { Outlet, useLocation } from 'react-router-dom';
 import HomePage from '../../features/home/HomePage';
 import { Toaster } from 'react-hot-toast';
+import Footer from './Footer';
 
 /** https://react-hot-toast.com/docs/styling */
 
@@ -33,6 +34,7 @@ function App() {
                          * when we navigate. */}
                         <Outlet />
                     </Container>
+                    <Footer />
                 </>
             )}
         </>
