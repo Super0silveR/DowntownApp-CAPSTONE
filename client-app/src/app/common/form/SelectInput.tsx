@@ -39,13 +39,13 @@ export default function SelectInput(props: Props) {
             <InputLabel error={hasError} id={`select-${props.name}`}>{props.placeholder}</InputLabel>
             <Select
                 labelId={`select-${props.name}`}
-                value={field.value || ''}
+                value={field.value}
                 onChange={(e) => helpers.setValue(e.target.value)}
                 onBlur={() => helpers.setTouched(true)}
                 size='small'
                 placeholder={props.placeholder}
                 error={hasError}
-                sx={{my:'0.2rem'}}
+                sx={{my:'0.2rem',textAlign:'left'}}
             >
                 <MenuItem value=''>
                     <em>None</em>

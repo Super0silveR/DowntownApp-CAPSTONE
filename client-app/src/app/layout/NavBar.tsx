@@ -54,7 +54,7 @@ function ResponsiveAppBar() {
                             borderWidth: '.1rem'
                         }} 
                     />
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                    <Box textAlign='center' sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         <Button 
                             component={NavLink}
                             to='/bars'

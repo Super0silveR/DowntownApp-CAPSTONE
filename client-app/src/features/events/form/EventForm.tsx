@@ -1,6 +1,6 @@
-import { Button, Container, Grid, Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Event, emptyEvent } from '../../../app/models/event';
 import { useStore } from '../../../app/stores/store';
 import { observer } from 'mobx-react-lite';
@@ -16,6 +16,7 @@ import SelectInput from '../../../app/common/form/SelectInput';
 import { categoryOptions } from '../../../app/common/form/options/eventCategoryOptions';
 import { typeOptions } from '../../../app/common/form/options/eventTypeOptions';
 import DateTimeInput from '../../../app/common/form/DateTimeInput';
+import FormContainer from '../../../app/common/form/FormContainer';
 
 function EventForm() {
 
@@ -71,59 +72,49 @@ function EventForm() {
 
     return (
         <>
-            <Container maxWidth="md" sx={{my:3}}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <Typography
-                            variant='h4'
-                            fontFamily='monospace'
-                            sx={{textDecoration:'underline'}}
-                            mb={2}
-                        >
-                            {create ? 'Create a new' : 'Edit an'} event!
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Formik<Event> 
-                            enableReinitialize 
-                            initialValues={currEvent} 
-                            onSubmit={(values) => handleFormSubmit(values)}
-                            validationSchema={validationSchema}
-                        >
-                            {/** Deconstructing properties and functions form Formik that we'll use for our form. */}
-                            {({ handleSubmit, isValid, isSubmitting, dirty }) => { 
-                                return (
-                                    <Form onSubmit={handleSubmit} autoComplete='off'>
-                                        <Stack direction='column' spacing={3}>                                          
-                                            <TextInput name='title' placeholder='Title' label='Title' />
-                                            <TextArea name='description' placeholder='Description' label='Description' />
-                                            <SelectInput label='Category' placeholder='Category' name='eventCategoryId' options={categoryOptions} />
-                                            <SelectInput label='Type' placeholder='Type' name='eventTypeId' options={typeOptions} />        
-                                            <DateTimeInput name='date' label='Date' />                                 
-                                            <Divider />
-                                            <Stack direction='row' spacing={2}>
-                                                <LoadingButton 
-                                                    disabled={isSubmitting || !dirty || !isValid}
-                                                    loading={loading} 
-                                                    color="primary" 
-                                                    variant="outlined" 
-                                                    fullWidth 
-                                                    type="submit"
-                                                >
-                                                    <Typography fontFamily='monospace'>Submit</Typography>
-                                                </LoadingButton>
-                                                <Button component={Link} to='/events' color="warning" variant="outlined" fullWidth>
-                                                    <Typography fontFamily='monospace'>Cancel</Typography>
-                                                </Button>
-                                            </Stack>
+            <FormContainer 
+                title={`${create ? 'Create a new' : 'Edit an'} event!`}
+                form={
+                    <Formik<Event> 
+                        enableReinitialize 
+                        initialValues={currEvent} 
+                        onSubmit={(values) => handleFormSubmit(values)}
+                        validationSchema={validationSchema}
+                    >
+                        {/** Deconstructing properties and functions form Formik that we'll use for our form. */}
+                        {({ handleSubmit, isValid, isSubmitting, dirty }) => { 
+                            return (
+                                <Form onSubmit={handleSubmit} autoComplete='off'>
+                                    <Stack direction='column' spacing={3}>                                          
+                                        <TextInput name='title' placeholder='Title' label='Title' />
+                                        <TextArea name='description' placeholder='Description' label='Description' />
+                                        <SelectInput label='Category' placeholder='Category' name='eventCategoryId' options={categoryOptions} />
+                                        <SelectInput label='Type' placeholder='Type' name='eventTypeId' options={typeOptions} />        
+                                        <DateTimeInput name='date' label='Date' />                                 
+                                        <Divider />
+                                        <Stack direction='row' spacing={2}>
+                                            <LoadingButton 
+                                                disabled={isSubmitting || !dirty || !isValid}
+                                                loading={loading} 
+                                                color="primary" 
+                                                variant="outlined" 
+                                                fullWidth 
+                                                type="submit"
+                                            >
+                                                <Typography fontFamily='monospace'>Submit</Typography>
+                                            </LoadingButton>
+                                            <Button component={Link} to='/events' color="warning" variant="outlined" fullWidth>
+                                                <Typography fontFamily='monospace'>Cancel</Typography>
+                                            </Button>
                                         </Stack>
-                                    </Form>                                
-                                )
-                            }}
-                        </Formik>
-                    </Grid>
-                </Grid>
-            </Container>
+                                    </Stack>
+                                </Form>                                
+                            )
+                        }}
+                    </Formik>
+                }
+                minWidth={450}
+            />
         </>
     );
 };

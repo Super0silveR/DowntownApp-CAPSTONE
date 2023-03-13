@@ -1,6 +1,5 @@
-import { TextField } from '@mui/material';
+import { InputProps, TextField } from '@mui/material';
 import { useField } from 'formik';
-import React from 'react';
 import FormValidationError from './FormValidationError';
 
 interface Props {
@@ -8,6 +7,8 @@ interface Props {
     name: string;
     label?: string;
     fullWidth?: boolean;
+    type?: string;
+    InputProps?: InputProps | undefined;
 }
 
 /** 
@@ -35,14 +36,11 @@ export default function TextInput(props: Props) {
             /** The spread operator to inherit the properties. */
             {...field}
             {...props}
-            style={{
-                fontFamily:'monospace'
-            }}
             helperText={
                 meta.touched && meta.error
                     ? <FormValidationError error={meta.error} />
                     : null
             }
-        />          
+        />    
     );
 }

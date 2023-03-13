@@ -7,7 +7,9 @@ interface Props {
 
 /** Capitalizing the first letter of error messages. */
 function capitalizeFirstLetter(str: string) {
-    return str.charAt(0).toUpperCase() + str.slice(1) + '.';
+    if (str !== '')
+        return str.charAt(0).toUpperCase() + str.slice(1) + '.';
+    return null;
 }
 
 export default function FormValidationError({ error }: Props) {
@@ -18,6 +20,7 @@ export default function FormValidationError({ error }: Props) {
             fontFamily='monospace'
             letterSpacing='0.05rem'
             component='span'
+            color='error'
             ml={0}
         >
             {capitalizeFirstLetter(String(error))}

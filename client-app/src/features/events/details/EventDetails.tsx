@@ -138,7 +138,7 @@ function EventDetails() {
                                 size="small"
                                 sx={{ borderRadius: '0.2rem' }}
                                 component={Link}
-                                to={`/manage/${event.id}`}
+                                to={`/manageEvent/${event.id}`}
                             >
                                 Edit
                             </Button>

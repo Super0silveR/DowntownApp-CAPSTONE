@@ -85,7 +85,9 @@ const Events = {
  * Account related requests. 
  */
 const Accounts = {
-    login: (user: UserFormValues) => requests.post<User>('/accounts/login', user)
+    current: () => requests.get<User>('/account'),
+    login: (user: UserFormValues) => requests.post<User>('/accounts/login', user),
+    register: (user: UserFormValues) => requests.post<User>('/accounts/register', user)
 }
 
 /**

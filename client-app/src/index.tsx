@@ -9,6 +9,7 @@ import { router } from './app/router/Routes';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
     /** Providing our store context to the application. */
     <StoreContext.Provider value={store}>
