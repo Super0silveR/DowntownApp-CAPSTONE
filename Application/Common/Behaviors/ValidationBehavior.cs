@@ -24,7 +24,7 @@ namespace Application.Common.Behaviors
                                           .Where(f => f != null)
                                           .ToList();
 
-                if (failures.Any()) throw new ValidationException(failures);
+                if (failures.Any()) throw new Application.Common.Exceptions.ValidationException(failures);
             }
             return next();
         }

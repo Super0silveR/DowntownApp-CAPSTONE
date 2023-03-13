@@ -1,4 +1,5 @@
-import { Button, Divider, Grid, Typography } from '@mui/material';
+import { Button, Container, Divider, Grid, Typography } from '@mui/material';
+import { Stack } from '@mui/system';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -21,29 +22,45 @@ function EventDashboard() {
 
     return (
         <>
-            <Typography variant='h3' fontFamily='monospace'>
-                Events
-            </Typography>
-            <Button 
-                variant='text' 
-                component={NavLink} 
-                to='/createEvent'>
-                    Create a new Event!
-            </Button>
-            <Divider sx={{ margin: 2 }} />
+            <Stack 
+                direction='row' 
+                display='flex' 
+                sx={{
+                    alignContent:'center',
+                    alignItems:'center',
+                    justifyContent:'space-between'
+                }}>
+                <Typography variant='h3' letterSpacing={-2} fontFamily='monospace'>
+                    Events
+                </Typography>
+                <Button 
+                    variant='outlined' 
+                    component={NavLink}
+                    size='small'
+                    to='/createEvent'
+                    sx={{
+                        height:'2.25rem'
+                    }}
+                >
+                        Create a new Event!
+                </Button>
+            </Stack>
+            <Divider sx={{ my:1, mb: 5 }} />
             <Grid container>
                 <Grid item xs={8}>
                     <EventList />
                 </Grid>
                 <Grid item xs={4}>
-                    <Typography 
-                        align='center' 
-                        fontFamily='monospace' 
-                        variant='h4'
-                        letterSpacing={-3}
-                    >
-                            Event Filters
-                    </Typography>
+                    <Container sx={{alignItems:'center'}}>
+                        <Typography 
+                            fontFamily='monospace' 
+                            variant='h4'
+                            letterSpacing={-4}
+                            sx={{mt:-1}}
+                        >
+                                Event Filters
+                        </Typography>   
+                    </Container>
                 </Grid>
             </Grid>
         </>

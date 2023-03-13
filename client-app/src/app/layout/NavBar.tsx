@@ -13,7 +13,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { Whatshot } from '@mui/icons-material';
 
-const pages = ['Bars', 'Events', 'Become a content creator!'];
+const pages = ['Bars', 'Events', 'Errors'];
 
 /** 
  * React Component used as our Application NavBar.
@@ -54,7 +54,7 @@ function ResponsiveAppBar() {
                             borderWidth: '.1rem'
                         }} 
                     />
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                    <Box textAlign='center' sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         <Button 
                             component={NavLink}
                             to='/bars'
@@ -70,6 +70,14 @@ function ResponsiveAppBar() {
                             sx={{ my: 2, display: 'block' }}
                         >
                             {pages[1]}
+                        </Button>
+                        <Button 
+                            component={NavLink}
+                            to='/errors'
+                            color='inherit'
+                            sx={{ my: 2, display: 'block' }}
+                        >
+                            {pages[2]}
                         </Button>
                     </Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>

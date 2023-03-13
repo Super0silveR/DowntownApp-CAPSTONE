@@ -1,29 +1,54 @@
-import React from 'react';
-import { Container, Typography } from '@mui/material';
+import { Container, Divider, Typography } from '@mui/material';
+import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
+import { useStore } from '../../app/stores/store';
 
-export default function HomePage() {
+function HomePage() {
+
+    const { userStore } = useStore();
+
     return (
         <>
             <Container sx={{mt:'7em'}}>
                 <Typography 
-                    variant='h4' 
+                    variant='h3' 
                     fontWeight={600} 
                     fontFamily='monospace'
                     sx={{
                         textDecoration:'underline'
                     }}
                 >
-                    Home Page
+                    Downtown
                 </Typography>
                 <Typography 
-                    variant='h5' 
-                    fontWeight={500} 
+                    variant='body1' 
                     fontFamily='monospace'
+                    sx={{mb:2}}
                 >
-                    Go to our listed <Link to='/events'>Events</Link>!
+                    Let loose & connect!
                 </Typography>
+                { userStore.isLoggedIn 
+                    ? (
+                        <Typography 
+                            variant='h5' 
+                            fontWeight={500} 
+                            fontFamily='monospace'
+                        >
+                            Go to our listed <Link to='/events'>Events</Link>!
+                        </Typography>
+                    ) 
+                    : (
+                        <Typography 
+                            variant='h5' 
+                            fontWeight={500} 
+                            fontFamily='monospace'
+                        >
+                            <Link to='/login'>Login</Link> to start your adventure!
+                        </Typography>
+                    )}
             </Container>
         </>
     );
-}
+}; 
+
+export default observer(HomePage);
