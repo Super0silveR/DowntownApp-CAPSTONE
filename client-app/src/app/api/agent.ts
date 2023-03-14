@@ -1,6 +1,9 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import toast from 'react-hot-toast';
 import { Event } from '../models/event';
+import { EventType } from '../models/eventType';
+import { EventCategory } from '../models/eventCategory';
+import { ChallengeType } from '../models/challengeType';
 import { User, UserFormValues } from '../models/user';
 import { router } from '../router/Routes';
 import { store } from '../stores/store';
@@ -82,6 +85,40 @@ const Events = {
 }
 
 /**
+ * EventTypes related requests. 
+ */
+const EventTypes = {
+    list: () => requests.get<EventType[]>('/eventTypes'),
+    details: (id: string) => requests.get<EventType>(`/eventTypes/${id}`),
+    create: (eventType: EventType) => requests.post<void>('/eventTypes/', eventType),
+    update: (eventType: EventType) => requests.put<void>(`/eventTypes/${eventType.id}`, eventType),
+    delete: (id: string) => requests.del<void>(`/eventTypes/${id}`)
+}
+
+/**
+ * EventCategories related requests. 
+ */
+const EventCategories = {
+    list: () => requests.get<EventCategory[]>('/eventCategories'),
+    details: (id: string) => requests.get<EventCategory>(`/eventCategories/${id}`),
+    create: (eventCategory: EventCategory) => requests.post<void>('/eventCategories/', eventCategory),
+    update: (eventCategory: EventCategory) => requests.put<void>(`/eventCategories/${eventCategory.id}`, eventCategory),
+    delete: (id: string) => requests.del<void>(`/eventCategories/${id}`)
+}
+
+/**
+ * ChallengeTypes related requests. 
+ */
+const ChallengeTypes = {
+    list: () => requests.get<ChallengeType[]>('/challengeTypes'),
+    details: (id: string) => requests.get<ChallengeType>(`/challengeTypes/${id}`),
+    create: (challengeType: ChallengeType) => requests.post<void>('/challengeTypes/', challengeType),
+    update: (challengeType: ChallengeType) => requests.put<void>(`/challengeTypes/${challengeType.id}`, challengeType),
+    delete: (id: string) => requests.del<void>(`/challengeTypes/${id}`)
+}
+
+
+/**
  * Account related requests. 
  */
 const Accounts = {
@@ -95,7 +132,10 @@ const Accounts = {
  * */
 const agent = {
     Accounts,
-    Events
+    Events,
+    EventTypes,
+    EventCategories,
+    ChallengeTypes
 }
 
 /**
