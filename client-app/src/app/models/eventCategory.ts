@@ -2,10 +2,9 @@
 export interface EventCategory {
     id: string;
     title: string;
-    description: string;
+    description: string
     color: string;
     creatorId: string;
-    creatorUserName: string;
 }
 
 export const emptyEventCategory = (): EventCategory => ({
@@ -14,5 +13,4 @@ export const emptyEventCategory = (): EventCategory => ({
     description: '',
     color: '',
     creatorId: '',
-    creatorUserName: '',
 });

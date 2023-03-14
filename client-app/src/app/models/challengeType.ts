@@ -4,7 +4,6 @@ export interface ChallengeType {
     title: string;
     description: string;
     creatorId: string;
-    creatorUserName: string;
 }
 
 export const emptyChallengeType = (): ChallengeType => ({
@@ -12,5 +11,4 @@ export const emptyChallengeType = (): ChallengeType => ({
     title: '',
     description: '',
     creatorId: '',
-    creatorUserName: '',
 });
