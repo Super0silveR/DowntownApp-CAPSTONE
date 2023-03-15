@@ -15,7 +15,7 @@ export default class EventStore {
     selectedEvent: Event | undefined = undefined;
     editMode = false;
     loading = false;
-    loadingInitial = false;
+    loadingInitial = true;
 
     constructor() {
         makeAutoObservable(this);

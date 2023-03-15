@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Button, ButtonGroup, Typography } from '@mui/material';
 import { Container } from '@mui/system';
-import ValidationError from './ValidationError';
+import ValidationErrors from './ValidationErrors';
 
 export default function TestErrors() {
     const baseUrl = 'https://localhost:7246/api/';
@@ -29,7 +29,10 @@ export default function TestErrors() {
     }
 
     function handleValidationError() {
-        axios.post(baseUrl + 'events', {}).catch(err => setErrors(err));
+        axios.post(baseUrl + 'events', {}).catch(err => {
+            console.log(err);
+            setErrors(err);
+        });
     }
 
     return (
@@ -50,7 +53,7 @@ export default function TestErrors() {
                     <Button onClick={handleUnauthorised}>Unauthorized</Button>
                     <Button onClick={handleBadGuid}>Bad GUID</Button>
                 </ButtonGroup>
-                {errors && <ValidationError errors={errors} />}
+                {errors && <ValidationErrors errors={errors} />}
             </Container>         
         </>
     )

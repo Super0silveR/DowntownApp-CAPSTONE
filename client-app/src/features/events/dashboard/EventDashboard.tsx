@@ -18,7 +18,7 @@ function EventDashboard() {
             loadEvents();
     }, [loadEvents, eventRegistry.size]);
 
-    if (eventStore.loadingInitial) return <LoadingComponent content='Loading App..' />
+    if (eventStore.loadingInitial) return <LoadingComponent content='Loading Events..' />
 
     return (
         <>

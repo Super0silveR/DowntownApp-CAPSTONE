@@ -22,7 +22,6 @@ export default class UserStore {
     /** Action that logout the user and clear the token and user object. */
     logout = () => {
         store.commonStore.setToken(null);
-        localStorage.removeItem('jwt');
         this.user = null;
         router.navigate('/');
     }
@@ -36,6 +35,30 @@ export default class UserStore {
             store.commonStore.setToken(user.token);
             runInAction(() => this.user = user);
             router.navigate('/events');
+            store.modalStore.closeModal();
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    /** Action that fetches the current logged in user. */
+    getUser = async () => {
+        try {
+            const user = await agent.Accounts.current();
+            runInAction(() => this.user = user);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    /** Action that executes the register for the user values. */
+    register = async (creds: UserFormValues) => {
+        try {
+            const user = await agent.Accounts.register(creds);
+            store.commonStore.setToken(user.token);
+            runInAction(() => this.user = user);
+            router.navigate('/events');
+            store.modalStore.closeModal();
         } catch (e) {
             throw e;
         }
