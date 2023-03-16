@@ -19,6 +19,17 @@ const sleep = (delay: number) => {
 axios.defaults.baseURL = 'https://localhost:7246/api';
 
 /**
+ * Setting up an Axios interceptor for adding the JWT token to the
+ * outgoing request.
+ */
+axios.interceptors.request.use(config => {
+    const token = store.commonStore.token;
+    if (token && config.headers) 
+        config.headers.Authorization = `Bearer ${token}`;
+    return config;
+});
+
+/**
  * Setting up an Axios interceptor for computing the response.
  * 
  * In case of an error getting thrown by the API, we also use interceptor for quality of life
@@ -122,7 +133,7 @@ const ChallengeTypes = {
  * Account related requests. 
  */
 const Accounts = {
-    current: () => requests.get<User>('/account'),
+    current: () => requests.get<User>('/accounts'),
     login: (user: UserFormValues) => requests.post<User>('/accounts/login', user),
     register: (user: UserFormValues) => requests.post<User>('/accounts/register', user)
 }

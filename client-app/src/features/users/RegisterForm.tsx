@@ -1,45 +1,57 @@
 import { LoadingButton } from "@mui/lab";
 import { Stack, Typography, Button, Divider, InputAdornment } from "@mui/material";
-import { Form, Formik } from "formik";
+import { ErrorMessage, Form, Formik } from "formik";
 import { observer } from "mobx-react-lite";
 import FormContainer from "../../app/common/form/FormContainer";
 import TextInput from "../../app/common/form/TextInput";
 import { useStore } from "../../app/stores/store";
 import * as Yup from 'yup';
 import { UserFormValues } from "../../app/models/user";
-import FormValidationError from "../../app/common/form/FormValidationError";
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import LockIcon from '@mui/icons-material/Lock';
+import ValidationErrors from "../errors/ValidationErrors";
 
-function LoginForm() {
+function RegisterForm() {
 
     /** Validation schema using Yup. */
     const validationSchema = Yup.object<UserFormValues>({
         email: Yup.string().required().email(),
-        password: Yup.string().required()
+        password: Yup.string().required(),
+        displayName: Yup.string().required(),
+        userName: Yup.string().required()
     });
 
     const { modalStore, userStore } = useStore();
 
     return (
         <FormContainer
-            title='Login'
+            title='Register'
             form={
                 <Formik
-                    initialValues={{email: '', password: '', error: null}}
-                    onSubmit={(values, { setErrors }) => 
-                        userStore.login(values)
-                            .catch(error => setErrors({error: 'Invalid email or password'}))
-                    }
+                    initialValues={{ displayName: '', email: '', password: '', userName: '', error: ''}}
+                    onSubmit={(values, { setErrors, setSubmitting }) => {
+                        userStore.register(values).catch((e) => {
+                            setSubmitting(false);
+                            setErrors({error: e});
+                        });
+                    }}
                     validationSchema={validationSchema}
                 >
-                    {({handleSubmit, isSubmitting, errors}) => (
+                    {({handleSubmit, isSubmitting, errors, isValid, dirty}) => (
                         <Form 
-                            className='ui-form'
+                            className='ui-form error'
                             onSubmit={handleSubmit}
                             autoComplete='off'
                         >
-                            <Stack direction='column' spacing={3}>   
+                            <Stack direction='column' spacing={3}>     
+                                <TextInput 
+                                    placeholder='Display Name' 
+                                    name='displayName'
+                                />   
+                                <TextInput 
+                                    placeholder='Username' 
+                                    name='userName'
+                                /> 
                                 <TextInput 
                                     placeholder='Email' 
                                     name='email'
@@ -63,16 +75,20 @@ function LoginForm() {
                                         )
                                     }} 
                                 />
-                                {errors.error && <FormValidationError error={errors.error ?? ''} />}
+                                <ErrorMessage 
+                                    name='error'
+                                    render={() => <ValidationErrors errors={[errors.error]} />}
+                                />
                                 <Divider sx={{width:'50%'}} />
                                 <Stack direction='row' spacing={2}>
                                     <LoadingButton 
+                                        disabled={!isValid || !dirty || isSubmitting}
                                         loading={isSubmitting}
                                         variant='contained' 
                                         fullWidth 
                                         type="submit"
                                     >
-                                        <Typography fontFamily='monospace'>Login</Typography>
+                                        <Typography fontFamily='monospace'>Register</Typography>
                                     </LoadingButton>
                                     <Button onClick={() => modalStore.closeModal()} color="warning" variant="contained" fullWidth>
                                         <Typography fontFamily='monospace'>Cancel</Typography>
@@ -83,10 +99,10 @@ function LoginForm() {
                     )}
                 </Formik>
             }
-            minWidth={375}
+            minWidth={450}
         />
     );
 };
 
 /** Every time we need to use any `store` object, we need the observable transformation. */
-export default observer(LoginForm);
+export default observer(RegisterForm);

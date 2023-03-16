@@ -13,16 +13,16 @@ import Divider from '@mui/material/Divider';
 import TextInput from '../../../app/common/form/TextInput';
 import TextArea from '../../../app/common/form/TextArea';
 import SelectInput from '../../../app/common/form/SelectInput';
-import { categoryOptions } from '../../../app/common/form/options/eventCategoryOptions';
-import { typeOptions } from '../../../app/common/form/options/eventTypeOptions';
 import DateTimeInput from '../../../app/common/form/DateTimeInput';
 import FormContainer from '../../../app/common/form/FormContainer';
 
 function EventForm() {
 
-    const { eventStore } = useStore();
+    const { eventStore, lookupStore } = useStore();
     const { createEvent, updateEvent, 
-            loading, loadEvent, loadingInitial } = eventStore;
+        loading, loadEvent, loadingInitial } = eventStore;
+    const { loadEventCategories, eventCategorySelectOptions,
+        loadEventTypes, eventTypeSelectOptions } = lookupStore;
 
     /** React Router hooks for fetching url params. */
     const { id } = useParams();
@@ -42,13 +42,19 @@ function EventForm() {
     });
 
     useEffect(() => {
-        if (id) {
-            loadEvent(id).then(event => {
-                setEvent(event);
-                setCreate(false);
-            });
+        try {
+            if (id) {
+                loadEvent(id).then(event => {
+                    setEvent(event);
+                    setCreate(false);
+                });
+            }
+            loadEventCategories();
+            loadEventTypes();
+        } catch (e) {
+            console.log(e);
         }
-    }, [id, loadEvent]);
+    }, [id, loadEvent, loadEventCategories, loadEventTypes]);
 
     // /** Handling the onSubmit logic. */
     function handleFormSubmit(event: Event) {
@@ -88,8 +94,8 @@ function EventForm() {
                                     <Stack direction='column' spacing={3}>                                          
                                         <TextInput name='title' placeholder='Title' label='Title' />
                                         <TextArea name='description' placeholder='Description' label='Description' />
-                                        <SelectInput label='Category' placeholder='Category' name='eventCategoryId' options={categoryOptions} />
-                                        <SelectInput label='Type' placeholder='Type' name='eventTypeId' options={typeOptions} />        
+                                        <SelectInput label='Category' placeholder='Category' name='eventCategoryId' options={eventCategorySelectOptions} />
+                                        <SelectInput label='Type' placeholder='Type' name='eventTypeId' options={eventTypeSelectOptions} />        
                                         <DateTimeInput name='date' label='Date' />                                 
                                         <Divider />
                                         <Stack direction='row' spacing={2}>

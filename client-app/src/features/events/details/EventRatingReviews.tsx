@@ -3,22 +3,12 @@ import ListItem from '@mui/material/ListItem/ListItem';
 import { useTheme } from '@mui/material/styles';
 import { Review } from '../../../app/models/event';
 
-// TEMPORARY.
-// const faces = [
-//     "http://i.pravatar.cc/300?img=1",
-//     "http://i.pravatar.cc/300?img=2",
-//     "http://i.pravatar.cc/300?img=3",
-//     "http://i.pravatar.cc/300?img=4"
-// ];
-
 interface Props {
     ratings: Review[];
 }
 
 function EventRatingReviews({ ratings }: Props) {
     const theme = useTheme();
-
-    console.log(ratings);
     
     return (
         <>   

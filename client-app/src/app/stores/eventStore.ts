@@ -86,14 +86,16 @@ export default class EventStore {
     loadEvent = async (id: string) => {
         let event = this.getEvent(id);
         if (event) {
-            this.selectedEvent = event;
+            this.selectedEvent = event; 
             return event;
         } else {
             this.setLoadingInitial(true);
             try {
                 event = await agent.Events.details(id);
                 this.setEvent(event);
-                runInAction(() => this.selectedEvent = event);
+                runInAction(() => {
+                    this.selectedEvent = event
+                });
                 return event;
             } catch (e) {
                 throw e;

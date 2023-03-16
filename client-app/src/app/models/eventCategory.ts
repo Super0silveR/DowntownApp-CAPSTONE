@@ -1,4 +1,3 @@
-
 export interface EventCategory {
     id: string;
     title: string;
