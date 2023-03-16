@@ -11,7 +11,7 @@ interface Props {
     placeholder: string;
     name: string;
     label: string;
-    options?: { value: string, text: string}[];
+    options?: { value: string, text: string }[];
 }
 
 /** 
