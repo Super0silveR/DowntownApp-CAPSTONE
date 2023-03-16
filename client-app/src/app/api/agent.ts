@@ -4,6 +4,8 @@ import { Event } from '../models/event';
 import { EventType } from '../models/eventType';
 import { EventCategory } from '../models/eventCategory';
 import { ChallengeType } from '../models/challengeType';
+import { QuestionType } from '../models/questionType';
+import { ChatRoomType } from '../models/chatRoomType';
 import { User, UserFormValues } from '../models/user';
 import { router } from '../router/Routes';
 import { store } from '../stores/store';
@@ -128,6 +130,27 @@ const ChallengeTypes = {
     delete: (id: string) => requests.del<void>(`/challengeTypes/${id}`)
 }
 
+/**
+ * QuestionTypes related requests. 
+ */
+const QuestionTypes = {
+    list: () => requests.get<QuestionType[]>('/questionTypes'),
+    details: (id: string) => requests.get<QuestionType>(`/questionTypes/${id}`),
+    create: (questionType: QuestionType) => requests.post<void>('/questionTypes/', questionType),
+    update: (questionType: QuestionType) => requests.put<void>(`/questionTypes/${questionType.id}`, questionType),
+    delete: (id: string) => requests.del<void>(`/questionTypes/${id}`)
+}
+
+/**
+ * ChatRoomTypes related requests. 
+ */
+const ChatRoomTypes = {
+    list: () => requests.get<ChatRoomType[]>('/chatRoomTypes'),
+    details: (id: string) => requests.get<ChatRoomType>(`/chatRoomTypes/${id}`),
+    create: (chatRoomType: ChatRoomType) => requests.post<void>('/chatRoomTypes/', chatRoomType),
+    update: (chatRoomType: ChatRoomType) => requests.put<void>(`/chatRoomTypes/${chatRoomType.id}`, chatRoomType),
+    delete: (id: string) => requests.del<void>(`/chatRoomTypes/${id}`)
+}
 
 /**
  * Account related requests. 
@@ -146,7 +169,9 @@ const agent = {
     Events,
     EventTypes,
     EventCategories,
-    ChallengeTypes
+    ChallengeTypes,
+    QuestionTypes,
+    ChatRoomTypes
 }
 
 /**
