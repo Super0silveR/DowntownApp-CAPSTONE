@@ -88,7 +88,7 @@ namespace Api.Extensions
                         builder
                         .AllowAnyHeader()
                         .AllowAnyMethod()
-                        .WithOrigins("http://localhost:3000");
+                        .WithOrigins("https://localhost:3000");
                     });
             });
 
