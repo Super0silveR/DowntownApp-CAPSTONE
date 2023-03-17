@@ -37,7 +37,11 @@ namespace Api.Controllers.Identity
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
             var emailClaim = User.FindFirstValue(ClaimTypes.Email);
-            var user = await _userManager.FindByEmailAsync(emailClaim);
+            var user = await _userManager.Users
+                .Include(u => u.Photos)
+                .FirstOrDefaultAsync(u => u.Email == emailClaim);
+            
+            if (user is null) return NotFound();
 
             return await CreateUserObject(user);
         }
@@ -45,13 +49,15 @@ namespace Api.Controllers.Identity
         /// <summary>
         /// Loging-in a user.
         /// </summary>
-        /// <param name="loginDto">Login data.</param>
+        /// <param name="loginDto">Login credentials.</param>
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await _userManager.FindByEmailAsync(loginDto.Email);
+            var user = await _userManager.Users
+                .Include(u => u.Photos)
+                .FirstOrDefaultAsync(u => u.Email == loginDto.Email);
 
             if (user is null) return Unauthorized();
 
@@ -113,7 +119,7 @@ namespace Api.Controllers.Identity
             new()
             {
                 DisplayName = user.DisplayName,
-                Photo = null,
+                Photo = user.Photos.FirstOrDefault(p => p.IsMain)?.Url,
                 Token = await _tokenService.CreateToken(user),
                 UserName = user.UserName
             };

@@ -1,6 +1,4 @@
-﻿using Application.Handlers.Profiles;
-
-namespace Application.DTOs.Queries
+﻿namespace Application.DTOs.Queries
 {
     public class BarDto
     {
@@ -9,7 +7,7 @@ namespace Application.DTOs.Queries
         public string? Description { get; set; }
         public double CoverCost { get; set; } = 0.0;
         public bool IsActive { get; set; } = false;
-        public Profile? Creator { get; set; }
+        public ProfileDto? Creator { get; set; }
         public BarLikeDto? Likes { get; set; }
         public ICollection<BarEventDto> ScheduledEvents { get; set; } = new HashSet<BarEventDto>();
     }

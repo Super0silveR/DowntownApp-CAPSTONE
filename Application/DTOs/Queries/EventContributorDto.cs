@@ -1,11 +1,9 @@
-﻿using Application.Handlers.Profiles;
-
-namespace Application.DTOs.Queries
+﻿namespace Application.DTOs.Queries
 {
     /// <summary>
     /// Class representing the data transfer object for the EventContributor entity.
     /// </summary>
-    public class EventContributorDto : Profile
+    public class EventContributorDto : ProfileDto
     {
         public bool IsActive { get; set; }
         public bool IsAdmin { get; set; }
