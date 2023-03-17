@@ -6,10 +6,13 @@ using Application.Handlers.Events.Queries;
 using Application.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Infrastructure.Medias;
+using Infrastructure.Medias.Cloudinary;
 using Infrastructure.Security;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using Persistence;
@@ -31,7 +34,7 @@ namespace Api.Extensions
 
             services.AddOpenApiDocument(configure =>
             {
-                configure.Title = "CleanArchitecture API";
+                configure.Title = "Downtown-App API";
                 configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
                 {
                     Type = OpenApiSecuritySchemeType.ApiKey,
@@ -64,11 +67,13 @@ namespace Api.Extensions
             services.AddHttpContextAccessor();
 
             services.AddScoped<IDataContext>(provider => provider.GetRequiredService<DataContext>());
-
             services.AddScoped<DataContextInitializer>();
+            services.AddScoped<IMediaService, MediaService>();
 
             services.AddTransient<IColorService, ColorService>();
             services.AddTransient<IDateTimeService, DateTimeService>();
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehavior<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
             services.Configure<ApiBehaviorOptions>(options =>
                 options.SuppressModelStateInvalidFilter = true);
@@ -97,8 +102,7 @@ namespace Api.Extensions
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssemblyContaining<Create>();
 
-            //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehavior<,>));
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            services.Configure<CloudinarySettings>(configuration.GetSection("Cloudinary"));
 
             return services;
         }

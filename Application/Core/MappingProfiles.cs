@@ -97,7 +97,8 @@ namespace Application.Core
                 .ForMember(erdto => erdto.Ratings, options => options.MapFrom(er => er))
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => src is not null));
 
-            CreateMap<User, Handlers.Profiles.Profile>();
+            CreateMap<User, ProfileDto>()
+                .ForMember(pdto => pdto.Image, options => options.MapFrom(u => u.Photos.FirstOrDefault(p => p.IsMain)!.Url));
 
             #endregion
 

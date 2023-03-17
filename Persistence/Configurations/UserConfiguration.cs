@@ -74,12 +74,6 @@ namespace Persistence.Configurations
                    .HasConstraintName("FK_USER_LIKED_BARS")
                    .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(u => u.Photos)
-                   .WithOne(up => up.User)
-                   .HasForeignKey(up => up.UserId)
-                   .HasConstraintName("FK_USER_PHOTOS")
-                   .OnDelete(DeleteBehavior.Cascade);
-
             builder.HasMany(u => u.Questions)
                    .WithOne(q => q.User)
                    .HasForeignKey(q => q.UserId)
