@@ -41,7 +41,7 @@ namespace Persistence
             {
                 if (_context.Database.IsSqlite() || _context.Database.IsNpgsql())
                 {
-                    await _context.Database.EnsureDeletedAsync();
+                    //await _context.Database.EnsureDeletedAsync();
                     //await _context.Database.EnsureCreatedAsync();
                     await _context.Database.MigrateAsync();
                 }
@@ -68,10 +68,9 @@ namespace Persistence
 
         public async Task TrySeedAsync()
         {
-            Guard.Against.Null(_context.Events, nameof(_context.Events));
-
             var adminRole = new Role { Name = "admin", NormalizedName = "ADMIN" };
 
+            /// Users seeding.
             var users = new List<User>
             {
                 new User { DisplayName = "Admin", UserName = "Admin", Email = "admin@test.com" },
@@ -81,6 +80,7 @@ namespace Persistence
                 new User { DisplayName = "Venomyox", UserName = "younes", Email = "younes@test.com" }
             };
 
+            /// Creating the users before anything else so that our foreign keys constraints are respected when building the database.
             if (!_roleManager.Roles.Any(role => role.Name == adminRole.Name))
             {
                 await _roleManager.CreateAsync(adminRole);
@@ -100,6 +100,103 @@ namespace Persistence
                 await _context.SaveChangesAsync();
             }
 
+            /// Challenge Types seeding.
+            var challengeTypes = new List<ChallengeType>
+            {
+                new ChallengeType
+                {
+                    Name = "Challenge1",
+                    Description = "Awesome challenge1!",
+                    CreatorId = users[0].Id
+                },
+                new ChallengeType
+                {
+                    Name = "Challenge2",
+                    Description = "Awesome challenge2!",
+                    CreatorId = users[0].Id
+                },
+                new ChallengeType
+                {
+                    Name = "Challenge3",
+                    Description = "Awesome challenge3!",
+                    CreatorId = users[0].Id
+                },
+            };
+
+            /// Chat Room Types seeding.
+            var chatRoomTypes = new List<ChatRoomType>
+            {
+                new ChatRoomType { Name = "Private" },
+                new ChatRoomType { Name = "Public" }
+            };
+
+            if (!_context.ChatRoomTypes.Any())
+            {
+                await _context.ChatRoomTypes.AddRangeAsync(chatRoomTypes);
+                await _context.SaveChangesAsync();
+            }
+
+            /// Chat Rooms seeding.
+            var chatRooms = new List<ChatRoom>
+            {
+                new ChatRoom
+                {
+                    ChatRoomType = chatRoomTypes[0],
+                    Name = "My First ChatRoom"
+                },
+                new ChatRoom
+                {
+                    ChatRoomType = chatRoomTypes[0],
+                    Name = "My Second ChatRoom"
+                }
+            };
+
+            if (!_context.ChatRooms.Any())
+            {
+                await _context.ChatRooms.AddRangeAsync(chatRooms);
+                await _context.SaveChangesAsync();
+            }
+
+            /// User Chat Rooms seeding.
+            var userChatRooms = new List<UserChatRoom>
+            {
+                new UserChatRoom
+                {
+                    ChatRoom = chatRooms[0],
+                    User = users[0]
+                },
+                new UserChatRoom
+                {
+                    ChatRoom = chatRooms[0],
+                    User = users[1]
+                },
+                new UserChatRoom
+                {
+                    ChatRoom = chatRooms[1],
+                    User = users[0]
+                }
+            };
+
+            /// User Chats seeding.
+            var userChats = new List<UserChat>
+            {
+                new UserChat
+                {
+                    Sent = DateTime.UtcNow,
+                    Message = "Hi Elias!",
+                    ChatRoom = chatRooms[0],
+                    User = users[0]
+                },
+                new UserChat
+                {
+                    Sent = DateTime.UtcNow.AddSeconds(5),
+                    Message = "Hi Vincent! How are you?",
+                    ChatRoom = chatRooms[0],
+                    User = users[1]
+                }
+            };
+
+            /// Event Categories seeding.
             var eventCategories = new List<EventCategory>
             {
                 new EventCategory
@@ -125,9 +222,7 @@ namespace Persistence
                 },
             };
 
-            await _context.EventCategories.AddRangeAsync(eventCategories);
-            await _context.SaveChangesAsync();
-
+            /// Event Types seeding.
             var eventTypes = new List<EventType>
             {
                 new EventType
@@ -153,35 +248,115 @@ namespace Persistence
                 },
             };
 
-            await _context.EventTypes.AddRangeAsync(eventTypes);
-            await _context.SaveChangesAsync();
-
-
-            var challengeTypes = new List<ChallengeType>
+            if (!_context.EventCategories.Any())
             {
-                new ChallengeType
+
+                await _context.EventCategories.AddRangeAsync(eventCategories);
+                await _context.SaveChangesAsync();
+            }
+
+            if (!_context.EventTypes.Any())
+            {
+                await _context.EventTypes.AddRangeAsync(eventTypes);
+                await _context.SaveChangesAsync();
+            }
+
+            /// Event seeding.
+            var events = new List<Event>
+            {
+                new Event
                 {
-                    Name = "Challenge1",
-                    Description = "Awesome challenge1!",
-                    CreatorId = users[0].Id
+                    CreatorId = users[0].Id,
+                    EventCategoryId = eventCategories[0].Id,
+                    EventTypeId = eventTypes[2].Id,
+                    Title = "Past Event 1",
+                    Date = DateTime.UtcNow.AddMonths(-2),
+                    Description = "Event 2 months ago"
                 },
-                new ChallengeType
+                new Event
                 {
-                    Name = "Challenge2",
-                    Description = "Awesome challenge2!",
-                    CreatorId = users[0].Id
+                    CreatorId = users[1].Id,
+                    EventCategoryId = eventCategories[1].Id,
+                    EventTypeId = eventTypes[1].Id,
+                    Title = "Past Event 2",
+                    Date = DateTime.UtcNow.AddMonths(-1),
+                    Description = "Event 1 month ago"
                 },
-                new ChallengeType
+                new Event
                 {
-                    Name = "Challenge3",
-                    Description = "Awesome challenge3!",
-                    CreatorId = users[0].Id
+                    CreatorId = users[2].Id,
+                    EventCategoryId = eventCategories[2].Id,
+                    EventTypeId = eventTypes[0].Id,
+                    Title = "Future Event 1",
+                    Date = DateTime.UtcNow.AddMonths(1),
+                    Description = "Event 1 month in future"
                 },
+                new Event
+                {
+                    CreatorId = users[3].Id,
+                    EventCategoryId = eventCategories[0].Id,
+                    EventTypeId = eventTypes[2].Id,
+                    Title = "Future Event 2",
+                    Date = DateTime.UtcNow.AddMonths(2),
+                    Description = "Event 2 months in future"
+                },
+                new Event
+                {
+                    CreatorId = users[0].Id,
+                    EventCategoryId = eventCategories[1].Id,
+                    EventTypeId = eventTypes[1].Id,
+                    Title = "Future Event 3",
+                    Date = DateTime.UtcNow.AddMonths(3),
+                    Description = "Event 3 months in future"
+                },
+                new Event
+                {
+                    CreatorId = users[1].Id,
+                    EventCategoryId = eventCategories[2].Id,
+                    EventTypeId = eventTypes[0].Id,
+                    Title = "Future Event 4",
+                    Date = DateTime.UtcNow.AddMonths(4),
+                    Description = "Event 4 months in future"
+                },
+                new Event
+                {
+                    CreatorId = users[2].Id,
+                    EventCategoryId = eventCategories[0].Id,
+                    EventTypeId = eventTypes[2].Id,
+                    Title = "Future Event 5",
+                    Date = DateTime.UtcNow.AddMonths(5),
+                    Description = "Event 5 months in future"
+                },
+                new Event
+                {
+                    CreatorId = users[3].Id,
+                    EventCategoryId = eventCategories[1].Id,
+                    EventTypeId = eventTypes[1].Id,
+                    Title = "Future Event 6",
+                    Date = DateTime.UtcNow.AddMonths(6),
+                    Description = "Event 6 months in future"
+                },
+                new Event
+                {
+                    CreatorId = users[0].Id,
+                    EventCategoryId = eventCategories[2].Id,
+                    EventTypeId = eventTypes[0].Id,
+                    Title = "Future Event 7",
+                    Date = DateTime.UtcNow.AddMonths(7),
+                    Description = "Event 2 months ago"
+                },
+                new Event
+                {
+                    CreatorId = users[1].Id,
+                    EventCategoryId = eventCategories[0].Id,
+                    EventTypeId = eventTypes[2].Id,
+                    Title = "Future Event 8",
+                    Date = DateTime.UtcNow.AddMonths(8),
+                    Description = "Event 8 months in future"
+                }
             };
 
-            await _context.ChallengeTypes.AddRangeAsync(challengeTypes);
-            await _context.SaveChangesAsync();
-
+            /// Profile Question Types seeding.
             var questionTypes = new List<QuestionType>
             {
                 new QuestionType
@@ -201,165 +376,27 @@ namespace Persistence
                 },
             };
 
-            await _context.QuestionTypes.AddRangeAsync(questionTypes);
-            await _context.SaveChangesAsync();
-
-            var chatRoomTypes = new List<ChatRoomType>
+            if (!_context.ChallengeTypes.Any())
             {
-                new ChatRoomType { Name = "Private" },
-                new ChatRoomType { Name = "Public" }
-            };
-            await _context.ChatRoomTypes.AddRangeAsync(chatRoomTypes);
+                await _context.ChallengeTypes.AddRangeAsync(challengeTypes);
+                await _context.SaveChangesAsync();
+            }
 
-            var chatRooms = new List<ChatRoom>
+            if (!_context.UserChatRooms.Any())
             {
-                new ChatRoom
-                {
-                    ChatRoomType = chatRoomTypes[0],
-                    Name = "My First ChatRoom"
-                },
-                new ChatRoom
-                {
-                    ChatRoomType = chatRoomTypes[0],
-                    Name = "My Second ChatRoom"
-                }
-            };
-            await _context.ChatRooms.AddRangeAsync(chatRooms);
+                await _context.UserChatRooms.AddRangeAsync(userChatRooms);
+                await _context.SaveChangesAsync();
+            }
 
-            var userChatRooms = new List<UserChatRoom>
+            if (!_context.UserChats.Any())
             {
-                new UserChatRoom
-                {
-                    ChatRoom = chatRooms[0],
-                    User = users[0]
-                },
-                new UserChatRoom
-                {
-                    ChatRoom = chatRooms[0],
-                    User = users[1]
-                },
-                new UserChatRoom
-                {
-                    ChatRoom = chatRooms[1],
-                    User = users[0]
-                }
-            };
-            await _context.UserChatRooms.AddRangeAsync(userChatRooms);
-
-            var userChats = new List<UserChat>
-            {
-                new UserChat
-                {
-                    Sent = DateTime.UtcNow,
-                    Message = "Hi Elias!",
-                    ChatRoom = chatRooms[0],
-                    User = users[0]
-                },
-                new UserChat
-                {
-                    Sent = DateTime.UtcNow.AddSeconds(5),
-                    Message = "Hi Vincent! How are you?",
-                    ChatRoom = chatRooms[0],
-                    User = users[1]
-                }
-            };
-            await _context.UserChats.AddRangeAsync(userChats);
+                await _context.UserChats.AddRangeAsync(userChats);
+                await _context.SaveChangesAsync();
+            }
 
             if (!_context.Events.Any())
             {
-                var events = new List<Event>
-                {
-                    new Event
-                    {
-                        CreatorId = users[0].Id,
-                        EventCategoryId = eventCategories[0].Id,
-                        EventTypeId = eventTypes[2].Id,
-                        Title = "Past Event 1",
-                        Date = DateTime.UtcNow.AddMonths(-2),
-                        Description = "Event 2 months ago"
-                    },
-                    new Event
-                    {
-                        CreatorId = users[1].Id,
-                        EventCategoryId = eventCategories[1].Id,
-                        EventTypeId = eventTypes[1].Id,
-                        Title = "Past Event 2",
-                        Date = DateTime.UtcNow.AddMonths(-1),
-                        Description = "Event 1 month ago"
-                    },
-                    new Event
-                    {
-                        CreatorId = users[2].Id,
-                        EventCategoryId = eventCategories[2].Id,
-                        EventTypeId = eventTypes[0].Id,
-                        Title = "Future Event 1",
-                        Date = DateTime.UtcNow.AddMonths(1),
-                        Description = "Event 1 month in future"
-                    },
-                    new Event
-                    {
-                        CreatorId = users[3].Id,
-                        EventCategoryId = eventCategories[0].Id,
-                        EventTypeId = eventTypes[2].Id,
-                        Title = "Future Event 2",
-                        Date = DateTime.UtcNow.AddMonths(2),
-                        Description = "Event 2 months in future"
-                    },
-                    new Event
-                    {
-                        CreatorId = users[0].Id,
-                        EventCategoryId = eventCategories[1].Id,
-                        EventTypeId = eventTypes[1].Id,
-                        Title = "Future Event 3",
-                        Date = DateTime.UtcNow.AddMonths(3),
-                        Description = "Event 3 months in future"
-                    },
-                    new Event
-                    {
-                        CreatorId = users[1].Id,
-                        EventCategoryId = eventCategories[2].Id,
-                        EventTypeId = eventTypes[0].Id,
-                        Title = "Future Event 4",
-                        Date = DateTime.UtcNow.AddMonths(4),
-                        Description = "Event 4 months in future"
-                    },
-                    new Event
-                    {
-                        CreatorId = users[2].Id,
-                        EventCategoryId = eventCategories[0].Id,
-                        EventTypeId = eventTypes[2].Id,
-                        Title = "Future Event 5",
-                        Date = DateTime.UtcNow.AddMonths(5),
-                        Description = "Event 5 months in future"
-                    },
-                    new Event
-                    {
-                        CreatorId = users[3].Id,
-                        EventCategoryId = eventCategories[1].Id,
-                        EventTypeId = eventTypes[1].Id,
-                        Title = "Future Event 6",
-                        Date = DateTime.UtcNow.AddMonths(6),
-                        Description = "Event 6 months in future"
-                    },
-                    new Event
-                    {
-                        CreatorId = users[0].Id,
-                        EventCategoryId = eventCategories[2].Id,
-                        EventTypeId = eventTypes[0].Id,
-                        Title = "Future Event 7",
-                        Date = DateTime.UtcNow.AddMonths(7),
-                        Description = "Event 2 months ago"
-                    },
-                    new Event
-                    {
-                        CreatorId = users[1].Id,
-                        EventCategoryId = eventCategories[0].Id,
-                        EventTypeId = eventTypes[2].Id,
-                        Title = "Future Event 8",
-                        Date = DateTime.UtcNow.AddMonths(8),
-                        Description = "Event 8 months in future"
-                    }
-                };
+                await _context.Events.AddRangeAsync(events);
 
                 events[0].Contributors.Add(new EventContributor { Event = events[0], User = users[1], IsActive = true, IsAdmin = true, Status = ContributorStatus.Creator });
                 events[0].Contributors.Add(new EventContributor { Event = events[0], User = users[2], IsActive = true, Status = ContributorStatus.Accepted });
@@ -372,11 +409,8 @@ namespace Persistence
                 events[0].Ratings.Add(new EventRating { Event = events[0], User = users[3], Vote = 4, Review = "Wow, memorable experience!" });
                 events[0].Ratings.Add(new EventRating { Event = events[0], User = users[4], Vote = 5, Review = "Wow, incredible experience!" });
 
-                await _context.Events.AddRangeAsync(events);
                 await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
         }
     }
 }

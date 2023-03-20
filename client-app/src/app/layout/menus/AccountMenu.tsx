@@ -85,7 +85,7 @@ export default function AccountMenu({ logout, user }: Props) {
                     >
                         {user 
                             ? <Avatar 
-                                src={user?.image || '/assets/user.png'} 
+                                src={user?.photo || '/assets/user.png'} 
                                 sx={{ width: 24, height: 24 }} 
                                 /> 
                             : <AccountCircle />}
@@ -127,7 +127,7 @@ export default function AccountMenu({ logout, user }: Props) {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem component={Link} to={`/profile/${user?.userName}`} onClick={handleClose}>
+                <MenuItem component={Link} to={`/profiles/${user?.userName}`} onClick={handleClose}>
                     <ListItemIcon>
                         <AccountCircle fontSize="small" />
                     </ListItemIcon>

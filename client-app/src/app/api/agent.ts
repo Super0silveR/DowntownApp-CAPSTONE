@@ -9,6 +9,7 @@ import { ChatRoomType } from '../models/chatRoomType';
 import { User, UserFormValues } from '../models/user';
 import { router } from '../router/Routes';
 import { store } from '../stores/store';
+import { Profile } from '../models/profile';
 
 /** Adding a `fake` delay to the app for testing the `loading` indicators after requests. */
 const sleep = (delay: number) => {
@@ -161,17 +162,22 @@ const Accounts = {
     register: (user: UserFormValues) => requests.post<User>('/accounts/register', user)
 }
 
+const Profiles = {
+    get: (userName: string) => requests.get<Profile>(`/profiles/${userName}`)
+}
+
 /**
  * Building the `agent` object.
  * */
 const agent = {
     Accounts,
+    ChallengeTypes,
+    ChatRoomTypes,
     Events,
     EventTypes,
     EventCategories,
-    ChallengeTypes,
-    QuestionTypes,
-    ChatRoomTypes
+    Profiles,
+    QuestionTypes
 }
 
 /**

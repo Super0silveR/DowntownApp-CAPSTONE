@@ -64,7 +64,7 @@ export default function EventContributors({ contributors }: Props) {
                             }
                         >
                             <ListItemAvatar>
-                                <Avatar alt={contributor.userName} src={contributor.image ?? faces[i]} />
+                                <Avatar alt={contributor.user.userName} src={contributor.user.photo ?? faces[i]} />
                             </ListItemAvatar>
                             <ListItemText
                                 primary={
@@ -78,7 +78,7 @@ export default function EventContributors({ contributors }: Props) {
                                             variant="body1"
                                             color="primary.dark"
                                         >
-                                            {contributor.displayName}
+                                            {contributor.user.displayName}
                                         </Typography>
                                     </React.Fragment>
                                 }

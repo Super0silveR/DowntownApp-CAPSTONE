@@ -2,7 +2,6 @@ import { Avatar, Button, Divider, ListItem, ListItemAvatar, ListItemSecondaryAct
 import React, { SyntheticEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Event } from '../../../app/models/event';
-import ImageIcon from '@mui/icons-material/Image';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useStore } from '../../../app/stores/store';
 import { observer } from 'mobx-react-lite';
@@ -22,6 +21,9 @@ function EventListItem({ event }: Props) {
 
     const [target, setTarget] = useState('');
 
+    /** Accessing the host through the list of contributors. WILL NEED CHANGES! */
+    const host = event.contributors.find(c => c.status === 'Creator')?.user;
+
     function handleEventDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
         setTarget(e.currentTarget.name);
         deleteEvent(id);
@@ -38,8 +40,7 @@ function EventListItem({ event }: Props) {
                 elevation={3}
             >
                 <ListItem 
-                    component={Link}
-                    to={`/events/${event.id}`}
+                    component='span'
                     key={event.id}
                     sx={{
                         // transition: "0.3s",
@@ -56,9 +57,9 @@ function EventListItem({ event }: Props) {
                     }}
                 >
                     <ListItemAvatar>
-                        <Avatar>
-                            <ImageIcon />
-                        </Avatar>
+                        <Avatar
+                            src={host?.photo || '/assets/user.png'}
+                        /> 
                     </ListItemAvatar>
                     <Stack direction='column'>
                         <ListItemText
@@ -110,6 +111,14 @@ function EventListItem({ event }: Props) {
                                 </React.Fragment>
                             }
                         />
+                        <Typography
+                            component='p'
+                            variant='caption'
+                            fontWeight='100'
+                            color="secondary.light"
+                        >
+                            Created by <Link to={host ? `/profiles/${host.userName}` : '#'}>{host?.displayName ?? 'Someone'}</Link>
+                        </Typography>
                     </Stack>
                     <ListItemSecondaryAction>
                         <Stack

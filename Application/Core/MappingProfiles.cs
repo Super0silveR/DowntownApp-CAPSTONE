@@ -79,9 +79,6 @@ namespace Application.Core
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 
             CreateMap<EventContributor, EventContributorDto>()
-                .ForMember(ec => ec.DisplayName, options => options.MapFrom(ec => ec.User!.DisplayName))
-                .ForMember(ec => ec.UserName, options => options.MapFrom(ec => ec.User!.UserName))
-                .ForMember(ec => ec.Bio, options => options.MapFrom(ec => ec.User!.Bio))
                 .ForMember(ec => ec.Status, options => options.MapFrom(ec => ec.Status.ToString()));
 
             CreateMap<EventRating, RatingDto>();
@@ -98,7 +95,10 @@ namespace Application.Core
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => src is not null));
 
             CreateMap<User, ProfileDto>()
-                .ForMember(pdto => pdto.Image, options => options.MapFrom(u => u.Photos.FirstOrDefault(p => p.IsMain)!.Url));
+                .ForMember(pdto => pdto.Photo, options => options.MapFrom(u => u.Photos.FirstOrDefault(p => p.IsMain)!.Url));
+
+            CreateMap<User, UserLightDto>()
+                .ForMember(pdto => pdto.Photo, options => options.MapFrom(u => u.Photos.FirstOrDefault(p => p.IsMain)!.Url));
 
             #endregion
 

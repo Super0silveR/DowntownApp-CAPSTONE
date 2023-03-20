@@ -12,7 +12,6 @@ using Infrastructure.Security;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using Persistence;
@@ -50,16 +49,19 @@ namespace Api.Extensions
             services.AddScoped<AuditableEntitySaveChangesInterceptor>();
             services.AddScoped<UserFollowingSaveChangesInterceptor>();
 
+            // Data Context.
             services.AddDbContext<DataContext>(opt =>
             {
-                //var constr = configuration["ConnectionStrings:DefaultConnection"];
-                //opt.UseSqlite(constr,
-                //              builder => builder.MigrationsAssembly(typeof(DataContext).Assembly.FullName));
-
                 //TODO: PgSql connection. (Prod vs Env)
                 var constr = configuration["ConnectionStrings:PgAdminConnection"];
                 opt.UseNpgsql(constr,
-                    builder => builder.MigrationsAssembly(typeof(DataContext).Assembly.FullName));
+                              builder =>
+                              {
+                                  builder.MigrationsAssembly(typeof(DataContext).Assembly.FullName);
+                                  /// Using the `SplitQuery` behavior is to work around performance issues with JOINs. 
+                                  /// EF allows to specify that a given LINQ query should be split into multiple SQL queries.
+                                  builder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                              });
             });
 
             services.AddSingleton<ICurrentUserService, CurrentUserService>();
@@ -93,7 +95,7 @@ namespace Api.Extensions
                         builder
                         .AllowAnyHeader()
                         .AllowAnyMethod()
-                        .WithOrigins("https://localhost:3000");
+                        .WithOrigins("https://localhost:3000", "http://localhost:3000");
                     });
             });
 
