@@ -3,6 +3,7 @@ import CommonStore from "./commonStore";
 import EventStore from "./eventStore";
 import LookupStore from "./lookupStore";
 import ModalStore from "./modalStore";
+import ProfileStore from "./profileStore";
 import UserStore from "./userStore";
 
 /** Main store interface. */
@@ -11,7 +12,8 @@ interface Store {
     eventStore: EventStore,
     lookupStore: LookupStore,
     modalStore: ModalStore,
-    userStore: UserStore
+    userStore: UserStore,
+    profileStore: ProfileStore
 }
 
 /** Instance of our main store, containing different stores. */
@@ -20,7 +22,8 @@ export const store: Store = {
     eventStore: new EventStore(),
     lookupStore: new LookupStore(),
     modalStore: new ModalStore(),
-    userStore: new UserStore()
+    userStore: new UserStore(),
+    profileStore: new ProfileStore()
 }
 
 /** Hooking up our store object to the React Context. */

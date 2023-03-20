@@ -5,6 +5,7 @@ import TestErrors from "../../features/errors/TestErrors";
 import EventDashboard from "../../features/events/dashboard/EventDashboard";
 import EventDetails from "../../features/events/details/EventDetails";
 import EventForm from "../../features/events/form/EventForm";
+import ProfilePage from "../../features/profiles/ProfilePage";
 import LoginForm from "../../features/users/LoginForm";
 import App from "../layout/App";
 
@@ -27,6 +28,7 @@ export const routes: RouteObject[] = [
 
             /** User related routes. */
             {path: 'login', element: <LoginForm key='login-form' />},
+            {path: 'profiles/:userName', element: <ProfilePage />},
 
             /** Any routes that doesn't match our own routes. */
             {path: '*', element: <Navigate replace to='/not-found' key='not-foud' />}

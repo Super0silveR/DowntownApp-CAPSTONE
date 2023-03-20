@@ -44,7 +44,7 @@ const theme = createTheme({
                         fontSize: '1rem'
                 }
             }
-        },
+        }
     },
     typography: {
         fontFamily: 'monospace'

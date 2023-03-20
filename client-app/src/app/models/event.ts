@@ -24,10 +24,7 @@ export interface Contributor {
     isAdmin: boolean;
     created: Date;
     status: string;
-    userName: string;
-    displayName: string;
-    bio?: any;
-    image?: any;
+    user: UserDto;
 }
 
 export interface Event {
