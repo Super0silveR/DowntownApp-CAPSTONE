@@ -6,6 +6,7 @@ import orange from "@mui/material/colors/orange";
 import green from "@mui/material/colors/green";
 import lightBlue from "@mui/material/colors/lightBlue";
 import grey from "@mui/material/colors/grey";
+import { deepPurple } from "@mui/material/colors";
 
 const theme = createTheme({
     components: {
@@ -22,11 +23,31 @@ const theme = createTheme({
         //         })
         //     }
         // },
+        MuiAvatar: {
+            styleOverrides: {
+                root: {
+                    margin:0
+                }
+            }
+        },
         MuiButton: {
             styleOverrides: {
                 root: ({ownerState, theme}) => ({
                     ...(ownerState.color === 'warning' && {
                         color: '#fff'
+                    })
+                })
+            }
+        },
+        MuiIconButton: {
+            styleOverrides: {
+                root: ({ownerState, theme}) => ({
+                    ...(ownerState["aria-details"] === 'socials' && {
+                        color: theme.palette.common.white,
+                        '&:hover': {
+                            color: theme.palette.primary.main,
+                            backgroundColor: theme.palette.action.hover
+                        }
                     })
                 })
             }
@@ -87,7 +108,7 @@ const theme = createTheme({
             active: red[200],
             disabled: grey[700],
             disabledBackground: grey[300],
-            hover: red[100],
+            hover: deepPurple[100],
             hoverOpacity: 0.7,
             focus: red[600],
             focusOpacity: 0.92,
