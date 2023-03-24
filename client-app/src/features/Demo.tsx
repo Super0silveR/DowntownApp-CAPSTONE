@@ -29,7 +29,26 @@ import React from "react";
 //          setEvents(response.data);
 //        });
 //    }, []);
-    
+
+// //
+// {location.pathname.startsWith('/profiles') && 
+// <div 
+//     style={{
+//         backgroundImage: 'url("https://res.cloudinary.com/dwixnc66t/image/upload/v1641058246/samples/landscapes/landscape-panorama.jpg")',
+//         backgroundRepeat: 'no-repeat',
+//         backgroundSize: 'cover',
+//         position:'fixed', 
+//         left:0, 
+//         top:69, 
+//         width:'100%', 
+//         height:'45%', 
+//         zIndex:'-100'
+//     }} 
+// />
+// }
+// //
+//
+//
 //    return (
 //        <Box sx={{ my: '7em', mb: '3em', width: '100%' }}>
 //        <Grid2

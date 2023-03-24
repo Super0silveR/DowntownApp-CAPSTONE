@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import ResponsiveAppBar from './NavBar';
-import { Container } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import { Outlet, useLocation } from 'react-router-dom';
 import HomePage from '../../features/home/HomePage';
 import { Toaster } from 'react-hot-toast';
@@ -49,7 +49,7 @@ function App() {
                     }}
                 />
                 {location.pathname === '/' ? <HomePage /> : (
-                    <>
+                    <Box position='relative'>
                         <ResponsiveAppBar />
                         <Container sx={{ my: '7em' }}>
                             {/** Route Outlet so we can swap in/out react components 
@@ -57,7 +57,7 @@ function App() {
                             <Outlet />
                         </Container>
                         {/** <Footer /> */}
-                    </>
+                    </Box>
                 )}
             </ThemeProvider>
         </>

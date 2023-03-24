@@ -1,5 +1,6 @@
 import { TabPanel } from '@mui/lab';
-import { Box, SxProps, Theme } from '@mui/system';
+import { Box, Divider } from '@mui/material';
+import { SxProps, Theme } from '@mui/system';
 import React from 'react';
 import NotComplete from '../NotComplete';
 
@@ -22,14 +23,8 @@ export default function CustomTabPanel({ id, content, value, sx }: Props) {
                 ...sx
             }}
         >
-            <Box
-                sx={{
-                    boxShadow: 'rgba(0, 0, 0, 0.12) 0px 2px 4px 0px inset',
-                    borderRadius: '0.5em',
-                    minHeight: '150px',
-                    padding: 2,
-                }}
-            >
+            <Divider />
+            <Box p={1} minHeight={100}>
                 {content ?? <NotComplete />}
             </Box>
         </TabPanel> 

@@ -95,6 +95,8 @@ namespace Application.Core
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => src is not null));
 
             CreateMap<User, ProfileDto>()
+                .ForMember(pdto => pdto.Followers, options => options.MapFrom(u => u.Followers.Count))
+                .ForMember(pdto => pdto.Following, options => options.MapFrom(u => u.Followings.Count))
                 .ForMember(pdto => pdto.Photo, options => options.MapFrom(u => u.Photos.FirstOrDefault(p => p.IsMain)!.Url));
 
             CreateMap<User, UserLightDto>()

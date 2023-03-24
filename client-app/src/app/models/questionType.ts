@@ -1,8 +1,7 @@
-
 export interface QuestionType {
     id: string;
     name: string;
-    description: string
+    description: string;
 }
 
 export const emptyQuestionType = (): QuestionType => ({

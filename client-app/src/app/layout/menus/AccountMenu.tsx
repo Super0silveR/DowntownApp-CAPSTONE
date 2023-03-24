@@ -48,7 +48,7 @@ export default function AccountMenu({ logout, user }: Props) {
                     user &&
                     <>
                         <IconButton size="small" aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={4} color="error">
+                            <Badge badgeContent={4} color="secondary">
                                 <MailIcon />
                             </Badge>
                         </IconButton>
