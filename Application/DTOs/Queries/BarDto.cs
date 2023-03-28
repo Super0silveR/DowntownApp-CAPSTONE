@@ -3,6 +3,7 @@
     public class BarDto
     {
         public Guid CreatorId { get; set; }
+        public Guid? Id { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
         public double CoverCost { get; set; } = 0.0;
