@@ -1,6 +1,15 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
+import toast from 'react-hot-toast';
 import { Event } from '../models/event';
+import { EventType } from '../models/eventType';
+import { EventCategory } from '../models/eventCategory';
+import { ChallengeType } from '../models/challengeType';
+import { QuestionType } from '../models/questionType';
+import { ChatRoomType } from '../models/chatRoomType';
 import { User, UserFormValues } from '../models/user';
+import { router } from '../router/Routes';
+import { store } from '../stores/store';
+import { Profile } from '../models/profile';
 
 /** Adding a `fake` delay to the app for testing the `loading` indicators after requests. */
 const sleep = (delay: number) => {
@@ -12,15 +21,57 @@ const sleep = (delay: number) => {
 /** Setting up the default url to our API. */
 axios.defaults.baseURL = 'https://localhost:7246/api';
 
-/** Setting up an Axios interceptor for computing the response. [in this case] */
+/**
+ * Setting up an Axios interceptor for adding the JWT token to the
+ * outgoing request.
+ */
+axios.interceptors.request.use(config => {
+    const token = store.commonStore.token;
+    if (token && config.headers) 
+        config.headers.Authorization = `Bearer ${token}`;
+    return config;
+});
+
+/**
+ * Setting up an Axios interceptor for computing the response.
+ * 
+ * In case of an error getting thrown by the API, we also use interceptor for quality of life
+ * and user experience.
+ */
 axios.interceptors.response.use(async response => {
-    try {
-        await sleep(1000);
-        return response;
-    } catch (error) {
-        console.log(error);
-        return await Promise.reject(error);
+    await sleep(1000);
+    return response;
+}, (error: AxiosError) => {
+    const { data, status } = error.response as AxiosResponse;
+    switch (status) {
+        case 400:
+            if (data.errors) {
+                const modalStateErrors = [];
+                for (const key in data.errors) {
+                    if (data.errors[key])
+                        modalStateErrors.push(data.errors[key]);
+                }
+                throw modalStateErrors.flat();
+            } else {
+               toast.error(data); 
+            }
+            break;
+        case 401:
+            toast.error('Unauthorized');
+            break;
+        case 403:
+            toast.error('Forbidden');
+            break;
+        case 404:
+            /** Navigate the user to our NotFound react component. */
+            router.navigate('/not-found');
+            break;
+        case 500:
+            store.commonStore.setServerError(data);
+            router.navigate('/server-error');
+            break;
     }
+    return Promise.reject(error);
 });
 
 /** Extracting the data from the response. */
@@ -48,10 +99,71 @@ const Events = {
 }
 
 /**
+ * EventTypes related requests. 
+ */
+const EventTypes = {
+    list: () => requests.get<EventType[]>('/eventTypes'),
+    details: (id: string) => requests.get<EventType>(`/eventTypes/${id}`),
+    create: (eventType: EventType) => requests.post<void>('/eventTypes/', eventType),
+    update: (eventType: EventType) => requests.put<void>(`/eventTypes/${eventType.id}`, eventType),
+    delete: (id: string) => requests.del<void>(`/eventTypes/${id}`)
+}
+
+/**
+ * EventCategories related requests. 
+ */
+const EventCategories = {
+    list: () => requests.get<EventCategory[]>('/eventCategories'),
+    details: (id: string) => requests.get<EventCategory>(`/eventCategories/${id}`),
+    create: (eventCategory: EventCategory) => requests.post<void>('/eventCategories/', eventCategory),
+    update: (eventCategory: EventCategory) => requests.put<void>(`/eventCategories/${eventCategory.id}`, eventCategory),
+    delete: (id: string) => requests.del<void>(`/eventCategories/${id}`)
+}
+
+/**
+ * ChallengeTypes related requests. 
+ */
+const ChallengeTypes = {
+    list: () => requests.get<ChallengeType[]>('/challengeTypes'),
+    details: (id: string) => requests.get<ChallengeType>(`/challengeTypes/${id}`),
+    create: (challengeType: ChallengeType) => requests.post<void>('/challengeTypes/', challengeType),
+    update: (challengeType: ChallengeType) => requests.put<void>(`/challengeTypes/${challengeType.id}`, challengeType),
+    delete: (id: string) => requests.del<void>(`/challengeTypes/${id}`)
+}
+
+/**
+ * QuestionTypes related requests. 
+ */
+const QuestionTypes = {
+    list: () => requests.get<QuestionType[]>('/questionTypes'),
+    details: (id: string) => requests.get<QuestionType>(`/questionTypes/${id}`),
+    create: (questionType: QuestionType) => requests.post<void>('/questionTypes/', questionType),
+    update: (questionType: QuestionType) => requests.put<void>(`/questionTypes/${questionType.id}`, questionType),
+    delete: (id: string) => requests.del<void>(`/questionTypes/${id}`)
+}
+
+/**
+ * ChatRoomTypes related requests. 
+ */
+const ChatRoomTypes = {
+    list: () => requests.get<ChatRoomType[]>('/chatRoomTypes'),
+    details: (id: string) => requests.get<ChatRoomType>(`/chatRoomTypes/${id}`),
+    create: (chatRoomType: ChatRoomType) => requests.post<void>('/chatRoomTypes/', chatRoomType),
+    update: (chatRoomType: ChatRoomType) => requests.put<void>(`/chatRoomTypes/${chatRoomType.id}`, chatRoomType),
+    delete: (id: string) => requests.del<void>(`/chatRoomTypes/${id}`)
+}
+
+/**
  * Account related requests. 
  */
 const Accounts = {
-    login: (user: UserFormValues) => requests.post<User>('/accounts/login', user)
+    current: () => requests.get<User>('/accounts'),
+    login: (user: UserFormValues) => requests.post<User>('/accounts/login', user),
+    register: (user: UserFormValues) => requests.post<User>('/accounts/register', user)
+}
+
+const Profiles = {
+    get: (userName: string) => requests.get<Profile>(`/profiles/${userName}`)
 }
 
 /**
@@ -59,7 +171,13 @@ const Accounts = {
  * */
 const agent = {
     Accounts,
-    Events
+    ChallengeTypes,
+    ChatRoomTypes,
+    Events,
+    EventTypes,
+    EventCategories,
+    Profiles,
+    QuestionTypes
 }
 
 /**

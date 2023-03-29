@@ -1,33 +1,55 @@
 ﻿using Api.Controllers.Base;
-using Application.DTOs.Commands;
-using Application.Handlers.Bars.Commands;
-using Microsoft.AspNetCore.Authorization;
+using Policies = Api.Constants.AuthorizationPolicyConstants;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Application.Handlers.Bars.Queries;
+using Application.Handlers.Bars.Commands;
+using Application.DTOs;
+using Application.DTOs.Commands;
 
-namespace Api.Controllers
+namespace Api.Controllers.Lookup
 {
-    [AllowAnonymous]
+    [Authorize(Policies.CREATOR)]
+    [Route("api/[controller]")]
     public class BarsController : BaseApiController
     {
+        public BarsController() { }
+
+        #region Queries
+
+        [HttpGet] //api/bars
+        public async Task<IActionResult> GetBars()
+        {
+            return HandleResult(await Mediator.Send(new List.Query()));
+        }
+
+        [HttpGet("{id}")] //api/bars/{id}
+        public async Task<IActionResult> GetBarDetails(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
+        }
+
+        #endregion
+
         #region Commands
 
         [HttpPost] //api/bars
-        public async Task<IActionResult> CreateEvent(BarCommandDto bar)
+        public async Task<IActionResult> CreateBar(BarCommandDto barDto)
         {
-            return HandleResult(await Mediator.Send(new CreateBar.Command { Bar = bar }));
+            return HandleResult(await Mediator.Send(new CreateBar.Command { Bar = barDto }));
         }
 
         [HttpPut("{id}")] //api/bars/{id}
-        public async Task<IActionResult> EditEvent(Guid id, BarCommandDto bar)
+        public async Task<IActionResult> UpdateBar(Guid id, BarCommandDto barDto)
         {
-            return HandleResult(await Mediator.Send(new EditBar.Command { Id = id, Bar = bar }));
+            return HandleResult(await Mediator.Send(new EditBar.Command { Id = id, Bar = barDto }));
         }
 
-        //[HttpDelete("{id}")] //api/bars/{id}
-        //public async Task<IActionResult> DeleteEvent(Guid id)
-        //{
-        //    return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
-        //}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBar(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new DeleteBar.Command { Id = id }));
+        }
 
         #endregion
     }

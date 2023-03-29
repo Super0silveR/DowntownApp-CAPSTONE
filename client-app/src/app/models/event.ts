@@ -10,13 +10,13 @@ export interface Review {
 export interface Rating {
     value: number;
     count: number;
-    reviews: Review[];
+    ratings: Review[];
 }
 
 const emptyRating = (): Rating => ({
     value: 0,
     count: 0,
-    reviews: []
+    ratings: []
 });
 
 export interface Contributor {
@@ -24,47 +24,33 @@ export interface Contributor {
     isAdmin: boolean;
     created: Date;
     status: string;
-    userName: string;
-    displayName: string;
-    bio?: any;
-    image?: any;
+    user: UserDto;
 }
 
-export interface BaseEvent {
+export interface Event {
     id: string;
     eventCategoryId: string;
     eventTypeId: string;
+    date: Date | null;
     title: string;
     description: string;
-}
-
-export interface Event extends BaseEvent {
     creatorId: string;
-    date: string;
     creatorUserName: string;
     isActive: boolean;
     rating: Rating;
     contributors: Contributor[];
 }
 
-const emptyBaseEvent = (): BaseEvent => ({
+export const emptyEvent = (): Event => ({
     id: '',
     title: '',
+    date: null,
     description: '',
     eventTypeId: '',
-    eventCategoryId: ''
-});
-
-const emptyEvent = (): Event => ({
-    ...emptyBaseEvent(),
+    eventCategoryId: '',
     creatorId: '',
-    date: '',
     creatorUserName: '',
     isActive: true,
     rating: emptyRating(),
     contributors: []
 });
-
-export const newEvent = <T extends Partial<Event>>(event?: T): Event & T => {
-    return Object.assign(emptyEvent(), event);
-}

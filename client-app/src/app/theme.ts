@@ -2,16 +2,80 @@ import { createTheme } from "@mui/material/styles";
 
 import red from "@mui/material/colors/red";
 import orange from "@mui/material/colors/orange";
-import yellow from "@mui/material/colors/yellow";
+//import yellow from "@mui/material/colors/yellow";
 import green from "@mui/material/colors/green";
 import lightBlue from "@mui/material/colors/lightBlue";
 import grey from "@mui/material/colors/grey";
+import { deepPurple } from "@mui/material/colors";
 
-const theme = (mode: any) => createTheme({
+const theme = createTheme({
+    components: {
+        /** 
+         * Error with this one when creating/managing Event, but not in Login. 
+         * Login contains Adnornments, but not create event. [???]
+         * */
+        // MuiInputAdornment: {
+        //     styleOverrides: {
+        //         root: ({ownerState, theme}) => ({
+        //             ...(ownerState && {
+        //                 color: theme.palette.text.disabled
+        //             })
+        //         })
+        //     }
+        // },
+        MuiAvatar: {
+            styleOverrides: {
+                root: {
+                    margin:0
+                }
+            }
+        },
+        MuiButton: {
+            styleOverrides: {
+                root: ({ownerState, theme}) => ({
+                    ...(ownerState.color === 'warning' && {
+                        color: '#fff'
+                    })
+                })
+            }
+        },
+        MuiIconButton: {
+            styleOverrides: {
+                root: ({ownerState, theme}) => ({
+                    ...(ownerState["aria-details"] === 'socials' && {
+                        color: theme.palette.common.white,
+                        '&:hover': {
+                            color: theme.palette.primary.main,
+                            backgroundColor: theme.palette.action.hover
+                        }
+                    })
+                })
+            }
+        },
+        MuiFilledInput: {
+            styleOverrides: {
+                root: ({theme}) => ({
+                    backgroundColor: theme.palette.primary.light + '18'
+                })
+            }
+        },
+        MuiInputBase: {
+            styleOverrides: {
+                root: {
+                        fontSize: '1rem'
+                }
+            }
+        }
+    },
+    typography: {
+        fontFamily: 'monospace'
+    },
     palette: {
         mode: 'light',
         primary: {
-            main: orange[500]
+            light: '#757ce8',
+            main: '#3f50b5',
+            dark: '#002884',
         },
         secondary: {
             light: red[500],
@@ -21,7 +85,7 @@ const theme = (mode: any) => createTheme({
         },
         error: {
             light: red[400],
-            main: red[500],
+            main: red[700],
             dark: red[300],
             contrastText: grey[800]
         },
@@ -29,7 +93,7 @@ const theme = (mode: any) => createTheme({
             main: green[500]
         },
         warning: {
-            main: yellow[500],
+            main: orange[600],
             contrastText: grey[800]
         },
         info: {
@@ -43,23 +107,23 @@ const theme = (mode: any) => createTheme({
         action: {
             active: red[200],
             disabled: grey[700],
-            disabledBackground: grey[200],
-            hover: red[100],
+            disabledBackground: grey[300],
+            hover: deepPurple[100],
             hoverOpacity: 0.7,
             focus: red[600],
-            focusOpacity: 1,
+            focusOpacity: 0.92,
             selected: red[300],
-            selectedOpacity: 1
+            selectedOpacity: 0.08
         },
         background: {
-            default: orange[300],
+            //default: orange[300],
             paper: grey[200]
         },
         common: {
             black: grey[900],
             white: grey[200]
         },
-        tonalOffset: 0.2
+        tonalOffset: 0.1,
     }
 });
 

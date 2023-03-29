@@ -7,14 +7,15 @@ namespace Domain.Entities
     /// </summary>
     public class User : IdentityUser<Guid>
     {
-        public string? DisplayName { get; set; }
         public string? Bio { get; set; }
-        public int ColorCode { get; set; } = 0;
+        public string? ColorCode { get; set; }
+        public string? DisplayName { get; set; }
         public bool IsContentCreator { get; set; } = false;
+        public bool IsOpenToMessage { get; set; } = true;
         public bool IsPrivate { get; set; } = false;
+        public string? Location { get; set; }
 
         public virtual Avatar? Avatar { get; set; }
-
         public virtual ICollection<UserAddress> Addresses { get; set; } = new HashSet<UserAddress>();
         public virtual ICollection<BarEventAttendee> AttendedBarEvents { get; set; } = new HashSet<BarEventAttendee>();
         public virtual ICollection<BarEventComment> CommentedBarEvents { get; set; } = new HashSet<BarEventComment>();
@@ -33,5 +34,9 @@ namespace Domain.Entities
 
         /// Lookup Creations
         public virtual ICollection<EventCategory> CreatedEventCategories { get; set; } = new HashSet<EventCategory>();
+        public virtual ICollection<EventType> CreatedEventTypes { get; set; } = new HashSet<EventType>();
+        public virtual ICollection<ChallengeType> CreatedChallengesTypes { get; set; } = new HashSet<ChallengeType>();
+
+
     }
 }

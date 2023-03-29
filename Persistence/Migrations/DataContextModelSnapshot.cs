@@ -325,6 +325,9 @@ namespace Persistence.Migrations
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
@@ -338,6 +341,8 @@ namespace Persistence.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("ChallengeTypes");
                 });
@@ -575,6 +580,9 @@ namespace Persistence.Migrations
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
@@ -588,6 +596,8 @@ namespace Persistence.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("EventTypes");
                 });
@@ -720,8 +730,8 @@ namespace Persistence.Migrations
                     b.Property<string>("Bio")
                         .HasColumnType("text");
 
-                    b.Property<int>("ColorCode")
-                        .HasColumnType("integer");
+                    b.Property<string>("ColorCode")
+                        .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -740,8 +750,14 @@ namespace Persistence.Migrations
                     b.Property<bool>("IsContentCreator")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsOpenToMessage")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsPrivate")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("text");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -941,9 +957,11 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.UserPhoto", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsMain")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Url")
                         .HasColumnType("text");
@@ -1248,6 +1266,17 @@ namespace Persistence.Migrations
                     b.Navigation("ChallengeType");
                 });
 
+            modelBuilder.Entity("Domain.Entities.ChallengeType", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "Creator")
+                        .WithMany("CreatedChallengesTypes")
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Creator");
+                });
+
             modelBuilder.Entity("Domain.Entities.ChatRoom", b =>
                 {
                     b.HasOne("Domain.Entities.ChatRoomType", "ChatRoomType")
@@ -1341,6 +1370,18 @@ namespace Persistence.Migrations
                     b.Navigation("Event");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.EventType", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "Creator")
+                        .WithMany("CreatedEventTypes")
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_EVENT_TYPE_CREATED_BY");
+
+                    b.Navigation("Creator");
                 });
 
             modelBuilder.Entity("Domain.Entities.Question", b =>
@@ -1462,14 +1503,11 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.UserPhoto", b =>
                 {
-                    b.HasOne("Domain.Entities.User", "User")
+                    b.HasOne("Domain.Entities.User", null)
                         .WithMany("Photos")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_USER_PHOTO_USER_ID");
-
-                    b.Navigation("User");
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.UserQuestion", b =>
@@ -1640,7 +1678,11 @@ namespace Persistence.Migrations
 
                     b.Navigation("CreatedBars");
 
+                    b.Navigation("CreatedChallengesTypes");
+
                     b.Navigation("CreatedEventCategories");
+
+                    b.Navigation("CreatedEventTypes");
 
                     b.Navigation("CreatedEvents");
 

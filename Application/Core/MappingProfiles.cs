@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Commands;
+﻿
+using Application.DTOs.Commands;
 using Application.DTOs.Queries;
 using Domain.Entities;
 using Domain.Enums;
@@ -28,6 +29,14 @@ namespace Application.Core
             CreateMap<Event, Event>();
 
             CreateMap<Event, EventDto>()
+                .ForMember(e => e.CreatorUserName, options => 
+                    options.MapFrom(src => src.Contributors.FirstOrDefault(c => c.IsAdmin)!.User!.UserName))
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<EventDto, Event>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<Event, EventDto>()
                 .ForMember(edto => edto.Contributors, options => 
                     options.MapFrom(e => e.Contributors.Where(c => !c.Status.Equals(ContributorStatus.Removed))))
                 .ForMember(edto => edto.CreatorUserName, options =>
@@ -42,10 +51,34 @@ namespace Application.Core
             CreateMap<EventCategory, EventCategoryDto>()
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 
+            CreateMap<EventCategoryDto, EventCategory>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<EventType, EventTypeDto>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<EventTypeDto, EventType>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<ChallengeType, ChallengeTypeDto>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<ChallengeTypeDto, ChallengeType>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<QuestionType, QuestionTypeDto>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<QuestionTypeDto, QuestionType>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<ChatRoomType, ChatRoomTypeDto>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<ChatRoomTypeDto, ChatRoomType>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
             CreateMap<EventContributor, EventContributorDto>()
-                .ForMember(ec => ec.DisplayName, options => options.MapFrom(ec => ec.User!.DisplayName))
-                .ForMember(ec => ec.UserName, options => options.MapFrom(ec => ec.User!.UserName))
-                .ForMember(ec => ec.Bio, options => options.MapFrom(ec => ec.User!.Bio))
                 .ForMember(ec => ec.Status, options => options.MapFrom(ec => ec.Status.ToString()));
 
             CreateMap<EventRating, RatingDto>();
@@ -61,7 +94,13 @@ namespace Application.Core
                 .ForMember(erdto => erdto.Ratings, options => options.MapFrom(er => er))
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => src is not null));
 
-            CreateMap<User, Handlers.Profiles.Profile>();
+            CreateMap<User, ProfileDto>()
+                .ForMember(pdto => pdto.Followers, options => options.MapFrom(u => u.Followers.Count))
+                .ForMember(pdto => pdto.Following, options => options.MapFrom(u => u.Followings.Count))
+                .ForMember(pdto => pdto.Photo, options => options.MapFrom(u => u.Photos.FirstOrDefault(p => p.IsMain)!.Url));
+
+            CreateMap<User, UserLightDto>()
+                .ForMember(pdto => pdto.Photo, options => options.MapFrom(u => u.Photos.FirstOrDefault(p => p.IsMain)!.Url));
 
             #endregion
 
@@ -72,10 +111,21 @@ namespace Application.Core
 
             CreateMap<EventCategoryCommandDto, EventCategory>()
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
-
+            
             CreateMap<EventCommandDto, Event>()
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+            
+            CreateMap<EventTypeCommandDto, EventType>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 
+            CreateMap<ChallengeTypeCommandDto, ChallengeType>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<QuestionTypeCommandDto, QuestionType>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<ChatRoomTypeCommandDto, ChatRoomType>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
             #endregion
         }
     }

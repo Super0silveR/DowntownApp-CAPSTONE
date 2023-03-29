@@ -6,20 +6,23 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
-import { Badge, Divider } from '@mui/material';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import { Divider } from '@mui/material';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { Whatshot } from '@mui/icons-material';
+import { observer } from 'mobx-react-lite';
+import { useStore } from '../stores/store';
+import AccountMenu from './menus/AccountMenu';
 
-const pages = ['Bars', 'Events', 'Become a content creator!'];
+const pages = ['Bars', 'Events', 'Errors'];
 
 /** 
  * React Component used as our Application NavBar.
  * Needs some rework.
  */
 function ResponsiveAppBar() {
+
+    const { userStore: { user, logout } } = useStore();
+
     return (
         <AppBar position="fixed">
             <Container maxWidth={false}>
@@ -35,9 +38,8 @@ function ResponsiveAppBar() {
                         sx={{
                             mr: 2,
                             display: { xs: 'none', md: 'flex' },
-                            fontFamily: 'monospace',
                             fontWeight: 700,
-                            letterSpacing: '.2rem',
+                            letterSpacing: '.4rem',
                             color: 'inherit',
                             textDecoration: 'none',
                         }}
@@ -54,7 +56,7 @@ function ResponsiveAppBar() {
                             borderWidth: '.1rem'
                         }} 
                     />
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                    <Box textAlign='center' sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         <Button 
                             component={NavLink}
                             to='/bars'
@@ -71,32 +73,16 @@ function ResponsiveAppBar() {
                         >
                             {pages[1]}
                         </Button>
-                    </Box>
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={4} color="error">
-                                <MailIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton
-                            size="large"
-                            aria-label="show 17 new notifications"
-                            color="inherit"
+                        <Button 
+                            component={NavLink}
+                            to='/errors'
+                            color='inherit'
+                            sx={{ my: 2, display: 'block' }}
                         >
-                            <Badge badgeContent={11} color="secondary">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton
-                            size="large"
-                            edge="end"
-                            aria-label="account of current user"
-                            aria-haspopup="true"
-                            color="inherit"
-                        >
-                            <AccountCircle />
-                        </IconButton>
+                            {pages[2]}
+                        </Button>
                     </Box>
+                    <AccountMenu logout={logout} user={user} />
                     <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
                             size="large"
@@ -113,4 +99,4 @@ function ResponsiveAppBar() {
     );
 }
 
-export default ResponsiveAppBar;
+export default observer(ResponsiveAppBar);

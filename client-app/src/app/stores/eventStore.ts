@@ -3,6 +3,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Event } from "../models/event";
 import { v4 as uuid } from 'uuid';
+import dayjs from "dayjs";
 
 /**
  * MobX class that represents the state management (or store) for our event entities.
@@ -20,10 +21,29 @@ export default class EventStore {
         makeAutoObservable(this);
     }
 
-    /** Computed Property */
+    /** 
+     * Usage of the `!` operator because we KNOW the event will not be null.
+     * Else we need to deal with nullable warnings from TS.
+     */
     get eventsByDate() {
-        return Array.from(this.eventRegistry.values()).sort((e1, e2) =>
-            Date.parse(e1.date) - Date.parse(e2.date));
+        return Array.from(this.eventRegistry.values()).sort((e1, e2) => 
+            e1.date!.getTime() - e2.date!.getTime());
+    }
+
+    /** 
+     * Reducing the array of events so that we now have an array of objects.
+     * Each objects has a `key` and a `value` where the `key` is a date, and 
+     * the value is an array of Event.
+     * We could have 3 events [value] on the same day [key], for example.
+     */
+    get groupedEventsByDate() {
+        return Object.entries(
+            this.eventsByDate.reduce((events, event) => {
+                const date = dayjs(event.date!).format('MMM d, YYYY');
+                events[date] = events[date] ? [...events[date], event] : [event];
+                return events;
+            }, {} as {[key: string]: Event[]})
+        );
     }
 
     /** Action that sets the `loadingInitial` property.  */
@@ -41,9 +61,7 @@ export default class EventStore {
         const { value, count } = this.selectedEvent?.rating!;
         var newAvg = (this.selectedEvent?.rating.value !== 0) ? (value + ((newValue - value) / (count + 1))) : newValue;
         this.selectedEvent!.rating!.count = count + 1;
-        this.selectedEvent!.rating!.value = newAvg;
-
-        console.log(this.selectedEvent?.rating);
+        this.selectedEvent!.rating!.value = Number.parseFloat(newAvg.toFixed(1));
     }
 
     /** ASYNC ACTIONS */
@@ -58,7 +76,7 @@ export default class EventStore {
                 this.setEvent(event);
             });
         } catch (e) {
-            console.log(e);
+            throw e;
         } finally {
             this.setLoadingInitial(false);
         }
@@ -68,22 +86,23 @@ export default class EventStore {
     loadEvent = async (id: string) => {
         let event = this.getEvent(id);
         if (event) {
-            this.selectedEvent = event;
+            this.selectedEvent = event; 
             return event;
         } else {
             this.setLoadingInitial(true);
             try {
                 event = await agent.Events.details(id);
                 this.setEvent(event);
-                runInAction(() => this.selectedEvent = event);
+                runInAction(() => {
+                    this.selectedEvent = event
+                });
                 return event;
             } catch (e) {
-                console.log(e);
+                throw e;
             } finally {
                 this.setLoadingInitial(false);
             }
         }
-        this.setLoadingInitial(false);
     }
 
     /** Action that executes the creation of an event. */
@@ -93,12 +112,12 @@ export default class EventStore {
         try {
             await agent.Events.create(event);
             runInAction(() => {
-                this.eventRegistry.set(event.id, event);
+                this.setEvent(event);
                 this.selectedEvent = event;
                 this.editMode = false;
             });
         } catch (e) {
-            console.log(e);
+            return Promise.reject(e);
         }
         finally {
             this.setLoading(false);
@@ -111,12 +130,12 @@ export default class EventStore {
         try {
             await agent.Events.update(event);
             runInAction(() => {
-                this.eventRegistry.set(event.id, event);
+                this.setEvent(event);
                 this.selectedEvent = event;
                 this.editMode = false;
             });
         } catch (e) {
-            console.log(e);
+            throw e;
         } finally {
             this.setLoading(false);
         }
@@ -131,7 +150,7 @@ export default class EventStore {
                 this.eventRegistry.delete(id);
             });
         } catch (e) {
-            console.log(e);
+            throw e;
         } finally {
             this.setLoading(false);
         }
@@ -144,7 +163,7 @@ export default class EventStore {
 
     /** Add an event to the registry. */
     private setEvent = (event: Event) => {
-        event.date = event.date.split('T')[0];
+        event.date = new Date(event.date!);
         this.eventRegistry.set(event.id, event);
     };
 }

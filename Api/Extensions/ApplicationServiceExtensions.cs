@@ -6,6 +6,8 @@ using Application.Handlers.Events.Queries;
 using Application.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Infrastructure.Medias;
+using Infrastructure.Medias.Cloudinary;
 using Infrastructure.Security;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +33,7 @@ namespace Api.Extensions
 
             services.AddOpenApiDocument(configure =>
             {
-                configure.Title = "CleanArchitecture API";
+                configure.Title = "Downtown-App API";
                 configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
                 {
                     Type = OpenApiSecuritySchemeType.ApiKey,
@@ -47,16 +49,19 @@ namespace Api.Extensions
             services.AddScoped<AuditableEntitySaveChangesInterceptor>();
             services.AddScoped<UserFollowingSaveChangesInterceptor>();
 
+            // Data Context.
             services.AddDbContext<DataContext>(opt =>
             {
-                //var constr = configuration["ConnectionStrings:DefaultConnection"];
-                //opt.UseSqlite(constr,
-                //              builder => builder.MigrationsAssembly(typeof(DataContext).Assembly.FullName));
-
                 //TODO: PgSql connection. (Prod vs Env)
                 var constr = configuration["ConnectionStrings:PgAdminConnection"];
                 opt.UseNpgsql(constr,
-                    builder => builder.MigrationsAssembly(typeof(DataContext).Assembly.FullName));
+                              builder =>
+                              {
+                                  builder.MigrationsAssembly(typeof(DataContext).Assembly.FullName);
+                                  /// Using the `SplitQuery` behavior is to work around performance issues with JOINs. 
+                                  /// EF allows to specify that a given LINQ query should be split into multiple SQL queries.
+                                  builder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                              });
             });
 
             services.AddSingleton<ICurrentUserService, CurrentUserService>();
@@ -64,11 +69,13 @@ namespace Api.Extensions
             services.AddHttpContextAccessor();
 
             services.AddScoped<IDataContext>(provider => provider.GetRequiredService<DataContext>());
-
             services.AddScoped<DataContextInitializer>();
+            services.AddScoped<IMediaService, MediaService>();
 
             services.AddTransient<IColorService, ColorService>();
             services.AddTransient<IDateTimeService, DateTimeService>();
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehavior<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
             services.Configure<ApiBehaviorOptions>(options =>
                 options.SuppressModelStateInvalidFilter = true);
@@ -88,17 +95,16 @@ namespace Api.Extensions
                         builder
                         .AllowAnyHeader()
                         .AllowAnyMethod()
-                        .WithOrigins("http://localhost:3000");
+                        .WithOrigins("https://localhost:3000", "http://localhost:3000");
                     });
             });
 
+            services.AddMediatR(typeof(Details.Handler).Assembly);
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddFluentValidationAutoValidation();
-            services.AddMediatR(typeof(Details.Handler).Assembly);
             services.AddValidatorsFromAssemblyContaining<Create>();
 
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehavior<,>));
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            services.Configure<CloudinarySettings>(configuration.GetSection("Cloudinary"));
 
             return services;
         }

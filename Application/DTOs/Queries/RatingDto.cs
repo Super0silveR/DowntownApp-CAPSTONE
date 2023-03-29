@@ -1,5 +1,4 @@
-﻿using Application.Handlers.Profiles;
-using Domain.Entities;
+﻿using Domain.Entities;
 
 namespace Application.DTOs.Queries
 {
@@ -8,6 +7,6 @@ namespace Application.DTOs.Queries
         public DateTime Rated { get; set; } = DateTime.UtcNow;
         public int Vote { get; set; }
         public string? Review { get; set; }
-        public Profile User { get; set; } = new Profile();
+        public UserLightDto User { get; set; } = new UserLightDto();
     }
 }
