@@ -54,6 +54,14 @@ namespace Api.Controllers
             return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
         }
 
+        [Authorize(Policies.WRITE_EVENTS)]
+        [HttpPost("{id}/schedule")] //api/events/{id}/schedule
+        public async Task<IActionResult> ScheduleEvent(Guid id, EventCommandDto @event)
+        {
+        return HandleResult(await Mediator.Send(new Schedule.Command { Id = id, Event = @event }));
+        }
+
+
         #endregion
     }
 }

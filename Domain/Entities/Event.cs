@@ -11,6 +11,7 @@ namespace Domain.Entities
         public Guid CreatorId { get; set; }
         public Guid EventCategoryId { get; set; }
         public Guid EventTypeId { get; set; }
+        public Guid BarId { get; set; }
         public string? Title { get; set; }
         public DateTime Date { get; set; } = DateTime.UtcNow;
         public string? Description { get; set; }
