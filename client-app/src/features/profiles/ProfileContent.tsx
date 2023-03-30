@@ -41,12 +41,8 @@ function ProfileContent({ profile }: Props) {
                     <Tab label="Events" value='2' icon={<EmojiEvents fontSize='small' />} iconPosition='top' />
                     <Tab label="Friends" value='3' icon={<PeopleOutline fontSize='small' />} iconPosition='top' />
                 </TabList>
-                <CustomTabPanel
-                    content={<ProfileGeneral profile={profile} /> }
-                    id='general-profile-tab'
-                    value='0'
-                />
-                <ProfilePhotos />
+                <ProfileGeneral profile={profile} />
+                <ProfilePhotos profile={profile} />
                 <ProfileEvents />
                 <CustomTabPanel
                     id='followers-profile-tab'

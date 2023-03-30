@@ -1,80 +1,133 @@
-import { DeleteForever, FavoriteBorderOutlined, FavoriteOutlined } from '@mui/icons-material';
-import { IconButton, ImageList, ImageListItem, ImageListItemBar } from '@mui/material';
+import { Add, Clear } from '@mui/icons-material';
+import { Card, CardMedia, Fab, Grid, Stack, SxProps, Typography, Zoom } from '@mui/material';
 import { observer } from 'mobx-react-lite';
+import { useState } from 'react';
 import CustomTabPanel from '../../app/common/components/TabPanel';
+import PhotoUploadWidget from '../../app/common/image/PhotoUploadWidget';
+import { Profile } from '../../app/models/profile';
+import { useStore } from '../../app/stores/store';
+import theme from '../../app/theme';
+import ProfilePhotoButtons from './ProfilePhotoButtons';
 
-function srcset(image: string, width: number, height: number, rows = 1, cols = 1) {
-    return {
-      src: `${image}?w=${width * cols}&h=${height * rows}&fit=crop&auto=format`,
-      srcSet: `${image}?w=${width * cols}&h=${
-        height * rows
-      }&fit=crop&auto=format&dpr=2 2x`,
-    };
-  }
+// function srcset(image: string, width: number, height: number, rows = 1, cols = 1) {
+//     return {
+//       src: `${image}?w=${width * cols}&h=${height * rows}&fit=crop&auto=format`,
+//       srcSet: `${image}?w=${width * cols}&h=${
+//         height * rows
+//       }&fit=crop&auto=format&dpr=2 2x`,
+//     };
+//   }
 
-function ProfilePhotos() {
+interface Props {
+  profile: Profile;
+}  
+
+const fabStyle = {
+  position: 'relative',
+  bottom: theme.spacing(0),
+  right: theme.spacing(0)
+}; 
+
+const fabs = [
+  {
+    color: 'primary' as 'primary',
+    icon: <Add />,
+    sx: fabStyle as SxProps,
+    label: 'Add',
+  },
+  {
+    color: 'secondary' as 'secondary',
+    icon: <Clear />,
+    sx: fabStyle as SxProps,
+    label: 'Cancel',
+  },
+]; 
+
+const transitionDuration = {
+  enter: theme.transitions.duration.enteringScreen,
+  exit: theme.transitions.duration.leavingScreen,
+};
+
+function ProfilePhotos({ profile } : Props) {
+
+    const { 
+      profileStore: { 
+        deletePhoto,
+        isCurrentUser, 
+        loading,
+        uploadPhoto, 
+        uploading,
+        setMain,
+      }
+    } = useStore();
+
+    const [addPhotoMode, setAddPhotoMode] = useState(false);
+
+    function handlePhotoUpload(file: Blob) {
+      uploadPhoto(file).then(() => setAddPhotoMode(false));
+    }
+
     return (
         <CustomTabPanel
             content={
-                <ImageList
-                  sx={{
-                    width: 600,
-                    height: 415,
-                    // Promote the list into its own layer in Chrome. This costs memory, but helps keeping high FPS.
-                    transform: 'translateZ(0)',
-                  }}
-                  rowHeight={200}
-                  gap={6}
-                >
-                    {itemData.map((item) => {          
-                        return (
-                            <ImageListItem key={item.img} cols={1} rows={1}>
-                                <img
-                                    {...srcset(item.img, 300, 200)}
-                                    alt={item.title}
-                                    loading="lazy"
-                                />
-                                <ImageListItemBar
-                                    sx={{
-                                    background:
-                                        'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
-                                        'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-                                    }}
-                                    title={item.title}
-                                    position="top"
-                                    actionIcon={
-                                        <IconButton
-                                            sx={{ color: 'white', p:'0.2em', m:'0.2em' }}
-                                            aria-label={`star ${item.title}`}
-                                            aria-details='photo-actions'
-                                            size='medium'
-                                        >
-                                            {item.featured ? <FavoriteOutlined /> : <FavoriteBorderOutlined fontSize='inherit'/>}
-                                        </IconButton>
-                                    }
-                                    actionPosition="left"
-                                />
-                                <ImageListItemBar
-                                    sx={{
-                                    background:
-                                        'rgba(0,0,0,0)'
-                                    }}
-                                    actionIcon={
-                                        <IconButton
-                                            sx={{ color: 'white', p:'0.2em', m:'0.2em' }}
-                                            aria-label={`star ${item.title}`}
-                                            aria-details='photo-actions'
-                                            size='medium'
-                                        >
-                                            <DeleteForever fontSize='inherit'/>
-                                        </IconButton>
-                                    }
-                                    actionPosition="right"
-                                />
-                            </ImageListItem>
-                        );
-                    })}
-                </ImageList>
+              <>
+                <Grid container spacing={1}>
+                  <Grid item xs={12} textAlign='right'>
+                    <Stack direction='row' width='100%' justifyContent={addPhotoMode ? 'space-between' : 'right'}>
+                      {addPhotoMode && <Typography variant='body2' fontSize={18} alignSelf='center'>Upload a new photo!</Typography>}
+                      {isCurrentUser && 
+                        fabs.map((fab, index) => (
+                          /** TODO: Issue with the transition of button. */
+                          <Zoom
+                            key={fab.color}
+                            in={Number(addPhotoMode) === index}
+                            timeout={transitionDuration}
+                            style={{
+                              transitionDelay: `${Number(addPhotoMode) === index ? transitionDuration.exit : 0}ms`,
+                            }}
+                            unmountOnExit
+                          >
+                            <Fab 
+                              size='small' 
+                              key={fab.color}
+                              aria-label={fab.label} 
+                              color={fab.color}
+                              onClick={() => setAddPhotoMode(!addPhotoMode)}
+                              sx={fab.sx}
+                            >
+                              {fab.icon}
+                            </Fab>
+                          </Zoom>
+                        ))
+                      }
+                    </Stack>
+                  </Grid>
+                  {addPhotoMode 
+                    ? <PhotoUploadWidget uploadPhoto={handlePhotoUpload} uploading={uploading} />
+                    : profile.photos?.map((photo) => (
+                        <Grid item xs={12} sm={6} md={4} key={photo.id}>
+                          <Card aria-details='profile-photo-card'>
+                            <div style={{ position: "relative" }}>
+                              <CardMedia
+                                sx={{ minHeight: 250 }}
+                                image={photo.url}
+                                children={
+                                  <ProfilePhotoButtons 
+                                    deletePhoto={deletePhoto}
+                                    isCurrentUser={isCurrentUser}
+                                    loading={loading}
+                                    photo={photo}
+                                    setMain={setMain}
+                                  />
+                                }
+                              />
+                            </div>
+                          </Card>
+                        </Grid>
+                    ))
+                  }
+                </Grid>
+              </>
             }
             id='photos-profile-tab'
             value='1'
@@ -83,68 +136,3 @@ function ProfilePhotos() {
 }
 
 export default observer(ProfilePhotos);
-
-const itemData = [
-  {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Breakfast',
-    author: '@bkristastucchio',
-    featured: true,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-    title: 'Burger',
-    author: '@rollelflex_graphy726',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-    title: 'Camera',
-    author: '@helloimnik',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-    title: 'Coffee',
-    author: '@nolanissac',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-    title: 'Hats',
-    author: '@hjrc33',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
-    title: 'Honey',
-    author: '@arwinneil',
-    featured: true,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
-    title: 'Basketball',
-    author: '@tjdragotta',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
-    title: 'Fern',
-    author: '@katie_wasserman',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
-    title: 'Mushrooms',
-    author: '@silverdalex',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
-    title: 'Tomato basil',
-    author: '@shelleypauls',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
-    title: 'Sea star',
-    author: '@peterlaster',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
-    title: 'Bike',
-    author: '@southside_customs',
-  },
-];

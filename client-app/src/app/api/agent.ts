@@ -10,6 +10,7 @@ import { User, UserFormValues } from '../models/user';
 import { router } from '../router/Routes';
 import { store } from '../stores/store';
 import { Profile } from '../models/profile';
+import { Photo } from '../models/photo';
 
 /** Adding a `fake` delay to the app for testing the `loading` indicators after requests. */
 const sleep = (delay: number) => {
@@ -163,7 +164,18 @@ const Accounts = {
 }
 
 const Profiles = {
-    get: (userName: string) => requests.get<Profile>(`/profiles/${userName}`)
+    get: (userName: string) => requests.get<Profile>(`/profiles/${userName}`),
+    uploadPhoto: (file: Blob) => {
+        let formData = new FormData();
+        formData.append('File', file);
+        return axios.post<Photo>('photos', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+    },
+    setMainPhoto: (id: string) => requests.post(`/photos/${id}/setMain`, {}),
+    deletePhoto: (id: string) => requests.del(`/photos/${id}`)
 }
 
 /**
