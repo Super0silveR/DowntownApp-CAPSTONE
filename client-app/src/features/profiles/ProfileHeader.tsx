@@ -24,7 +24,7 @@ function ProfileHeader({ profile }: Props) {
             <Grid container direction='row' minHeight={165}>
                 <Grid item xs={3}>
                     <Avatar
-                        src={'https://res.cloudinary.com/dwixnc66t/image/upload/v1641058233/samples/people/kitchen-bar.jpg'}
+                        src={profile.photo ?? 'https://res.cloudinary.com/dwixnc66t/image/upload/v1641058233/samples/people/kitchen-bar.jpg'}
                         sx={{
                             width: { xs: 100, md: 175},
                             height: { xs: 100, md: 175},
@@ -87,6 +87,7 @@ function ProfileHeader({ profile }: Props) {
                             <Button
                                 variant='contained'
                                 size='small'
+                                sx={{width:'75%'}}
                                 endIcon={<FavoriteBorder />}
                             >
                                 <Typography fontFamily='monospace'>Follow</Typography>
