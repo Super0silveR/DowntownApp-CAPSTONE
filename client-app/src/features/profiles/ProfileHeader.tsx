@@ -31,7 +31,10 @@ function ProfileHeader({ profile }: Props) {
                             boxShadow: 'rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset',
                             left: { xs: 'calc(50% - 50px)', md: 'calc(50% - 87.5px)'},
                             top: 0,
-                            mb: 'calc(-5% - 87.5px)'
+                            mb: 'calc(-5% - 87.5px)',
+                            '&:hover': {
+                                opacity: [0.5,0.5,0.5],
+                                }
                         }}
                     />
                 </Grid>
