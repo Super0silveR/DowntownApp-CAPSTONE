@@ -19,6 +19,10 @@ export default class UserStore {
         return !!this.user;
     }
 
+    setPhoto = (photo: string) => {
+        if (this.user) this.user.photo = photo;
+    }
+
     /** Action that logout the user and clear the token and user object. */
     logout = () => {
         store.commonStore.setToken(null);

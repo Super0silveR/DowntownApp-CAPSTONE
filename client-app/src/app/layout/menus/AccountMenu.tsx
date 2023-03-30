@@ -18,13 +18,14 @@ import { User } from '../../models/user';
 import { Badge } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { router } from '../../router/Routes';
+import { observer } from 'mobx-react-lite';
 
 interface Props {
     user: User | null;
     logout: () => void;
 }
 
-export default function AccountMenu({ logout, user }: Props) {
+function AccountMenu({ logout, user }: Props) {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const open = Boolean(anchorEl);
 
@@ -156,3 +157,5 @@ export default function AccountMenu({ logout, user }: Props) {
         </>
     );
 }
+
+export default observer(AccountMenu);

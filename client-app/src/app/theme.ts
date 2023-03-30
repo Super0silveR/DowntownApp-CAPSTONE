@@ -39,10 +39,24 @@ const theme = createTheme({
                 })
             }
         },
+        MuiFab: {
+            styleOverrides: {
+                root: ({theme}) => ({
+                    color: theme.palette.common.white,
+                    backgroundColor: theme.palette.primary.main,
+                    '&:hover': {
+                        color: theme.palette.primary.dark,
+                        backgroundColor: theme.palette.primary.light
+                    }
+                })
+            }
+
+        },
         MuiIconButton: {
             styleOverrides: {
                 root: ({ownerState, theme}) => ({
-                    ...(ownerState["aria-details"] === 'socials' && {
+                    ...((ownerState["aria-details"] === 'socials' ||
+                         ownerState['aria-details'] === 'profile-photos') && {
                         color: theme.palette.common.white,
                         '&:hover': {
                             color: theme.palette.primary.main,
@@ -63,6 +77,13 @@ const theme = createTheme({
             styleOverrides: {
                 root: {
                         fontSize: '1rem'
+                }
+            }
+        },
+        MuiStepLabel: {
+            styleOverrides: {
+                label: {
+                    fontSize: 18
                 }
             }
         }

@@ -1,5 +1,5 @@
 import { Instagram, Facebook, Pinterest } from '@mui/icons-material';
-import { Paper, Container, Stack, Typography, Divider, ButtonGroup, IconButton } from '@mui/material';
+import { Paper, Container, Stack, Typography, Divider, ButtonGroup, IconButton, useTheme } from '@mui/material';
 import React from 'react';
 import { Profile } from '../../app/models/profile';
 
@@ -8,8 +8,11 @@ interface Props {
 }
 
 export default function ProfileAside({ profile }: Props) {
+
+    const theme = useTheme();
+
     return (
-        <Paper aria-label='profile-side-header' sx={{bgcolor:'#3f50b5'}}>
+        <Paper aria-label='profile-side-header' sx={{bgcolor:theme.palette.primary.main}}>
             <Container sx={{p:1,mt:1,height:'auto'}}>
                 <Stack 
                     color='#fff'
