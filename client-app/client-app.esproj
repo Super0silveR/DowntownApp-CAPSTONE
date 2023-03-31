@@ -18,6 +18,6 @@
     <Folder Include="src\features\events\dashboard\" />
     <Folder Include="src\features\events\details\" />
     <Folder Include="src\features\events\form\" />
-    <Folder Include="src\features\profiles\" />
+	<Folder Include="src\features\profiles\" />
   </ItemGroup>
 </Project>
