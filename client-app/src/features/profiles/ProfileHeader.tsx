@@ -3,6 +3,8 @@ import { observer } from 'mobx-react-lite';
 import { Profile } from '../../app/models/profile';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import { FavoriteBorder } from '@mui/icons-material';
+import { useStore } from '../../app/stores/store';
+import ProfileAvatarMaker from './ProfileAvatarMaker';
 
 interface Props {
     profile: Profile;
@@ -11,6 +13,9 @@ interface Props {
 /** Test Image : 'https://res.cloudinary.com/dwixnc66t/image/upload/v1641058233/samples/people/kitchen-bar.jpg' */
 
 function ProfileHeader({ profile }: Props) {
+
+    const { modalStore } = useStore();
+
     return (
         <Paper
             sx={{
@@ -37,7 +42,9 @@ function ProfileHeader({ profile }: Props) {
                                     opacity: [0.5, 0.5, 0.5],
 
                                 }
+                                
                             }}
+                            
                         />
                     </Tooltip>
                 </Grid>
@@ -46,8 +53,18 @@ function ProfileHeader({ profile }: Props) {
                         <Stack spacing={-0.5} justifyContent='center'>
                             <Typography component='span' fontSize={22}>{profile?.displayName}<VerifiedIcon sx={{fontSize:14,color:'royalblue'}} /></Typography>
                             <Typography sx={{ fontSize: 14, fontStyle: 'italic' }} variant='caption' color='secondary.dark'>@{profile?.userName}</Typography>
+                            
                         </Stack>
-                        <Chip size='small' label="color-code" color='primary' variant="outlined" sx={{width:'fit-content'}} />
+                        <Chip size='small' label="color-code" color='primary' variant="outlined" sx={{ width: 'fit-content' }} />
+                        <Button
+                            variant='contained'
+                            size='small'
+                            sx={{ width: '25%' }}
+                            onClick={() => modalStore.openModal(<ProfileAvatarMaker />)}
+                            
+                        >
+                            <Typography fontFamily='monospace'>Make my Avatar!</Typography>
+                        </Button>
                     </Stack>
                 </Grid>
                 <Grid item xs={2}>
