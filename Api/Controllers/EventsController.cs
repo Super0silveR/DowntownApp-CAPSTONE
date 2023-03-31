@@ -44,7 +44,7 @@ namespace Api.Controllers
         [HttpPut("{id}")] //api/events/{id}
         public async Task<IActionResult> EditEvent(Guid id, EventCommandDto @event)
         {
-            return HandleResult(await Mediator.Send(new Edit.Command { Id = id, Event = @event }));
+            return HandleResult(await Mediator.Send(new Edit.Command { Id = id, Event = @event })); 
         }
 
         [Authorize(Policies.WRITE_EVENTS)]
@@ -61,6 +61,29 @@ namespace Api.Controllers
         return HandleResult(await Mediator.Send(new Schedule.Command { Id = id, Event = @event }));
         }
 
+        [HttpPut("{id}/contributors/{contributorId}")]
+        public async Task<IActionResult> AddContributor(Guid id, EventContributorCommandDto @contributor)
+        {
+            return HandleResult(await Mediator.Send(new AddContributor.Command { Id = id, Contributor = @contributor }));
+        }
+
+        [HttpDelete("{id}/contributors/{contributorId}")]
+        public async Task<IActionResult> RemoveContributor(Guid id, EventContributorCommandDto @contributor)
+        {
+            return HandleResult(await Mediator.Send(new RemoveContributor.Command { Id = id, Contributor = @contributor }));
+        }
+
+        [HttpPost("{id}/review")]//api/events/{id}/review
+        public async Task<IActionResult> ReviewEvent(Guid id, EventReviewCommandDto @review)
+        {
+            return HandleResult(await Mediator.Send(new Review.Command { Id = id, Review = @review }));
+        }
+
+        [HttpPost("{id}/rate")]//api/events/{id}/rate
+        public async Task<IActionResult> RateEvent(Guid id, EventRateCommandDto @rate)
+        {
+            return HandleResult(await Mediator.Send(new Rate.Command { Id = id, Rate = @rate }));
+        }
 
         #endregion
     }

@@ -22,6 +22,7 @@ namespace Application.Handlers.Events.Commands
             public EventCommandDto Event { get; set; } = new EventCommandDto();
             public Guid Id { get; set; }
 
+
         }
 
         /// <summary>
@@ -59,7 +60,6 @@ namespace Application.Handlers.Events.Commands
             /// <returns>Result<Unit></returns>
             public async Task<Result<Unit>?> Handle(Command request, CancellationToken cancellationToken)
             {
-                Guard.Against.Null(_context.Bars, nameof(_context.Bars));
                 Guard.Against.Null(_context.Events, nameof(_context.Events));
 
                 if (!Guid.TryParse(_userService.GetUserId(), out Guid userId)) return null;
