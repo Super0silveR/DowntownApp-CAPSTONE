@@ -7,6 +7,7 @@ import EventDetails from "../../features/events/details/EventDetails";
 import EventForm from "../../features/events/form/EventForm";
 import ProfilePage from "../../features/profiles/ProfilePage";
 import LoginForm from "../../features/users/LoginForm";
+import MailboxPage from "../../features/Mailbox/MailboxPage";
 import App from "../layout/App";
 
 /** Tree-like structure to represents the different routes in our Application. */
@@ -24,14 +25,19 @@ export const routes: RouteObject[] = [
             /** Error related routes. */
             {path: 'errors', element: <TestErrors key='errors' />},
             {path: 'not-found', element: <NotFound key='errors' />},
-            {path: 'server-error', element: <ServerError key='errors' />},
+            { path: 'server-error', element: <ServerError key='errors' /> },
+
+            /** Mailbox related routes. */
+            {path: 'mailbox', element: <MailboxPage />},
 
             /** User related routes. */
             {path: 'login', element: <LoginForm key='login-form' />},
             {path: 'profiles/:userName', element: <ProfilePage />},
 
             /** Any routes that doesn't match our own routes. */
-            {path: '*', element: <Navigate replace to='/not-found' key='not-foud' />}
+            { path: '*', element: <Navigate replace to='/not-found' key='not-foud' /> }
+
+            
         ]
     }
 ];

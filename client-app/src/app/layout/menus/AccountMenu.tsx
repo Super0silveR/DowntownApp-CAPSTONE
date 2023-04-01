@@ -16,7 +16,7 @@ import { useState } from 'react';
 import { AccountCircle } from '@mui/icons-material';
 import { User } from '../../models/user';
 import { Badge } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { router } from '../../router/Routes';
 import { observer } from 'mobx-react-lite';
 
@@ -35,6 +35,13 @@ function AccountMenu({ logout, user }: Props) {
         else
             router.navigate('/login');
     };
+    /** Test route for Mailboxpage */
+    const mailbox = (e: React.MouseEvent<HTMLElement>) => {
+        if (user)
+            router.navigate('/mailbox');
+        else
+            router.navigate('/login');
+    }
 
     const handleClose = (e: React.MouseEvent<HTMLElement>) => {
         if (e.currentTarget.id === 'user-logout')
@@ -48,7 +55,8 @@ function AccountMenu({ logout, user }: Props) {
                 {
                     user &&
                     <>
-                        <IconButton size="small" aria-label="show 4 new mails" color="inherit">
+                        <IconButton size="small" aria-label="show 4 new mails" color="inherit" component={NavLink}
+                            to='/mailbox'>
                             <Badge badgeContent={4} color="secondary">
                                 <MailIcon />
                             </Badge>
@@ -58,6 +66,7 @@ function AccountMenu({ logout, user }: Props) {
                             size="small"
                             aria-label="show 17 new notifications"
                             color="inherit"
+                            
                         >
                             <Badge badgeContent={11} color="secondary">
                                 <NotificationsIcon />
