@@ -66,6 +66,7 @@ export default class ProfileStore {
                     if (photo.isMain && store.userStore.user) {
                         store.userStore.setPhoto(photo.url);
                         this.profile.photo = photo.url;
+                        store.eventStore.setCreatorPhoto(photo);
                     }
                 }
             })
@@ -86,6 +87,7 @@ export default class ProfileStore {
                     this.profile.photos.find(p => p.isMain)!.isMain = false;
                     this.profile.photos.find(p => p.id === photo.id)!.isMain = true;
                     this.profile.photo = photo.url;
+                    store.eventStore.setCreatorPhoto(photo);
                 }
             })
         } catch (error) {

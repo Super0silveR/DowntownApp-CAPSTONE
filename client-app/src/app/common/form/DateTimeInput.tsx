@@ -25,6 +25,7 @@ function DateTimeInput(props: Props, dateProps: DatePickerProps<Dayjs>) {
      * text field that we're creating.
      */
     const [field, meta, helpers] = useField(props.name);
+    const dateValue = dayjs(field.value);
 
     /** TODO: Styling the DatePicker... */
     return (
@@ -34,10 +35,11 @@ function DateTimeInput(props: Props, dateProps: DatePickerProps<Dayjs>) {
                     {...field}
                     {...dateProps}
                     {...props}
-                    disabled={dayjs(field.value).isBefore(dayjs())}
-                    format='MMMM d, YYYY'
-                    value={field.value ? dayjs(field.value) : null}
-                    onChange={(value: any) => helpers.setValue(value)} 
+                    format='DD/MMMM/YYYY'
+                    value={field.value ? dateValue : null}
+                    onChange={(value: any) => {
+                        helpers.setValue(value);
+                    }} 
                     onOpen={() => helpers.setTouched(true)}            
                 />
                 <FormHelperText error={meta.touched && !!meta.error}>

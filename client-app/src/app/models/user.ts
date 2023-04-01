@@ -4,6 +4,7 @@ export interface User {
     displayName: string;
     token: string;
     photo?: string;
+    colorCode?: string;
 }
 
 /** Interface that represents the `simpler user object` returned by the API. */
