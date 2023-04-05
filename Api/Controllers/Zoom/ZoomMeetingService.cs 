@@ -1,0 +1,105 @@
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+
+namespace Application.Services
+{
+    public class ZoomMeetingService : IZoomMeetingService
+    {
+        private readonly HttpClient _httpClient;
+        private readonly ZoomApiOptions _apiOptions;
+
+        public ZoomMeetingService(HttpClient httpClient, ZoomApiOptions apiOptions)
+        {
+            _httpClient = httpClient;
+            _apiOptions = apiOptions;
+        }
+
+        public async Task<ZoomApiResponse<ZoomMeeting>> GetMeeting(string meetingId, string accessToken)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            var response = await _httpClient.GetAsync($"{_apiOptions.BaseUrl}/meetings/{meetingId}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var meeting = JsonConvert.DeserializeObject<ZoomMeeting>(json);
+                return new ZoomApiResponse<ZoomMeeting>(meeting);
+            }
+            else
+            {
+                var errorCode = response.StatusCode;
+                var errorMessage = $"Failed to get Zoom meeting with ID {meetingId}. Error code: {errorCode}";
+                return new ZoomApiResponse<ZoomMeeting>(errorCode, errorMessage);
+            }
+        }
+
+        public async Task<ZoomApiResponse<List<ZoomMeeting>>> GetMeetings(string accessToken)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            var response = await _httpClient.GetAsync($"{_apiOptions.BaseUrl}/users/me/meetings");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var meetings = JsonConvert.DeserializeObject<List<ZoomMeeting>>(json);
+                return new ZoomApiResponse<List<ZoomMeeting>>(meetings);
+            }
+            else
+            {
+                var errorCode = response.StatusCode;
+                var errorMessage = $"Failed to get Zoom meetings. Error code: {errorCode}";
+                return new ZoomApiResponse<List<ZoomMeeting>>(errorCode, errorMessage);
+            }
+        }
+
+        public async Task<ZoomApiResponse<string>> CreateMeeting(ZoomMeetingCreateRequest meeting, string accessToken)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            var json = JsonConvert.SerializeObject(meeting);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync($"{_apiOptions.BaseUrl}/users/me/meetings", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var createdMeeting = JsonConvert.DeserializeObject<ZoomMeetingCreateResponse>(await response.Content.ReadAsStringAsync());
+                return new ZoomApiResponse<string>(createdMeeting.Id);
+            }
+            else
+            {
+                var errorCode = response.StatusCode;
+                var errorMessage = $"Failed to create Zoom meeting. Error code: {errorCode}";
+                return new ZoomApiResponse<string>(errorCode, errorMessage);
+            }
+        }
+
+        public async Task<ZoomApiResponse> UpdateMeeting(string meetingId, ZoomMeetingUpdateRequest meeting, string accessToken)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            var json = JsonConvert.SerializeObject(meeting);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync($"{_apiOptions.BaseUrl}/meetings/{meetingId}", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return new ZoomApiResponse();
+            }
+            else
+            {
+                var errorCode = response.StatusCode;
+                var errorMessage = $"Failed to update Zoom meeting with ID {meetingId}. Error code: {errorCode}";
+                return new ZoomApiResponse(errorCode, errorMessage);
+            }
+        }
+
+       

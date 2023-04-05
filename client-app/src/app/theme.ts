@@ -8,6 +8,7 @@ import lightBlue from "@mui/material/colors/lightBlue";
 import grey from "@mui/material/colors/grey";
 import { deepPurple } from "@mui/material/colors";
 
+
 const theme = createTheme({
     components: {
         /** 
@@ -118,6 +119,8 @@ const theme = createTheme({
         background: {
             //default: orange[300],
             paper: grey[200]
+            // Ajoutez cette ligne pour changer la couleur de fond
+          
         },
         common: {
             black: grey[900],

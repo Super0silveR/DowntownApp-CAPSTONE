@@ -21,6 +21,8 @@ namespace Application.Common.Interfaces
         DbSet<ChallengeType> ChallengeTypes { get; }
         DbSet<ChatRoom> ChatRooms { get; }
         DbSet<ChatRoomType> ChatRoomTypes { get; }
+        DbSet<ChatRoom> ZoomMeetings { get; }
+        DbSet<ChatRoomType> ZoomMeetingTypes  { get; }
         DbSet<Event> Events { get; }
         DbSet<EventCategory> EventCategories { get; }
         DbSet<EventContributor> EventContributors { get; }

@@ -88,7 +88,7 @@ function HomePage() {
     <div className="container">
       <div className="row">
         <div className="col-md-12 text-center">
-          <p>Welcome to our online platform! With our convenient downtown application< br/> you can easily attend and discover events anytime, anywhere < br/> all from the comfort of your own device.</p>
+          <p style={{ fontSize: '20px' }}>Welcome to our online platform! With our convenient downtown application< br/> you can easily attend and discover events anytime, anywhere < br/> all from the comfort of your own device.</p>
         </div>
       </div>
     </div>

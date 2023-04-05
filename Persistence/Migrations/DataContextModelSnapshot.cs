@@ -410,6 +410,69 @@ namespace Persistence.Migrations
                     b.ToTable("ChatRoomTypes");
                 });
 
+                 modelBuilder.Entity("Domain.Entities.ZoomMeeting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ZoomMeetingTypeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ZoomMeetingTypeId");
+
+                    b.ToTable("ZoomMeetings");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ZoomMeetingType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ZoomMeetingTypes");
+                });
+
             modelBuilder.Entity("Domain.Entities.Event", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1286,7 +1349,20 @@ namespace Persistence.Migrations
                         .HasConstraintName("FK_CHAT_ROOM_TYPE_ID");
 
                     b.Navigation("ChatRoomType");
+             
                 });
+
+            modelBuilder.Entity("Domain.Entities.ZoomMeeting", b =>
+                {
+                    b.HasOne("Domain.Entities.ZoomMeetingType", "ZoomMeetingType")
+                        .WithMany("TypedZoomMeetings")
+                        .HasForeignKey("ZoomMeetingTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("FK_ZOOM_MEETING_TYPE_ID");
+
+                    b.Navigation("ZoomMeetingType");
+                });
+
 
             modelBuilder.Entity("Domain.Entities.Event", b =>
                 {
