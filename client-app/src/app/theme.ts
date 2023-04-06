@@ -25,9 +25,12 @@ const theme = createTheme({
         // },
         MuiAvatar: {
             styleOverrides: {
-                root: {
-                    margin:0
-                }
+                root: ({ownerState, theme}) => ({
+                    ...(ownerState['aria-label'] === 'attendees' && {
+                        backgroundColor: theme.palette.primary.light,
+                        margin:-2
+                    })
+                })
             }
         },
         MuiButton: {
@@ -55,11 +58,18 @@ const theme = createTheme({
         MuiIconButton: {
             styleOverrides: {
                 root: ({ownerState, theme}) => ({
-                    ...((ownerState["aria-details"] === 'socials' ||
+                    ...((ownerState['aria-details'] === 'socials' ||
                          ownerState['aria-details'] === 'profile-photos') && {
                         color: theme.palette.common.white,
                         '&:hover': {
                             color: theme.palette.primary.main,
+                            backgroundColor: theme.palette.action.hover
+                        }
+                    }),
+                    ...((ownerState['aria-details'] === 'event-actions') && {
+                        color: theme.palette.primary.main,
+                        '&:hover': {
+                            color: theme.palette.primary.dark,
                             backgroundColor: theme.palette.action.hover
                         }
                     })

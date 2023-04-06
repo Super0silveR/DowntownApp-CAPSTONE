@@ -1,10 +1,10 @@
-import { Grid, Paper, Typography } from '@mui/material';
+import { Button, Grid, Paper, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { useStore } from '../../../app/stores/store';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { observer } from 'mobx-react-lite';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import EventContributors from './EventContributors';
 import EventRatings from './EventRatings';
 import EventRatingReviews from './EventRatingReviews';
@@ -82,6 +82,18 @@ function EventDetails() {
                     </Grid>
                     <Grid item xs={12} md={3} sm={6}>
                         <EventRatings rating={event.rating} />            
+                    </Grid>
+                    <Grid item xs={12} md={3} sm={6}>
+                        <Button
+                            variant='outlined'
+                            color='primary'
+                            size="small"
+                            sx={{ borderRadius: '0.2rem' }}
+                            component={Link}
+                            to={`/manageEvent/${event.id}`}
+                        >
+                            Edit
+                        </Button>           
                     </Grid>
                 </Grid>
                 <Grid container spacing={2}>
