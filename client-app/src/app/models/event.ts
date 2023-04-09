@@ -1,4 +1,4 @@
-import { UserDto } from "./user";
+import { User, UserDto } from "./user";
 
 export interface Review {
     rated: Date;
@@ -24,7 +24,7 @@ export interface Contributor {
     isAdmin: boolean;
     created: Date;
     status: string;
-    user: UserDto;
+    user: User;
 }
 
 export interface Event {

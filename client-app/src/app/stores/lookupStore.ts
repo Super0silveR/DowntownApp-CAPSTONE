@@ -11,20 +11,20 @@ export default class LookupStore {
     eventCategorySelectOptions: {value:string,text:string}[] = [];
     eventTypeRegistry = new Map<string, EventType>();
     eventTypeSelectOptions: { value: string, text: string }[] = [];
-    loading = false;
+    loadingCommon = false;
 
     constructor() {
         makeAutoObservable(this);
     }
 
     /** Setting the loading flag. */
-    setLoading = (state: boolean) => this.loading = state;
+    setLoadingCommon = (state: boolean) => this.loadingCommon = state;
 
     /** ASYNC */
 
     /** Fetching all the event categories. */
     loadEventCategories = async () => {
-        this.setLoading(true);
+        this.setLoadingCommon(true);
         try {
             const eventCategories = await agent.EventCategories.list();
             eventCategories.forEach(category => this.setEventCategory(category));
@@ -37,13 +37,13 @@ export default class LookupStore {
         } catch (e) {
             throw e;
         } finally {
-            this.setLoading(false);
+            this.setLoadingCommon(false);
         }
     }
 
     /** Fetching all the event types. */
     loadEventTypes = async () => {
-        this.setLoading(true);
+        this.setLoadingCommon(true);
         try {
             const eventTypes = await agent.EventTypes.list();
             eventTypes.forEach(type => this.setEventType(type));
@@ -56,7 +56,7 @@ export default class LookupStore {
         } catch (e) {
             throw e;
         } finally {
-            this.setLoading(false);
+            this.setLoadingCommon(false);
         }
     }
 

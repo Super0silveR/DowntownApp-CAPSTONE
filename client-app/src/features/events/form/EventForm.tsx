@@ -22,7 +22,7 @@ function EventForm() {
     const { createEvent, updateEvent, 
         loading, loadEvent, loadingInitial } = eventStore;
     const { loadEventCategories, eventCategorySelectOptions,
-        loadEventTypes, eventTypeSelectOptions } = lookupStore;
+        loadEventTypes, eventTypeSelectOptions, loadingCommon } = lookupStore;
 
     /** React Router hooks for fetching url params. */
     const { id } = useParams();
@@ -74,7 +74,7 @@ function EventForm() {
         }
     }
 
-    if (loadingInitial) return <LoadingComponent content='Loading Event..' />
+    if (loadingInitial || loadingCommon) return <LoadingComponent content='Loading Event..' />
 
     return (
         <>
