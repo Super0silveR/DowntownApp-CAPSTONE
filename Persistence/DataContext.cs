@@ -45,6 +45,8 @@ namespace Persistence
         public DbSet<ChallengeType> ChallengeTypes => Set<ChallengeType>();
         public DbSet<ChatRoom> ChatRooms => Set<ChatRoom>();
         public DbSet<ChatRoomType> ChatRoomTypes => Set<ChatRoomType>();
+         public DbSet<MeetingZoom> MeetingZooms => Set<MeetingZoom>();
+        public DbSet<MeetingZoomType> MeetingZoomTypes => Set<MeetingZoomType>();
         public DbSet<Event> Events => Set<Event>();
         public DbSet<EventCategory> EventCategories => Set<EventCategory>();
         public DbSet<EventContributor> EventContributors => Set<EventContributor>();
@@ -56,6 +58,8 @@ namespace Persistence
         public DbSet<UserAddress> UserAddresses => Set<UserAddress>();
         public DbSet<UserChat> UserChats => Set<UserChat>();
         public DbSet<UserChatRoom> UserChatRooms => Set<UserChatRoom>();
+        public DbSet<UserMeeting> UserMeetings => Set<UserMeeting>();
+        public DbSet<UserMeetingZoom> UserMeetingZooms => Set<UserMeetingZoom>();
         public DbSet<UserFollowing> UserFollowings => Set<UserFollowing>();
         public DbSet<UserGroup> UserGroups => Set<UserGroup>();
         public DbSet<UserPhoto> UserPhotos => Set<UserPhoto>();

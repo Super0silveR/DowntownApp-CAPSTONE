@@ -1,4 +1,3 @@
-﻿
 using Application.DTOs.Commands;
 using Application.DTOs.Queries;
 using Domain.Entities;
@@ -78,6 +77,12 @@ namespace Application.Core
             CreateMap<ChatRoomTypeDto, ChatRoomType>()
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 
+            CreateMap<MeetingZoomType, MeetingZoomTypeDto>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<MeetingZoomTypeDto, MeetingZoomType>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
             CreateMap<EventContributor, EventContributorDto>()
                 .ForMember(ec => ec.Status, options => options.MapFrom(ec => ec.Status.ToString()));
 
@@ -125,6 +130,10 @@ namespace Application.Core
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 
             CreateMap<ChatRoomTypeCommandDto, ChatRoomType>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+
+            CreateMap<MeetingZoomTypeCommandDto, MeetingZoomType>()
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
             #endregion
         }

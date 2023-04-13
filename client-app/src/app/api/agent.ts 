@@ -6,6 +6,7 @@ import { EventCategory } from '../models/eventCategory';
 import { ChallengeType } from '../models/challengeType';
 import { QuestionType } from '../models/questionType';
 import { ChatRoomType } from '../models/chatRoomType';
+import { MeetingZoomType } from '../models/MeetingZoomType';
 import { User, UserFormValues } from '../models/user';
 import { router } from '../router/Routes';
 import { store } from '../stores/store';
@@ -155,6 +156,17 @@ const ChatRoomTypes = {
 }
 
 /**
+ * meetingZoomTypes related requests. 
+ */
+const meetingZoomTypes = {
+    list: () => requests.get<MeetingZoomType[]>('/meetingZoomTypes'),
+    details: (id: string) => requests.get<MeetingZoomType>(`/meetingZoomTypes/${id}`),
+    create: (meetingZoomType: meetingZoomType) => requests.post<void>('/meetingZoomTypes/', meetingZoomType),
+    update: (meetingZoomType: meetingZoomType) => requests.put<void>(`/meetingZoomTypes/${meetingZoomType.id}`, meetingZoomType),
+    delete: (id: string) => requests.del<void>(`/meetingZoomTypes/${id}`)
+}
+
+/**
  * Account related requests. 
  */
 const Accounts = {
@@ -185,6 +197,7 @@ const agent = {
     Accounts,
     ChallengeTypes,
     ChatRoomTypes,
+    meetingZoomTypes
     Events,
     EventTypes,
     EventCategories,

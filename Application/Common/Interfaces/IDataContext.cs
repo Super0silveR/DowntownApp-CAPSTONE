@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Common.Interfaces
@@ -21,6 +21,8 @@ namespace Application.Common.Interfaces
         DbSet<ChallengeType> ChallengeTypes { get; }
         DbSet<ChatRoom> ChatRooms { get; }
         DbSet<ChatRoomType> ChatRoomTypes { get; }
+        DbSet<MeetingZoom> MeetingZooms { get; }
+        DbSet<MeetingZoomType> MeetingZoomTypes { get; }
         DbSet<Event> Events { get; }
         DbSet<EventCategory> EventCategories { get; }
         DbSet<EventContributor> EventContributors { get; }
@@ -33,6 +35,8 @@ namespace Application.Common.Interfaces
         DbSet<UserAddress> UserAddresses { get; }
         DbSet<UserChat> UserChats { get; }
         DbSet<UserChatRoom> UserChatRooms { get; }
+        DbSet<UserMeeting> UserMeetings { get; }
+        DbSet<UserMeetingZoom> UserMeetingZooms { get; }
         DbSet<UserFollowing> UserFollowings { get; }
         DbSet<UserGroup> UserGroups { get; }
         DbSet<UserPhoto> UserPhotos { get; }

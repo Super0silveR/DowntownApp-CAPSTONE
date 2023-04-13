@@ -97,6 +97,18 @@ namespace Persistence.Configurations
                    .HasForeignKey(ucr => ucr.UserId)
                    .HasConstraintName("FK_USER_CHAT_ROOMS")
                    .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(u => u.UserMeetings)
+                   .WithOne(um => um.User)
+                   .HasForeignKey(um => uc.UserId)
+                   .HasConstraintName("FK_USER_MEETINGS")
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(u => u.UserMeetingZooms)
+                   .WithOne(umz => umz.User)
+                   .HasForeignKey(umz => umz.UserId)
+                   .HasConstraintName("FK_USER_MEETING_ZOOMS")
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

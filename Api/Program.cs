@@ -38,6 +38,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<ChatHub>("/hubs/chats");
+app.MapHub<MeetingHub>("/hubs/meetings");
 
 #region Context and Seed Data
 

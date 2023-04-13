@@ -196,6 +196,75 @@ namespace Persistence
                 }
             };
 
+            /// Meeting Zoom Types seeding.
+            var meetingZoomTypes = new List<MeetingZoomType>
+            {
+                new MeetingZoomType { Name = "Private" },
+                new MeetingZoomType { Name = "Public" }
+            };
+
+            if (!_context.MeetingZoomTypes.Any())
+            {
+                await _context.MeetingZoomTypes.AddRangeAsync(meetingZoomTypes);
+                await _context.SaveChangesAsync();
+            }
+
+            /// Meeting Zooms seeding.
+            var meetingZooms = new List<MeetingZoom>
+            {
+                new MeetingZoom
+                {
+                    MeetingZoomType = meetingZoomTypes[0],
+                    Name = "My First MeetingZoom"
+                },
+                new MeetingZoom
+                {
+                   MeetingZoomType = meetingZoomTypes[0],
+                    Name = "My Second MeetingZoom"
+                }
+            };
+
+            if (!_context.MeetingZooms.Any())
+            {
+                await _context.MeetingZooms.AddRangeAsync(meetingZooms);
+                await _context.SaveChangesAsync();
+            }
+
+            /// User Meeting Zooms seeding.
+            var userMeetingZooms = new List<UserMeetingZoom>
+            {
+                new UserMeetingZoom
+                {
+                    MeetingZoom = meetingZooms[0],
+                    User = users[0]
+                },
+                new UserMeetingZoom
+                {
+                    MeetingZoom= meetingZooms[0],
+                    User = users[1]
+                },
+                new UserMeetingZoom
+                {
+                    MeetingZoom = meetingZooms[1],
+                    User = users[0]
+                }
+            };
+
+            /// User Meetings seeding.
+            var userMeetings = new List<UserMeeting>
+            {
+                new UserMeeting
+                {
+                    MeetingZoom = MeetingZooms[0],
+                    User = users[0]
+                },
+                new UserMeeting
+                {
+                    MeetingZoom = MeetingZooms[0],
+                    User = users[1]
+                }
+            };
+
             /// Event Categories seeding.
             var eventCategories = new List<EventCategory>
             {
@@ -388,9 +457,16 @@ namespace Persistence
                 await _context.SaveChangesAsync();
             }
 
-            if (!_context.UserChats.Any())
-            {
+            if (!_context.UserMeetingZooms.Any())  
+            {å
+                await _contexå
                 await _context.UserChats.AddRangeAsync(userChats);
+                await _context.SaveChangesAsync();
+            }
+
+            if (!_context.UserMeetings.Any())  Meeting
+            {
+                await _context.UserMeetings.AddRangeAsync(userMeetings);
                 await _context.SaveChangesAsync();
             }
 

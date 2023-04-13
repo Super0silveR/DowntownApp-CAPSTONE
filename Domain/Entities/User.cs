@@ -31,6 +31,8 @@ namespace Domain.Entities
         public virtual ICollection<EventRating> RatedEvents { get; set; } = new HashSet<EventRating>();
         public virtual ICollection<UserChat> UserChats { get; set; } = new HashSet<UserChat>();
         public virtual ICollection<UserChatRoom> UserChatRooms { get; set; } = new HashSet<UserChatRoom>();
+        public virtual ICollection<UserMeeting> UserMeetings { get; set; } = new HashSet<UserMeeting>();
+        public virtual ICollection<UserMeetingZoom> UserMeetingZooms { get; set; } = new HashSet<UserMeetingZoom>();
 
         /// Lookup Creations
         public virtual ICollection<EventCategory> CreatedEventCategories { get; set; } = new HashSet<EventCategory>();

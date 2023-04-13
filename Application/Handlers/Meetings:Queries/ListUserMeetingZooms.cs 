@@ -1,0 +1,65 @@
+using Application.Common.Interfaces;
+using Application.Core;
+using Ardalis.GuardClauses;
+using Domain.Entities;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace Application.Handlers.Meetings.Queries    
+{
+    public class ListUserMeetingZooms
+    {
+        /// <summary>
+        /// Query class representing the data passed to the handler.
+        /// </summary>
+        public class Query : IRequest<Result<List<MeetingZoom>>>
+        {
+            public Guid UserId { get; set; }
+        }
+
+        /// <summary>
+        /// Handler class representing the handling of the connection event on our chat hub.
+        /// </summary>
+        public class Handler : IRequestHandler<Query, Result<List<MeetingZoom>>>
+        {
+            private readonly IDataContext _context;
+
+            public Handler(IDataContext context)
+            {
+                _context = context;
+            }
+
+            /// <summary>
+            /// The goal is to return a list of MeetingZooms that belongs to the requested UserId.
+            /// TODO: Reworking the loading of the meetings, but right now we fetch all the UserMeeting for each MeetingZoom as well.
+            /// </summary>
+            /// <param name="request">Query class containing the UserId</param>
+            /// <param name="cancellationToken"></param>
+            /// <returns>List of MeetingZooms.</returns>
+            public async Task<Result<List<MeetingZoom>>> Handle(Query request, CancellationToken cancellationToken)
+            {
+                Guard.Against.Null(_context.MeetingZooms, nameof(_context.MeetingZooms));
+
+                var userMeetingZooms = await _context.MeetingZooms
+                                                  .Join(
+                                                    _context.UserMeetingZooms,
+                                                   mz => mz.Id,
+                                                    umz=> umz.MeetingZoomId,
+                                                    (mz, umz) => new { MeetingZoom = mz, UserMeetingZoom = umz }
+                                                  )
+                                                  .Where(mzumz => mzumz.UserMeetingZoom.UserId == request.UserId)
+                                                  .OrderByDescending(mzumz => mzumz.MeetingZoom.Created)
+                                                  .Select(mzumz => new MeetingZoom
+                                                  {
+                                                     MeetingZoomTypeId = mzumz.MeetingZoom.MeetingZoomTypeId,
+                                                      Name = mzumz.MeetingZoom.Name,
+                                                      Description = mzumz.MeetingZoom.Description,
+                                                      UserMeetings = mzumz.MeetingZoom.UserMeetings.Select(mz => mz).OrderBy(um => um.Sent).ToList()
+                                                  })
+                                                  .ToListAsync(cancellationToken);
+
+                return Result<List<MeetingZoom>>.Success(userMeetingZooms);
+            }
+        }
+    }
+}
