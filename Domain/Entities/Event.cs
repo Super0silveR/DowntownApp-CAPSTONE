@@ -22,6 +22,6 @@ namespace Domain.Entities
 
         public virtual ICollection<EventContributor> Contributors { get; set; } = new HashSet<EventContributor>();
         public virtual ICollection<EventRating> Ratings { get; set; } = new HashSet<EventRating>();
-        public virtual ICollection<BarEvent> ScheduledBarEvents { get; set; } = new HashSet<BarEvent>();
+        public virtual ICollection<ScheduledEvent> ScheduledEvents { get; set; } = new HashSet<ScheduledEvent>();
     }
 }

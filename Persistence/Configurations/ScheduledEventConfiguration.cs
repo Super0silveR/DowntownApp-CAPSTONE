@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Persistence.Configurations
 {
-    public class BarEventConfiguration : IEntityTypeConfiguration<BarEvent>
+    public class ScheduledEventConfiguration : IEntityTypeConfiguration<ScheduledEvent>
     {
-        public void Configure(EntityTypeBuilder<BarEvent> builder)
+        public void Configure(EntityTypeBuilder<ScheduledEvent> builder)
         {
             builder.HasOne(be => be.Event)
-                   .WithMany(e => e.ScheduledBarEvents)
+                   .WithMany(e => e.ScheduledEvents)
                    .HasForeignKey(be => be.EventId)
                    .HasConstraintName("FK_BAR_EVENT_EVENT_ID");
 
@@ -19,20 +19,20 @@ namespace Persistence.Configurations
                    .HasConstraintName("FK_BAR_EVENT_BAR_ID");
 
             builder.HasMany(be => be.Attendees)
-                   .WithOne(bea => bea.BarEvent)
-                   .HasForeignKey(bea => bea.BarEventId)
+                   .WithOne(bea => bea.Event)
+                   .HasForeignKey(bea => bea.EventId)
                    .HasConstraintName("FK_BAR_EVENT_ATTENDEES")
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(be => be.Challenges)
-                   .WithOne(c => c.BarEvent)
-                   .HasForeignKey(c => c.BarEventId)
+                   .WithOne(c => c.Event)
+                   .HasForeignKey(c => c.EventId)
                    .HasConstraintName("FK_BAR_EVENT_CHALLENGES")
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(be => be.Comments)
-                   .WithOne(c => c.BarEvent)
-                   .HasForeignKey(c => c.BarEventId)
+                   .WithOne(c => c.Event)
+                   .HasForeignKey(c => c.EventId)
                    .HasConstraintName("FK_BAR_EVENT_COMMENTS")
                    .OnDelete(DeleteBehavior.Cascade);
         }

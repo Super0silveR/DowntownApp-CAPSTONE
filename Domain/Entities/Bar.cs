@@ -15,7 +15,7 @@ namespace Domain.Entities
 
         public virtual User? Creator { get; set; }
 
-        public virtual ICollection<BarEvent> ScheduledEvents { get; set; } = new HashSet<BarEvent>();
+        public virtual ICollection<ScheduledEvent> ScheduledEvents { get; set; } = new HashSet<ScheduledEvent>();
         public virtual ICollection<BarLike> Likes { get; set; } = new HashSet<BarLike>();
     }
 }
