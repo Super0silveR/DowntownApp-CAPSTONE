@@ -41,9 +41,9 @@ namespace Persistence
             {
                 if (_context.Database.IsSqlite() || _context.Database.IsNpgsql())
                 {
-                    //await _context.Database.EnsureDeletedAsync();
-                    //await _context.Database.EnsureCreatedAsync();
-                    await _context.Database.MigrateAsync();
+                    await _context.Database.EnsureDeletedAsync();
+                    await _context.Database.EnsureCreatedAsync();
+                    //await _context.Database.MigrateAsync();
                 }
             }
             catch (Exception ex)

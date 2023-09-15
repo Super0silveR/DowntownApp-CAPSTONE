@@ -24,7 +24,7 @@ namespace Application.Core
 
             CreateMap<Bar, BarDto>();
 
-            CreateMap<BarEvent, BarEventDto>();
+            CreateMap<ScheduledEvent, BarEventDto>();
             
             CreateMap<Event, Event>();
 

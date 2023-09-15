@@ -672,7 +672,7 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BarEvents",
+                name: "Events",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -689,7 +689,7 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BarEvents", x => x.Id);
+                    table.PrimaryKey("PK_ScheduledEvents", x => x.Id);
                     table.ForeignKey(
                         name: "FK_BAR_EVENT_BAR_ID",
                         column: x => x.BarId,

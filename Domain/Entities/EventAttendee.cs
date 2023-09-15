@@ -6,15 +6,17 @@ namespace Domain.Entities
     /// <summary>
     /// Entity responsible for keeping track of attendees for specific events.
     /// </summary>
-    public class BarEventAttendee : BaseEntity
+    public class EventAttendee : BaseEntity
     {
         public Guid AttendeeId { get; set; }
-        public Guid BarEventId { get; set; }
+        public Guid EventId { get; set; }
+        public Guid? TicketId { get; set; }
         public bool IsHost { get; set; }
 
         public virtual User? Attendee { get; set; }
-        public virtual BarEvent? BarEvent { get; set; }
+        public virtual ScheduledEvent? Event { get; set; }
+        public virtual EventTicket? Ticket { get; set; }
 
-        public virtual ICollection<BarEventComment> BarEventComments { get; set; } = new HashSet<BarEventComment>();
+        public virtual ICollection<EventComment> EventComments { get; set; } = new HashSet<EventComment>();
     }
 }

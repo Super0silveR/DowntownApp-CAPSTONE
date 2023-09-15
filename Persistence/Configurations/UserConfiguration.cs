@@ -14,13 +14,13 @@ namespace Persistence.Configurations
                    .HasConstraintName("FK_USER_ADDRESSES")
                    .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(u => u.AttendedBarEvents)
+            builder.HasMany(u => u.AttendedEvents)
                    .WithOne(bea => bea.Attendee)
                    .HasForeignKey(bea => bea.AttendeeId)
                    .HasConstraintName("FK_USER_ATTENDED_BAR_EVENTS")
                    .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(u => u.CommentedBarEvents)
+            builder.HasMany(u => u.CommentedEvents)
                    .WithOne(bec => bec.Attendee)
                    .HasForeignKey(bec => bec.AttendeeId)
                    .HasConstraintName("FK_USER_COMMENTED_BAR_EVENTS")

@@ -15,6 +15,6 @@ namespace Domain.Entities
 
         public virtual ChallengeType? ChallengeType { get; set; }
 
-        public virtual ICollection<BarEventChallenge> BarEventChallenges { get; set; } = new HashSet<BarEventChallenge>();
+        public virtual ICollection<EventChallenge> EventChallenges { get; set; } = new HashSet<EventChallenge>();
     }
 }

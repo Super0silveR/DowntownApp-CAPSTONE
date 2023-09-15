@@ -12,10 +12,10 @@ namespace Application.Common.Interfaces
         DbSet<Address> Addresses { get; }
         DbSet<Avatar> Avatars { get; }
         DbSet<Bar> Bars { get; }
-        DbSet<BarEvent> BarEvents { get; }
-        DbSet<BarEventAttendee> BarEventAttendees { get; }
-        DbSet<BarEventChallenge> BarEventChallenges { get; }
-        DbSet<BarEventComment> BarEventComments { get; }
+        DbSet<ScheduledEvent> ScheduledEvents { get; }
+        DbSet<EventAttendee> ScheduledEventAttendees { get; }
+        DbSet<EventChallenge> ScheduledEventChallenges { get; }
+        DbSet<EventComment> ScheduledEventComments { get; }
         DbSet<BarLike> BarLikes { get; }
         DbSet<Challenge> Challenges { get; }
         DbSet<ChallengeType> ChallengeTypes { get; }
