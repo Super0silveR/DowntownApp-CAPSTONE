@@ -41,19 +41,14 @@ namespace Persistence
             {
                 if (_context.Database.IsSqlite() || _context.Database.IsNpgsql())
                 {
-                    var pendingMigrations = await _context.Database.GetPendingMigrationsAsync();
-
-                    if (pendingMigrations.Any())
-                    {
-                        //await _context.Database.MigrateAsync();
-                        await _context.Database.EnsureCreatedAsync();
+                        await _context.Database.MigrateAsync();
                         //await _context.Database.EnsureDeletedAsync();
-                    }
+                        //await _context.Database.EnsureCreatedAsync();
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while initializing the Sqlite Database.");
+                _logger.LogError(ex, "Error occurred while initializing the Database.");
                 throw;
             }
         }

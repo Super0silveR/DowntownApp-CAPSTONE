@@ -365,7 +365,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("BarEventAttendees");
+                    b.ToTable("ScheduledEventAttendees");
                 });
 
             modelBuilder.Entity("Domain.Entities.EventCategory", b =>
@@ -427,7 +427,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("ChallengeId");
 
-                    b.ToTable("BarEventChallenges");
+                    b.ToTable("ScheduledEventChallenges");
                 });
 
             modelBuilder.Entity("Domain.Entities.EventComment", b =>
@@ -454,7 +454,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("EventId", "AttendeeId");
 
-                    b.ToTable("BarEventComments");
+                    b.ToTable("ScheduledEventComments");
                 });
 
             modelBuilder.Entity("Domain.Entities.EventContributor", b =>
@@ -757,7 +757,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("BarEvents");
+                    b.ToTable("ScheduledEvents");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
