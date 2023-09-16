@@ -24,7 +24,8 @@ import {
   function EventDashboard() {
     const { eventStore } = useStore();
     const { loadEvents, eventRegistry } = eventStore;
-  
+
+    /** Load the [filtered*(TODO)] events at the dashboard initialization. */
     useEffect(() => {
       if (eventRegistry.size <= 1) loadEvents();
     }, [loadEvents, eventRegistry.size]);
@@ -84,7 +85,7 @@ import {
         </Stack>
         <Divider sx={{ my: 1, mb: 3 }} />
         <Grid container spacing={3}>
-          <Grid item xs={12} md={4}> {/* Move the button to the left */}
+          <Grid item xs={12} md={4}> {}
             <Container>
               <Typography variant='h5' color='white'>
                 Filters
