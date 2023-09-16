@@ -46,8 +46,8 @@ namespace Persistence
                     if (pendingMigrations.Any())
                     {
                         //await _context.Database.MigrateAsync();
+                        await _context.Database.EnsureDeletedAsync();
                         await _context.Database.EnsureCreatedAsync();
-                        //await _context.Database.EnsureDeletedAsync();
                     }
                 }
             }
