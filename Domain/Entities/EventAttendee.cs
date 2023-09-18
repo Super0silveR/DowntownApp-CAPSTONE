@@ -9,7 +9,7 @@ namespace Domain.Entities
     public class EventAttendee : BaseEntity
     {
         public Guid AttendeeId { get; set; }
-        public Guid EventId { get; set; }
+        public Guid ScheduledEventId { get; set; }
         public Guid? TicketId { get; set; }
         public bool IsHost { get; set; }
 
