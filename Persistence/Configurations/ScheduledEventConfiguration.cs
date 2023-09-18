@@ -20,7 +20,7 @@ namespace Persistence.Configurations
 
             builder.HasMany(be => be.Attendees)
                    .WithOne(bea => bea.Event)
-                   .HasForeignKey(bea => bea.EventId)
+                   .HasForeignKey(bea => bea.ScheduledEventId)
                    .HasConstraintName("FK_BAR_EVENT_ATTENDEES")
                    .OnDelete(DeleteBehavior.Cascade);
 

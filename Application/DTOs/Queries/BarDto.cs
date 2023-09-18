@@ -8,7 +8,7 @@
         public string? Description { get; set; }
         public double CoverCost { get; set; } = 0.0;
         public bool IsActive { get; set; } = false;
-        public ProfileDto? Creator { get; set; }
+        public ProfileLightDto? Creator { get; set; }
         public BarLikeDto? Likes { get; set; }
         public ICollection<BarEventDto> ScheduledEvents { get; set; } = new HashSet<BarEventDto>();
     }

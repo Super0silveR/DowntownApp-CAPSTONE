@@ -1,4 +1,5 @@
 ﻿using Domain.Common;
+using Domain.Enums;
 
 namespace Domain.Entities
 {
@@ -10,6 +11,7 @@ namespace Domain.Entities
         public Guid ObserverId { get; set; }
         public Guid TargetId { get; set; }
         public DateTime Followed { get; set; }
+        public FollowStatus Status { get; set; } = FollowStatus.Pending;
         public bool IsFavourite { get; set; } = false;
 
         public virtual User? Observer { get; set; }
