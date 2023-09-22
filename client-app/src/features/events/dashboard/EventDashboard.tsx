@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
 import EventList from './EventList';
-import { AllOut, Filter, Filter1, FilterAlt, SocialDistance, TripOrigin, ViewList, ViewModule, ViewQuilt } from '@mui/icons-material';
+import { FilterAlt, TripOrigin } from '@mui/icons-material';
 import theme from '../../../app/theme';
 
 function EventDashboard() {

@@ -5,6 +5,7 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import { FavoriteBorder } from '@mui/icons-material';
 import { useStore } from '../../app/stores/store';
 import ProfileAvatarMaker from './ProfileAvatarMaker';
+import FollowButton from './FollowButton';
 
 interface Props {
     profile: Profile;
@@ -56,7 +57,7 @@ function ProfileHeader({ profile }: Props) {
                             
                         </Stack>
                         <Chip size='small' label="color-code" color='primary' variant="outlined" sx={{ width: 'fit-content' }} />
-                        <Button
+                        {/* <Button
                             variant='contained'
                             size='small'
                             sx={{ width: '25%' }}
@@ -64,7 +65,7 @@ function ProfileHeader({ profile }: Props) {
                             
                         >
                             <Typography fontFamily='monospace'>Make my Avatar!</Typography>
-                        </Button>
+                        </Button> */}
                     </Stack>
                 </Grid>
                 <Grid item xs={2}>
@@ -107,14 +108,7 @@ function ProfileHeader({ profile }: Props) {
                         </Grid>
                         <Grid item xs={12} m={1}><Divider variant='middle' /></Grid>
                         <Grid item xs={12}>
-                            <Button
-                                variant='contained'
-                                size='small'
-                                sx={{width:'75%'}}
-                                endIcon={<FavoriteBorder />}
-                            >
-                                <Typography fontFamily='monospace'>Follow</Typography>
-                            </Button>
+                            <FollowButton profile={profile} />
                         </Grid>
                     </Grid>
                 </Grid>

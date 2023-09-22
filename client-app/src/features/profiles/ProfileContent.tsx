@@ -1,13 +1,15 @@
-import { CropOriginal, EmojiEvents, PeopleOutline, PermIdentity } from '@mui/icons-material';
+import { CropOriginal, EmojiEvents, People, PeopleOutline, PermIdentity } from '@mui/icons-material';
 import { TabContext, TabList } from '@mui/lab';
 import { Box, Tab } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
-import CustomTabPanel from '../../app/common/components/TabPanel';
 import { Profile } from '../../app/models/profile';
 import ProfileEvents from './ProfileEvents';
 import ProfileGeneral from './ProfileGeneral';
 import ProfilePhotos from './ProfilePhotos';
+import ProfileFollowings from './ProfileFollowings';
+import { useStore } from '../../app/stores/store';
+import ProfileFollowers from './ProfileFollowers';
 
 interface Props {
     profile: Profile;
@@ -15,8 +17,10 @@ interface Props {
 
 function ProfileContent({ profile }: Props) {
     const [value, setValue] = useState('0');
+    const {profileStore} = useStore();
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+        profileStore.setActiveTab(Number.parseInt(newValue));
         setValue(newValue);
     };
 
@@ -28,26 +32,28 @@ function ProfileContent({ profile }: Props) {
                 mt: 1
             }}
         >
-            <TabContext value={value}>
+            <TabContext 
+                value={value}
+            >
                 <TabList
                     sx={{p: 1, pt:0, mb:-1}}
-                    onChange={handleChange}
+                    onChange={(e, data) => handleChange(e, data)}
                     aria-label="Profile Sections"
                     selectionFollowsFocus
+
                     centered
                 >
                     <Tab label="General" value='0' icon={<PermIdentity fontSize='small' />} iconPosition='top' />
                     <Tab label="Photos" value='1' icon={<CropOriginal fontSize='small' />} iconPosition='top' />
                     <Tab label="Events" value='2' icon={<EmojiEvents fontSize='small' />} iconPosition='top' />
-                    <Tab label="Friends" value='3' icon={<PeopleOutline fontSize='small' />} iconPosition='top' />
+                    <Tab label="Following" value='3' icon={<PeopleOutline fontSize='small' />} iconPosition='top' />
+                    <Tab label="Followers" value='4' icon={<People fontSize='small' />} iconPosition='top' />
                 </TabList>
                 <ProfileGeneral profile={profile} />
                 <ProfilePhotos profile={profile} />
                 <ProfileEvents />
-                <CustomTabPanel
-                    id='followers-profile-tab'
-                    value='3'
-                />
+                <ProfileFollowings key='following' />
+                <ProfileFollowers key='followers' />
             </TabContext>
         </Box>
     );

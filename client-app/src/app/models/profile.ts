@@ -14,6 +14,7 @@ export interface Profile {
     followers: number;
     following: number;
     isContentCreator: boolean;
+    isFollowing: boolean;
     isOpenForMessage: boolean;
     isPrivate: boolean;
     location?: string;
@@ -21,6 +22,20 @@ export interface Profile {
     photo?: string;
     photos?: Photo[];
     questions?: Question[];
+    userName?: string;
+}
+
+export interface ProfileDto {
+    bio?: string;
+    colorCode: ColorCode;
+    displayName?: string;
+    followers: number;
+    following: number;
+    isContentCreator: boolean;
+    isFollowing: boolean;
+    isOpenForMessage: boolean;
+    isPrivate: boolean;
+    photo?: string;
     userName?: string;
 }
 
@@ -32,4 +47,11 @@ export class Profile implements Profile {
         this.photo = user.photo;
         this.colorCode = COLOR_CODE.gray;
     }
+    
+    followers = 0;
+    following = 0;
+    isContentCreator = false;
+    isFollowing = false;
+    isOpenForMessage = true;
+    isPrivate = false;
 }

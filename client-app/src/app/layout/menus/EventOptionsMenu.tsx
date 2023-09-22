@@ -1,10 +1,9 @@
-import { Add, DeleteForever, InfoOutlined, More, MoreHoriz, MoreVert, Settings, ThreeDRotation } from '@mui/icons-material';
-import { CircularProgress, Divider, IconButton, ListItem, ListItemIcon, Menu, MenuItem } from '@mui/material';
+import { DeleteForever, InfoOutlined, MoreVert } from '@mui/icons-material';
+import { CircularProgress, Divider, IconButton, ListItemIcon, Menu, MenuItem } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import React, { SyntheticEvent, useState } from 'react';
+import React, { useState } from 'react';
 import { useStore } from '../../stores/store';
 import { Event } from '../../models/event';
-import { Navigate } from 'react-router-dom';
 import { router } from '../../router/Routes';
 import theme from '../../theme';
   
