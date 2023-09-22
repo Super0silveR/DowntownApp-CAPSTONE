@@ -92,6 +92,10 @@ namespace Application.Core
             CreateMap<EventContributor, EventContributorDto>()
                 .ForMember(ec => ec.Status, options => options.MapFrom(ec => ec.Status.ToString()));
 
+            CreateMap<ScheduledEvent, ScheduledEventDto>()
+                .ForMember(se => se.AvailableTickets, options => options.MapFrom(se => se.Tickets.Count))
+                .ForMember(se => se.CommentCount, options => options.MapFrom(se => se.Comments.Count));
+
             CreateMap<EventRating, RatingDto>();
 
             CreateMap<ICollection<BarLike>, BarLikeDto>()

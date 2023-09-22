@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Data.Odbc;
 using System.Diagnostics;
 using System.Drawing;
 
@@ -102,6 +103,25 @@ namespace Persistence
 
                     await _userManager.AddToRoleAsync(user, adminRole.Name);
                 }
+                await _context.SaveChangesAsync();
+            }
+
+            /// Bar seeding.
+            var bars = new List<Bar>
+            {
+                new Bar
+                {
+                    CoverCost = 0,
+                    Creator = users[1],
+                    Description = "Bar for testing attendees and profile cards.",
+                    IsActive = true,
+                    Title = "Hephaestots' Bar!"
+                }
+            };
+
+            if (!_context.Bars.Any())
+            {
+                await _context.Bars.AddRangeAsync(bars);
                 await _context.SaveChangesAsync();
             }
 
@@ -413,6 +433,26 @@ namespace Persistence
                 events[0].Ratings.Add(new EventRating { Event = events[0], User = users[2], Vote = 3, Review = "I would certainly return!" });
                 events[0].Ratings.Add(new EventRating { Event = events[0], User = users[3], Vote = 4, Review = "Wow, memorable experience!" });
                 events[0].Ratings.Add(new EventRating { Event = events[0], User = users[4], Vote = 5, Review = "Wow, incredible experience!" });
+
+                bars[0].ScheduledEvents.Add(new ScheduledEvent
+                {
+                    Event = events[0],
+                    Attendees = new List<EventAttendee>
+                    {
+                        new EventAttendee
+                        {
+                            Attendee = users[1]
+                        },
+                        new EventAttendee
+                        {
+                            Attendee = users[2]
+                        }
+                    },
+                    Bar = bars[0],
+                    Capacity = 50,
+                    Challenges = new List<EventChallenge>(),
+                    Scheduled = DateTime.UtcNow.AddDays(1)
+                });
 
                 await _context.SaveChangesAsync();
             }

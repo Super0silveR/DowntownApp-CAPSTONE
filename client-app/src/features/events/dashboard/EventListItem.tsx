@@ -1,4 +1,4 @@
-import { Avatar, AvatarGroup, Badge, Box, Card, CardActions, CardContent, CardHeader, Divider, Grid, IconButton, Tooltip, Typography } from '@mui/material';
+import { Avatar, AvatarGroup, Box, Card, CardActions, CardContent, CardHeader, Divider, Grid, IconButton, Tooltip, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Event } from '../../../app/models/event';
 import { observer } from 'mobx-react-lite';
