@@ -1,27 +1,89 @@
 ﻿using Application.Common.Behaviors;
+using Application.Common.Interfaces;
 using Application.Core;
-using Application.Handlers.Events;
+using Application.Handlers.Events.Commands;
+using Application.Handlers.Events.Queries;
+using Application.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Infrastructure.Medias;
+using Infrastructure.Medias.Cloudinary;
+using Infrastructure.Security;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NSwag;
+using NSwag.Generation.Processors.Security;
 using Persistence;
+using Persistence.Interceptors;
+using Persistence.Services;
+using System.Reflection;
+using OpenApiSecurityScheme = NSwag.OpenApiSecurityScheme;
 
 namespace Api.Extensions
 {
     public static class ApplicationServiceExtensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, 
-                                                                IConfiguration config)
+                                                                IConfiguration configuration)
         {
             // Configure the HTTP request pipeline.
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
+
+            services.AddOpenApiDocument(configure =>
+            {
+                configure.Title = "Downtown-App API";
+                configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
+                {
+                    Type = OpenApiSecuritySchemeType.ApiKey,
+                    Name = "Authorization",
+                    In = OpenApiSecurityApiKeyLocation.Header,
+                    Description = "Type into the textbox: Bearer {your JWT token}."
+                });
+
+                configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+            });
+
+            // Interceptors.
+            services.AddScoped<AuditableEntitySaveChangesInterceptor>();
+            services.AddScoped<UserFollowingSaveChangesInterceptor>();
+
+            // Data Context.
             services.AddDbContext<DataContext>(opt =>
             {
-                var constr = config.GetConnectionString("DefaultConnection");
-                opt.UseSqlite(constr);
+                //TODO: PgSql connection. (Prod vs Env)
+                var constr = configuration["ConnectionStrings:PgAdminConnection"];
+                opt.UseNpgsql(constr,
+                              builder =>
+                              {
+                                  builder.MigrationsAssembly(typeof(DataContext).Assembly.FullName);
+                                  /// Using the `SplitQuery` behavior is to work around performance issues with JOINs. 
+                                  /// EF allows to specify that a given LINQ query should be split into multiple SQL queries.
+                                  builder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                              });
+            });
+
+            services.AddSingleton<ICurrentUserService, CurrentUserService>();
+
+            services.AddHttpContextAccessor();
+
+            services.AddScoped<IDataContext>(provider => provider.GetRequiredService<DataContext>());
+            services.AddScoped<DataContextInitializer>();
+            services.AddScoped<IMediaService, MediaService>();
+
+            services.AddTransient<IColorService, ColorService>();
+            services.AddTransient<IDateTimeService, DateTimeService>();
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehavior<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
+            services.Configure<ApiBehaviorOptions>(options =>
+                options.SuppressModelStateInvalidFilter = true);
+
+            services.AddSignalR(options =>
+            {
+                options.EnableDetailedErrors = true;
             });
 
             // Cors
@@ -34,23 +96,16 @@ namespace Api.Extensions
                         builder
                         .AllowAnyHeader()
                         .AllowAnyMethod()
-                        .WithOrigins("http://localhost:3000");
+                        .WithOrigins("https://localhost:3000", "http://localhost:3000");
                     });
             });
 
+            services.AddMediatR(cfg=>cfg.RegisterServicesFromAssemblies(typeof(Details.Handler).GetTypeInfo().Assembly));
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddFluentValidationAutoValidation();
-            services.AddMediatR(typeof(Details.Handler).Assembly);
             services.AddValidatorsFromAssemblyContaining<Create>();
 
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehavior<,>));
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-
-            // Adding AWS configuration
-            var AWSoptions = config.GetAWSOptions();
-
-            services.AddDefaultAWSOptions(AWSoptions);
-            //services.AddAWSService<IAmazonS3>(); /// S3 Bucket for file/bucket actions.
+            services.Configure<CloudinarySettings>(configuration.GetSection("Cloudinary"));
 
             return services;
         }

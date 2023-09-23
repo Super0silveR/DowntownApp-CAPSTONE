@@ -4,10 +4,20 @@
     <JavaScriptTestRoot>src\</JavaScriptTestRoot>
     <JavaScriptTestFramework>Jest</JavaScriptTestFramework>
     <!-- Command to run on project build -->
-    <BuildCommand></BuildCommand>
+    <BuildCommand>
+    </BuildCommand>
     <!-- Command to create an optimized build of the project that's ready for publishing -->
     <ProductionBuildCommand>npm run build</ProductionBuildCommand>
     <!-- Folder where production build objects will be placed -->
     <BuildOutputFolder>$(MSBuildProjectDirectory)\build</BuildOutputFolder>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="src\app\models\" />
+    <Folder Include="src\app\api\" />
+    <Folder Include="src\app\stores\" />
+    <Folder Include="src\features\events\dashboard\" />
+    <Folder Include="src\features\events\details\" />
+    <Folder Include="src\features\events\form\" />
+	<Folder Include="src\features\profiles\" />
+  </ItemGroup>
 </Project>

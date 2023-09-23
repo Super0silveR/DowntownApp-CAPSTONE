@@ -13,6 +13,8 @@
 *.db-shm
 *.db-wal
 
+*drawio.bkp
+
 appsettings.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)
@@ -484,3 +486,9 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 /Api/appsettings.json
+<<<<<<< HEAD
+/.editorconfig
+/Api/specification.json
+=======
+/client-app/client-app.esproj
+>>>>>>> 954feb972cc26eda736a693a581e4c614f13d1be
