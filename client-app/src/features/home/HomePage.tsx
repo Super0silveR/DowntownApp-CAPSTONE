@@ -16,74 +16,88 @@ function HomePage() {
       style={{
         position: 'relative',
         backgroundColor: 'linear-gradient(135deg, #9c27b0, #e91e63)',
-        color: 'white',
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        overflow: 'hidden',
+        color: 'white', 
       }}
     >
-      <div
+      <img
+        src={logo}
+        alt="Logo"
         style={{
+          width: '250px',
+          marginBottom: '2em',
+        }}
+      />
+      <Container
+        sx={{
+          position: 'relative',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          minHeight: '100vh', // Set the minimum height to 100vh for a full-page layout
+          textAlign: 'center',
+          padding: '2em',
+          borderRadius: '16px',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.2)',
           overflow: 'hidden',
+          marginTop: '2em',
+          marginBottom: '2em',
         }}
       >
-        <img
-          src={logo}
-          alt="Logo"
+        <div
           style={{
-            width: '250px',
-            marginBottom: '2em',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: 'linear-gradient(135deg, #9c27b0, #e91e63)',
+            opacity: 0.7,
+          }}
+        ></div>
+
+        <img
+          src={partyImage1HD}
+          alt="Party 1"
+          style={{
+            width: '100%',
+            transform: 'scale(1.1)',
+            transition: 'transform 0.5s ease-in-out',
+            filter: 'brightness(80%)',
           }}
         />
-        <Container
-          sx={{
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center',
-            padding: '2em',
-            borderRadius: '16px',
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
-            boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.2)',
-            overflow: 'hidden',
-            marginTop: '2em',
-            marginBottom: '2em',
-          }}
+
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          height="100%"
         >
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              background: 'linear-gradient(135deg, #9c27b0, #e91e63)',
-              opacity: 0.7,
-            }}
-          ></div>
-
-          <img
-            src={partyImage1HD}
-            alt="Party 1"
-            style={{
-              width: '100%',
-              transform: 'scale(1.1)',
-              transition: 'transform 0.5s ease-in-out',
-              filter: 'brightness(80%)',
-            }}
-          />
-
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="center"
-            height="100%"
-          >
-            <Grid container spacing={2} justifyContent="center">
-              {userStore.isLoggedIn ? (
+          <Grid container spacing={2} justifyContent="center">
+            {userStore.isLoggedIn ? (
+              <Grid item>
+                <Button
+                  variant="contained"
+                  sx={{
+                    background: 'linear-gradient(135deg, #e91e63, #9c27b0)',
+                    color: 'white',
+                    fontSize: '1.5rem',
+                    padding: '1em 3em',
+                  }}
+                  component={Link}
+                  to="/events"
+                  size="large"
+                >
+                  Explore Events
+                </Button>
+              </Grid>
+            ) : (
+              <>
                 <Grid item>
                   <Button
                     variant="contained"
@@ -93,51 +107,32 @@ function HomePage() {
                       fontSize: '1.5rem',
                       padding: '1em 3em',
                     }}
-                    component={Link}
-                    to="/events"
+                    onClick={() => modalStore.openModal(<LoginForm />)}
                     size="large"
                   >
-                    Explore Events
+                    Login
                   </Button>
                 </Grid>
-              ) : (
-                <>
-                  <Grid item>
-                    <Button
-                      variant="contained"
-                      sx={{
-                        background: 'linear-gradient(135deg, #e91e63, #9c27b0)',
-                        color: 'white',
-                        fontSize: '1.5rem',
-                        padding: '1em 3em',
-                      }}
-                      onClick={() => modalStore.openModal(<LoginForm />)}
-                      size="large"
-                    >
-                      Login
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      onClick={() => modalStore.openModal(<RegisterForm />)}
-                      size="large"
-                      sx={{
-                        fontSize: '1.5rem',
-                        padding: '1em 3em',
-                        background: 'linear-gradient(135deg, #e91e63, #e74c3c)',
-                      }}
-                    >
-                      Register
-                    </Button>
-                  </Grid>
-                </>
-              )}
-            </Grid>
-          </Box>
-        </Container>
-      </div>
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => modalStore.openModal(<RegisterForm />)}
+                    size="large"
+                    sx={{
+                      fontSize: '1.5rem',
+                      padding: '1em 3em',
+                      background: 'linear-gradient(135deg, #e91e63, #e74c3c)',
+                    }}
+                  >
+                    Register
+                  </Button>
+                </Grid>
+              </>
+            )}
+          </Grid>
+        </Box>
+      </Container>
     </div>
   );
 }
