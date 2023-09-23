@@ -180,6 +180,18 @@ export default class EventStore {
         }
     }
 
+    /** Actions that allows us to update the following count for specific attendees in the event registry. */
+    updateAttendeeFollowing = (username: string) => {
+        this.eventRegistry.forEach(event => {
+            event.attendees.forEach(attendee => {
+                if (attendee.userName === username) {
+                    attendee.isFollowing ? attendee.followers-- : attendee.followers++;
+                    attendee.isFollowing = !attendee.isFollowing;
+                }
+            })
+        })
+    }
+
     /** PRIVATE METHODS */
 
     /** Fetch an event from the registry. */

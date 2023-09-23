@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Persistence;
@@ -11,9 +12,10 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230917142846_FollowingEntityAdded")]
+    partial class FollowingEntityAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -346,10 +348,7 @@ namespace Persistence.Migrations
                     b.Property<Guid>("AttendeeId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ScheduledEventId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("EventId")
+                    b.Property<Guid>("EventId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("Id")
@@ -361,12 +360,10 @@ namespace Persistence.Migrations
                     b.Property<Guid?>("TicketId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("AttendeeId", "ScheduledEventId")
+                    b.HasKey("AttendeeId", "EventId")
                         .HasName("PK_BAR_EVENT_ATTENDEE_ID");
 
                     b.HasIndex("EventId");
-
-                    b.HasIndex("ScheduledEventId");
 
                     b.HasIndex("TicketId");
 
@@ -1284,13 +1281,9 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_USER_ATTENDED_BAR_EVENTS");
 
-                    b.HasOne("Domain.Entities.Event", null)
-                        .WithMany("Attendees")
-                        .HasForeignKey("EventId");
-
                     b.HasOne("Domain.Entities.ScheduledEvent", "Event")
                         .WithMany("Attendees")
-                        .HasForeignKey("ScheduledEventId")
+                        .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_BAR_EVENT_ATTENDEES");
@@ -1690,8 +1683,6 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Event", b =>
                 {
-                    b.Navigation("Attendees");
-
                     b.Navigation("Contributors");
 
                     b.Navigation("Ratings");

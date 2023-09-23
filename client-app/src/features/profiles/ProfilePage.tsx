@@ -11,12 +11,15 @@ import ProfileAside from './ProfileAside';
 
 function ProfilePage() {
 
-    const { profileStore: { loadProfile, loadingProfile, profile } } = useStore();
+    const { profileStore: { loadProfile, loadingProfile, profile, setActiveTab } } = useStore();
     const { userName } = useParams<{userName: string}>();
 
     useEffect(() => {
         if (userName) loadProfile(userName);
-    }, [loadProfile, userName]);
+        return () => {
+            setActiveTab(0);
+        }
+    }, [loadProfile, userName, setActiveTab]);
 
     if (loadingProfile) return <LoadingComponent content='Loading Profile...' />
 

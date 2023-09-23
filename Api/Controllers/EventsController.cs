@@ -29,6 +29,13 @@ namespace Api.Controllers
             return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
         }
 
+        [Authorize]
+        [HttpGet("scheduled")]
+        public async Task<IActionResult> GetScheduledEvents()
+        {
+            return HandleResult(await Mediator.Send(new Scheduled.Query()));
+        }
+
         #endregion
 
         #region Commands

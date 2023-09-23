@@ -4,16 +4,17 @@ using Application.DTOs.Queries;
 using Ardalis.GuardClauses;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Handlers.Events.Queries
 {
-    public class List
+    public class Scheduled
     {
-        public class Query : IRequest<Result<List<EventDto>>> { }
+        public class Query : IRequest<Result<List<ScheduledEventDto>>> { }
 
-        public class Handler : IRequestHandler<Query, Result<List<EventDto>>>
+        public class Handler : IRequestHandler<Query, Result<List<ScheduledEventDto>>>
         {
             private readonly IDataContext _context;
             private readonly ICurrentUserService _currentUserService;
@@ -26,19 +27,20 @@ namespace Application.Handlers.Events.Queries
                 _mapper = mapper;
             }
 
-            public async Task<Result<List<EventDto>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<ScheduledEventDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 Guard.Against.Null(_context.Events, nameof(_context.Events));
 
-                var eventDtos = await _context.Events
-                                              .OrderByDescending(e => e.Created)
-                                              .ProjectTo<EventDto>(_mapper.ConfigurationProvider, new
+                var eventDtos = await _context.ScheduledEvents
+                                              .OrderByDescending(e => e.Scheduled)
+                                              .Include(e => e.Attendees)
+                                              .ProjectTo<ScheduledEventDto>(_mapper.ConfigurationProvider, new
                                               {
                                                   currentUserName = _currentUserService.GetUserName()
                                               })
                                               .ToListAsync(cancellationToken);
 
-                return Result<List<EventDto>>.Success(eventDtos);
+                return Result<List<ScheduledEventDto>>.Success(eventDtos);
             }
         }
     }

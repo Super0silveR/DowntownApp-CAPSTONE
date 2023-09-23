@@ -1,3 +1,4 @@
+import { ProfileDto } from "./profile";
 import { User, UserDto } from "./user";
 
 export interface Review {
@@ -38,6 +39,7 @@ export interface Event {
     creatorUserName: string;
     isActive: boolean;
     rating: Rating;
+    attendees: ProfileDto[];
     contributors: Contributor[];
 }
 
@@ -52,5 +54,6 @@ export const emptyEvent = (): Event => ({
     creatorUserName: '',
     isActive: true,
     rating: emptyRating(),
+    attendees: [],
     contributors: []
 });

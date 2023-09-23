@@ -8,7 +8,7 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<EventAttendee> builder)
         {
-            builder.HasKey(ea => new { ea.AttendeeId, ea.EventId })
+            builder.HasKey(ea => new { ea.AttendeeId, ea.ScheduledEventId })
                    .HasName("PK_BAR_EVENT_ATTENDEE_ID");
 
             builder.HasOne(ea => ea.Attendee)
@@ -18,7 +18,7 @@ namespace Persistence.Configurations
 
             builder.HasOne(ea => ea.Event)
                    .WithMany(e => e.Attendees)
-                   .HasForeignKey(ea => ea.EventId)
+                   .HasForeignKey(ea => ea.ScheduledEventId)
                    .HasConstraintName("FK_BAR_EVENT_ATTENDEE_BAR_EVENT_ID");
 
             builder.HasMany(bea => bea.EventComments)

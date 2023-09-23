@@ -1,27 +1,16 @@
-import {
-    Button,
-    Container,
-    Divider,
-    Grid,
-    Slider,
-    ToggleButton,
-    ToggleButtonGroup,
-    Typography,
-    Paper,
-  } from '@mui/material';
-  import { Stack } from '@mui/system';
-  import { observer } from 'mobx-react-lite';
-  import React, { useEffect } from 'react';
-  import { NavLink } from 'react-router-dom';
-  import LoadingComponent from '../../../app/layout/LoadingComponent';
-  import { useStore } from '../../../app/stores/store';
-  import EventList from './EventList';
-  import {
-    FilterAlt,
-    TripOrigin,
-  } from '@mui/icons-material';
-  
-  function EventDashboard() {
+import { Button, Container, Divider, Grid, Slider, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Stack } from '@mui/system';
+import { observer } from 'mobx-react-lite';
+import React, { useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
+import { useStore } from '../../../app/stores/store';
+import EventList from './EventList';
+import { FilterAlt, TripOrigin } from '@mui/icons-material';
+import theme from '../../../app/theme';
+
+function EventDashboard() {
+
     const { eventStore } = useStore();
     const { loadEvents, eventRegistry } = eventStore;
 
