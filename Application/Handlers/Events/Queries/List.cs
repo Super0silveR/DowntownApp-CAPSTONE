@@ -43,7 +43,7 @@ namespace Application.Handlers.Events.Queries
                 Guard.Against.Null(_context.Events, nameof(_context.Events));
 
                 var eventDtoQuery = _context.Events
-                    .OrderByDescending(e => e.Created)
+                    .OrderByDescending(e => e.Date)
                     .ProjectTo<EventDto>(_mapper.ConfigurationProvider, new
                     {
                         currentUserName = _currentUserService.GetUserName()
