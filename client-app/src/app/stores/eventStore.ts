@@ -6,6 +6,7 @@ import { v4 as uuid } from 'uuid';
 import dayjs from "dayjs";
 import { Photo } from "../models/photo";
 import { store } from "./store";
+import { Pagination, PaginationParams } from "../models/pagination";
 
 /**
  * MobX class that represents the state management (or store) for our event entities.
@@ -18,6 +19,8 @@ export default class EventStore {
     editMode = false;
     loading = false;
     loadingInitial = false;
+    pagination: Pagination | null = null;
+    paginationParams = new PaginationParams();
 
     constructor() {
         makeAutoObservable(this);
@@ -45,7 +48,17 @@ export default class EventStore {
                 events[date] = events[date] ? [...events[date], event] : [event];
                 return events;
             }, {} as {[key: string]: Event[]})
-        );
+        ).reverse();
+    }
+
+    /**
+     * Configuration of the pagination parameters into the URL itself.
+     */
+    get generateAxiosPaginationParams() {
+        const params = new URLSearchParams();
+        params.append('pageNumber', this.paginationParams.pageNumber.toString());
+        params.append('pageSize', this.paginationParams.pageSize.toString());
+        return params;
     }
 
     /** Action that sets the `loadingInitial` property.  */
@@ -57,6 +70,12 @@ export default class EventStore {
     setLoading = (state: boolean) => {
         this.loading = state;
     }
+
+    /** Set the current pagination object to our pagination parameters. */
+    setPagination = (pagination: Pagination) => this.pagination = pagination;
+
+    /** Set the current pagination parameters in our store. */
+    setPaginationParams = (paginationParams: PaginationParams) => this.paginationParams = paginationParams;
 
     /** Action that recomputes the rating of an event. [TODO ; issues with displaying the changes.] */
     setRating = (newValue: number) => {
@@ -88,10 +107,12 @@ export default class EventStore {
         this.setLoadingInitial(true);
         /** Asynchronous code has got to be in a try/catch block. */
         try {
-            const events = await agent.Events.list();
-            events.forEach(event => {
+            const result = await agent.Events.list(this.generateAxiosPaginationParams);
+            result.data.forEach(event => {
                 this.setEvent(event);
             });
+            console.log(this.groupedEventsByDate);
+            this.setPagination(result.pagination);
         } catch (e) {
             throw e;
         } finally {
