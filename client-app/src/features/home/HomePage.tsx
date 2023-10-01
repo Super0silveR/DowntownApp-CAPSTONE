@@ -1,4 +1,4 @@
-import { Container, Button, Typography, Box } from '@mui/material';
+import { Container, Button, Typography, Box, Grid } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { useStore } from '../../app/stores/store';
@@ -20,7 +20,6 @@ function HomePage() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
         overflow: 'hidden',
         color: 'white', 
       }}
@@ -45,6 +44,8 @@ function HomePage() {
           backgroundColor: 'rgba(255, 255, 255, 0.9)',
           boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.2)',
           overflow: 'hidden',
+          marginTop: '2em',
+          marginBottom: '2em',
         }}
       >
         <div
@@ -74,85 +75,62 @@ function HomePage() {
           display="flex"
           flexDirection="column"
           alignItems="center"
-          mb={2}
+          justifyContent="center"
+          height="100%"
         >
-          <Typography
-            variant='body1'
-            fontFamily='monospace'
-            sx={{
-              mb: 2,
-              fontSize: 18,
-            }}
-            
-            
-          >
-          </Typography>
-          <Typography
-            variant='body1'
-            fontFamily='monospace'
-            sx={{
-              mb: 2,
-              fontSize: 18,
-            }}
-          >
-          </Typography>
-          <Typography
-            variant='body1'
-            fontFamily='monospace'
-            sx={{
-              mb: 2,
-              fontSize: 18,
-            }}
-          >
-          </Typography>
-          {userStore.isLoggedIn ? (
-            <Button
-              variant="contained"
-              sx={{
-                background: 'linear-gradient(135deg, #e91e63, #9c27b0)',
-                color: 'white',
-                fontSize: '1.5rem',
-                padding: '1em 3em',
-                mt: 2,
-              }}
-              component={Link}
-              to="/events"
-              size="large"
-            >
-              Explore Events
-            </Button>
-          ) : (
-            <>
-              <Button
-                variant="contained"
-                sx={{
-                  background: 'linear-gradient(135deg, #e91e63, #9c27b0)',
-                  color: 'white',
-                  fontSize: '1.5rem',
-                  padding: '1em 3em',
-                  mt: 2,
-                }}
-                onClick={() => modalStore.openModal(<LoginForm />)}
-                size="large"
-              >
-                Login
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => modalStore.openModal(<RegisterForm />)}
-                size="large"
-                sx={{
-                  fontSize: '1.5rem',
-                  padding: '1em 3em',
-                  mt: 2,
-                  background: 'linear-gradient(135deg, #e91e63, #e74c3c)',
-                }}
-              >
-                Register
-              </Button>
-            </>
-          )}
+          <Grid container spacing={2} justifyContent="center">
+            {userStore.isLoggedIn ? (
+              <Grid item>
+                <Button
+                  variant="contained"
+                  sx={{
+                    background: 'linear-gradient(135deg, #e91e63, #9c27b0)',
+                    color: 'white',
+                    fontSize: '1.5rem',
+                    padding: '1em 3em',
+                  }}
+                  component={Link}
+                  to="/events"
+                  size="large"
+                >
+                  Explore Events
+                </Button>
+              </Grid>
+            ) : (
+              <>
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      background: 'linear-gradient(135deg, #e91e63, #9c27b0)',
+                      color: 'white',
+                      fontSize: '1.5rem',
+                      padding: '1em 3em',
+                    }}
+                    onClick={() => modalStore.openModal(<LoginForm />)}
+                    size="large"
+                  >
+                    Login
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => modalStore.openModal(<RegisterForm />)}
+                    size="large"
+                    sx={{
+                      fontSize: '1.5rem',
+                      padding: '1em 3em',
+                      background: 'linear-gradient(135deg, #e91e63, #e74c3c)',
+                    }}
+                  >
+                    Register
+                  </Button>
+                </Grid>
+              </>
+            )}
+          </Grid>
         </Box>
       </Container>
     </div>
