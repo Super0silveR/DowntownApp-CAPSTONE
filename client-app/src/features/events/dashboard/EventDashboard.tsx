@@ -8,6 +8,7 @@ import { useStore } from '../../../app/stores/store';
 import EventList from './EventList';
 import { FilterAlt, TripOrigin } from '@mui/icons-material';
 import theme from '../../../app/theme';
+import { PaginationParams } from '../../../app/models/pagination';
 
 function EventDashboard() {
 
