@@ -1,10 +1,7 @@
-import { Avatar, Button, Chip, Divider, Grid, Paper, Stack, Typography, Tooltip } from '@mui/material';
+import { Avatar, Chip, Divider, Grid, Paper, Stack, Typography, Tooltip } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { Profile } from '../../app/models/profile';
 import VerifiedIcon from '@mui/icons-material/Verified';
-import { FavoriteBorder } from '@mui/icons-material';
-import { useStore } from '../../app/stores/store';
-import ProfileAvatarMaker from './ProfileAvatarMaker';
 import FollowButton from './FollowButton';
 
 interface Props {
@@ -14,9 +11,6 @@ interface Props {
 /** Test Image : 'https://res.cloudinary.com/dwixnc66t/image/upload/v1641058233/samples/people/kitchen-bar.jpg' */
 
 function ProfileHeader({ profile }: Props) {
-
-    const { modalStore } = useStore();
-
     return (
         <Paper
             sx={{

@@ -11,6 +11,7 @@ import { router } from '../router/Routes';
 import { store } from '../stores/store';
 import { Profile, ProfileDto } from '../models/profile';
 import { Photo } from '../models/photo';
+import { PaginatedResult } from '../models/pagination';
 
 /** Adding a `fake` delay to the app for testing the `loading` indicators after requests. */
 const sleep = (delay: number) => {
@@ -40,7 +41,16 @@ axios.interceptors.request.use(config => {
  * and user experience.
  */
 axios.interceptors.response.use(async response => {
-    await sleep(1000);
+    await sleep(1000); // Temporary.
+
+    const pagination = response.headers['pagination'];
+
+    /** If the pagination parameters exist, we transform the data into our paginated class. */
+    if (pagination) {
+        const parsedPagination = JSON.parse(pagination);
+        response.data = new PaginatedResult(response.data, parsedPagination)
+        return response as AxiosResponse<PaginatedResult<any>>
+    }
     return response;
 }, (error: AxiosError) => {
     const { data, status } = error.response as AxiosResponse;
@@ -93,7 +103,8 @@ const requests = {
  * Event [domain entity] related requests.
  * */
 const Events = {
-    list: () => requests.get<Event[]>('/events'),
+    /** Custom usage of the axios.get() to append the pagination parameters. */
+    list: (params: URLSearchParams) => axios.get<PaginatedResult<Event[]>>('/events', {params}).then(responseBody),
     details: (id: string) => requests.get<Event>(`/events/${id}`),
     create: (event: Event) => requests.post<void>('/events/', event),
     update: (event: Event) => requests.put<void>(`/events/${event.id}`, event),

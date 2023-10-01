@@ -1,7 +1,7 @@
-import { Button, Container, Divider, Grid, Paper, Slider, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Button, CircularProgress, Container, Divider, Grid, Paper, Slider, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { observer } from 'mobx-react-lite';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
@@ -12,7 +12,12 @@ import theme from '../../../app/theme';
 function EventDashboard() {
 
     const { eventStore } = useStore();
-    const { loadEvents, eventRegistry } = eventStore;
+    const { eventRegistry,
+            loadEvents,  
+            pagination, 
+            setPaginationParams
+        } = eventStore;
+    const [loadingNextPage, setLoadingNextPage] = useState(false);
 
     /** Load the [filtered*(TODO)] events at the dashboard initialization. */
     useEffect(() => {
@@ -22,9 +27,24 @@ function EventDashboard() {
     const [view, setView] = React.useState('list');
   
     const handleChange = (event: React.MouseEvent<HTMLElement>, nextView: string) => {
-        setView(nextView);
-      };
-  
+      setView(nextView);
+    };
+
+    /**
+     * Method handling the action of loading the next page of events, triggered by the user.
+     * 
+     * IMPORTANT: Setting our pagination params here to a new object, i.e. updating their values,
+     * our computed property in our event store, named generateAxiosPaginationParams(), will be 
+     * re-computed to include the new ones. In this case here, we ask only for the next page.
+     */
+    const handleNextPage = () => {
+        setLoadingNextPage(true);
+        setPaginationParams(new PaginationParams(pagination!.currentPage + 1));
+        loadEvents().then(() => {
+            setLoadingNextPage(false);
+        });
+    }
+    
     function valuetext(value: number) {
       return `${value} KM`;
     }
