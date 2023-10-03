@@ -150,6 +150,7 @@ function EventDashboard() {
                         />
                     </Container>
                 </Grid>
+                {/** TODO: Hidding when not loading and centering the content with the rest of the page. */}
                 <Grid item xs={8}>
                     <CircularProgress />
                 </Grid>
