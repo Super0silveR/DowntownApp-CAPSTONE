@@ -1,5 +1,5 @@
 /** Function from MobX allowing it to compute the observables by itself. */
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Event } from "../models/event";
 import { v4 as uuid } from 'uuid';
@@ -21,9 +21,20 @@ export default class EventStore {
     loadingInitial = false;
     pagination: Pagination | null = null;
     paginationParams = new PaginationParams();
+    predicate = new Map().set('all', true);
 
     constructor() {
         makeAutoObservable(this);
+
+        /** Reaction so that everytime we update (in our store) the values of our predicate we clear and load with the new filters. */
+        reaction(
+            () => this.predicate.keys(),
+            () => {
+                this.paginationParams = new PaginationParams();
+                this.eventRegistry.clear();
+                this.loadEvents();
+            }
+        )
     }
 
     /** 
@@ -52,12 +63,20 @@ export default class EventStore {
     }
 
     /**
-     * Configuration of the pagination parameters into the URL itself.
+     * Configuration of the pagination and filtering parameters into the URL itself.
      */
     get generateAxiosPaginationParams() {
         const params = new URLSearchParams();
         params.append('pageNumber', this.paginationParams.pageNumber.toString());
         params.append('pageSize', this.paginationParams.pageSize.toString());
+        /** Adding the filtering parameters to the QueryURL. */
+        this.predicate.forEach((value, key) => {
+            if (key === 'startDate') {
+                params.append(key, (value as Date).toISOString())
+            } else {
+                params.append(key, value);
+            }
+        })
         return params;
     }
 
@@ -76,6 +95,35 @@ export default class EventStore {
 
     /** Set the current pagination parameters in our store. */
     setPaginationParams = (paginationParams: PaginationParams) => this.paginationParams = paginationParams;
+
+    /** Set the current predicate parameters to keep track of filters. */
+    setPredicate = (predicate: String, value: String | Date) => {
+        /** Local helper method. */
+        const resetPredicate = () => {
+            this.predicate.forEach((value, key) => {
+                if (key !== 'startDate') this.predicate.delete(key);
+            })
+        }
+        switch (predicate) {
+            case 'all':
+                resetPredicate();
+                this.predicate.set('all', true);
+                break;
+            case 'isGoing':
+                resetPredicate();
+                this.predicate.set('isGoing', true);
+                break;
+            case 'isHosting':
+                resetPredicate();
+                this.predicate.set('isHosting', true);
+                break
+            case 'startDate':
+                this.predicate.delete('startDate');
+                this.predicate.set('startDate', value);
+        }
+
+        console.log(predicate);
+    }
 
     /** Action that recomputes the rating of an event. [TODO ; issues with displaying the changes.] */
     setRating = (newValue: number) => {
@@ -111,7 +159,6 @@ export default class EventStore {
             result.data.forEach(event => {
                 this.setEvent(event);
             });
-            console.log(this.groupedEventsByDate);
             this.setPagination(result.pagination);
         } catch (e) {
             throw e;
