@@ -49,6 +49,9 @@ namespace Api.Extensions
             services.AddScoped<AuditableEntitySaveChangesInterceptor>();
             services.AddScoped<UserFollowingSaveChangesInterceptor>();
 
+            // HttpClient
+            services.AddHttpClient();
+
             // Data Context.
             services.AddDbContext<DataContext>(opt =>
             {
