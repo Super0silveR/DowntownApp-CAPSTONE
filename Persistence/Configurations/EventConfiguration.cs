@@ -35,7 +35,7 @@ namespace Persistence.Configurations
                    .HasConstraintName("FK_EVENT_EVENT_RATINGS")
                    .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(e => e.ScheduledBarEvents)
+            builder.HasMany(e => e.ScheduledEvents)
                    .WithOne(be => be.Event)
                    .HasForeignKey(be => be.EventId)
                    .HasConstraintName("FK_EVENT_SCHEDULED_BAR_EVENTS")

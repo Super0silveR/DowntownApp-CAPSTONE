@@ -1,7 +1,7 @@
-import { Divider, Grid, List } from '@mui/material';
+import { Grid } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { observer } from 'mobx-react-lite';
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import { useStore } from '../../../app/stores/store';
 import EventListItem from './EventListItem';
 import theme from '../../../app/theme';

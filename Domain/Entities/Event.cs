@@ -20,8 +20,9 @@ namespace Domain.Entities
         public virtual EventCategory? Category { get; set; }
         public virtual EventType? EventType { get; set; }
 
+        public virtual ICollection<EventAttendee> Attendees { get; set; } = new HashSet<EventAttendee>();
         public virtual ICollection<EventContributor> Contributors { get; set; } = new HashSet<EventContributor>();
         public virtual ICollection<EventRating> Ratings { get; set; } = new HashSet<EventRating>();
-        public virtual ICollection<BarEvent> ScheduledBarEvents { get; set; } = new HashSet<BarEvent>();
+        public virtual ICollection<ScheduledEvent> ScheduledEvents { get; set; } = new HashSet<ScheduledEvent>();
     }
 }

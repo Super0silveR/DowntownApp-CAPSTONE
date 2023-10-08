@@ -36,10 +36,6 @@ namespace Persistence
         public DbSet<Address> Addresses => Set<Address>();
         public DbSet<Avatar> Avatars => Set<Avatar>();
         public DbSet<Bar> Bars => Set<Bar>();
-        public DbSet<BarEvent> BarEvents => Set<BarEvent>();
-        public DbSet<BarEventAttendee> BarEventAttendees => Set<BarEventAttendee>();
-        public DbSet<BarEventChallenge> BarEventChallenges => Set<BarEventChallenge>();
-        public DbSet<BarEventComment> BarEventComments => Set<BarEventComment>();
         public DbSet<BarLike> BarLikes => Set<BarLike>();
         public DbSet<Challenge> Challenges => Set<Challenge>();
         public DbSet<ChallengeType> ChallengeTypes => Set<ChallengeType>();
@@ -49,10 +45,15 @@ namespace Persistence
         public DbSet<EventCategory> EventCategories => Set<EventCategory>();
         public DbSet<EventContributor> EventContributors => Set<EventContributor>();
         public DbSet<EventRating> EventRatings => Set<EventRating>();
+        public DbSet<EventTicket> EventsTickets => Set<EventTicket>();
         public DbSet<EventType> EventTypes => Set<EventType>();
         public DbSet<Group> Groups => Set<Group>();
         public DbSet<Question> Questions => Set<Question>();
         public DbSet<QuestionType> QuestionTypes => Set<QuestionType>();
+        public DbSet<ScheduledEvent> ScheduledEvents => Set<ScheduledEvent>();
+        public DbSet<EventAttendee> ScheduledEventAttendees => Set<EventAttendee>();
+        public DbSet<EventChallenge> ScheduledEventChallenges => Set<EventChallenge>();
+        public DbSet<EventComment> ScheduledEventComments => Set<EventComment>();
         public DbSet<UserAddress> UserAddresses => Set<UserAddress>();
         public DbSet<UserChat> UserChats => Set<UserChat>();
         public DbSet<UserChatRoom> UserChatRooms => Set<UserChatRoom>();

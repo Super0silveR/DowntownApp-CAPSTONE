@@ -4,13 +4,13 @@
 
 namespace Persistence.Migrations
 {
-    public partial class AddedStatusToContributor : Migration
+    public partial class FollowingEntityAdded : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
                 name: "Status",
-                table: "EventContributors",
+                table: "UserFollowings",
                 type: "integer",
                 nullable: false,
                 defaultValue: 0);
@@ -20,7 +20,7 @@ namespace Persistence.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "Status",
-                table: "EventContributors");
+                table: "UserFollowings");
         }
     }
 }

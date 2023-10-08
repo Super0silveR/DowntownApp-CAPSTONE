@@ -17,8 +17,8 @@ namespace Domain.Entities
 
         public virtual Avatar? Avatar { get; set; }
         public virtual ICollection<UserAddress> Addresses { get; set; } = new HashSet<UserAddress>();
-        public virtual ICollection<BarEventAttendee> AttendedBarEvents { get; set; } = new HashSet<BarEventAttendee>();
-        public virtual ICollection<BarEventComment> CommentedBarEvents { get; set; } = new HashSet<BarEventComment>();
+        public virtual ICollection<EventAttendee> AttendedEvents { get; set; } = new HashSet<EventAttendee>();
+        public virtual ICollection<EventComment> CommentedEvents { get; set; } = new HashSet<EventComment>();
         public virtual ICollection<EventContributor> ContributedEvents { get; set; } = new HashSet<EventContributor>(); 
         public virtual ICollection<Bar> CreatedBars { get; set; } = new HashSet<Bar>();
         public virtual ICollection<Event> CreatedEvents { get; set; } = new HashSet<Event>();

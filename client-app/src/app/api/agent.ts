@@ -9,8 +9,9 @@ import { ChatRoomType } from '../models/chatRoomType';
 import { User, UserFormValues } from '../models/user';
 import { router } from '../router/Routes';
 import { store } from '../stores/store';
-import { Profile } from '../models/profile';
+import { Profile, ProfileDto } from '../models/profile';
 import { Photo } from '../models/photo';
+import { PaginatedResult } from '../models/pagination';
 
 /** Adding a `fake` delay to the app for testing the `loading` indicators after requests. */
 const sleep = (delay: number) => {
@@ -40,7 +41,16 @@ axios.interceptors.request.use(config => {
  * and user experience.
  */
 axios.interceptors.response.use(async response => {
-    await sleep(1000);
+    await sleep(1000); // Temporary.
+
+    const pagination = response.headers['pagination'];
+
+    /** If the pagination parameters exist, we transform the data into our paginated class. */
+    if (pagination) {
+        const parsedPagination = JSON.parse(pagination);
+        response.data = new PaginatedResult(response.data, parsedPagination)
+        return response as AxiosResponse<PaginatedResult<any>>
+    }
     return response;
 }, (error: AxiosError) => {
     const { data, status } = error.response as AxiosResponse;
@@ -86,13 +96,15 @@ const requests = {
     post: <T>(url: string, body: {}) => axios.post<T>(url, body).then(responseBody),
     put: <T> (url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
     del: <T> (url: string) => axios.delete<T>(url).then(responseBody),
+    userSearch: <T>(query: string) => axios.get<T[]>(`/userSearch?q=${query}`).then(responseBody),
 }
 
 /**
  * Event [domain entity] related requests.
  * */
 const Events = {
-    list: () => requests.get<Event[]>('/events'),
+    /** Custom usage of the axios.get() to append the pagination parameters. */
+    list: (params: URLSearchParams) => axios.get<PaginatedResult<Event[]>>('/events', {params}).then(responseBody),
     details: (id: string) => requests.get<Event>(`/events/${id}`),
     create: (event: Event) => requests.post<void>('/events/', event),
     update: (event: Event) => requests.put<void>(`/events/${event.id}`, event),
@@ -163,6 +175,9 @@ const Accounts = {
     register: (user: UserFormValues) => requests.post<User>('/accounts/register', user)
 }
 
+/**
+ * Profile related requests.
+ */
 const Profiles = {
     get: (userName: string) => requests.get<Profile>(`/profiles/${userName}`),
     uploadPhoto: (file: Blob) => {
@@ -175,8 +190,18 @@ const Profiles = {
         })
     },
     setMainPhoto: (id: string) => requests.post(`/photos/${id}/setMain`, {}),
-    deletePhoto: (id: string) => requests.del(`/photos/${id}`)
+    deletePhoto: (id: string) => requests.del(`/photos/${id}`),
+    updateFollowing: (username: string) => requests.post(`/followers/${username}`, {}),
+    listFollowings: (username: string, predicate: string) => 
+        requests.get<ProfileDto[]>(`/followers/${username}?predicate=${predicate}`)
 }
+
+
+const handleUserSearch = (query: string) => {
+    return requests.userSearch<User[]>(query);
+  };
+  
+  
 
 /**
  * Building the `agent` object.
@@ -189,7 +214,8 @@ const agent = {
     EventTypes,
     EventCategories,
     Profiles,
-    QuestionTypes
+    QuestionTypes,
+    handleUserSearch
 }
 
 /**

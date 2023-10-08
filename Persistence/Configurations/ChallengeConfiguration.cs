@@ -8,7 +8,7 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Challenge> builder)
         {
-            builder.HasMany(c => c.BarEventChallenges)
+            builder.HasMany(c => c.EventChallenges)
                    .WithOne(bec => bec.Challenge)
                    .HasForeignKey(bec => bec.ChallengeId)
                    .HasConstraintName("FK_CHALLENGE_BAR_EVENT_CHALLENGES")

@@ -1,4 +1,4 @@
-import { Avatar, AvatarGroup, Badge, Box, Card, CardActions, CardContent, CardHeader, Divider, Grid, IconButton, Tooltip, Typography } from '@mui/material';
+import { Avatar, AvatarGroup, Box, Card, CardActions, CardContent, CardHeader, Divider, Grid, IconButton, Tooltip, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Event } from '../../../app/models/event';
 import { observer } from 'mobx-react-lite';
@@ -26,11 +26,18 @@ function EventListItem({ event }: Props) {
                 width: '100%',
                 minHeight: 200,
                 borderRadius: '0.3em',
-                boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px'
+                boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
+                backgroundColor: '#9c27b0'
             }}
             alignItems='flex-start'
         >
-            <Card>
+            <Card
+                sx={{
+                    backgroundColor: '#be29ec', 
+                    borderRadius: '0.3em',
+                    boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
+                }}
+            >
                 <CardHeader
                     sx={{textAlign:'justify'}}
                     avatar={

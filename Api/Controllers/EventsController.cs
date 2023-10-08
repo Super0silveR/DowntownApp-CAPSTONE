@@ -5,6 +5,7 @@ using Application.Handlers.Events.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.DTOs.Commands;
+using Application.Core;
 
 namespace Api.Controllers
 {
@@ -17,9 +18,9 @@ namespace Api.Controllers
 
         [Authorize(Policies.READ_EVENTS)]
         [HttpGet] //api/events
-        public async Task<IActionResult> GetEvents()
+        public async Task<IActionResult> GetEvents([FromQuery]PaginationParams @params)
         {
-            return HandleResult(await Mediator.Send(new List.Query()));
+            return HandlePagedResult(await Mediator.Send(new List.Query { Params = @params }));
         }
 
         [Authorize(Policies.READ_EVENTS)]
@@ -27,6 +28,13 @@ namespace Api.Controllers
         public async Task<IActionResult> GetEvent(Guid id)
         {
             return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
+        }
+
+        [Authorize]
+        [HttpGet("scheduled")]
+        public async Task<IActionResult> GetScheduledEvents()
+        {
+            return HandleResult(await Mediator.Send(new Scheduled.Query()));
         }
 
         #endregion

@@ -12,8 +12,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230303034429_ChangesWithLogic")]
-    partial class ChangesWithLogic
+    [Migration("20230918000819_AttendeesEvent")]
+    partial class AttendeesEvent
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -137,125 +137,6 @@ namespace Persistence.Migrations
                     b.ToTable("Bars");
                 });
 
-            modelBuilder.Entity("Domain.Entities.BarEvent", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("BarId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Capacity")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Guidelines")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsHost")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("LastModifiedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("Scheduled")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BarId");
-
-                    b.HasIndex("EventId");
-
-                    b.ToTable("BarEvents");
-                });
-
-            modelBuilder.Entity("Domain.Entities.BarEventAttendee", b =>
-                {
-                    b.Property<Guid>("AttendeeId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("BarEventId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsHost")
-                        .HasColumnType("boolean");
-
-                    b.HasKey("AttendeeId", "BarEventId")
-                        .HasName("PK_BAR_EVENT_ATTENDEE_ID");
-
-                    b.HasIndex("BarEventId");
-
-                    b.ToTable("BarEventAttendees");
-                });
-
-            modelBuilder.Entity("Domain.Entities.BarEventChallenge", b =>
-                {
-                    b.Property<Guid>("BarEventId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ChallengeId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("NextChallengeId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("ParentChallengeId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("BarEventId", "ChallengeId")
-                        .HasName("PK_BAR_EVENT_CHALLENGE_ID");
-
-                    b.HasIndex("ChallengeId");
-
-                    b.ToTable("BarEventChallenges");
-                });
-
-            modelBuilder.Entity("Domain.Entities.BarEventComment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("AttendeeId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("BarEventId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("Sent")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AttendeeId");
-
-                    b.HasIndex("BarEventId", "AttendeeId");
-
-                    b.ToTable("BarEventComments");
-                });
-
             modelBuilder.Entity("Domain.Entities.BarLike", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -327,6 +208,9 @@ namespace Persistence.Migrations
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
@@ -340,6 +224,8 @@ namespace Persistence.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("ChallengeTypes");
                 });
@@ -457,6 +343,38 @@ namespace Persistence.Migrations
                     b.ToTable("Events");
                 });
 
+            modelBuilder.Entity("Domain.Entities.EventAttendee", b =>
+                {
+                    b.Property<Guid>("AttendeeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ScheduledEventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("EventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsHost")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid?>("TicketId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("AttendeeId", "ScheduledEventId")
+                        .HasName("PK_BAR_EVENT_ATTENDEE_ID");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("ScheduledEventId");
+
+                    b.HasIndex("TicketId");
+
+                    b.ToTable("ScheduledEventAttendees");
+                });
+
             modelBuilder.Entity("Domain.Entities.EventCategory", b =>
                 {
                     b.Property<Guid>("Id")
@@ -492,6 +410,58 @@ namespace Persistence.Migrations
                     b.HasIndex("CreatorId");
 
                     b.ToTable("EventCategories");
+                });
+
+            modelBuilder.Entity("Domain.Entities.EventChallenge", b =>
+                {
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ChallengeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("NextChallengeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ParentChallengeId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("EventId", "ChallengeId")
+                        .HasName("PK_BAR_EVENT_CHALLENGE_ID");
+
+                    b.HasIndex("ChallengeId");
+
+                    b.ToTable("ScheduledEventChallenges");
+                });
+
+            modelBuilder.Entity("Domain.Entities.EventComment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AttendeeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Sent")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AttendeeId");
+
+                    b.HasIndex("EventId", "AttendeeId");
+
+                    b.ToTable("ScheduledEventComments");
                 });
 
             modelBuilder.Entity("Domain.Entities.EventContributor", b =>
@@ -562,14 +532,11 @@ namespace Persistence.Migrations
                     b.ToTable("EventRatings");
                 });
 
-            modelBuilder.Entity("Domain.Entities.EventType", b =>
+            modelBuilder.Entity("Domain.Entities.EventTicket", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
-
-                    b.Property<string>("Color")
-                        .HasColumnType("text");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
@@ -586,10 +553,55 @@ namespace Persistence.Migrations
                     b.Property<Guid?>("LastModifiedBy")
                         .HasColumnType("uuid");
 
+                    b.Property<double?>("Price")
+                        .HasColumnType("double precision");
+
+                    b.Property<Guid>("ScheduledEventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("TicketClassification")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ScheduledEventId");
+
+                    b.ToTable("EventsTickets");
+                });
+
+            modelBuilder.Entity("Domain.Entities.EventType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Color")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Title")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("EventTypes");
                 });
@@ -710,6 +722,51 @@ namespace Persistence.Migrations
                     b.ToTable("Roles", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Entities.ScheduledEvent", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("BarId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Capacity")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Guidelines")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsHost")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Scheduled")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BarId");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("ScheduledEvents");
+                });
+
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -722,8 +779,8 @@ namespace Persistence.Migrations
                     b.Property<string>("Bio")
                         .HasColumnType("text");
 
-                    b.Property<int>("ColorCode")
-                        .HasColumnType("integer");
+                    b.Property<string>("ColorCode")
+                        .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -742,8 +799,14 @@ namespace Persistence.Migrations
                     b.Property<bool>("IsContentCreator")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsOpenToMessage")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsPrivate")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("text");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -902,6 +965,9 @@ namespace Persistence.Migrations
                     b.Property<bool>("IsFavourite")
                         .HasColumnType("boolean");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
                     b.HasKey("ObserverId", "TargetId")
                         .HasName("PK_USER_FOLLOWING");
 
@@ -943,9 +1009,11 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.UserPhoto", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsMain")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Url")
                         .HasColumnType("text");
@@ -1124,99 +1192,6 @@ namespace Persistence.Migrations
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("Domain.Entities.BarEvent", b =>
-                {
-                    b.HasOne("Domain.Entities.Bar", "Bar")
-                        .WithMany("ScheduledEvents")
-                        .HasForeignKey("BarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_BAR_EVENT_BAR_ID");
-
-                    b.HasOne("Domain.Entities.Event", "Event")
-                        .WithMany("ScheduledBarEvents")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_EVENT_SCHEDULED_BAR_EVENTS");
-
-                    b.Navigation("Bar");
-
-                    b.Navigation("Event");
-                });
-
-            modelBuilder.Entity("Domain.Entities.BarEventAttendee", b =>
-                {
-                    b.HasOne("Domain.Entities.User", "Attendee")
-                        .WithMany("AttendedBarEvents")
-                        .HasForeignKey("AttendeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_USER_ATTENDED_BAR_EVENTS");
-
-                    b.HasOne("Domain.Entities.BarEvent", "BarEvent")
-                        .WithMany("Attendees")
-                        .HasForeignKey("BarEventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_BAR_EVENT_ATTENDEES");
-
-                    b.Navigation("Attendee");
-
-                    b.Navigation("BarEvent");
-                });
-
-            modelBuilder.Entity("Domain.Entities.BarEventChallenge", b =>
-                {
-                    b.HasOne("Domain.Entities.BarEvent", "BarEvent")
-                        .WithMany("Challenges")
-                        .HasForeignKey("BarEventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_BAR_EVENT_CHALLENGES");
-
-                    b.HasOne("Domain.Entities.Challenge", "Challenge")
-                        .WithMany("BarEventChallenges")
-                        .HasForeignKey("ChallengeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_CHALLENGE_BAR_EVENT_CHALLENGES");
-
-                    b.Navigation("BarEvent");
-
-                    b.Navigation("Challenge");
-                });
-
-            modelBuilder.Entity("Domain.Entities.BarEventComment", b =>
-                {
-                    b.HasOne("Domain.Entities.User", "Attendee")
-                        .WithMany("CommentedBarEvents")
-                        .HasForeignKey("AttendeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_USER_COMMENTED_BAR_EVENTS");
-
-                    b.HasOne("Domain.Entities.BarEvent", "BarEvent")
-                        .WithMany("Comments")
-                        .HasForeignKey("BarEventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_BAR_EVENT_COMMENTS");
-
-                    b.HasOne("Domain.Entities.BarEventAttendee", "BarEventAttendee")
-                        .WithMany("BarEventComments")
-                        .HasForeignKey("BarEventId", "AttendeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_BAR_EVENT_COMMENT_BAR_EVENT_ID_ATTENDEE_ID");
-
-                    b.Navigation("Attendee");
-
-                    b.Navigation("BarEvent");
-
-                    b.Navigation("BarEventAttendee");
-                });
-
             modelBuilder.Entity("Domain.Entities.BarLike", b =>
                 {
                     b.HasOne("Domain.Entities.Bar", "Bar")
@@ -1248,6 +1223,17 @@ namespace Persistence.Migrations
                         .HasConstraintName("FK_CHALLENGE_TYPE_ID");
 
                     b.Navigation("ChallengeType");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ChallengeType", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "Creator")
+                        .WithMany("CreatedChallengesTypes")
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Creator");
                 });
 
             modelBuilder.Entity("Domain.Entities.ChatRoom", b =>
@@ -1291,6 +1277,37 @@ namespace Persistence.Migrations
                     b.Navigation("EventType");
                 });
 
+            modelBuilder.Entity("Domain.Entities.EventAttendee", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "Attendee")
+                        .WithMany("AttendedEvents")
+                        .HasForeignKey("AttendeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_USER_ATTENDED_BAR_EVENTS");
+
+                    b.HasOne("Domain.Entities.Event", null)
+                        .WithMany("Attendees")
+                        .HasForeignKey("EventId");
+
+                    b.HasOne("Domain.Entities.ScheduledEvent", "Event")
+                        .WithMany("Attendees")
+                        .HasForeignKey("ScheduledEventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_BAR_EVENT_ATTENDEES");
+
+                    b.HasOne("Domain.Entities.EventTicket", "Ticket")
+                        .WithMany()
+                        .HasForeignKey("TicketId");
+
+                    b.Navigation("Attendee");
+
+                    b.Navigation("Event");
+
+                    b.Navigation("Ticket");
+                });
+
             modelBuilder.Entity("Domain.Entities.EventCategory", b =>
                 {
                     b.HasOne("Domain.Entities.User", "Creator")
@@ -1301,6 +1318,57 @@ namespace Persistence.Migrations
                         .HasConstraintName("FK_USER_CREATED_EVENT_CATEGORIES");
 
                     b.Navigation("Creator");
+                });
+
+            modelBuilder.Entity("Domain.Entities.EventChallenge", b =>
+                {
+                    b.HasOne("Domain.Entities.Challenge", "Challenge")
+                        .WithMany("EventChallenges")
+                        .HasForeignKey("ChallengeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_BAR_EVENT_CHALLENGE_CHALLENGE_ID");
+
+                    b.HasOne("Domain.Entities.ScheduledEvent", "Event")
+                        .WithMany("Challenges")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_BAR_EVENT_CHALLENGES");
+
+                    b.Navigation("Challenge");
+
+                    b.Navigation("Event");
+                });
+
+            modelBuilder.Entity("Domain.Entities.EventComment", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "Attendee")
+                        .WithMany("CommentedEvents")
+                        .HasForeignKey("AttendeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_USER_COMMENTED_BAR_EVENTS");
+
+                    b.HasOne("Domain.Entities.ScheduledEvent", "Event")
+                        .WithMany("Comments")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_BAR_EVENT_COMMENTS");
+
+                    b.HasOne("Domain.Entities.EventAttendee", "EventAttendee")
+                        .WithMany("EventComments")
+                        .HasForeignKey("EventId", "AttendeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_BAR_EVENT_COMMENT_BAR_EVENT_ID_ATTENDEE_ID");
+
+                    b.Navigation("Attendee");
+
+                    b.Navigation("Event");
+
+                    b.Navigation("EventAttendee");
                 });
 
             modelBuilder.Entity("Domain.Entities.EventContributor", b =>
@@ -1345,6 +1413,30 @@ namespace Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.Entities.EventTicket", b =>
+                {
+                    b.HasOne("Domain.Entities.ScheduledEvent", "ScheduledEvent")
+                        .WithMany("Tickets")
+                        .HasForeignKey("ScheduledEventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_EVENT_EVENT_TICKET_ID");
+
+                    b.Navigation("ScheduledEvent");
+                });
+
+            modelBuilder.Entity("Domain.Entities.EventType", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "Creator")
+                        .WithMany("CreatedEventTypes")
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_EVENT_TYPE_CREATED_BY");
+
+                    b.Navigation("Creator");
+                });
+
             modelBuilder.Entity("Domain.Entities.Question", b =>
                 {
                     b.HasOne("Domain.Entities.QuestionType", "QuestionType")
@@ -1355,6 +1447,27 @@ namespace Persistence.Migrations
                         .HasConstraintName("FK_QUESTION_TYPE_ID");
 
                     b.Navigation("QuestionType");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ScheduledEvent", b =>
+                {
+                    b.HasOne("Domain.Entities.Bar", "Bar")
+                        .WithMany("ScheduledEvents")
+                        .HasForeignKey("BarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_BAR_EVENT_BAR_ID");
+
+                    b.HasOne("Domain.Entities.Event", "Event")
+                        .WithMany("ScheduledEvents")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_BAR_EVENT_EVENT_ID");
+
+                    b.Navigation("Bar");
+
+                    b.Navigation("Event");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserAddress", b =>
@@ -1464,14 +1577,11 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.UserPhoto", b =>
                 {
-                    b.HasOne("Domain.Entities.User", "User")
+                    b.HasOne("Domain.Entities.User", null)
                         .WithMany("Photos")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_USER_PHOTO_USER_ID");
-
-                    b.Navigation("User");
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.UserQuestion", b =>
@@ -1558,23 +1668,9 @@ namespace Persistence.Migrations
                     b.Navigation("ScheduledEvents");
                 });
 
-            modelBuilder.Entity("Domain.Entities.BarEvent", b =>
-                {
-                    b.Navigation("Attendees");
-
-                    b.Navigation("Challenges");
-
-                    b.Navigation("Comments");
-                });
-
-            modelBuilder.Entity("Domain.Entities.BarEventAttendee", b =>
-                {
-                    b.Navigation("BarEventComments");
-                });
-
             modelBuilder.Entity("Domain.Entities.Challenge", b =>
                 {
-                    b.Navigation("BarEventChallenges");
+                    b.Navigation("EventChallenges");
                 });
 
             modelBuilder.Entity("Domain.Entities.ChallengeType", b =>
@@ -1596,11 +1692,18 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Event", b =>
                 {
+                    b.Navigation("Attendees");
+
                     b.Navigation("Contributors");
 
                     b.Navigation("Ratings");
 
-                    b.Navigation("ScheduledBarEvents");
+                    b.Navigation("ScheduledEvents");
+                });
+
+            modelBuilder.Entity("Domain.Entities.EventAttendee", b =>
+                {
+                    b.Navigation("EventComments");
                 });
 
             modelBuilder.Entity("Domain.Entities.EventCategory", b =>
@@ -1628,21 +1731,36 @@ namespace Persistence.Migrations
                     b.Navigation("TypedQuestions");
                 });
 
+            modelBuilder.Entity("Domain.Entities.ScheduledEvent", b =>
+                {
+                    b.Navigation("Attendees");
+
+                    b.Navigation("Challenges");
+
+                    b.Navigation("Comments");
+
+                    b.Navigation("Tickets");
+                });
+
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.Navigation("Addresses");
 
-                    b.Navigation("AttendedBarEvents");
+                    b.Navigation("AttendedEvents");
 
                     b.Navigation("Avatar");
 
-                    b.Navigation("CommentedBarEvents");
+                    b.Navigation("CommentedEvents");
 
                     b.Navigation("ContributedEvents");
 
                     b.Navigation("CreatedBars");
 
+                    b.Navigation("CreatedChallengesTypes");
+
                     b.Navigation("CreatedEventCategories");
+
+                    b.Navigation("CreatedEventTypes");
 
                     b.Navigation("CreatedEvents");
 

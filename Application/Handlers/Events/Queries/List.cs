@@ -9,31 +9,52 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Handlers.Events.Queries
 {
+    /// <summary>
+    /// Handler class for returning all the listed events.
+    /// </summary>
     public class List
     {
-        public class Query : IRequest<Result<List<EventDto>>> { }
+        /// <summary>
+        /// Query class used as our "request object" for MediatR, with, in this case, parameters.
+        /// </summary>
+        public class Query : IRequest<Result<PagedList<EventDto>>>
+        {
+            public PaginationParams Params { get; set; } = new PaginationParams();
+        }
 
-        public class Handler : IRequestHandler<Query, Result<List<EventDto>>>
+        /// <summary>
+        /// Handler class used when the request "query" is passed to MediatR.
+        /// </summary>
+        public class Handler : IRequestHandler<Query, Result<PagedList<EventDto>>>
         {
             private readonly IDataContext _context;
+            private readonly ICurrentUserService _currentUserService;
             private readonly IMapper _mapper;
 
-            public Handler(IDataContext context, IMapper mapper)
+            public Handler(IDataContext context, ICurrentUserService currentUserService, IMapper mapper)
             {
                 _context = context;
+                _currentUserService = currentUserService;
                 _mapper = mapper;
             }
 
-            public async Task<Result<List<EventDto>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<PagedList<EventDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 Guard.Against.Null(_context.Events, nameof(_context.Events));
 
-                var eventDtos = await _context.Events
-                                              .OrderByDescending(e => e.Created)
-                                              .ProjectTo<EventDto>(_mapper.ConfigurationProvider)
-                                              .ToListAsync(cancellationToken);
+                var eventDtoQuery = _context.Events
+                    .OrderByDescending(e => e.Date)
+                    .ProjectTo<EventDto>(_mapper.ConfigurationProvider, new
+                    {
+                        currentUserName = _currentUserService.GetUserName()
+                    })
+                    .AsQueryable();
 
-                return Result<List<EventDto>>.Success(eventDtos);
+                return Result<PagedList<EventDto>>.Success(
+                    await PagedList<EventDto>.CreateAsync(eventDtoQuery, 
+                        request.Params.PageNumber, 
+                        request.Params.PageSize)
+                );
             }
         }
     }

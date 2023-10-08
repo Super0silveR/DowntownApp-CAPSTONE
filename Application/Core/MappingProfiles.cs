@@ -14,6 +14,8 @@ namespace Application.Core
     {
         public MappingProfiles()
         {
+            string? currentUserName = null;
+
             CreateMap<Guid?, Guid>()
                 .ConvertUsing((src, dest) => src ?? dest);
 
@@ -24,7 +26,7 @@ namespace Application.Core
 
             CreateMap<Bar, BarDto>();
 
-            CreateMap<BarEvent, BarEventDto>();
+            CreateMap<ScheduledEvent, BarEventDto>();
             
             CreateMap<Event, Event>();
 
@@ -47,6 +49,15 @@ namespace Application.Core
             CreateMap<Event, EventLightDto>()
                 .ForMember(edto => edto.CreatorUserName, options =>
                     options.MapFrom(src => src.Contributors.FirstOrDefault(c => c.Status.Equals(ContributorStatus.Creator))!.User!.UserName));
+
+            CreateMap<EventAttendee, EventAttendeeDto>()
+                .ForMember(edto => edto.DisplayName, options => options.MapFrom(ea => ea.Attendee!.DisplayName))
+                .ForMember(edto => edto.UserName, options => options.MapFrom(ea => ea.Attendee!.UserName))
+                .ForMember(edto => edto.Bio, options => options.MapFrom(ea => ea.Attendee!.Bio))
+                .ForMember(edto => edto.Image, options => options.MapFrom(ea => ea.Attendee!.Photos.FirstOrDefault(p => p.IsMain)!.Url))
+                .ForMember(edto => edto.FollowersCount, options => options.MapFrom(ea => ea.Attendee!.Followers.Count))
+                .ForMember(edto => edto.FollowersCount, options => options.MapFrom(ea => ea.Attendee!.Followings.Count))
+                .ForMember(edto => edto.IsFollowing, options => options.MapFrom(ea => ea.Attendee!.Followers.Any(x => x.Observer!.UserName == currentUserName)));
 
             CreateMap<EventCategory, EventCategoryDto>()
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
@@ -81,6 +92,10 @@ namespace Application.Core
             CreateMap<EventContributor, EventContributorDto>()
                 .ForMember(ec => ec.Status, options => options.MapFrom(ec => ec.Status.ToString()));
 
+            CreateMap<ScheduledEvent, ScheduledEventDto>()
+                .ForMember(se => se.AvailableTickets, options => options.MapFrom(se => se.Tickets.Count))
+                .ForMember(se => se.CommentCount, options => options.MapFrom(se => se.Comments.Count));
+
             CreateMap<EventRating, RatingDto>();
 
             CreateMap<ICollection<BarLike>, BarLikeDto>()
@@ -97,7 +112,14 @@ namespace Application.Core
             CreateMap<User, ProfileDto>()
                 .ForMember(pdto => pdto.Followers, options => options.MapFrom(u => u.Followers.Count))
                 .ForMember(pdto => pdto.Following, options => options.MapFrom(u => u.Followings.Count))
-                .ForMember(pdto => pdto.Photo, options => options.MapFrom(u => u.Photos.FirstOrDefault(p => p.IsMain)!.Url));
+                .ForMember(pdto => pdto.Photo, options => options.MapFrom(u => u.Photos.FirstOrDefault(p => p.IsMain)!.Url))
+                .ForMember(pdto => pdto.IsFollowing, options => options.MapFrom(u => u.Followers.Any(x => x.Observer!.UserName == currentUserName)));
+
+            CreateMap<User, ProfileLightDto>()
+                .ForMember(pdto => pdto.Followers, options => options.MapFrom(u => u.Followers.Count))
+                .ForMember(pdto => pdto.Following, options => options.MapFrom(u => u.Followings.Count))
+                .ForMember(pdto => pdto.Photo, options => options.MapFrom(u => u.Photos.FirstOrDefault(p => p.IsMain)!.Url))
+                .ForMember(pdto => pdto.IsFollowing, options => options.MapFrom(u => u.Followers.Any(x => x.Observer!.UserName == currentUserName)));
 
             CreateMap<User, UserLightDto>()
                 .ForMember(pdto => pdto.Photo, options => options.MapFrom(u => u.Photos.FirstOrDefault(p => p.IsMain)!.Url));

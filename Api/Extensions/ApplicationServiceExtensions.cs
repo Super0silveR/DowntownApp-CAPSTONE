@@ -17,6 +17,7 @@ using NSwag.Generation.Processors.Security;
 using Persistence;
 using Persistence.Interceptors;
 using Persistence.Services;
+using System.Reflection;
 using OpenApiSecurityScheme = NSwag.OpenApiSecurityScheme;
 
 namespace Api.Extensions
@@ -102,7 +103,7 @@ namespace Api.Extensions
                     });
             });
 
-            services.AddMediatR(typeof(Details.Handler).Assembly);
+            services.AddMediatR(cfg=>cfg.RegisterServicesFromAssemblies(typeof(Details.Handler).GetTypeInfo().Assembly));
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssemblyContaining<Create>();

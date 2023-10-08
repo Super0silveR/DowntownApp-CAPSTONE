@@ -6,7 +6,7 @@ namespace Domain.Entities
     /// <summary>
     /// Entity that represents the association of a scheduled event at a bar.
     /// </summary>
-    public class BarEvent : BaseAuditableEntity
+    public class ScheduledEvent : BaseAuditableEntity
     {
         public Guid BarId { get; set; }
         public Guid EventId { get; set; }
@@ -18,8 +18,9 @@ namespace Domain.Entities
         public virtual Bar? Bar { get; set; } 
         public virtual Event? Event { get; set; }
 
-        public virtual ICollection<BarEventChallenge> Challenges { get; set; } = new HashSet<BarEventChallenge>();
-        public virtual ICollection<BarEventComment> Comments { get; set; } = new HashSet<BarEventComment>();
-        public virtual ICollection<BarEventAttendee> Attendees { get; set; } = new HashSet<BarEventAttendee>();
+        public virtual ICollection<EventChallenge> Challenges { get; set; } = new HashSet<EventChallenge>();
+        public virtual ICollection<EventComment> Comments { get; set; } = new HashSet<EventComment>();
+        public virtual ICollection<EventAttendee> Attendees { get; set; } = new HashSet<EventAttendee>();
+        public virtual ICollection<EventTicket> Tickets { get; set; } = new HashSet<EventTicket>();
     }
 }

@@ -1,123 +1,150 @@
-import { Button, Container, Divider, Grid, Slider, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Button, CircularProgress, Container, Divider, Grid, Paper, Slider, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { observer } from 'mobx-react-lite';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
 import EventList from './EventList';
-import { AllOut, Filter, Filter1, FilterAlt, SocialDistance, TripOrigin, ViewList, ViewModule, ViewQuilt } from '@mui/icons-material';
+import { FilterAlt, TripOrigin } from '@mui/icons-material';
 import theme from '../../../app/theme';
+import { PaginationParams } from '../../../app/models/pagination';
 
 function EventDashboard() {
 
     const { eventStore } = useStore();
-    const { loadEvents, eventRegistry } = eventStore;
+    const { eventRegistry,
+            loadEvents,  
+            pagination, 
+            setPaginationParams
+        } = eventStore;
+    const [loadingNextPage, setLoadingNextPage] = useState(false);
 
     /** Load the [filtered*(TODO)] events at the dashboard initialization. */
     useEffect(() => {
-        if (eventRegistry.size <= 1)
-            loadEvents();
-    }, [loadEvents, eventRegistry.size]);  
-    
+      if (eventRegistry.size <= 1) loadEvents();
+    }, [loadEvents, eventRegistry.size]);
+  
     const [view, setView] = React.useState('list');
-
+  
     const handleChange = (event: React.MouseEvent<HTMLElement>, nextView: string) => {
       setView(nextView);
     };
+
+    /**
+     * Method handling the action of loading the next page of events, triggered by the user.
+     * 
+     * IMPORTANT: Setting our pagination params here to a new object, i.e. updating their values,
+     * our computed property in our event store, named generateAxiosPaginationParams(), will be 
+     * re-computed to include the new ones. In this case here, we ask only for the next page.
+     */
+    const handleNextPage = () => {
+        setLoadingNextPage(true);
+        setPaginationParams(new PaginationParams(pagination!.currentPage + 1));
+        loadEvents().then(() => {
+            setLoadingNextPage(false);
+        });
+    }
     
     function valuetext(value: number) {
-        return `${value}KM`;
+      return `${value} KM`;
     }
-
-    if (eventStore.loadingInitial) return <LoadingComponent content='Loading Events..' />
-
+  
+    if (eventStore.loadingInitial) return <LoadingComponent content='Loading Events..' />;
+  
     return (
-        <>
-            <Stack 
-                direction='row' 
-                display='flex' 
+      <Container
+        component={Paper}
+        elevation={3}
+        sx={{
+          padding: '2rem',
+          borderRadius: '16px',
+          backgroundColor: '#ff86c3', 
+          boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
+          margin: '2rem auto',
+          maxWidth: '800px',
+        }}
+      >
+        <Stack
+          direction='column' 
+          alignItems='center' 
+          marginBottom='1.5rem'
+        >
+          <Typography variant='h3' color='white'>
+            Events
+          </Typography>
+          <Button
+            variant='outlined'
+            component={NavLink}
+            to='/createEvent'
+            size='large' 
+            fullWidth 
+            sx={{
+              height: '3rem', 
+              marginTop: '1rem', 
+              borderColor: '#fff', 
+              color: '#fff', 
+              '&:hover': {
+                backgroundColor: '#fff', 
+                color: '#9c27b0', 
+              },
+            }}
+          >
+            Create a New Event
+          </Button>
+        </Stack>
+        <Divider sx={{ my: 1, mb: 3 }} />
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={4}> {}
+            <Container>
+              <Typography variant='h5' color='white'>
+                Filters
+              </Typography>
+              <ToggleButtonGroup
+                orientation='vertical'
+                value={view}
+                exclusive
+                onChange={handleChange}
+                fullWidth
                 sx={{
-                    alignContent:'center',
-                    alignItems:'center',
-                    justifyContent:'space-between'
-                }}>
-                <Typography variant='h3' letterSpacing={-2} fontFamily='monospace'>
-                    Events
-                </Typography>
-                <Button 
-                    variant='outlined' 
-                    component={NavLink}
-                    size='small'
-                    to='/createEvent'
-                    sx={{
-                        height:'2.25rem'
-                    }}
-                >
-                        Create a new Event!
-                </Button>
-            </Stack>
-            <Divider sx={{ my:1, mb: 5 }} />
-            <Grid container>
-                <Grid item xs={8}>
-                    <EventList />
-                </Grid>
-                <Grid item xs={4}>
-                    <Container sx={{alignItems:'center'}}>  
-                        <Typography 
-                            variant='h4'
-                            mt={'1.1em'}
-                            fontSize={18}
-                            sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                flexWrap: 'wrap',
-                                color: theme.palette.primary.main
-                            }}
-                        >
-                                <FilterAlt />
-                                Filters
-                        </Typography>
-                        <ToggleButtonGroup
-                            orientation="vertical"
-                            value={view}
-                            exclusive
-                            onChange={handleChange}
-                            fullWidth
-                            title='Use these options to filter the event listing.'
-                        >
-                            <ToggleButton value="hosting" aria-label="hosting">
-                                Hosting
-                            </ToggleButton>
-                            <ToggleButton value="going" aria-label="going">
-                                Going
-                            </ToggleButton>
-                        </ToggleButtonGroup>
-                        <Divider sx={{pt:1,pb:1,mb:1}} />
-                        <Typography 
-                            variant='body2'
-                            fontSize={18}
-                            sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                flexWrap: 'wrap',
-                                color: theme.palette.primary.main
-                            }}
-                        >
-                                <TripOrigin />
-                                Distance (KM)
-                        </Typography>
-                        <Slider
-                            aria-label="Distance (KM)"
-                            defaultValue={30}
-                            getAriaValueText={valuetext}
-                            color='primary'
-                        />
-                    </Container>
-                </Grid>
-            </Grid>
-        </>
+                  marginBottom: '1rem',
+                  '& .MuiToggleButton-root': {
+                    marginBottom: '0.5rem',
+                    backgroundColor: '#fff', 
+                    color: '#9c27b0', 
+                    border: '1px solid #9c27b0', 
+                    '&.Mui-selected': {
+                      backgroundColor: '#9c27b0', 
+                      color: '#fff', 
+                    },
+                  },
+                }}
+              >
+                <ToggleButton value='hosting'>
+                  Hosting
+                </ToggleButton>
+                <ToggleButton value='going'>
+                  Going
+                </ToggleButton>
+              </ToggleButtonGroup>
+              <Typography variant='h5' color='white'>
+                Distance (KM)
+              </Typography>
+              <Slider
+                aria-label='Distance (KM)'
+                defaultValue={30}
+                getAriaValueText={valuetext}
+                color='primary'
+              />
+            </Container>
+          </Grid>
+          <Grid item xs={12} md={8}>
+            <EventList />
+          </Grid>
+        </Grid>
+      </Container>
     );
-};
-
-export default observer(EventDashboard);
+  }
+  
+  export default observer(EventDashboard);
+  
