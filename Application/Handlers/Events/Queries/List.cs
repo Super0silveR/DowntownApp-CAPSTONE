@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Core;
 using Application.DTOs.Queries;
+using Application.Params;
 using Ardalis.GuardClauses;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -19,7 +20,7 @@ namespace Application.Handlers.Events.Queries
         /// </summary>
         public class Query : IRequest<Result<PagedList<EventDto>>>
         {
-            public PaginationParams Params { get; set; } = new PaginationParams();
+            public EventParams Params { get; set; } = new EventParams();
         }
 
         /// <summary>
@@ -43,12 +44,24 @@ namespace Application.Handlers.Events.Queries
                 Guard.Against.Null(_context.Events, nameof(_context.Events));
 
                 var eventDtoQuery = _context.Events
+                    .Where(e => e.Date >= request.Params.StartDate)
                     .OrderByDescending(e => e.Date)
                     .ProjectTo<EventDto>(_mapper.ConfigurationProvider, new
                     {
                         currentUserName = _currentUserService.GetUserName()
                     })
                     .AsQueryable();
+
+                /// Updating the query to accommodate filtering, specifically for the currently logged in user.
+                if (request.Params.IsGoing && !request.Params.IsHosting)
+                {
+                    eventDtoQuery = eventDtoQuery.Where(edto => edto.Attendees!.Any(a => a.UserName == _currentUserService.GetUserName()));
+                }
+
+                if (request.Params.IsHosting && !request.Params.IsGoing)
+                {
+                    eventDtoQuery = eventDtoQuery.Where(edto => edto.CreatorUserName == _currentUserService.GetUserName());
+                }
 
                 return Result<PagedList<EventDto>>.Success(
                     await PagedList<EventDto>.CreateAsync(eventDtoQuery, 
