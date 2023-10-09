@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Divider, Grid, Typography } from '@mui/material';
+import { Button, CircularProgress, Container, Divider, Grid, Paper, Slider, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { observer } from 'mobx-react-lite';
 import { Fragment, useEffect, useState } from 'react';
@@ -7,8 +7,6 @@ import { useStore } from '../../../app/stores/store';
 import EventList from './EventList';
 import { PaginationParams } from '../../../app/models/pagination';
 import InfiniteScroll from 'react-infinite-scroller';
-import EventFilters from './EventFilters';
-import EventListItemPlaceholder from './EventListItemPlaceholder';
 
 function EventDashboard() {
 
@@ -24,7 +22,13 @@ function EventDashboard() {
     useEffect(() => {
         if (eventRegistry.size <= 1)
             loadEvents();
-    }, [loadEvents, eventRegistry.size]);
+    }, [loadEvents, eventRegistry.size]);  
+    
+    const [view, setView] = React.useState('list');
+
+    const handleChange = (event: React.MouseEvent<HTMLElement>, nextView: string) => {
+      setView(nextView);
+    };
 
     /**
      * Method handling the action of loading the next page of events, triggered by the user.
@@ -40,6 +44,12 @@ function EventDashboard() {
             setLoadingNextPage(false);
         });
     }
+    
+    function valuetext(value: number) {
+        return `${value}KM`;
+    }
+
+    if (eventStore.loadingInitial && !loadingNextPage) return <LoadingComponent content='Loading Events..' />
 
     return (
         <>
@@ -51,16 +61,11 @@ function EventDashboard() {
                     alignItems:'center',
                     justifyContent:'space-between'
                 }}>
-                <Stack>
-                    <Typography variant='h3'>
-                        Listed Events
-                    </Typography>
-                    <Typography variant='subtitle1'>
-                        Note that these events might not be <i><b>scheduled</b></i> yet.
-                    </Typography>
-                </Stack>
+                <Typography variant='h3' letterSpacing={-2} fontFamily='monospace'>
+                    Events
+                </Typography>
                 <Button 
-                    variant='contained' 
+                    variant='outlined' 
                     component={NavLink}
                     size='small'
                     to='/createEvent'
@@ -68,7 +73,7 @@ function EventDashboard() {
                         height:'2.25rem'
                     }}
                 >
-                    Create your new event!
+                        Create a new Event!
                 </Button>
             </Stack>
             <Divider sx={{ my:1, mb: 5 }} />
@@ -76,47 +81,79 @@ function EventDashboard() {
                 container
             >
                 <Grid item xs={8}>
-                    {eventStore.loadingInitial && 
-                     eventRegistry.size === 0 && 
-                     !loadingNextPage ? (
-                        <Fragment>
-                            <EventListItemPlaceholder />
-                            <EventListItemPlaceholder />
-                        </Fragment>
-                    ) : (
-                        <InfiniteScroll
-                            hasMore={
-                                !loadingNextPage &&
-                                !!pagination && 
-                                pagination.currentPage < pagination.totalPages
-                            }
-                            initialLoad={false}
-                            loadMore={handleNextPage}
-                            pageStart={0}
-                        >
-                            <EventList />
-                        </InfiniteScroll>
-
-                    )}
+                    <InfiniteScroll
+                        hasMore={
+                            !loadingNextPage &&
+                            !!pagination && 
+                            pagination.currentPage < pagination.totalPages
+                        }
+                        initialLoad={false}
+                        loadMore={handleNextPage}
+                        pageStart={0}
+                    >
+                        <EventList />
+                    </InfiniteScroll>
                 </Grid>
                 <Grid item xs={4}>
-                    <EventFilters />
+                    <Container sx={{alignItems:'center'}}>  
+                        <Typography 
+                            variant='h4'
+                            mt={'1.1em'}
+                            fontSize={18}
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                flexWrap: 'wrap',
+                                color: theme.palette.primary.main
+                            }}
+                        >
+                                <FilterAlt />
+                                Filters
+                        </Typography>
+                        <ToggleButtonGroup
+                            orientation="vertical"
+                            value={view}
+                            exclusive
+                            onChange={handleChange}
+                            fullWidth
+                            title='Use these options to filter the event listing.'
+                        >
+                            <ToggleButton value="hosting" aria-label="hosting">
+                                Hosting
+                            </ToggleButton>
+                            <ToggleButton value="going" aria-label="going">
+                                Going
+                            </ToggleButton>
+                        </ToggleButtonGroup>
+                        <Divider sx={{pt:1,pb:1,mb:1}} />
+                        <Typography 
+                            variant='body2'
+                            fontSize={18}
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                flexWrap: 'wrap',
+                                color: theme.palette.primary.main
+                            }}
+                        >
+                                <TripOrigin />
+                                Distance (KM)
+                        </Typography>
+                        <Slider
+                            aria-label="Distance (KM)"
+                            defaultValue={30}
+                            getAriaValueText={valuetext}
+                            color='primary'
+                        />
+                    </Container>
                 </Grid>
-                {/** TODO: Hidding when not loading and centering the content with the rest of the page. */}
                 <Grid item xs={8}>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            paddingTop: 2
-                        }}
-                    >
-                        {loadingNextPage && <CircularProgress />}
-                    </Box>
+                    <CircularProgress />
                 </Grid>
             </Grid>
         </>
     );
-};
-
-export default observer(EventDashboard);
+  }
+  
+  export default observer(EventDashboard);
+  

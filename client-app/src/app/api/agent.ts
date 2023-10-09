@@ -96,6 +96,7 @@ const requests = {
     post: <T>(url: string, body: {}) => axios.post<T>(url, body).then(responseBody),
     put: <T> (url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
     del: <T> (url: string) => axios.delete<T>(url).then(responseBody),
+    userSearch: <T>(query: string) => axios.get<T[]>(`/userSearch?q=${query}`).then(responseBody),
 }
 
 /**
@@ -195,6 +196,13 @@ const Profiles = {
         requests.get<ProfileDto[]>(`/followers/${username}?predicate=${predicate}`)
 }
 
+
+const handleUserSearch = (query: string) => {
+    return requests.userSearch<User[]>(query);
+  };
+  
+  
+
 /**
  * Building the `agent` object.
  * */
@@ -206,7 +214,8 @@ const agent = {
     EventTypes,
     EventCategories,
     Profiles,
-    QuestionTypes
+    QuestionTypes,
+    handleUserSearch
 }
 
 /**
