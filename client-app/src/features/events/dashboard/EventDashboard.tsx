@@ -1,14 +1,14 @@
 import { Box, Button, CircularProgress, Divider, Grid, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { observer } from 'mobx-react-lite';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
 import EventList from './EventList';
 import { PaginationParams } from '../../../app/models/pagination';
 import InfiniteScroll from 'react-infinite-scroller';
 import EventFilters from './EventFilters';
+import EventListItemPlaceholder from './EventListItemPlaceholder';
 
 function EventDashboard() {
 
@@ -40,8 +40,6 @@ function EventDashboard() {
             setLoadingNextPage(false);
         });
     }
-
-    if (eventStore.loadingInitial && !loadingNextPage) return <LoadingComponent content='Loading Events..' />
 
     return (
         <>
@@ -78,18 +76,28 @@ function EventDashboard() {
                 container
             >
                 <Grid item xs={8}>
-                    <InfiniteScroll
-                        hasMore={
-                            !loadingNextPage &&
-                            !!pagination && 
-                            pagination.currentPage < pagination.totalPages
-                        }
-                        initialLoad={false}
-                        loadMore={handleNextPage}
-                        pageStart={0}
-                    >
-                        <EventList />
-                    </InfiniteScroll>
+                    {eventStore.loadingInitial && 
+                     eventRegistry.size === 0 && 
+                     !loadingNextPage ? (
+                        <Fragment>
+                            <EventListItemPlaceholder />
+                            <EventListItemPlaceholder />
+                        </Fragment>
+                    ) : (
+                        <InfiniteScroll
+                            hasMore={
+                                !loadingNextPage &&
+                                !!pagination && 
+                                pagination.currentPage < pagination.totalPages
+                            }
+                            initialLoad={false}
+                            loadMore={handleNextPage}
+                            pageStart={0}
+                        >
+                            <EventList />
+                        </InfiniteScroll>
+
+                    )}
                 </Grid>
                 <Grid item xs={4}>
                     <EventFilters />

@@ -6,7 +6,7 @@ import { Container, Typography, ToggleButtonGroup, ToggleButton, Divider, Slider
 import { LocalizationProvider, DateCalendar } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import theme from '../../../app/theme';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 
 /** Important to note here that 'observer' gives the 'rights' to the component to look into the store. (and being notified of changes) */
 export default observer(function EventFilters() {
