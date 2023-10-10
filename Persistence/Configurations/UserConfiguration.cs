@@ -8,6 +8,11 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
+            builder.HasOne(u => u.CreatorProfile)
+                   .WithOne(cp => cp.Creator)
+                   .HasForeignKey<CreatorProfiles>(cp => cp.UserId)
+                   .HasConstraintName("FK_USER_CREATOR_PROFILE_ID");
+
             builder.HasMany(u => u.Addresses)
                    .WithOne(ua => ua.User)
                    .HasForeignKey(ua => ua.UserId)
@@ -84,6 +89,18 @@ namespace Persistence.Configurations
                    .WithOne(er => er.User)
                    .HasForeignKey(er => er.UserId)
                    .HasConstraintName("FK_USER_RATED_EVENTS")
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(u => u.ReviewedCreators)
+                   .WithOne(cr => cr.Reviewer)
+                   .HasForeignKey(cr => cr.ReviewerId)
+                   .HasConstraintName("FK_USER_CREATOR_REVIEWS_ID")
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(u => u.UserSocials)
+                   .WithOne(s => s.User)
+                   .HasForeignKey(s => s.UserId)
+                   .HasConstraintName("FK_USER_SOCIAL_ID")
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(u => u.UserChats)

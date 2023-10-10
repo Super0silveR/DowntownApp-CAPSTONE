@@ -16,6 +16,8 @@ namespace Domain.Entities
         public string? Location { get; set; }
 
         public virtual Avatar? Avatar { get; set; }
+        public virtual CreatorProfiles? CreatorProfile { get; set; }
+
         public virtual ICollection<UserAddress> Addresses { get; set; } = new HashSet<UserAddress>();
         public virtual ICollection<EventAttendee> AttendedEvents { get; set; } = new HashSet<EventAttendee>();
         public virtual ICollection<EventComment> CommentedEvents { get; set; } = new HashSet<EventComment>();
@@ -29,6 +31,8 @@ namespace Domain.Entities
         public virtual ICollection<UserPhoto> Photos { get; set; } = new HashSet<UserPhoto>();
         public virtual ICollection<UserQuestion> Questions { get; set; } = new HashSet<UserQuestion>();
         public virtual ICollection<EventRating> RatedEvents { get; set; } = new HashSet<EventRating>();
+        public virtual ICollection<CreatorReviews> ReviewedCreators { get; set; } = new HashSet<CreatorReviews>();
+        public virtual ICollection<Socials> UserSocials { get; set; } = new HashSet<Socials>();
         public virtual ICollection<UserChat> UserChats { get; set; } = new HashSet<UserChat>();
         public virtual ICollection<UserChatRoom> UserChatRooms { get; set; } = new HashSet<UserChatRoom>();
 
