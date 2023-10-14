@@ -5,8 +5,8 @@ import { useStore } from '../../app/stores/store';
 import LoginForm from '../users/LoginForm';
 import RegisterForm from '../users/RegisterForm';
 
-import logo from '../../assets/logo.png'; 
-import partyImage1HD from '../../assets/party1.jpg'; 
+import logo from '../../assets/logo.png';
+import partyImage1HD from '../../assets/party1.jpg';
 
 function HomePage() {
   const { modalStore, userStore } = useStore();
@@ -21,17 +21,28 @@ function HomePage() {
         flexDirection: 'column',
         alignItems: 'center',
         overflow: 'hidden',
-        color: 'white', 
+        color: 'white',
       }}
     >
       <img
         src={logo}
         alt="Logo"
         style={{
-          width: '250px',
+          width: '400px',  // Adjust the width as needed
           marginBottom: '2em',
         }}
       />
+      <div
+        style={{
+          fontSize: '2rem',
+          color: '#e91e63',
+          fontWeight: 'bold',
+          textAlign: 'center',
+          marginTop: '1em', // Adjust the top margin as needed
+        }}
+      >
+        Stop swiping, start experiencing
+      </div>
       <Container
         sx={{
           position: 'relative',
