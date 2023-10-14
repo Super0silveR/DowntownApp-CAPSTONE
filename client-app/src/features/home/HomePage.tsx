@@ -11,6 +11,16 @@ import partyImage1HD from '../../assets/party1.jpg';
 function HomePage() {
   const { modalStore, userStore } = useStore();
 
+  const starStyles = {
+    fontSize: '24px',
+    animation: 'twinkle 2s linear infinite',
+  };
+
+  const starsLeft = [
+    { top: '10%', left: '5%', color: 'purple' },
+    { top: '30%', left: '3%', color: 'pink' },
+    { top: '50%', left: '7%', color: 'lavender' },
+  ];
   return (
     <div
       style={{
@@ -24,6 +34,19 @@ function HomePage() {
         color: 'white',
       }}
     >
+            {starsLeft.map((star, index) => {
+        return (
+          <div
+            key={index}
+            style={{
+              ...starStyles,
+              ...star,
+            }}
+          >
+            ★
+          </div>
+        );
+      })}
       <img
         src={logo}
         alt="Logo"
@@ -42,6 +65,9 @@ function HomePage() {
         }}
       >
         Stop swiping, start experiencing
+        <span role="img" aria-label="sparkles" style={{ marginLeft: '0.5rem' }}>
+    ✨
+  </span>
       </div>
       <Container
         sx={{
