@@ -12,7 +12,7 @@ import { Whatshot } from '@mui/icons-material';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../stores/store';
 import AccountMenu from './menus/AccountMenu';
-import logo from '../../assets/logo-4c-white-transparency@print.png'; // Import your logo image
+import logo from '../../assets/logo-4c-white-transparency@print.png';
 
 const pages = ['Bars', 'Events', 'Errors'];
 
@@ -32,14 +32,20 @@ function ResponsiveAppBar() {
                             marginRight: 10,
                             marginBottom: 10,
                             borderWidth: '.1rem'
-                        }} 
+                        }}
                     />
                     <Box textAlign='center' sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         <Button 
                             component={NavLink}
                             to='/bars'
                             color='inherit'
-                            sx={{ my: 2, display: 'block' }}
+                            sx={{
+                                my: 2,
+                                display: 'block',
+                                '&:hover': {
+                                    color: 'purple',
+                                }
+                            }}
                         >
                             {pages[0]}
                         </Button>
@@ -47,7 +53,13 @@ function ResponsiveAppBar() {
                             component={NavLink}
                             to='/events'
                             color='inherit'
-                            sx={{ my: 2, display: 'block' }}
+                            sx={{
+                                my: 2,
+                                display: 'block',
+                                '&:hover': {
+                                    color: 'purple',
+                                }
+                            }}
                         >
                             {pages[1]}
                         </Button>
@@ -55,7 +67,13 @@ function ResponsiveAppBar() {
                             component={NavLink}
                             to='/errors'
                             color='inherit'
-                            sx={{ my: 2, display: 'block' }}
+                            sx={{
+                                my: 2,
+                                display: 'block',
+                                '&:hover': {
+                                    color: 'purple',
+                                }
+                            }}
                         >
                             {pages[2]}
                         </Button>

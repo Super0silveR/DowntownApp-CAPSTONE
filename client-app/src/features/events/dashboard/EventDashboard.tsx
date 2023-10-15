@@ -42,7 +42,7 @@ function EventDashboard() {
     }
 
     return (
-        <>
+        <Box sx={{ backgroundColor: '#f9a8d4', minHeight: '100vh' }}>
             <Stack 
                 direction='row' 
                 display='flex' 
@@ -115,7 +115,7 @@ function EventDashboard() {
                     </Box>
                 </Grid>
             </Grid>
-        </>
+        </Box>
     );
 };
 
