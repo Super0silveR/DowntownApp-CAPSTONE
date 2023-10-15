@@ -42,7 +42,7 @@ function EventDashboard() {
     }
 
     return (
-        <Box sx={{ backgroundColor: '#f9a8d4', minHeight: '100vh' }}>
+        <Box sx={{ backgroundColor: '#fce7f3', minHeight: '100vh' }}>
             <Stack 
                 direction='row' 
                 display='flex' 
@@ -62,14 +62,20 @@ function EventDashboard() {
                 <Button 
                     variant='contained' 
                     component={NavLink}
-                    size='small'
+                    size='large'
                     to='/createEvent'
                     sx={{
-                        height:'2.25rem'
-                    }}
-                >
-                    Create your new event!
-                </Button>
+                        borderRadius: '50%',  
+                        backgroundColor: '#8b5cf6',  
+                        width: '15rem',  
+                        height: '4.25rem',  
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                }}
+            >
+                Create your new event!
+            </Button>
             </Stack>
             <Divider sx={{ my:1, mb: 5 }} />
             <Grid
