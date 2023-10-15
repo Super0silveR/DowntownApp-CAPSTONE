@@ -83,6 +83,29 @@ namespace ApplicationTests.Data
                             );
 
                         dataContext.SaveChanges();
+
+                        dataContext.Events.AddRange(
+                                new Event
+                                {
+                                    CreatorId = _currentUser.Id,
+                                    EventCategoryId = dataContext.EventCategories.First().Id,
+                                    EventTypeId = dataContext.EventTypes.First().Id,
+                                    Title = "Future Test Event 1",
+                                    Date = DateTime.UtcNow.AddMonths(3),
+                                    Description = "Event 3 months in future"
+                                },
+                                new Event
+                                {
+                                    CreatorId = _currentUser.Id,
+                                    EventCategoryId = dataContext.EventCategories.First().Id,
+                                    EventTypeId = dataContext.EventTypes.First().Id,
+                                    Title = "Future Test Event 2",
+                                    Date = DateTime.UtcNow.AddMonths(5),
+                                    Description = "Event 5 months in future"
+                                }
+                            );
+
+                        dataContext.SaveChanges();
                     }
 
                     _databaseInitialized = true;
@@ -95,15 +118,7 @@ namespace ApplicationTests.Data
         /// </summary>
         /// <returns></returns>
         public DataContext CreateContext() =>
-            new DataContext(
-                    new DbContextOptionsBuilder<DataContext>()./*UseNpgsql*/UseSqlite(ConnectionString).Options,
-                    _mediatorMock.Object,
-                    _auditableEntitySaveChangesInterceptor,
-                    _userFollowingSaveChangesInterceptor
-                );
-
-        public Mock<DataContext> CreateMockedContext() =>
-            new Mock<DataContext>(
+            new (
                     new DbContextOptionsBuilder<DataContext>()./*UseNpgsql*/UseSqlite(ConnectionString).Options,
                     _mediatorMock.Object,
                     _auditableEntitySaveChangesInterceptor,
