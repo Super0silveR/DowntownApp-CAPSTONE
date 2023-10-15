@@ -59,7 +59,7 @@ namespace Application.Handlers.Events.Commands
             {
                 Guard.Against.Null(_context.Events, nameof(_context.Events));
 
-                if (!Guid.TryParse(_userService.GetUserId(), out Guid userId)) return null;
+                if (!Guid.TryParse(_userService.GetUserId(), out Guid userId)) return Result<Unit>.Failure("This user is invalid.");
 
                 var user = await _context.Users.FindAsync(new object?[] { userId }, cancellationToken);
 

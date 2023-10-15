@@ -26,6 +26,8 @@ namespace Application.Core
 
             CreateMap<Bar, BarDto>();
 
+            CreateMap<CreatorProfiles, CreatorProfileDto>();
+
             CreateMap<ScheduledEvent, BarEventDto>();
             
             CreateMap<Event, Event>();
@@ -110,6 +112,7 @@ namespace Application.Core
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => src is not null));
 
             CreateMap<User, ProfileDto>()
+                .ForMember(pdto => pdto.CreatorProfile, options => options.MapFrom(u => u.CreatorProfile))
                 .ForMember(pdto => pdto.Followers, options => options.MapFrom(u => u.Followers.Count))
                 .ForMember(pdto => pdto.Following, options => options.MapFrom(u => u.Followings.Count))
                 .ForMember(pdto => pdto.Photo, options => options.MapFrom(u => u.Photos.FirstOrDefault(p => p.IsMain)!.Url))
@@ -136,7 +139,16 @@ namespace Application.Core
             
             CreateMap<EventCommandDto, Event>()
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
-            
+
+            CreateMap<ProfileCommandDto, User>()
+                .ForMember(pcdto => pcdto.Bio, options => options.MapFrom(pcdto => pcdto.Bio))
+                .ForMember(pcdto => pcdto.ColorCode, options => options.MapFrom(pcdto => pcdto.ColorCode))
+                .ForMember(pcdto => pcdto.DisplayName, options => options.MapFrom(pcdto => pcdto.DisplayName))
+                .ForMember(pcdto => pcdto.IsOpenToMessage, options => options.MapFrom(pcdto => pcdto.IsOpenToMessage))
+                .ForMember(pcdto => pcdto.IsPrivate, options => options.MapFrom(pcdto => pcdto.IsPrivate))
+                .ForMember(pcdto => pcdto.Location, options => options.MapFrom(pcdto => pcdto.Location))
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
             CreateMap<EventTypeCommandDto, EventType>()
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 

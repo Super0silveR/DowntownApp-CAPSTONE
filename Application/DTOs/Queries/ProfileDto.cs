@@ -18,6 +18,8 @@ namespace Application.DTOs.Queries
         public string? Photo { get; set; }
         public string? UserName { get; set; }
 
+        public CreatorProfileDto? CreatorProfile { get; set; }
+
         public ICollection<UserPhoto>? Photos { get; set; }
         public ICollection<UserQuestion>? Questions { get; set; }
     }

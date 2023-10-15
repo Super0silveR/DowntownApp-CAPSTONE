@@ -1,4 +1,6 @@
 ﻿using Api.Controllers.Base;
+using Application.DTOs.Commands;
+using Application.Handlers.Profiles.Commands;
 using Application.Handlers.Profiles.Queries;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +12,12 @@ namespace Api.Controllers
         public async Task<IActionResult> GetProfile(string username)
         {
             return HandleResult(await Mediator.Send(new ProfileDetails.Query { UserName = username }));
+        }
+
+        [HttpPost] /// api/Profiles
+        public async Task<IActionResult> EditProfile(ProfileCommandDto @profile)
+        {
+            return HandleResult(await Mediator.Send(new GeneralEdit.Command { Profile = @profile }));
         }
     }
 }
