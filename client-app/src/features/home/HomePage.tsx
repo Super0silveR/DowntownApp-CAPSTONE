@@ -29,7 +29,7 @@ function HomePage() {
         src={logo}
         alt="Logo"
         style={{
-          width: '400px',  // Adjust the width as needed
+          width: '400px',
           marginBottom: '2em',
         }}
       />
@@ -39,7 +39,7 @@ function HomePage() {
           color: '#e91e63',
           fontWeight: 'bold',
           textAlign: 'center',
-          marginTop: '1em', // Adjust the top margin as needed
+          marginTop: '1em', 
         }}
       >
         Stop swiping, start experiencing
