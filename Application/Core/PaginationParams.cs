@@ -1,8 +1,11 @@
-﻿namespace Application.Core
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Application.Core
 {
     /// <summary>
     /// Parameters class for the pagination functionnality.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class PaginationParams
     {
         /// <summary>

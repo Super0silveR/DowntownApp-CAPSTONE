@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.DTOs.Commands;
 using Application.Core;
+using Application.Params;
 
 namespace Api.Controllers
 {
@@ -18,7 +19,7 @@ namespace Api.Controllers
 
         [Authorize(Policies.READ_EVENTS)]
         [HttpGet] //api/events
-        public async Task<IActionResult> GetEvents([FromQuery]PaginationParams @params)
+        public async Task<IActionResult> GetEvents([FromQuery]EventParams @params)
         {
             return HandlePagedResult(await Mediator.Send(new List.Query { Params = @params }));
         }

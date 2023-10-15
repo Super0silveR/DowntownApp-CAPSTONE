@@ -96,7 +96,7 @@ function AccountMenu({ logout, user }: Props) {
                         {user 
                             ? <Avatar 
                                 src={user?.photo || '/assets/user.png'} 
-                                sx={{ width: 24, height: 24 }} 
+                                sx={{ width: 36, height: 36 }} 
                                 /> 
                             : <AccountCircle />}
                     </IconButton>

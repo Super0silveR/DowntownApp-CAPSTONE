@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { observer } from 'mobx-react-lite';
 import { Fragment } from 'react';
@@ -15,14 +15,21 @@ function EventList() {
         <>
             {groupedEventsByDate.map(([group, events]) => (
                 <Fragment key={group}>
-                    <Typography 
-                        variant='h6' 
-                        color={theme.palette.primary.dark}
-                        fontSize='1.4em'
-                        pb={2}
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'left'
+                        }}
                     >
-                        {group}
-                    </Typography>
+                        <Typography 
+                            variant='h6' 
+                            color={theme.palette.primary.dark}
+                            fontSize='1.4em'
+                            pb={2}
+                        >
+                            {group}
+                        </Typography>
+                    </Box>
                     <Grid container>
                         {events.map(event => (
                             <EventListItem key={event.id} event={event} />

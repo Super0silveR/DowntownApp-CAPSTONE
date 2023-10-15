@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Persistence.Migrations
 {
-    public partial class InitFromSept : Migration
+    public partial class InitWithCreatorProfile : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -46,6 +46,19 @@ namespace Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ChatRoomTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ContentGenres",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Value = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContentGenres", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -270,6 +283,32 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CreatorProfiles",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Collaborations = table.Column<string>(type: "TEXT", nullable: true),
+                    PastExperiences = table.Column<string>(type: "TEXT", nullable: true),
+                    StandOut = table.Column<string>(type: "TEXT", nullable: true),
+                    LogoUrl = table.Column<string>(type: "text", nullable: true),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CREATOR_PROFILE_USER_ID", x => x.UserId);
+                    table.ForeignKey(
+                        name: "FK_USER_CREATOR_PROFILE_ID",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EventCategories",
                 columns: table => new
                 {
@@ -314,6 +353,31 @@ namespace Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_EVENT_TYPE_CREATED_BY",
                         column: x => x.CreatorId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Socials",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Url = table.Column<string>(type: "text", nullable: true),
+                    SocialType = table.Column<int>(type: "integer", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Socials", x => x.Id);
+                    table.UniqueConstraint("PK_USER_SOCIAL_TYPE_ID", x => new { x.UserId, x.SocialType });
+                    table.ForeignKey(
+                        name: "FK_USER_SOCIAL_ID",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -377,6 +441,7 @@ namespace Persistence.Migrations
                     ObserverId = table.Column<Guid>(type: "uuid", nullable: false),
                     TargetId = table.Column<Guid>(type: "uuid", nullable: false),
                     Followed = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     IsFavourite = table.Column<bool>(type: "boolean", nullable: false),
                     Id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
@@ -648,6 +713,65 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CreatorContentGenres",
+                columns: table => new
+                {
+                    CreatorProfileId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ContentGenreId = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CREATOR_CONTENT_GENRE_ID", x => new { x.ContentGenreId, x.CreatorProfileId });
+                    table.ForeignKey(
+                        name: "FK_CREATOR_CONTENT_GENRE_ID",
+                        column: x => x.ContentGenreId,
+                        principalTable: "ContentGenres",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CREATOR_PROFILE_GENRE_ID",
+                        column: x => x.CreatorProfileId,
+                        principalTable: "CreatorProfiles",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CreatorReviews",
+                columns: table => new
+                {
+                    RevieweeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ReviewerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Review = table.Column<string>(type: "text", nullable: true),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_USER_CREATOR_REVIEW", x => new { x.RevieweeId, x.ReviewerId });
+                    table.ForeignKey(
+                        name: "FK_REVIEWEE_ID",
+                        column: x => x.RevieweeId,
+                        principalTable: "CreatorProfiles",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_USER_CREATOR_REVIEWS_ID",
+                        column: x => x.ReviewerId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Events",
                 columns: table => new
                 {
@@ -837,20 +961,26 @@ namespace Persistence.Migrations
                 columns: table => new
                 {
                     AttendeeId = table.Column<Guid>(type: "uuid", nullable: false),
-                    EventId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ScheduledEventId = table.Column<Guid>(type: "uuid", nullable: false),
                     TicketId = table.Column<Guid>(type: "uuid", nullable: true),
                     IsHost = table.Column<bool>(type: "boolean", nullable: false),
+                    EventId = table.Column<Guid>(type: "uuid", nullable: true),
                     Id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BAR_EVENT_ATTENDEE_ID", x => new { x.AttendeeId, x.EventId });
+                    table.PrimaryKey("PK_BAR_EVENT_ATTENDEE_ID", x => new { x.AttendeeId, x.ScheduledEventId });
                     table.ForeignKey(
                         name: "FK_BAR_EVENT_ATTENDEES",
-                        column: x => x.EventId,
+                        column: x => x.ScheduledEventId,
                         principalTable: "ScheduledEvents",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ScheduledEventAttendees_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Events",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ScheduledEventAttendees_EventsTickets_TicketId",
                         column: x => x.TicketId,
@@ -881,7 +1011,7 @@ namespace Persistence.Migrations
                         name: "FK_BAR_EVENT_COMMENT_BAR_EVENT_ID_ATTENDEE_ID",
                         columns: x => new { x.EventId, x.AttendeeId },
                         principalTable: "ScheduledEventAttendees",
-                        principalColumns: new[] { "AttendeeId", "EventId" },
+                        principalColumns: new[] { "AttendeeId", "ScheduledEventId" },
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_BAR_EVENT_COMMENTS",
@@ -927,6 +1057,16 @@ namespace Persistence.Migrations
                 name: "IX_ChatRooms_ChatRoomTypeId",
                 table: "ChatRooms",
                 column: "ChatRoomTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CreatorContentGenres_CreatorProfileId",
+                table: "CreatorContentGenres",
+                column: "CreatorProfileId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CreatorReviews_ReviewerId",
+                table: "CreatorReviews",
+                column: "ReviewerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EventCategories_CreatorId",
@@ -988,6 +1128,11 @@ namespace Persistence.Migrations
                 name: "IX_ScheduledEventAttendees_EventId",
                 table: "ScheduledEventAttendees",
                 column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScheduledEventAttendees_ScheduledEventId",
+                table: "ScheduledEventAttendees",
+                column: "ScheduledEventId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ScheduledEventAttendees_TicketId",
@@ -1101,6 +1246,12 @@ namespace Persistence.Migrations
                 name: "BarLikes");
 
             migrationBuilder.DropTable(
+                name: "CreatorContentGenres");
+
+            migrationBuilder.DropTable(
+                name: "CreatorReviews");
+
+            migrationBuilder.DropTable(
                 name: "EventContributors");
 
             migrationBuilder.DropTable(
@@ -1114,6 +1265,9 @@ namespace Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "ScheduledEventComments");
+
+            migrationBuilder.DropTable(
+                name: "Socials");
 
             migrationBuilder.DropTable(
                 name: "UserAddresses");
@@ -1147,6 +1301,12 @@ namespace Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserTokens");
+
+            migrationBuilder.DropTable(
+                name: "ContentGenres");
+
+            migrationBuilder.DropTable(
+                name: "CreatorProfiles");
 
             migrationBuilder.DropTable(
                 name: "Challenges");

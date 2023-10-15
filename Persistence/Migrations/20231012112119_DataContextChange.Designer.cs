@@ -12,8 +12,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230918000819_AttendeesEvent")]
-    partial class AttendeesEvent
+    [Migration("20231012112119_DataContextChange")]
+    partial class DataContextChange
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -291,6 +291,125 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ChatRoomTypes");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ContentGenres", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Value")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ContentGenres");
+                });
+
+            modelBuilder.Entity("Domain.Entities.CreatorContentGenres", b =>
+                {
+                    b.Property<int>("ContentGenreId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("CreatorProfileId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ContentGenreId", "CreatorProfileId")
+                        .HasName("PK_CREATOR_CONTENT_GENRE_ID");
+
+                    b.HasIndex("CreatorProfileId");
+
+                    b.ToTable("CreatorContentGenres");
+                });
+
+            modelBuilder.Entity("Domain.Entities.CreatorProfiles", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Collaborations")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("LogoUrl")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PastExperiences")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StandOut")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("UserId")
+                        .HasName("PK_CREATOR_PROFILE_USER_ID");
+
+                    b.ToTable("CreatorsProfiles");
+                });
+
+            modelBuilder.Entity("Domain.Entities.CreatorReviews", b =>
+                {
+                    b.Property<Guid>("RevieweeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ReviewerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Review")
+                        .HasColumnType("text");
+
+                    b.HasKey("RevieweeId", "ReviewerId")
+                        .HasName("PK_USER_CREATOR_REVIEW");
+
+                    b.HasIndex("ReviewerId");
+
+                    b.ToTable("CreatorReviews");
                 });
 
             modelBuilder.Entity("Domain.Entities.Event", b =>
@@ -765,6 +884,41 @@ namespace Persistence.Migrations
                     b.HasIndex("EventId");
 
                     b.ToTable("ScheduledEvents");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Socials", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("SocialType")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("UserId", "SocialType")
+                        .HasName("PK_USER_SOCIAL_TYPE_ID");
+
+                    b.ToTable("Socials");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -1247,6 +1401,60 @@ namespace Persistence.Migrations
                     b.Navigation("ChatRoomType");
                 });
 
+            modelBuilder.Entity("Domain.Entities.CreatorContentGenres", b =>
+                {
+                    b.HasOne("Domain.Entities.ContentGenres", "Genre")
+                        .WithMany("GenredCreators")
+                        .HasForeignKey("ContentGenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_CREATOR_CONTENT_GENRE_ID");
+
+                    b.HasOne("Domain.Entities.CreatorProfiles", "Creator")
+                        .WithMany("CreatorContentGenres")
+                        .HasForeignKey("CreatorProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_CREATOR_PROFILE_GENRE_ID");
+
+                    b.Navigation("Creator");
+
+                    b.Navigation("Genre");
+                });
+
+            modelBuilder.Entity("Domain.Entities.CreatorProfiles", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "Creator")
+                        .WithOne("CreatorProfile")
+                        .HasForeignKey("Domain.Entities.CreatorProfiles", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_USER_CREATOR_PROFILE_ID");
+
+                    b.Navigation("Creator");
+                });
+
+            modelBuilder.Entity("Domain.Entities.CreatorReviews", b =>
+                {
+                    b.HasOne("Domain.Entities.CreatorProfiles", "Reviewee")
+                        .WithMany("CreatorReviews")
+                        .HasForeignKey("RevieweeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_REVIEWEE_ID");
+
+                    b.HasOne("Domain.Entities.User", "Reviewer")
+                        .WithMany("ReviewedCreators")
+                        .HasForeignKey("ReviewerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_USER_CREATOR_REVIEWS_ID");
+
+                    b.Navigation("Reviewee");
+
+                    b.Navigation("Reviewer");
+                });
+
             modelBuilder.Entity("Domain.Entities.Event", b =>
                 {
                     b.HasOne("Domain.Entities.User", "Creator")
@@ -1470,6 +1678,18 @@ namespace Persistence.Migrations
                     b.Navigation("Event");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Socials", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany("UserSocials")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_USER_SOCIAL_ID");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Entities.UserAddress", b =>
                 {
                     b.HasOne("Domain.Entities.Address", "Adddress")
@@ -1690,6 +1910,18 @@ namespace Persistence.Migrations
                     b.Navigation("TypedChatRooms");
                 });
 
+            modelBuilder.Entity("Domain.Entities.ContentGenres", b =>
+                {
+                    b.Navigation("GenredCreators");
+                });
+
+            modelBuilder.Entity("Domain.Entities.CreatorProfiles", b =>
+                {
+                    b.Navigation("CreatorContentGenres");
+
+                    b.Navigation("CreatorReviews");
+                });
+
             modelBuilder.Entity("Domain.Entities.Event", b =>
                 {
                     b.Navigation("Attendees");
@@ -1764,6 +1996,8 @@ namespace Persistence.Migrations
 
                     b.Navigation("CreatedEvents");
 
+                    b.Navigation("CreatorProfile");
+
                     b.Navigation("Followers");
 
                     b.Navigation("Followings");
@@ -1778,9 +2012,13 @@ namespace Persistence.Migrations
 
                     b.Navigation("RatedEvents");
 
+                    b.Navigation("ReviewedCreators");
+
                     b.Navigation("UserChatRooms");
 
                     b.Navigation("UserChats");
+
+                    b.Navigation("UserSocials");
                 });
 #pragma warning restore 612, 618
         }
