@@ -27,13 +27,13 @@ function EventListItem({ event }: Props) {
                 minHeight: 200,
                 borderRadius: '0.3em',
                 boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
-                backgroundColor: '#9c27b0'
+                backgroundColor: 'white'
             }}
             alignItems='flex-start'
         >
             <Card
                 sx={{
-                    backgroundColor: '#be29ec', 
+                    backgroundColor: 'white', 
                     borderRadius: '0.3em',
                     boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
                 }}
