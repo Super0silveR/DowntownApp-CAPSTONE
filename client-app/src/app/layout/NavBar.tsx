@@ -12,40 +12,18 @@ import { Whatshot } from '@mui/icons-material';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../stores/store';
 import AccountMenu from './menus/AccountMenu';
+import logo from '../../assets/logo-4c-white-transparency@print.png'; // Import your logo image
 
 const pages = ['Bars', 'Events', 'Errors'];
 
-/** 
- * React Component used as our Application NavBar.
- * Needs some rework.
- */
 function ResponsiveAppBar() {
-
     const { userStore: { user, logout } } = useStore();
 
     return (
-        <AppBar position="fixed">
+        <AppBar position="fixed" sx={{ background: 'black' }}>
             <Container maxWidth={false}>
                 <Toolbar sx={{ margin:'0' }} disableGutters>
-                    <Whatshot
-                        fontSize='large'
-                        sx={{ display: { xs: 'none', md: 'flex' }, mr: 2 }} />
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component={NavLink}
-                        to='/'
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'none', md: 'flex' },
-                            fontWeight: 700,
-                            letterSpacing: '.4rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
-                    >
-                        DOWNTOWN
-                    </Typography>
+                    <img src={logo} alt="Logo" style={{ width: '250px', height: '100px', marginRight: '10px' }} />
                     <Divider
                         orientation="vertical"
                         flexItem
