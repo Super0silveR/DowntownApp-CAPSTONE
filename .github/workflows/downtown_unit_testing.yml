@@ -20,8 +20,8 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore .\DowntownApp.sln
     - name: Build
-      run: dotnet build .\DowntownApp.sln --configuration Release
+      run: dotnet build .\DowntownApp.sln --no-restore --configuration Release
     - name: Test
-      run: dotnet test .\DowntownApp.sln --no-build --verbosity normal
+      run: dotnet test .\DowntownApp.sln --no-build --verbosity normal --configuration Release
