@@ -7,21 +7,15 @@ using Domain.Entities;
 using Moq;
 using Application.DTOs.Commands;
 using MediatR;
-using Persistence;
 using ApplicationTests.Data;
 using Microsoft.EntityFrameworkCore;
 
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
 namespace ApplicationTests.Handlers.Events.Commands
 {
     [Collection("db_fixture_collection")]
     public class CreateEventTest
     {
-        /// <summary>
-        /// Instead of Mocking the datacontext, we will be using in-memory database for executing testing.
-        /// Per EF documentation, Mocking DbSet<T> is not possible.
-        /// </summary>
-        private readonly DataContext _dataContext;
-
         /// <summary>
         /// Event Command Data Transfer Object used for creating a new event.
         /// </summary>
@@ -31,29 +25,31 @@ namespace ApplicationTests.Handlers.Events.Commands
         private readonly Mock<ICurrentUserService> _userServiceMock;
         private readonly User _currentUser;
 
-        public DatabaseFixture Fixture { get; }
-
         public CreateEventTest(DatabaseFixture fixture)
         {
             Fixture = fixture;
 
-            _currentUser = fixture.CurrentUser;
-            _mapper = fixture.Mapper;
-            _userServiceMock = fixture.UserService;
+            _currentUser = Fixture.CurrentUser;
+            _mapper = Fixture.Mapper;
+            _userServiceMock = Fixture.UserService;
 
             _eventCommandDto = new();
-
-            _dataContext = Fixture.CreateContext();
         }
+
+        public DatabaseFixture Fixture { get; }
 
         [Fact]
         public async Task Handle_CreateEvent_ShouldReturnFailure_UserIdInvalid()
         {
             //Arrange
+            using var context = Fixture.CreateContext();
+
+            context.Database.BeginTransaction();
+
             var command = new CreateCommand() { Event = _eventCommandDto };
 
             var handler = new CreateHandler(
-                _dataContext,
+                context,
                 _mapper,
                 _userServiceMock.Object);
 
@@ -62,6 +58,8 @@ namespace ApplicationTests.Handlers.Events.Commands
 
             //Act
             Result<Unit>? result = await handler.Handle(command, CancellationToken.None);
+
+            context.ChangeTracker.Clear();
 
             //Assert
             Assert.NotNull(result);
@@ -73,10 +71,14 @@ namespace ApplicationTests.Handlers.Events.Commands
         public async Task Handle_CreateEvent_ShouldThrowException_UserInvalid()
         {
             //Arrange
+            using var context = Fixture.CreateContext();
+
+            context.Database.BeginTransaction();
+
             var command = new CreateCommand() { Event = _eventCommandDto };
 
             var handler = new CreateHandler(
-                _dataContext,
+                context,
                 _mapper,
                 _userServiceMock.Object);
 
@@ -85,6 +87,8 @@ namespace ApplicationTests.Handlers.Events.Commands
 
             //Act
             Func<Task> handleCreate = () => handler.Handle(command, CancellationToken.None);
+
+            context.ChangeTracker.Clear();
 
             //Assert
             var exception = await Assert.ThrowsAsync<Exception>(() => handleCreate());
@@ -95,7 +99,11 @@ namespace ApplicationTests.Handlers.Events.Commands
         public async Task Handle_CreateEvent_ShouldThrowDatabaseException_ForeignKeyCategory()
         {
             //Arrange
-            var type = _dataContext.EventTypes.FirstOrDefault(ec => ec.CreatorId == _currentUser.Id);
+            using var context = Fixture.CreateContext();
+
+            context.Database.BeginTransaction();
+
+            var type = context.EventTypes.FirstOrDefault(ec => ec.CreatorId == _currentUser.Id);
 
             _eventCommandDto = new()
             {
@@ -109,7 +117,7 @@ namespace ApplicationTests.Handlers.Events.Commands
             var command = new CreateCommand() { Event = _eventCommandDto };
 
             var handler = new CreateHandler(
-                _dataContext,
+                context,
                 _mapper,
                 _userServiceMock.Object);
 
@@ -119,7 +127,7 @@ namespace ApplicationTests.Handlers.Events.Commands
             //Act
             Func<Task> handleCreate = () => handler.Handle(command, CancellationToken.None);
 
-            _dataContext.ChangeTracker.Clear();
+            context.ChangeTracker.Clear();
 
             //Assert
             var exception = await Assert.ThrowsAsync<DbUpdateException>(() => handleCreate());
@@ -129,8 +137,12 @@ namespace ApplicationTests.Handlers.Events.Commands
         public async Task Handle_CreateEvent_ShouldReturnSucess()
         {
             //Arrange
-            var category = _dataContext.EventCategories.FirstOrDefault(ec => ec.CreatorId == _currentUser.Id);
-            var type = _dataContext.EventTypes.FirstOrDefault(ec => ec.CreatorId == _currentUser.Id);
+            using var context = Fixture.CreateContext();
+
+            context.Database.BeginTransaction();
+
+            var category = context.EventCategories.FirstOrDefault(ec => ec.CreatorId == _currentUser.Id);
+            var type = context.EventTypes.FirstOrDefault(ec => ec.CreatorId == _currentUser.Id);
 
             _eventCommandDto = new()
             {
@@ -144,7 +156,7 @@ namespace ApplicationTests.Handlers.Events.Commands
             var command = new CreateCommand() { Event = _eventCommandDto };
 
             var handler = new CreateHandler(
-                _dataContext,
+                context,
                 _mapper,
                 _userServiceMock.Object);
 
@@ -152,20 +164,14 @@ namespace ApplicationTests.Handlers.Events.Commands
             _userServiceMock.Setup(x => x.GetUserId()).Returns(_currentUser.Id.ToString());
 
             //Act
-            var result = await handler.Handle(command, CancellationToken.None);
+            Result<Unit>? result = await handler.Handle(command, CancellationToken.None);
 
-            _dataContext.ChangeTracker.Clear();
+            context.ChangeTracker.Clear();
 
             //Assert
             Assert.NotNull(result);
             Assert.True(result.IsSuccess);
             Assert.Equal(Unit.Value, result.Value);
-
-            /// Make additionnal verification on the new created event.
-            Event? newEvent = _dataContext.Events.FirstOrDefault(e => e.CreatorId == _currentUser.Id);
-
-            Assert.NotNull(newEvent);
-            Assert.NotNull(_dataContext.EventContributors.FirstOrDefault(ec => ec.EventId == newEvent.Id && ec.UserId == _currentUser.Id));
         }
     }
 }

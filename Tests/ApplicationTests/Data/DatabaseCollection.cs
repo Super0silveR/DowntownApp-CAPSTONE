@@ -5,7 +5,7 @@
     /// to be the place to apply [CollectionDefinition] and all the ICollectionFixture<> interfaces.
     /// </summary>
     [CollectionDefinition("db_fixture_collection")]
-    public class DatabaseCollection : ICollectionFixture<DatabaseFixture>
+    public class WriteDatabaseCollection : ICollectionFixture<DatabaseFixture>
     {
     }
 }
