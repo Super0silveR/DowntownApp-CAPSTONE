@@ -5,12 +5,13 @@ import { useStore } from '../../app/stores/store';
 import LoginForm from '../users/LoginForm';
 import RegisterForm from '../users/RegisterForm';
 
-import logo from '../../assets/logo.png'; 
-import partyImage1HD from '../../assets/party1.jpg'; 
+import logo from '../../assets/logo.png';
+import partyImage1HD from '../../assets/party1.jpg';
 
 function HomePage() {
   const { modalStore, userStore } = useStore();
 
+ 
   return (
     <div
       style={{
@@ -21,17 +22,31 @@ function HomePage() {
         flexDirection: 'column',
         alignItems: 'center',
         overflow: 'hidden',
-        color: 'white', 
+        color: 'white',
       }}
     >
       <img
         src={logo}
         alt="Logo"
         style={{
-          width: '250px',
+          width: '400px',
           marginBottom: '2em',
         }}
       />
+      <div
+        style={{
+          fontSize: '2rem',
+          color: '#e91e63',
+          fontWeight: 'bold',
+          textAlign: 'center',
+          marginTop: '1em', 
+        }}
+      >
+        Stop swiping, start experiencing
+        <span role="img" aria-label="sparkles" style={{ marginLeft: '0.5rem' }}>
+    ✨
+  </span>
+      </div>
       <Container
         sx={{
           position: 'relative',
