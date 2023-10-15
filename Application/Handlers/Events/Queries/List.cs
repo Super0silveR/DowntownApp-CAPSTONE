@@ -42,6 +42,7 @@ namespace Application.Handlers.Events.Queries
             public async Task<Result<PagedList<EventDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 Guard.Against.Null(_context.Events, nameof(_context.Events));
+                Guard.Against.NullOrEmpty(_currentUserService.GetUserId(), nameof(_currentUserService));  
 
                 var eventDtoQuery = _context.Events
                     .Where(e => e.Date >= request.Params.StartDate)
@@ -60,7 +61,7 @@ namespace Application.Handlers.Events.Queries
 
                 if (request.Params.IsHosting && !request.Params.IsGoing)
                 {
-                    eventDtoQuery = eventDtoQuery.Where(edto => edto.CreatorUserName == _currentUserService.GetUserName());
+                    eventDtoQuery = eventDtoQuery.Where(edto => edto.CreatorId == Guid.Parse(_currentUserService.GetUserId()!));
                 }
 
                 return Result<PagedList<EventDto>>.Success(
