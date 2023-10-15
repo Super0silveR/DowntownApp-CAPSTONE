@@ -22,6 +22,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build DowntownApp.sln --no-restore
+      run: dotnet build .\DowntownApp.sln --configuration Release
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test .\DowntownApp.sln --no-build --verbosity normal
