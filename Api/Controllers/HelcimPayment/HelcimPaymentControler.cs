@@ -1,4 +1,5 @@
 ﻿using Api.Controllers.Base;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 
@@ -12,7 +13,7 @@ namespace Api.Controllers
         {
             _httpClientFactory = httpClientFactory;
         }
-
+        [AllowAnonymous]
         [HttpPost("getHelcimTokens")]
         public async Task<IActionResult> GetHelcimTokens()
         {
@@ -44,13 +45,13 @@ namespace Api.Controllers
 
                 // Send the POST request to the Helcim API
                 var response = await httpClient.PostAsync(apiUrl, requestContent);
-                
+
 
                 // Check if the request was successful
                 if (response.IsSuccessStatusCode)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine("############################### - - - "+responseContent);
+                    Console.WriteLine("############################### - - - " + responseContent);
                     return Ok(responseContent);
                 }
                 else
@@ -63,7 +64,7 @@ namespace Api.Controllers
             {
                 // Handle any exceptions that may occur during the request
                 Console.WriteLine($"################################ - - - Error: {ex}");
-                return BadRequest(ex.Message);
+                return Unauthorized();
             }
         }
     }
