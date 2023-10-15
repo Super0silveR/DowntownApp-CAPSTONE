@@ -9,6 +9,7 @@ using Domain.Enums;
 using Domain.Events.Events;
 using FluentValidation;
 using MediatR;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Application.Handlers.Events.Commands
 {
@@ -20,17 +21,6 @@ namespace Application.Handlers.Events.Commands
         public class Command : IRequest<Result<Unit>?>
         {
             public EventCommandDto Event { get; set; } = new EventCommandDto();
-        }
-
-        /// <summary>
-        /// Validator class used for synchronous validation during the process pipeline.
-        /// </summary>
-        public class Validator : AbstractValidator<Command>
-        {
-            public Validator()
-            {
-                RuleFor(x => x.Event).SetValidator(new EventCommandDtoValidator());
-            }
         }
 
         /// <summary>
@@ -90,6 +80,18 @@ namespace Application.Handlers.Events.Commands
                 if (!result)
                     return Result<Unit>.Failure("Failed to create a new Event.");
                 return Result<Unit>.Success(Unit.Value);
+            }
+        }
+
+        /// <summary>
+        /// Validator class used for synchronous validation during the process pipeline.
+        /// </summary>
+        [ExcludeFromCodeCoverage]
+        public class Validator : AbstractValidator<Command>
+        {
+            public Validator()
+            {
+                RuleFor(x => x.Event).SetValidator(new EventCommandDtoValidator());
             }
         }
     }

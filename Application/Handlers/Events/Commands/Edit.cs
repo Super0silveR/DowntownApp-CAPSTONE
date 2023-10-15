@@ -6,6 +6,7 @@ using Ardalis.GuardClauses;
 using AutoMapper;
 using FluentValidation;
 using MediatR;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Application.Handlers.Events.Commands
 {
@@ -47,7 +48,7 @@ namespace Application.Handlers.Events.Commands
                 var @event = await _dataContext.Events.FindAsync(new object?[] { request.Id },
                                                                  cancellationToken: cancellationToken);
 
-                if (@event is null) return null;
+                if (@event is null) return Result<Unit>.Failure("This event does not exist.");
 
                 _mapper.Map(request.Event, @event);
 
@@ -62,6 +63,7 @@ namespace Application.Handlers.Events.Commands
         /// <summary>
         /// Validator class used for synchronous validation during the process pipeline.
         /// </summary>
+        [ExcludeFromCodeCoverage]
         public class Validator : AbstractValidator<Command>
         {
             public Validator()

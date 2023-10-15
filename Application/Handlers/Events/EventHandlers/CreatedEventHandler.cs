@@ -1,9 +1,14 @@
 ﻿using Domain.Events.Events;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Application.Handlers.Events.EventHandlers
 {
+    /// <summary>
+    /// This is really not used right now, but was a proof of concept on domain event notification. 
+    /// </summary>
+    [ExcludeFromCodeCoverage]
     public class CreatedEventHandler : INotificationHandler<CreatedEvent>
     {
         private readonly ILogger<CreatedEventHandler> _logger;
