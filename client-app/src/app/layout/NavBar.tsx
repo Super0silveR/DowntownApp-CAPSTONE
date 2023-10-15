@@ -23,7 +23,9 @@ function ResponsiveAppBar() {
         <AppBar position="fixed" sx={{ background: 'black' }}>
             <Container maxWidth={false}>
                 <Toolbar sx={{ margin:'0' }} disableGutters>
-                    <img src={logo} alt="Logo" style={{ width: '250px', height: '100px', marginRight: '10px' }} />
+                    <NavLink to="/"> {}
+                        <img src={logo} alt="Logo" style={{ width: '250px', height: '100px', marginRight: '10px' }} />
+                    </NavLink>
                     <Divider
                         orientation="vertical"
                         flexItem
