@@ -13,10 +13,10 @@ namespace Api.Controllers
         public TicketsController() { }
 
 
-        [HttpGet] //api/eventtickets
-        public async Task<IActionResult> GetTicket([FromQuery]TicketParams @params)
-        {
-            return HandleResult(await Mediator.Send(new List.Query))
-        }
-    }
+        //[HttpGet] //api/eventtickets
+        //public async Task<IActionResult> GetTicket([FromQuery]TicketParams @params)
+        //{
+           // return HandleResult(await Mediator.Send("temp"));
+        //}
+     }
 }

@@ -11,12 +11,12 @@ namespace Application.Handlers.Tickets.Queries
 {
     public class List
     {
-        public class List
-        {
+        
+        
             public class Query : IRequest<List<EventTicketDto>>
             {
-                public 
+                //public 
             }
-        }
+        
     }
 }

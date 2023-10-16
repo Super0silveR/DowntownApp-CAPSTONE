@@ -33,13 +33,9 @@ namespace Application.Handlers.Tickets.Commands
                 _userService = userService;
             }
 
-        public async Task<Result<Unit>?> Handle(Command request, CancellationToken cancellationToken)
+            public Task<Result<Unit>?> Handle(Command request, CancellationToken cancellationToken)
             {
-                Guard.Against.Null(_context.EventTicket, nameof(_context.EventTicket));
-
-                var eventTicket = _mapper.Map<EventTicket>(request.eventTicket);
-                _context.EventTicket.Add(eventTicket);
-                bool result = await _context.SaveChangesAsync(cancellationToken);
+                throw new NotImplementedException();
             }
         }
     }
