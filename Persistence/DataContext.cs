@@ -58,6 +58,7 @@ namespace Persistence
         public DbSet<EventAttendee> ScheduledEventAttendees => Set<EventAttendee>();
         public DbSet<EventChallenge> ScheduledEventChallenges => Set<EventChallenge>();
         public DbSet<EventComment> ScheduledEventComments => Set<EventComment>();
+        public DbSet<EventTicket> ScheduledEventTickets => Set<EventTicket>();
         public DbSet<Socials> Socials => Set<Socials>();
         public DbSet<UserAddress> UserAddresses => Set<UserAddress>();
         public DbSet<UserChat> UserChats => Set<UserChat>();

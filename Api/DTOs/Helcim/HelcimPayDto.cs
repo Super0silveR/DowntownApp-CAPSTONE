@@ -1,19 +1,20 @@
-﻿#nullable disable
+﻿
+using System.ComponentModel.DataAnnotations;
 
-using Domain.Common;
-
-namespace Domain.Entities
+namespace Api.DTOs.Helcim
 {
-    internal class HelcimPayBody : BaseAuditableEntity
+    public class HelcimPayDto
     {
         // Payment Type. Valid payment types are : 
         // purchase | preauth | verify
-        public string PaymentType { get; set; }
+        [Required]
+        public string? PaymentType { get; set; }
         // The amount of the transaction to be processed
         public int Amount { get; set; }
         // Currency abbreviation.
         // CAD | USD
-        public string Currency { get; set; }
+        [Required]
+        public string? Currency { get; set; }
         // This is the code of an existing customer in Helcim associated with this checkout
         public string? CustomerCode { get; set; }
         // This is the number of an existing invoice in Helcim associated with this checkout

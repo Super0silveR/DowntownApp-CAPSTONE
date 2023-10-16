@@ -1,21 +1,33 @@
 ﻿using Api.Controllers.Base;
+using Api.DTOs.Helcim;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 
 namespace Api.Controllers
 {
+    [AllowAnonymous]
     public class HelcimController : BaseApiController
     {
+        private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public HelcimController(IHttpClientFactory httpClientFactory)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="httpClientFactory"></param>
+        public HelcimController(IConfiguration configuration ,IHttpClientFactory httpClientFactory)
         {
+            _configuration = configuration;
             _httpClientFactory = httpClientFactory;
         }
-        [AllowAnonymous]
-        [HttpPost("getHelcimTokens")]
-        public async Task<IActionResult> GetHelcimTokens()
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> GetHelcimTokens(HelcimPayDto payDto)
         {
             Console.WriteLine("Trying to call");
             try
@@ -28,7 +40,7 @@ namespace Api.Controllers
 
                 // Set up the request headers
                 httpClient.DefaultRequestHeaders.Add("accept", "application/json");
-                httpClient.DefaultRequestHeaders.Add("api-token", "afDW%Xv8idT3G8w*w28A8x4ppphRA#TfPle.#6naPIuYDhS16zuj-@8O4FuVXCD4");
+                httpClient.DefaultRequestHeaders.Add("api-token", _configuration["Helcim:SecretToken"]);
 
                 // Create a JSON payload for the request body
                 var requestContent = new StringContent(
