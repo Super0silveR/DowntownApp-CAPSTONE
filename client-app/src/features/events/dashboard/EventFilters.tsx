@@ -59,7 +59,7 @@ export default observer(function EventFilters() {
             <ToggleButtonGroup
                 orientation="horizontal"
                 exclusive
-                onChange={() => handleToggleButtonsChange}
+                onChange={(_, value) => handleToggleButtonsChange(value)}
                 fullWidth
                 title='Use these options to filter the event listing.'
                 value={view}
@@ -102,7 +102,7 @@ export default observer(function EventFilters() {
                     <TripOrigin />
                     Distance (KM)
             </Typography>
-            {/** Todo the change handler for filtering. */}
+            {/** Todo the change handler for filtering the distance. */}
             <Slider
                 aria-label="Distance (KM)"
                 defaultValue={30}
