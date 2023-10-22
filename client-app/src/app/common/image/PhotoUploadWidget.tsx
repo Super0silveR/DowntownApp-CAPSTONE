@@ -13,7 +13,7 @@ interface Props {
 export default function PhotoUploadWidget({ uploading, uploadPhoto } : Props) {
 
     const [activeStep, setActiveStep] = useState(0);
-    const [files, setFiles] = useState<any>([]);
+    const [files, setFiles] = useState<object & {preview?: string}[]>([]);
     const [cropper, setCropper] = useState<Cropper>();
 
     const onCrop = () => {
@@ -47,7 +47,7 @@ export default function PhotoUploadWidget({ uploading, uploadPhoto } : Props) {
             component: (files && files.length > 0 &&
                 <PhotoCropperWidget 
                     setCropper={setCropper} 
-                    imagePreview={files[0].preview}
+                    imagePreview={files[0].preview!}
                 />
             )
         }
@@ -59,7 +59,7 @@ export default function PhotoUploadWidget({ uploading, uploadPhoto } : Props) {
      * */
     useEffect(() => {
         return () => {
-            files.forEach((file : any) => URL.revokeObjectURL(file.preview));
+            files.forEach((file : object & {preview?: string}) => URL.revokeObjectURL(file.preview!));
         }
     }, [files]);
 

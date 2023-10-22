@@ -7,7 +7,7 @@ import { User } from './user';
 type ColorCode = ValueOf<typeof COLOR_CODE>;
 
 /** Profile interface. */
-export interface Profile {
+export interface IProfile {
     bio?: string;
     colorCode: ColorCode;
     displayName?: string;
@@ -40,7 +40,7 @@ export interface ProfileDto {
 }
 
 /** Initializing the profile as `gray`. */
-export class Profile implements Profile {
+export class Profile implements IProfile {
     constructor(user: User) {
         this.userName = user.userName;
         this.displayName = user.displayName;
@@ -54,4 +54,13 @@ export class Profile implements Profile {
     isFollowing = false;
     isOpenForMessage = true;
     isPrivate = false;
+    bio?: string;
+    colorCode: ColorCode;
+    displayName?: string;
+    location?: string;
+    phoneNumber?: string;
+    photo?: string;
+    photos?: Photo[];
+    questions?: Question[];
+    userName?: string;
 }

@@ -37,7 +37,7 @@ function DateTimeInput(props: Props, dateProps: DatePickerProps<Dayjs>) {
                     {...props}
                     format='DD/MMMM/YYYY'
                     value={field.value ? dateValue : null}
-                    onChange={(value: any) => {
+                    onChange={(value) => {
                         helpers.setValue(value);
                     }} 
                     onOpen={() => helpers.setTouched(true)}            

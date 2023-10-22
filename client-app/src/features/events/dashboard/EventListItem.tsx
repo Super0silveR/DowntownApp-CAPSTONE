@@ -128,6 +128,6 @@ function EventListItem({ event }: Props) {
             </Card>
         </Grid>
     );
-};
+}
 
 export default observer(EventListItem);

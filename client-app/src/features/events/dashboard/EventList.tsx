@@ -39,6 +39,6 @@ function EventList() {
             ))}
         </>
     );
-};
+}
 
 export default observer(EventList);

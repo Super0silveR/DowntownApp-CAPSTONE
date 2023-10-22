@@ -97,10 +97,10 @@ export default class EventStore {
     setPaginationParams = (paginationParams: PaginationParams) => this.paginationParams = paginationParams;
 
     /** Set the current predicate parameters to keep track of filters. */
-    setPredicate = (predicate: String, value: String | Date) => {
+    setPredicate = (predicate: string, value: string | Date) => {
         /** Local helper method. */
         const resetPredicate = () => {
-            this.predicate.forEach((value, key) => {
+            this.predicate.forEach((_, key) => {
                 if (key !== 'startDate') this.predicate.delete(key);
             })
         }
@@ -127,8 +127,8 @@ export default class EventStore {
 
     /** Action that recomputes the rating of an event. [TODO ; issues with displaying the changes.] */
     setRating = (newValue: number) => {
-        const { value, count } = this.selectedEvent?.rating!;
-        var newAvg = (this.selectedEvent?.rating.value !== 0) ? (value + ((newValue - value) / (count + 1))) : newValue;
+        const { value, count } = this.selectedEvent?.rating ?? {value: 0, count: 0};
+        const newAvg = (this.selectedEvent?.rating.value !== 0) ? (value + ((newValue - value) / (count + 1))) : newValue;
         this.selectedEvent!.rating!.count = count + 1;
         this.selectedEvent!.rating!.value = Number.parseFloat(newAvg.toFixed(1));
     }
@@ -137,8 +137,8 @@ export default class EventStore {
     setCreatorPhoto = (photo: Photo) => {
         if (store.userStore.user) {
             const userName = store.userStore.user.userName;
-            this.eventRegistry.forEach((event, key) => {
-                let creator = event.contributors.find(c => {
+            this.eventRegistry.forEach((event) => {
+                const creator = event.contributors.find(c => {
                     return c.status.toUpperCase() === 'CREATOR' 
                         && c.user.userName === userName
                 })?.user;
@@ -161,6 +161,7 @@ export default class EventStore {
             });
             this.setPagination(result.pagination);
         } catch (e) {
+            console.log(e);
             throw e;
         } finally {
             this.setLoadingInitial(false);
@@ -183,6 +184,7 @@ export default class EventStore {
                 });
                 return event;
             } catch (e) {
+                console.log(e);
                 throw e;
             } finally {
                 this.setLoadingInitial(false);
@@ -227,6 +229,7 @@ export default class EventStore {
                 this.editMode = false;
             });
         } catch (e) {
+            console.log(e);
             throw e;
         } finally {
             this.setLoading(false);
@@ -242,6 +245,7 @@ export default class EventStore {
                 this.eventRegistry.delete(id);
             });
         } catch (e) {
+            console.log(e);
             throw e;
         } finally {
             this.setLoading(false);
@@ -268,7 +272,7 @@ export default class EventStore {
     /** Add an event to the registry. */
     private setEvent = (event: Event) => {
         event.date = new Date(event.date!);
-        event.creatorUserName ??= store.userStore.user?.userName!;
+        event.creatorUserName ??= store.userStore.user?.userName as string;
         this.eventRegistry.set(event.id, event);
     };
 }

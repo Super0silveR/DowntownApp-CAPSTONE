@@ -41,6 +41,7 @@ export default class UserStore {
             router.navigate('/events');
             store.modalStore.closeModal();
         } catch (e) {
+            console.log(e);
             throw e;
         }
     }
@@ -64,7 +65,8 @@ export default class UserStore {
             router.navigate('/events');
             store.modalStore.closeModal();
         } catch (e) {
-            throw e;
+            console.log(e);
+            throw e; 
         }
     }
 }
