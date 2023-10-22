@@ -15,7 +15,7 @@ import logo from '../../assets/logo-4c-white-transparency@print.png';
 const pages = ['Bars', 'Events', 'Errors'];
 
 function ResponsiveAppBar() {
-    const { userStore: { user, logout } } = useStore();
+    const { userStore: { user, logout, isLoggedIn } } = useStore();
 
     return (
         <AppBar position="fixed" sx={{ background: 'black' }}>
@@ -24,61 +24,66 @@ function ResponsiveAppBar() {
                     <NavLink to="/"> {}
                         <img src={logo} alt="Logo" style={{ width: '250px', height: '100px', marginRight: '10px' }} />
                     </NavLink>
-                    <Divider
-                        orientation="vertical"
-                        flexItem
-                        style={{
-                            marginTop: 10,
-                            marginRight: 10,
-                            marginBottom: 10,
-                            borderWidth: '.1rem'
-                        }}
-                    />
-                    <Box textAlign='center' sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        <Button 
-                            component={NavLink}
-                            to='/bars'
-                            color='inherit'
-                            sx={{
-                                my: 2,
-                                display: 'block',
-                                '&:hover': {
-                                    color: 'purple',
-                                }
+                    {isLoggedIn && 
+                    <>
+                        <Divider
+                            orientation="vertical"
+                            flexItem
+                            style={{
+                                marginTop: 22,
+                                marginRight: 10,
+                                marginBottom: 22,
+                                borderWidth: '.1rem',
+                                backgroundColor: 'white',
+                                opacity: 0.5
                             }}
-                        >
-                            {pages[0]}
-                        </Button>
-                        <Button 
-                            component={NavLink}
-                            to='/events'
-                            color='inherit'
-                            sx={{
-                                my: 2,
-                                display: 'block',
-                                '&:hover': {
-                                    color: 'purple',
-                                }
-                            }}
-                        >
-                            {pages[1]}
-                        </Button>
-                        <Button 
-                            component={NavLink}
-                            to='/errors'
-                            color='inherit'
-                            sx={{
-                                my: 2,
-                                display: 'block',
-                                '&:hover': {
-                                    color: 'purple',
-                                }
-                            }}
-                        >
-                            {pages[2]}
-                        </Button>
-                    </Box>
-                    <AccountMenu logout={logout} user={user} />
+                        />
+                        <Box textAlign='center' sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                            <Button 
+                                component={NavLink}
+                                to='/bars'
+                                color='inherit'
+                                sx={{
+                                    my: 2,
+                                    display: 'block',
+                                    '&:hover': {
+                                        color: 'purple',
+                                    }
+                                }}
+                            >
+                                {pages[0]}
+                            </Button>
+                            <Button 
+                                component={NavLink}
+                                to='/events'
+                                color='inherit'
+                                sx={{
+                                    my: 2,
+                                    display: 'block',
+                                    '&:hover': {
+                                        color: 'purple',
+                                    }
+                                }}
+                            >
+                                {pages[1]}
+                            </Button>
+                            <Button 
+                                component={NavLink}
+                                to='/errors'
+                                color='inherit'
+                                sx={{
+                                    my: 2,
+                                    display: 'block',
+                                    '&:hover': {
+                                        color: 'purple',
+                                    }
+                                }}
+                            >
+                                {pages[2]}
+                            </Button>
+                            <AccountMenu logout={logout} user={user} />
+                        </Box>
+                    </>}
                     <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
                             size="large"
