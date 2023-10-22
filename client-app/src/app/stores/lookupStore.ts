@@ -30,11 +30,12 @@ export default class LookupStore {
             eventCategories.forEach(category => this.setEventCategory(category));
             runInAction(() => {
                 /** Formatting the list fetched from the API into a select input options format. */
-                this.eventCategorySelectOptions = eventCategories.map((cat, i) => {
+                this.eventCategorySelectOptions = eventCategories.map((cat) => {
                     return { value: cat.id, text: cat.title };
                 });
             });
         } catch (e) {
+            console.log(e);
             throw e;
         } finally {
             this.setLoadingCommon(false);
@@ -49,11 +50,12 @@ export default class LookupStore {
             eventTypes.forEach(type => this.setEventType(type));
             runInAction(() => {
                 /** Formatting the list fetched from the API into a select input options format. */
-                this.eventTypeSelectOptions = eventTypes.map((type, i) => {
+                this.eventTypeSelectOptions = eventTypes.map((type) => {
                     return { value: type.id, text: type.title };
                 });
             });
         } catch (e) {
+            console.log(e);
             throw e;
         } finally {
             this.setLoadingCommon(false);

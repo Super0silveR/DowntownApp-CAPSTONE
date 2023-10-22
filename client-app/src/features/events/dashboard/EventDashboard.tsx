@@ -123,6 +123,6 @@ function EventDashboard() {
             </Grid>
         </Box>
     );
-};
+}
 
 export default observer(EventDashboard);

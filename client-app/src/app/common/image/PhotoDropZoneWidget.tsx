@@ -6,33 +6,33 @@ import { useDropzone } from 'react-dropzone'
 import theme from '../../theme';
 
 interface Props {
-    setFiles: (files: any) => void;
+    setFiles: (files: object[]) => void;
 }
 
 export default function PhotoDropZoneWidget({ setFiles } : Props) {
-    const dzStyle = {
+    const dzStyle = useMemo(() => ({
         flex: 1,
         display: 'flex',
-        flexDirection: 'column' as 'column',
+        flexDirection: 'column',
         backgroundColor: theme.palette.text.disabled + '20',
         border: '3px dashed ' + theme.palette.primary.light + '80',
         borderColor: theme.palette.primary.light + '80',
         borderRadius: '5px',
         color: theme.palette.text.secondary,
         height: 150,
-        justifyContent: 'center' as 'center',
+        justifyContent: 'center',
         paddingTop: '20px',
-        textAlign: 'center' as 'center'
-    };
+        textAlign: 'center'
+    } as object), []);
     
-    const activeStyle = {
+    const activeStyle = useMemo(() => ({
         borderColor: theme.palette.primary.main,
         backgroundColor: theme.palette.common.white
-    };
+    }), [])
 
-    const onDrop = useCallback((acceptedFiles: any) => {
-        setFiles(acceptedFiles.map((file: any) => Object.assign(file, {
-            preview: URL.createObjectURL(file)
+    const onDrop = useCallback((acceptedFiles: object[]) => {
+        setFiles(acceptedFiles.map((file: object) => Object.assign(file, {
+            preview: URL.createObjectURL(file as Blob)
         })));
     }, [setFiles]);
 

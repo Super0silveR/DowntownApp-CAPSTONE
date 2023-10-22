@@ -109,6 +109,6 @@ function ProfileHeader({ profile }: Props) {
             </Grid>
         </Paper>  
     );
-};
+}
 
 export default observer(ProfileHeader);

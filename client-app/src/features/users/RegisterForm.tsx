@@ -102,7 +102,7 @@ function RegisterForm() {
             minWidth={450}
         />
     );
-};
+}
 
 /** Every time we need to use any `store` object, we need the observable transformation. */
 export default observer(RegisterForm);

@@ -6,7 +6,7 @@ interface Props {
     content?: string;
 }
 
-export default function LoadingComponent({ inverted = true, content = 'Loading...' } : Props) {
+export default function LoadingComponent({ content = 'Loading...' } : Props) {
     return (
         <Backdrop
             sx={{

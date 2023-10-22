@@ -25,6 +25,6 @@ function ModalContainer() {
         </Modal>
         </>
     );
-};
+}
 
 export default observer(ModalContainer);
