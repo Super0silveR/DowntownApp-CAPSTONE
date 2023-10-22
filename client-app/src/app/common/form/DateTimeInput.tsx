@@ -2,7 +2,6 @@ import { FormControl, FormHelperText } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { DatePicker, DatePickerProps } from '@mui/x-date-pickers/DatePicker'
 import { useField } from 'formik';
-import React from 'react';
 import FormValidationError from './FormValidationError';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';

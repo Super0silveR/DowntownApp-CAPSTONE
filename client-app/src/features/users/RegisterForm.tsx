@@ -77,7 +77,7 @@ function RegisterForm() {
                                 />
                                 <ErrorMessage 
                                     name='error'
-                                    render={() => <ValidationErrors errors={[errors.error]} />}
+                                    render={() => <ValidationErrors errors={[errors.error as string]} />}
                                 />
                                 <Divider sx={{width:'50%'}} />
                                 <Stack direction='row' spacing={2}>
