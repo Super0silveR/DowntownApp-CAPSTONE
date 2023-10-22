@@ -21,7 +21,7 @@ const sleep = (delay: number) => {
 }
 
 /** Setting up the default url to our API. */
-axios.defaults.baseURL = 'https://localhost:7246/api';
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 /**
  * Setting up an Axios interceptor for adding the JWT token to the
@@ -41,7 +41,7 @@ axios.interceptors.request.use(config => {
  * and user experience.
  */
 axios.interceptors.response.use(async response => {
-    await sleep(1000); // Temporary.
+    if (import.meta.env.DEV) await sleep(1000);
 
     const pagination = response.headers['pagination'];
 
