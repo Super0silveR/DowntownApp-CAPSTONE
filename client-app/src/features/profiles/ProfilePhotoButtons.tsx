@@ -1,7 +1,7 @@
 import { Star, StarBorderOutlined, DeleteForever, Fullscreen } from '@mui/icons-material';
 import { Grid, Stack, IconButton, CircularProgress } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import React, { SyntheticEvent, useState } from 'react';
+import { SyntheticEvent, useState } from 'react';
 import { Photo } from '../../app/models/photo';
 
 interface Props {

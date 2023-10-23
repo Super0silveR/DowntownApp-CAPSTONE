@@ -2,7 +2,7 @@ import { Favorite, FavoriteBorder } from '@mui/icons-material';
 import { Box, Grid, Paper, Rating, Typography } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import { observer } from 'mobx-react-lite';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Rating as EventRating } from '../../../app/models/event';
 import { useStore } from '../../../app/stores/store';
 
@@ -27,7 +27,7 @@ function EventRatings({ rating }: Props) {
 
     const [voted, setVoted] = useState(true);
 
-    function handleRatingChange(e: React.SyntheticEvent<Element, Event>, value: number | null) {
+    function handleRatingChange(value: number | null) {
         setRating(value ?? 0);
         setVoted(false);
     }
@@ -81,7 +81,7 @@ function EventRatings({ rating }: Props) {
                                 precision={0.1}
                                 icon={<Favorite fontSize="inherit" />}
                                 emptyIcon={<FavoriteBorder fontSize="inherit" />}
-                                onChange={(e, value) => handleRatingChange(e, value)}
+                                onChange={(_, value) => handleRatingChange(value)}
                             />
                             <Typography
                                 className={"MuiTypography--subheading"}

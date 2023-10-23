@@ -1,6 +1,5 @@
 import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material';
 import { useField } from 'formik';
-import React from 'react';
 import FormValidationError from './FormValidationError';
 
 /** 
