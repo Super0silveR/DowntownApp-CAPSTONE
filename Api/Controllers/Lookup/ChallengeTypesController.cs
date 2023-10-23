@@ -4,12 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Application.Handlers.ChallengeTypes.Queries;
 using Application.Handlers.ChallengeTypes.Commands;
-using Application.DTOs;
 using Application.DTOs.Commands;
 
 namespace Api.Controllers.Lookup
 {
-    [Authorize(Policies.CREATOR)]
+    [Authorize]
     [Route("api/[controller]")]
     public class ChallengeTypesController : BaseApiController
     {
