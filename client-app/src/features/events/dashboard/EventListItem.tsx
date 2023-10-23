@@ -12,12 +12,12 @@ import {
     IconButton,
     Tooltip,
     Typography,
-    Rating, // Add the Rating component
-    Dialog, // Add the Dialog component
-    DialogActions, // Add the DialogActions component
-    DialogContent, // Add the DialogContent component
-    DialogTitle, // Add the DialogTitle component
-    Button, // Add the Button component
+    Rating,
+    Dialog, 
+    DialogActions, 
+    DialogContent, 
+    DialogTitle, 
+    Button, 
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Event } from '../../../app/models/event';
@@ -46,19 +46,17 @@ function EventListItem({ event }: Props) {
     };
 
     const handleRateEvent = () => {
-        // Implement the logic to submit the user's rating to the server or store it locally.
-        // You can use the 'userRating' state for this.
         console.log(`Rated event "${event.title}" with ${userRating} stars.`);
         setRatingDialogOpen(false);
     };
 
     return (
-        <Grid item xs={12} key={event.id} sx={{ /* ... styles ... */ }}>
-            <Card sx={{ /* ... styles ... */ }}>
+        <Grid item xs={12} key={event.id} sx={{  }}>
+            <Card sx={{  }}>
                 <CardHeader
                     avatar={
                         <Tooltip title={host?.displayName} arrow>
-                            <Avatar src={host?.photo || '/assets/user.png'} sx={{ /* ... styles ... */ }} />
+                            <Avatar src={host?.photo || '/assets/user.png'} sx={{  }} />
                         </Tooltip>
                     }
                     action={<EventOptionsMenu event={event} />}
@@ -84,7 +82,7 @@ function EventListItem({ event }: Props) {
                 <Divider />
                 <CardContent>
                     <AvatarGroup max={4} sx={{ justifyContent: 'right', m: -1 }}>
-                        {/* ... attendees avatars ... */}
+                        {}
                     </AvatarGroup>
                 </CardContent>
                 <Divider />
@@ -107,7 +105,7 @@ function EventListItem({ event }: Props) {
                 </CardActions>
             </Card>
 
-            {/* Rating Dialog */}
+            {}
             <Dialog open={ratingDialogOpen} onClose={handleCloseRatingDialog}>
                 <DialogTitle>Rate "{event.title}"</DialogTitle>
                 <DialogContent>
