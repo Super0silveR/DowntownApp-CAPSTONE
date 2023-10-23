@@ -63,6 +63,20 @@ namespace Api.Controllers
             return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
         }
 
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> CreateScheduledEvents()
+        {
+            return HandleResult(await Mediator.Send(new Schedule.Command()));
+        }
+
+        [Authorize]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> CancelEvent(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new Cancel.Command { Id = id }));   
+        }
+
         #endregion
     }
 }
