@@ -1,7 +1,6 @@
 import { Paper, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import { observer } from 'mobx-react-lite';
-import React from 'react';
 import { useStore } from '../../app/stores/store';
 
 function ServerError() {

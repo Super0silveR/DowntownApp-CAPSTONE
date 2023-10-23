@@ -6,8 +6,8 @@ import EventDashboard from "../../features/events/dashboard/EventDashboard";
 import EventDetails from "../../features/events/details/EventDetails";
 import EventForm from "../../features/events/form/EventForm";
 import ProfilePage from "../../features/profiles/ProfilePage";
-import LoginForm from "../../features/users/LoginForm";
 import App from "../layout/App";
+import RequireAuthentication from "./RequireAuthentication";
 
 /** Tree-like structure to represents the different routes in our Application. */
 export const routes: RouteObject[] = [
@@ -15,23 +15,34 @@ export const routes: RouteObject[] = [
         path: '/',
         element: <App />,
         children: [
-            /** Event related routes. */
-            {path: 'events', element: <EventDashboard />},
-            {path: 'events/:id', element: <EventDetails />},
-            {path: 'createEvent', element: <EventForm key='create' />},
-            {path: 'manageEvent/:id', element: <EventForm key='manage' />},
-
             /** Error related routes. */
-            {path: 'errors', element: <TestErrors key='errors' />},
             {path: 'not-found', element: <NotFound key='errors' />},
             {path: 'server-error', element: <ServerError key='errors' />},
 
-            /** User related routes. */
-            {path: 'login', element: <LoginForm key='login-form' />},
-            {path: 'profiles/:userName', element: <ProfilePage />},
-
             /** Any routes that doesn't match our own routes. */
-            {path: '*', element: <Navigate replace to='/not-found' key='not-foud' />}
+            {path: '*', element: <Navigate replace to='/not-found' key='not-foud' />},
+
+            /** Creating a custom routing element to `protect` some sections of our Applicatio
+             *  for authenticated users. (Private Routes)
+             * 
+             *  Hiding our valuable features behind a curtain.
+             */
+            {element: 
+                <RequireAuthentication />, 
+                children: [
+                    /** Event related routes. */
+                    {path: 'events', element: <EventDashboard />},
+                    {path: 'events/:id', element: <EventDetails />},
+                    {path: 'createEvent', element: <EventForm key='create' />},
+                    {path: 'manageEvent/:id', element: <EventForm key='manage' />},
+
+                    /** User related routes. */
+                    {path: 'profiles/:userName', element: <ProfilePage />},
+
+                    /** Errors related routes */
+                    {path: 'errors', element: <TestErrors key='errors' />}
+
+            ]}
         ]
     }
 ];

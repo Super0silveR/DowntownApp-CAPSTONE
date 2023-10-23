@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { Button, ButtonGroup, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import ValidationErrors from './ValidationErrors';
 
 export default function TestErrors() {
-    const baseUrl = 'https://localhost:7246/api/';
+    const baseUrl = import.meta.env.VITE_API_URL;
     const [errors, setErrors] = useState(null);
 
     function handleNotFound() {

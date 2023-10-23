@@ -2,7 +2,7 @@ import { CropOriginal, EmojiEvents, People, PeopleOutline, PermIdentity } from '
 import { TabContext, TabList } from '@mui/lab';
 import { Box, Tab } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Profile } from '../../app/models/profile';
 import ProfileEvents from './ProfileEvents';
 import ProfileGeneral from './ProfileGeneral';
@@ -19,7 +19,7 @@ function ProfileContent({ profile }: Props) {
     const [value, setValue] = useState('0');
     const {profileStore} = useStore();
 
-    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    const handleChange = (newValue: string) => {
         profileStore.setActiveTab(Number.parseInt(newValue));
         setValue(newValue);
     };
@@ -37,7 +37,7 @@ function ProfileContent({ profile }: Props) {
             >
                 <TabList
                     sx={{p: 1, pt:0, mb:-1}}
-                    onChange={(e, data) => handleChange(e, data)}
+                    onChange={(_, data) => handleChange(data)}
                     aria-label="Profile Sections"
                     selectionFollowsFocus
 

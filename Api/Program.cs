@@ -13,8 +13,7 @@ ConfigurationManager _config = builder.Configuration;
 // Add services to the container.
 builder.Services.AddControllers(options =>
 {
-    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser()
-                                                 .Build();
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
     options.Filters.Add(new AuthorizeFilter(policy));
 });
 
@@ -33,11 +32,19 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowSpecificOrigins");
 app.UseHttpsRedirection();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Using our minified/bundled client application that is located in wwwroot.
+// Our Kestrel Server that run the Api (i.e. Backend) will also host the client.
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+// Controllers and endpoints mapping.
 app.MapControllers();
 app.MapHub<ChatHub>("/hubs/chats");
+app.MapFallbackToController("Index", "Fallback");
 
 #region Context and Seed Data
 
