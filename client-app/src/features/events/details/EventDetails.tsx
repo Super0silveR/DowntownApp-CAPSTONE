@@ -170,6 +170,6 @@ function EventDetails() {
             </Card> */}
         </>
     );
-};
+}
 
 export default observer(EventDetails);

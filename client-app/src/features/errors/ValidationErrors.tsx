@@ -1,8 +1,7 @@
 import { Alert, Grid } from '@mui/material';
-import React from 'react';
 
 interface Props {
-    errors: any;
+    errors: Array<string>;
 }
 
 export default function ValidationErrors({ errors }: Props) {
@@ -17,7 +16,7 @@ export default function ValidationErrors({ errors }: Props) {
                     maxWidth='md'
                     direction='column'
                 >
-                    {errors?.map((error: any, i: any) => (
+                    {errors?.map((error, i) => (
                         <Grid item sx={{'&:not(:last-child)': { mb:2 }}} key={i}> 
                             <Alert severity="error">{error}</Alert>
                         </Grid>

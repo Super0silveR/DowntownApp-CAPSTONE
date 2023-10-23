@@ -20,6 +20,7 @@ namespace ApplicationTests.Data
     {
         /// Connection string SPECIFIC to an Sqlite database.
         private const string ConnectionString = "Data Source=downtown-app.db";
+        private const string NpgsqlString = "User ID=pgsadmin;Password=admin123;Host=localhost;Port=5457;Database=dtapp-test.db;Pooling=true;Include Error Detail=True;";
 
         private static readonly object _lock = new();
         private static bool _databaseInitialized;
@@ -114,12 +115,12 @@ namespace ApplicationTests.Data
         }
 
         /// <summary>
-        /// Method returning an instance of the DataContext, shared between the tests.
+        /// Method returning an instance of the DataContext, with our Fake Database.
         /// </summary>
         /// <returns></returns>
         public DataContext CreateContext() =>
             new (
-                    new DbContextOptionsBuilder<DataContext>()./*UseNpgsql*/UseSqlite(ConnectionString).Options,
+                    new DbContextOptionsBuilder<DataContext>().UseSqlite(ConnectionString).Options,
                     _mediatorMock.Object,
                     _auditableEntitySaveChangesInterceptor,
                     _userFollowingSaveChangesInterceptor

@@ -30,13 +30,13 @@ const fabStyle = {
 
 const fabs = [
   {
-    color: 'primary' as 'primary',
+    color: 'primary' as unknown as 'primary',
     icon: <Add />,
     sx: fabStyle as SxProps,
     label: 'Add',
   },
   {
-    color: 'secondary' as 'secondary',
+    color: 'secondary' as unknown as 'secondary',
     icon: <Clear />,
     sx: fabStyle as SxProps,
     label: 'Cancel',

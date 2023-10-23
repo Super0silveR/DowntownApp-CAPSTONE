@@ -100,6 +100,6 @@ function EventRatings({ rating }: Props) {
             </Paper>
         </>
     );
-};
+}
 
 export default observer(EventRatings);

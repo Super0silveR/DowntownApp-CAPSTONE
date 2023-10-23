@@ -91,7 +91,7 @@ export default observer(function FollowButton({profile} : Props) {
             sx={{width:'75%', opacity:buttonOpacity}}
             endIcon={endIcon}
             loading={loading}
-            onClick={(e) => handleFollow(e, profile?.userName!)}
+            onClick={(e) => handleFollow(e, (profile?.userName as string))}
             onMouseOver={(e) => handleMouseOver(e)}
             onMouseLeave={(e) => handleMouseLeave(e)}
         >

@@ -42,6 +42,6 @@ function ProfilePage() {
             }
         </Container>    
     );
-};
+}
 
 export default observer(ProfilePage);

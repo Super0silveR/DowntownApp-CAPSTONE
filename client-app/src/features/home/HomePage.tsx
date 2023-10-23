@@ -1,4 +1,4 @@
-import { Container, Button, Typography, Box, Grid } from '@mui/material';
+import { Container, Button, Box, Grid } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { useStore } from '../../app/stores/store';

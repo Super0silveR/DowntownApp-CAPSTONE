@@ -1,13 +1,13 @@
 import { Instagram, Facebook, Pinterest } from '@mui/icons-material';
 import { Paper, Container, Stack, Typography, Divider, ButtonGroup, IconButton, useTheme } from '@mui/material';
-import React from 'react';
 import { Profile } from '../../app/models/profile';
 
 interface Props {
     profile: Profile;
 }
 
-export default function ProfileAside({ profile }: Props) {
+// TODO: Make use of profile prop.
+export default function ProfileAside({ profile } : Props) {
 
     const theme = useTheme();
 
@@ -22,7 +22,7 @@ export default function ProfileAside({ profile }: Props) {
                     flexWrap="wrap"
                 >
                     <Typography variant='body2' fontSize={12} pt={2}>
-                        A believer in the power of technology to accelerate progress in healthcare, Joaquin is leading Johnson & Johnson to harness data science and intelligent...
+                        {profile.bio ?? 'Missing Bio.'}
                     </Typography>
                     <Typography>Location</Typography>
                     <Typography>Status</Typography>

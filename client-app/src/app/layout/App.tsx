@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import ResponsiveAppBar from './NavBar';
 import { Box, Container } from '@mui/material';
 import { Outlet, useLocation } from 'react-router-dom';
