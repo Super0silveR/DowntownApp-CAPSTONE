@@ -60,11 +60,11 @@ function EventForm() {
     function handleFormSubmit(event: Event) {
         /** Redirecting the user depending on the action. */
         if (!event.id) {
-            let newEvent = {
+            const newEvent = {
                 ...event,
                 id: uuid()
             };
-            createEvent(newEvent).then(value => {
+            createEvent(newEvent).then(() => {
                 navigate(`/events/${event.id}`);
             }).catch(e => console.log(e));
         } else {
@@ -123,6 +123,6 @@ function EventForm() {
             />
         </>
     );
-};
+}
 
 export default observer(EventForm);

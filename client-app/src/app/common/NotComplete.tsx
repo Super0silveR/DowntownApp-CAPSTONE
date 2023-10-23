@@ -20,6 +20,6 @@ function NotComplete({ text = 'Something is missing...' }: Props) {
             <Typography variant='subtitle2'>{text}</Typography>
         </Stack>
     );
-};
+}
 
 export default NotComplete;

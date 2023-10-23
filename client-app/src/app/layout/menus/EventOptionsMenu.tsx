@@ -30,7 +30,7 @@ function EventOptionsMenu({ event } : Props) {
       setAnchorEl(event.currentTarget);
     };
 
-    const handleClose = (e?: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+    const handleClose = () => {
         setAnchorEl(null);
     };
 
@@ -38,7 +38,7 @@ function EventOptionsMenu({ event } : Props) {
         setTarget(e.currentTarget.id);
         setAnchorEl(null);
         deleteEvent(id);
-    };
+    }
 
     return (
         <>
@@ -60,14 +60,16 @@ function EventOptionsMenu({ event } : Props) {
                 }}
                 anchorEl={anchorEl}
                 open={open}
-                onClose={() => handleClose()}
-                PaperProps={{
-                    style: {
-                        maxHeight: ITEM_HEIGHT * 4.5
-                    },
+                onClose={() => handleClose}
+                slotProps={{
+                    paper: {
+                        style: {
+                            maxHeight: ITEM_HEIGHT * 4.5
+                        },
+                    }
                 }}
             >
-                <MenuItem onClick={(e) => router.navigate(`/events/${event.id}`)}>
+                <MenuItem onClick={() => router.navigate(`/events/${event.id}`)}>
                     <ListItemIcon>
                         <InfoOutlined sx={{color:theme.palette.primary.dark}} fontSize="small" />
                     </ListItemIcon>

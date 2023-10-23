@@ -43,6 +43,6 @@ function EventRatingReviews({ ratings }: Props) {
             </Paper>
         </>
     );
-};
+}
 
 export default EventRatingReviews;

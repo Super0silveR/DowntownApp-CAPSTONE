@@ -29,7 +29,7 @@ function LoginForm() {
                     initialValues={{email: '', password: '', error: null}}
                     onSubmit={(values, { setErrors }) => 
                         userStore.login(values)
-                            .catch(error => setErrors({error: 'Invalid email or password'}))
+                            .catch(() => setErrors({error: 'Invalid email or password'}))
                     }
                     validationSchema={validationSchema}
                 >
@@ -86,7 +86,7 @@ function LoginForm() {
             minWidth={375}
         />
     );
-};
+}
 
 /** Every time we need to use any `store` object, we need the observable transformation. */
 export default observer(LoginForm);

@@ -14,16 +14,16 @@ export default observer(function EventFilters() {
     const { eventStore } = useStore();
     const { predicate, setPredicate } = eventStore; 
     
-    const [view, setView] = React.useState<String>();
+    const [view, setView] = React.useState<string>();
 
     /** Method handling the toggle buttons change mouse-event. */
-    const handleToggleButtonsChange = (event: React.MouseEvent<HTMLElement>, nextView: string) => {
+    const handleToggleButtonsChange = (nextView: string) => {
         setPredicate(nextView, 'true');
         setView(nextView);
     };
 
     /** Method handling the calendar date change. */
-    const handleCalendarDateChange = (nextDate: any) => {
+    const handleCalendarDateChange = (nextDate: string | Date) => {
         setPredicate('startDate', nextDate);
     }
 
@@ -59,7 +59,7 @@ export default observer(function EventFilters() {
             <ToggleButtonGroup
                 orientation="horizontal"
                 exclusive
-                onChange={handleToggleButtonsChange}
+                onChange={(_, value) => handleToggleButtonsChange(value)}
                 fullWidth
                 title='Use these options to filter the event listing.'
                 value={view}
@@ -102,7 +102,7 @@ export default observer(function EventFilters() {
                     <TripOrigin />
                     Distance (KM)
             </Typography>
-            {/** Todo the change handler for filtering. */}
+            {/** Todo the change handler for filtering the distance. */}
             <Slider
                 aria-label="Distance (KM)"
                 defaultValue={30}
@@ -129,7 +129,7 @@ export default observer(function EventFilters() {
                 <DateCalendar 
                     showDaysOutsideCurrentMonth
                     fixedWeekNumber={5} 
-                    onChange={(date: any) => handleCalendarDateChange(date)}
+                    onChange={(date) => handleCalendarDateChange(date)}
                     value={predicate.get('startDate') || dayjs()}
                 />
             </LocalizationProvider> 

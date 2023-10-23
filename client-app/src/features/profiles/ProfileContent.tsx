@@ -57,6 +57,6 @@ function ProfileContent({ profile }: Props) {
             </TabContext>
         </Box>
     );
-};
+}
 
 export default observer(ProfileContent);

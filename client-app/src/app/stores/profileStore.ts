@@ -5,7 +5,7 @@ import { Profile } from "../models/profile";
 import { store } from "./store";
 
 export default class ProfileStore {
-    activeTab: Number = 0;
+    activeTab: number = 0;
     profile?: Profile | null = null;
     followings: Profile[] = [];
     loading = false;
@@ -36,7 +36,7 @@ export default class ProfileStore {
         return false;
     }
 
-    setActiveTab = (activeTab: Number) => {
+    setActiveTab = (activeTab: number) => {
         console.log(activeTab);
         this.activeTab = activeTab;
     }

@@ -10,7 +10,6 @@ using MediatR;
 using ApplicationTests.Data;
 using Microsoft.EntityFrameworkCore;
 
-[assembly: CollectionBehavior(DisableTestParallelization = true)]
 namespace ApplicationTests.Handlers.Events.Commands
 {
     [Collection("db_fixture_collection")]

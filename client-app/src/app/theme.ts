@@ -35,7 +35,7 @@ const theme = createTheme({
         },
         MuiButton: {
             styleOverrides: {
-                root: ({ownerState, theme}) => ({
+                root: ({ownerState}) => ({
                     ...(ownerState.color === 'warning' && {
                         color: '#fff'
                      })
