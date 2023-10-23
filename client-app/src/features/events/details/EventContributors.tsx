@@ -15,10 +15,9 @@ import {
 } from '@mui/material';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
-import EditIcon from '@mui/icons-material/Edit';
 import { useTheme } from '@mui/material/styles';
 import { Contributor } from '../../../app/models/event';
-import agent from '../../../app/api/agent'; // Import your agent with user search functionality
+import agent from '../../../app/api/agent';
 import { User } from '../../../app/models/user';
 
 // TEMPORARY.
@@ -37,11 +36,8 @@ export default function EventContributors({ contributors }: Props) {
   const theme = useTheme();
   const [inviteModalOpen, setInviteModalOpen] = useState(false);
   const [userSearchQuery, setUserSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<User[]>([]);
+  const [searchResults, setSearchResults] = useState<User[]>([]); 
   const [loading, setLoading] = useState(false);
-
-  // New state to manage editing contributors
-  const [editingContributor, setEditingContributor] = useState<Contributor | null>(null);
 
   const openInviteModal = () => {
     setInviteModalOpen(true);
@@ -55,29 +51,18 @@ export default function EventContributors({ contributors }: Props) {
     try {
       setLoading(true);
       const response = await agent.handleUserSearch(userSearchQuery);
-      setSearchResults(response as unknown as User[]);
+      setSearchResults(response as unknown as User[]); 
     } catch (error) {
       console.error('Error searching for users:', error);
     } finally {
       setLoading(false);
     }
   };
+  
 
   const handleInvite = (user: User) => {
     console.log('Inviting user:', user);
     closeInviteModal();
-  };
-
-  // Function to handle editing a contributor
-  const handleEditContributor = (contributor: Contributor) => {
-    setEditingContributor(contributor);
-  };
-
-  // Function to save the changes when editing a contributor
-  const handleSaveEdit = () => {
-    // Implement the logic to save changes for the contributor
-    console.log('Saving changes for contributor:', editingContributor);
-    setEditingContributor(null);
   };
 
   return (
@@ -118,18 +103,19 @@ export default function EventContributors({ contributors }: Props) {
               key={i}
               divider={i < contributors.length - 1}
               secondaryAction={
-                contributor.status !== 'Creator' ? (
-                  <Stack direction='row' spacing={-1}>
-                    <IconButton aria-label='Edit' onClick={() => handleEditContributor(contributor)}>
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton aria-label='Remove' disabled>
-                      <HighlightOffOutlinedIcon />
-                    </IconButton>
-                  </Stack>
-                ) : null
+                <Stack direction='row' spacing={-1}>
+                  <IconButton aria-label='Information'>
+                    <HelpOutlineOutlinedIcon />
+                  </IconButton>
+                  {contributor.status !== 'Creator' ?
+                    (
+                      <IconButton aria-label='Remove' disabled>
+                        <HighlightOffOutlinedIcon />
+                      </IconButton>
+                    ) : null
+                  }
+                </Stack>
               }
-              
             >
               <ListItemAvatar>
                 <Avatar alt={contributor.user.userName} src={contributor.user.photo ?? faces[i]} />
@@ -221,9 +207,9 @@ export default function EventContributors({ contributors }: Props) {
           ) : (
             searchResults.map((user) => (
               <div key={user.userName}>
-                {/* Render user information here */}
+                {}
                 <Typography>{user.displayName}</Typography>
-                {/* Add an "Invite" button for each user */}
+                {}
                 <Button
                   variant="contained"
                   onClick={() => handleInvite(user)}
@@ -235,57 +221,6 @@ export default function EventContributors({ contributors }: Props) {
           )}
         </Paper>
       </Modal>
-      
-      {/* Edit Contributor Modal */}
-      {editingContributor && (
-        <Modal
-          open={!!editingContributor}
-          onClose={() => setEditingContributor(null)}
-          aria-labelledby='edit-contributor-modal'
-          aria-describedby='edit-contributor-description'
-        >
-          <Paper
-            sx={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              padding: '2rem',
-              borderRadius: '16px',
-              backgroundColor: '#ff86c3',
-              boxShadow:
-                'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
-              maxWidth: '400px',
-            }}
-          >
-            <Typography variant='h5' color='white' sx={{ marginBottom: '1.5rem' }}>
-              Edit Contributor
-            </Typography>
-            {/* Implement form fields for editing the contributor */}
-            <TextField
-              label='Contributor Name'
-              variant='outlined'
-              fullWidth
-              value={editingContributor.user.displayName}
-              // Handle changes to contributor name
-            />
-            <Button
-              variant="contained"
-              onClick={handleSaveEdit}
-              fullWidth
-              sx={{
-                background: 'linear-gradient(135deg, #e91e63, #9c27b0)',
-                color: 'white',
-                fontSize: '1.5rem',
-                padding: '1em',
-                marginTop: '1rem',
-              }}
-            >
-              Save Changes
-            </Button>
-          </Paper>
-        </Modal>
-      )}
     </>
   );
 }
