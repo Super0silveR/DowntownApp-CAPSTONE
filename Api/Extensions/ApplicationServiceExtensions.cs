@@ -56,16 +56,45 @@ namespace Api.Extensions
             // Data Context.
             services.AddDbContext<DataContext>(opt =>
             {
-                //TODO: PgSql connection. (Prod vs Env)
-                var constr = configuration["ConnectionStrings:PgAdminConnection"];
-                opt.UseNpgsql(constr,
-                              builder =>
-                              {
-                                  builder.MigrationsAssembly(typeof(DataContext).Assembly.FullName);
-                                  /// Using the `SplitQuery` behavior is to work around performance issues with JOINs. 
-                                  /// EF allows to specify that a given LINQ query should be split into multiple SQL queries.
-                                  builder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-                              });
+                var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+                string connStr;
+
+                // Depending on if in development or production, use either FlyIO
+                // connection string, or development connection string from env var.
+                if (env == "Development")
+                {
+                    // Use connection string from file.
+                    connStr = configuration["ConnectionStrings:PgAdminConnection"];
+                }
+                else
+                {
+                    // Use connection string provided at runtime by FlyIO.
+                    var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+
+                    // Parse connection URL to connection string for Npgsql
+                    connUrl = connUrl!.Replace("postgres://", string.Empty);
+                    var pgUserPass = connUrl.Split("@")[0];
+                    var pgHostPortDb = connUrl.Split("@")[1];
+                    var pgHostPort = pgHostPortDb.Split("/")[0];
+                    var pgDb = pgHostPortDb.Split("/")[1];
+                    var pgUser = pgUserPass.Split(":")[0];
+                    var pgPass = pgUserPass.Split(":")[1];
+                    var pgHost = pgHostPort.Split(":")[0];
+                    var pgPort = pgHostPort.Split(":")[1];
+                    var updatedHost = pgHost.Replace("flycast", "internal");
+
+                    connStr = $"Server={updatedHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};";
+                }
+
+                opt.UseNpgsql(connStr,
+                    builder =>
+                    {
+                        builder.MigrationsAssembly(typeof(DataContext).Assembly.FullName);
+                        /// Using the `SplitQuery` behavior is to work around performance issues with JOINs. 
+                        /// EF allows to specify that a given LINQ query should be split into multiple SQL queries.
+                        builder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                    });
             });
 
             services.AddSingleton<ICurrentUserService, CurrentUserService>();

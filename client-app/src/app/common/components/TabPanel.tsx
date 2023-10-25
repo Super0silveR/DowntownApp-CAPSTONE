@@ -1,7 +1,6 @@
 import { TabPanel } from '@mui/lab';
 import { Box, Divider } from '@mui/material';
 import { SxProps, Theme } from '@mui/system';
-import React from 'react';
 import NotComplete from '../NotComplete';
 
 interface Props {

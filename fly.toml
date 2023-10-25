@@ -1,0 +1,23 @@
+# fly.toml app configuration file generated for downtown-app on 2023-10-22T21:44:13-04:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "downtown-app"
+primary_region = "yul"
+
+[build]
+  image = "meatyharvey/downtown-app-prod:latest"
+
+[env]
+  ASPNETCORE_URLS="http://+:8080"
+  Cloudinary__Cloudname="dwixnc66t"
+  Cloudinary__ApiKey="277262858688816"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]

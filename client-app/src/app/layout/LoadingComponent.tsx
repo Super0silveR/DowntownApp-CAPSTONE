@@ -1,5 +1,4 @@
 import { Backdrop, CircularProgress, Stack, Typography } from '@mui/material';
-import React from 'react';
 
 interface Props {
     inverted?: boolean;

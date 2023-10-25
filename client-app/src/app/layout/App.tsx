@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import ResponsiveAppBar from './NavBar';
 import { Box, Container } from '@mui/material';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, ScrollRestoration, useLocation } from 'react-router-dom';
 import HomePage from '../../features/home/HomePage';
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from '@mui/material/styles';
@@ -10,7 +10,6 @@ import { useStore } from '../stores/store';
 import LoadingComponent from './LoadingComponent';
 import { observer } from 'mobx-react-lite';
 import ModalContainer from '../common/modals/ModalContainer';
-//import Footer from './Footer';
 
 /** https://react-hot-toast.com/docs/styling */
 
@@ -36,6 +35,7 @@ function App() {
         <>
             {/** Providing the custom theme we created to the entire App. (see theme.ts) */}
             <ThemeProvider theme={theme}>
+                <ScrollRestoration />
                 <ModalContainer />
                 <Toaster
                     position='bottom-right'

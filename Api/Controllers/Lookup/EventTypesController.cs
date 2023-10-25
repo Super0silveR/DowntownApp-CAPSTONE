@@ -9,7 +9,7 @@ using Application.DTOs.Commands;
 
 namespace Api.Controllers.Lookup
 {
-    [Authorize(Policies.CREATOR)]
+    [Authorize]
     [Route("api/[controller]")]
     public class EventTypesController : BaseApiController
     {

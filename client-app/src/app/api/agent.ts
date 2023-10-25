@@ -42,9 +42,7 @@ axios.interceptors.request.use(config => {
  */
 axios.interceptors.response.use(async response => {
     if (import.meta.env.DEV) await sleep(1000);
-
     const pagination = response.headers['pagination'];
-
     /** If the pagination parameters exist, we transform the data into our paginated class. */
     if (pagination) {
         const parsedPagination = JSON.parse(pagination);
