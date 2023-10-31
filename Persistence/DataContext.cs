@@ -49,7 +49,7 @@ namespace Persistence
         public DbSet<EventCategory> EventCategories => Set<EventCategory>();
         public DbSet<EventContributor> EventContributors => Set<EventContributor>();
         public DbSet<EventRating> EventRatings => Set<EventRating>();
-        public DbSet<EventTicket> EventsTickets => Set<EventTicket>();
+        public DbSet<EventTicket> EventTickets => Set<EventTicket>();
         public DbSet<EventType> EventTypes => Set<EventType>();
         public DbSet<Group> Groups => Set<Group>();
         public DbSet<Question> Questions => Set<Question>();
@@ -58,6 +58,7 @@ namespace Persistence
         public DbSet<EventAttendee> ScheduledEventAttendees => Set<EventAttendee>();
         public DbSet<EventChallenge> ScheduledEventChallenges => Set<EventChallenge>();
         public DbSet<EventComment> ScheduledEventComments => Set<EventComment>();
+        public DbSet<EventTicket> ScheduledEventTickets => Set<EventTicket>();
         public DbSet<Socials> Socials => Set<Socials>();
         public DbSet<UserAddress> UserAddresses => Set<UserAddress>();
         public DbSet<UserChat> UserChats => Set<UserChat>();
@@ -66,6 +67,8 @@ namespace Persistence
         public DbSet<UserGroup> UserGroups => Set<UserGroup>();
         public DbSet<UserPhoto> UserPhotos => Set<UserPhoto>();
         public DbSet<UserQuestion> UserQuestions => Set<UserQuestion>();
+
+        public DbSet<EventTicket> EventTicket => throw new NotImplementedException();
 
         #region overrides
 

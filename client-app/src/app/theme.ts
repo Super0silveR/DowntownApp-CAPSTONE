@@ -38,7 +38,7 @@ const theme = createTheme({
                 root: ({ownerState}) => ({
                     ...(ownerState.color === 'warning' && {
                         color: '#fff'
-                    })
+                     })
                 })
             }
         },
@@ -99,13 +99,13 @@ const theme = createTheme({
         }
     },
     typography: {
-        fontFamily: 'monospace'
+        fontFamily: 'sans-serif'
     },
     palette: {
         mode: 'light',
         primary: {
             light: '#757ce8',
-            main: '#3f50b5',
+            main: '#291752',
             dark: '#002884',
         },
         secondary: {
@@ -125,7 +125,7 @@ const theme = createTheme({
         },
         warning: {
             main: orange[600],
-            contrastText: grey[800]
+            contrastText: grey[900]
         },
         info: {
             main: lightBlue[500]
@@ -147,8 +147,8 @@ const theme = createTheme({
             selectedOpacity: 0.08
         },
         background: {
-            //default: orange[300],
-            paper: grey[200]
+            paper: grey[200],
+            
         },
         common: {
             black: grey[900],

@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Persistence.Migrations
 {
-    public partial class DeploymentMigration : Migration
+    public partial class InitialEventTickets : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -905,7 +905,7 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EventsTickets",
+                name: "EventTicket",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -920,7 +920,7 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EventsTickets", x => x.Id);
+                    table.PrimaryKey("PK_EventTicket", x => x.Id);
                     table.ForeignKey(
                         name: "FK_EVENT_EVENT_TICKET_ID",
                         column: x => x.ScheduledEventId,
@@ -982,9 +982,9 @@ namespace Persistence.Migrations
                         principalTable: "Events",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ScheduledEventAttendees_EventsTickets_TicketId",
+                        name: "FK_ScheduledEventAttendees_EventTicket_TicketId",
                         column: x => x.TicketId,
-                        principalTable: "EventsTickets",
+                        principalTable: "EventTicket",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_USER_ATTENDED_BAR_EVENTS",
@@ -1099,8 +1099,8 @@ namespace Persistence.Migrations
                 column: "EventTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EventsTickets_ScheduledEventId",
-                table: "EventsTickets",
+                name: "IX_EventTicket_ScheduledEventId",
+                table: "EventTicket",
                 column: "ScheduledEventId");
 
             migrationBuilder.CreateIndex(
@@ -1333,7 +1333,7 @@ namespace Persistence.Migrations
                 name: "ChallengeTypes");
 
             migrationBuilder.DropTable(
-                name: "EventsTickets");
+                name: "EventTicket");
 
             migrationBuilder.DropTable(
                 name: "ChatRoomTypes");
