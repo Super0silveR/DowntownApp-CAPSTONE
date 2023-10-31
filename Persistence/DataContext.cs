@@ -49,7 +49,7 @@ namespace Persistence
         public DbSet<EventCategory> EventCategories => Set<EventCategory>();
         public DbSet<EventContributor> EventContributors => Set<EventContributor>();
         public DbSet<EventRating> EventRatings => Set<EventRating>();
-        public DbSet<EventTicket> EventsTickets => Set<EventTicket>();
+        public DbSet<EventTicket> EventTickets => Set<EventTicket>();
         public DbSet<EventType> EventTypes => Set<EventType>();
         public DbSet<Group> Groups => Set<Group>();
         public DbSet<Question> Questions => Set<Question>();

@@ -5,8 +5,8 @@ using Application.Handlers.Events.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.DTOs.Commands;
-using Application.Core;
 using Application.Params;
+using Application.DTOs.Queries;
 
 namespace Api.Controllers
 {
@@ -32,10 +32,17 @@ namespace Api.Controllers
         }
 
         [Authorize]
-        [HttpGet("scheduled")]
+        [HttpGet("Scheduled")]
         public async Task<IActionResult> GetScheduledEvents()
         {
             return HandleResult(await Mediator.Send(new Scheduled.Query()));
+        }
+
+        [Authorize]
+        [HttpGet("Scheduled/{id}")]
+        public async Task<IActionResult> GetScheduledEvent(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new ScheduledDetails.Query { Id = id }));
         }
 
         #endregion
@@ -64,14 +71,14 @@ namespace Api.Controllers
         }
 
         [Authorize]
-        [HttpPost]
-        public async Task<IActionResult> CreateScheduledEvents()
+        [HttpPost("Scheduling")]
+        public async Task<IActionResult> CreateScheduledEvents(ScheduledEventDto scheduledEvent)
         {
-            return HandleResult(await Mediator.Send(new Schedule.Command()));
+            return HandleResult(await Mediator.Send(new Schedule.Command { ScheduledEvent = scheduledEvent }));
         }
 
         [Authorize]
-        [HttpDelete("{id}")]
+        [HttpDelete("scheduled/{id}")]
         public async Task<IActionResult> CancelEvent(Guid id)
         {
             return HandleResult(await Mediator.Send(new Cancel.Command { Id = id }));   

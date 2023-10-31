@@ -16,13 +16,11 @@ namespace Application.Handlers.Events.Queries
         public class Handler : IRequestHandler<Query, Result<List<ScheduledEventDto>>>
         {
             private readonly IDataContext _context;
-            private readonly ICurrentUserService _currentUserService;
             private readonly IMapper _mapper;
 
-            public Handler(IDataContext context, ICurrentUserService currentUserService, IMapper mapper)
+            public Handler(IDataContext context, IMapper mapper)
             {
                 _context = context;
-                _currentUserService = currentUserService;
                 _mapper = mapper;
             }
 
@@ -30,16 +28,11 @@ namespace Application.Handlers.Events.Queries
             {
                 Guard.Against.Null(_context.Events, nameof(_context.Events));
 
-                var eventDtos = await _context.ScheduledEvents
-                                              .OrderByDescending(e => e.Scheduled)
-                                              .Include(e => e.Attendees)
-                                              .ProjectTo<ScheduledEventDto>(_mapper.ConfigurationProvider, new
-                                              {
-                                                  currentUserName = _currentUserService.GetUserName()
-                                              })
+                var scheduledEventDtos = await _context.ScheduledEvents
+                                              .ProjectTo<ScheduledEventDto>(_mapper.ConfigurationProvider)
                                               .ToListAsync(cancellationToken);
 
-                return Result<List<ScheduledEventDto>>.Success(eventDtos);
+                return Result<List<ScheduledEventDto>>.Success(scheduledEventDtos);
             }
         }
     }

@@ -26,7 +26,7 @@ namespace Application.Common.Interfaces
         DbSet<EventContributor> EventContributors { get; }
         DbSet<EventRating> EventRatings { get; }
         DbSet<EventType> EventTypes { get; }
-        DbSet<EventTicket> EventTicket { get; }
+        DbSet<EventTicket> EventTickets { get; }
         DbSet<Group> Groups { get; }
         DbSet<Question> Questions { get; }
         DbSet<QuestionType> QuestionTypes { get; }

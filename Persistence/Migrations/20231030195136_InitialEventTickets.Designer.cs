@@ -12,8 +12,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231022203952_DeploymentMigration")]
-    partial class DeploymentMigration
+    [Migration("20231030195136_InitialEventTickets")]
+    partial class InitialEventTickets
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -685,7 +685,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("ScheduledEventId");
 
-                    b.ToTable("EventsTickets");
+                    b.ToTable("EventTicket");
                 });
 
             modelBuilder.Entity("Domain.Entities.EventType", b =>

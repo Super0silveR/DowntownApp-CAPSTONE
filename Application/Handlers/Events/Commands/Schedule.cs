@@ -3,6 +3,7 @@ using Application.Core;
 using Application.DTOs.Queries;
 using Ardalis.GuardClauses;
 using AutoMapper;
+using Domain.Entities;
 using MediatR;
 
 namespace Application.Handlers.Events.Commands
@@ -18,29 +19,33 @@ namespace Application.Handlers.Events.Commands
         {
             private readonly IDataContext _context;
             private readonly IMapper _mapper;
-            private readonly ICurrentUserService _currentUserService;
 
             public Handler(IDataContext context, IMapper mapper, ICurrentUserService currentUserService)
             {
                 _context = context;
                 _mapper = mapper;
-                _currentUserService = currentUserService;
             }
 
             public async Task<Result<Unit>?> Handle(Command request, CancellationToken cancellationToken)
             {
-                Guard.Against.Null(_context.Events, nameof(_context.Events));
+                Guard.Against.Null(_context.ScheduledEvents, nameof(_context.ScheduledEvents));
 
-                if (!Guid.TryParse(_currentUserService.GetUserId(), out Guid userId)) return Result<Unit>.Failure("This user is invalid.");
+                var bar = await _context.Bars.FindAsync(new object?[] { request.ScheduledEvent.BarId }, cancellationToken);
+                var @event = await _context.Events.FindAsync(new object?[] {request.ScheduledEvent.EventId}, cancellationToken);
 
-                var user = await _context.Users.FindAsync(new object?[] { userId }, cancellationToken);
+                if (bar == null) { return Result<Unit>.Failure("This bar is invalid"); }
+                if (@event == null) { return Result<Unit>.Failure("This event is invalid"); }
 
-                if (user is null) throw new Exception("This user is invalid.");
+                var scheduledEvent = _mapper.Map<ScheduledEvent>(request.ScheduledEvent);
 
-                /// TODO : Implement
-                /// TODO : Implement
-                /// TODO : Implement
+                scheduledEvent.Bar = bar;
+                scheduledEvent.Event = @event;
 
+                _context.ScheduledEvents.Add(scheduledEvent);
+
+                bool result = await _context.SaveChangesAsync(cancellationToken) > 0;
+
+                if (!result) return Result<Unit>.Failure("Failed to schedule a new event.");
                 return Result<Unit>.Success(Unit.Value);
             }
         }

@@ -29,9 +29,9 @@ namespace Application.Handlers.Tickets.Queries
 
             async Task<Result<EventTicketDto?>> IRequestHandler<Query, Result<EventTicketDto?>>.Handle(Query request, CancellationToken cancellationToken)
             {
-                Guard.Against.Null(_context.EventTicket, nameof(_context.EventTicket));
+                Guard.Against.Null(_context.EventTickets, nameof(_context.EventTickets));
 
-                var eventTicketDto = await _context.EventTicket
+                var eventTicketDto = await _context.EventTickets
                     .ProjectTo<EventTicketDto>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(ec => ec.Id == request.Id, cancellationToken);
 
