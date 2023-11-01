@@ -13,7 +13,7 @@ namespace Api.Controllers.Lookup
     [Route("api/[controller]")]
     public class BarsController : BaseApiController
     {
-        public BarsController() { }
+        public BarsController(MediatR.IMediator @object) { }
 
         #region Queries
 

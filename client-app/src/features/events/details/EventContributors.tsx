@@ -17,7 +17,7 @@ import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import { useTheme } from '@mui/material/styles';
 import { Contributor } from '../../../app/models/event';
-import agent from '../../../app/api/agent'; // Import your agent with user search functionality
+import agent from '../../../app/api/agent';
 import { User } from '../../../app/models/user';
 
 // TEMPORARY.
@@ -207,9 +207,9 @@ export default function EventContributors({ contributors }: Props) {
           ) : (
             searchResults.map((user) => (
               <div key={user.userName}>
-                {/* Render user information here */}
+                {}
                 <Typography>{user.displayName}</Typography>
-                {/* Add an "Invite" button for each user */}
+                {}
                 <Button
                   variant="contained"
                   onClick={() => handleInvite(user)}
