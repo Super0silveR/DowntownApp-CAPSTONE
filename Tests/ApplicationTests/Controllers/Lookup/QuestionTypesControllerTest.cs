@@ -1,29 +1,29 @@
-﻿using Api.Controllers;
-using Api.Controllers.Base;
+﻿using Api.Controllers.Lookup;
 using Application.Core;
+using Application.DTOs;
+using Application.DTOs.Commands;
 using Application.DTOs.Queries;
-using Application.Handlers.Events.Commands;
-using Application.Handlers.Events.Queries;
-using Application.Params;
+using Application.Handlers.QuestionTypes.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Xunit;
 
 namespace Api.Tests.Controllers
 {
-    public class EventsControllerTest
+    public class QuestionTypesControllerTest
     {
         private readonly Mock<IMediator> _mediatorMock;
-        private readonly EventsController _controller;
+        private readonly QuestionTypesController _controller;
 
-        public EventsControllerTest()
+        public QuestionTypesControllerTest()
         {
             _mediatorMock = new Mock<IMediator>();
-            _controller = new EventsController();
+            _controller = new QuestionTypesController();
             _controller.ControllerContext = new ControllerContext();
             _controller.ControllerContext.HttpContext = new DefaultHttpContext();
 
@@ -34,31 +34,32 @@ namespace Api.Tests.Controllers
         }
 
         [Fact]
-        public async Task ShouldGetEvents()
+        public async Task ShouldGetQuestionTypes()
         {
-            var mockResult = new Result<PagedList<EventDto>>(); 
+            var mockResult = new Result<List<QuestionTypeDto>>();
             _mediatorMock.Setup(m => m.Send(It.IsAny<List.Query>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(mockResult);
 
-            var result = await _controller.GetEvents(new EventParams()); 
+            var result = await _controller.GetQuestionType();
 
             var okResult = result as OkObjectResult;
 
+      
         }
 
         [Fact]
-        public async Task ShouldGetEvent()
+        public async Task ShouldGetQuestionTypeDetails()
         {
-            var eventId = Guid.NewGuid();
+            var questionTypeId = Guid.NewGuid();
 
-            var mockDetailsResult = new Result<EventDto>();
+            var mockDetailsResult = new Result<QuestionTypeDto>();
             _mediatorMock.Setup(m => m.Send(It.IsAny<Details.Query>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(mockDetailsResult);
 
-            var result = await _controller.GetEvent(eventId);
+            var result = await _controller.GetQuestionTypeDetails(questionTypeId);
 
             var okResult = result as OkObjectResult;
-           
+
         }
     }
 }
