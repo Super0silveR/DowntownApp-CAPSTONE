@@ -35,6 +35,12 @@ namespace Persistence.Configurations
                    .HasForeignKey(c => c.EventId)
                    .HasConstraintName("FK_BAR_EVENT_COMMENTS")
                    .OnDelete(DeleteBehavior.Cascade);
+            
+            builder.HasMany(be => be.Tickets)
+                   .WithOne(t => t.ScheduledEvent)
+                   .HasForeignKey(t => t.ScheduledEventId)
+                   .HasConstraintName("FK_EVENT_EVENT_TICKET_ID")
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

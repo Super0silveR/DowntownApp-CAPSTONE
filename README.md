@@ -27,10 +27,10 @@ and re-platforming.
 
 ## Members [Roles]
 
-1. Anys, Younes [Project Manager, Lead Developer, Backend]
-2. Harvey, Vincent [Business Analyst, Architect, Backend]
-3. Mahamane Sidi, Elias [Q/A Manager, Architect, Frontend]
-4. Wahbi, Nabil [Build Manager, Lead Developer, Frontend]
+1. Anys, Younes [Developer]
+2. Harvey, Vincent [Business Analyst, Lead Architect, Lead Developer, Project Manager, Backend/Frontend, QA Manager]
+3. Mahamane Sidi, Elias [Developer, Backend/Frontend]
+4. Wahbi, Nabil [Developer]
 
 ## Objectives
 
@@ -55,19 +55,15 @@ simulitanely, live streaming.
 ## Anticipated Architecture
 
 1. Backend:		.NET Core 6.
-2. Frontend:	Typescript REACT
+2. Frontend:	Typescript REACT using Vite.js.
 3. REST API:	CQRS with MediatR.
 4. Database:	PostgreSQL.
-5. Cloud:     AWS Elastic Beanstalk, SimpleDB, etc.
+5. Cloud:     Fly.io.
 
 ## Anticipated Risks
 
 1. Security: If paid memberships are to be implemented, it will be important to use **secure**  
 financial APIs for these transactions.
-
-2. Deployment architecture to AWS?
-
-3. Github Actions - Tests, Deployement.
 
 4. User identification, avoiding catfish and finding ways to secure people's private information on the platform.
 
@@ -82,12 +78,3 @@ Todo.
 ## Initial Plans
 
 Todo.
-
-
-## Current Developpement state 
-
-https://trello.com/b/1PL9nGHL/seg4910-main-board
-
--> Level 1 UI skeching
--> Skeleton for API
--> UML Diagram for the app

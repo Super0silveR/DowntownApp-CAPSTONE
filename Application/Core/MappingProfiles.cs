@@ -96,7 +96,8 @@ namespace Application.Core
 
             CreateMap<ScheduledEvent, ScheduledEventDto>()
                 .ForMember(se => se.AvailableTickets, options => options.MapFrom(se => se.Tickets.Count))
-                .ForMember(se => se.CommentCount, options => options.MapFrom(se => se.Comments.Count));
+                .ForMember(se => se.CommentCount, options => options.MapFrom(se => se.Comments.Count))
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 
             CreateMap<EventRating, RatingDto>();
 
@@ -160,6 +161,11 @@ namespace Application.Core
 
             CreateMap<ChatRoomTypeCommandDto, ChatRoomType>()
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<ScheduledEventDto, ScheduledEvent>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+
             #endregion
         }
     }

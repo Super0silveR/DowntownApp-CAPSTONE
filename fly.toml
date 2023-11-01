@@ -11,6 +11,8 @@ primary_region = "yul"
 
 [env]
   ASPNETCORE_URLS="http://+:8080"
+  Accounts__Auth0__Authority="https://downtown-app.us.auth0.com/"
+  Accounts__Auth0__Audience="https://downtownapp/api"
   Cloudinary__Cloudname="dwixnc66t"
   Cloudinary__ApiKey="277262858688816"
 
