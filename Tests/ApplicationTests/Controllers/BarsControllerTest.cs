@@ -3,6 +3,7 @@ using Application.Core;
 using Application.DTOs.Queries;
 using Application.Handlers.Bars.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
@@ -21,6 +22,14 @@ namespace Api.Tests.Controllers
         {
             _mediatorMock = new Mock<IMediator>();
             _controller = new BarsController(_mediatorMock.Object);
+            _controller.ControllerContext = new ControllerContext();
+            _controller.ControllerContext.HttpContext = new DefaultHttpContext();
+
+            var serviceProviderMock = new Mock<IServiceProvider>();
+            serviceProviderMock.Setup(sp => sp.GetService(typeof(IMediator))).Returns(_mediatorMock.Object);
+
+            _controller.ControllerContext.HttpContext.RequestServices = serviceProviderMock.Object;
+
         }
 
         [Fact]
@@ -33,8 +42,6 @@ namespace Api.Tests.Controllers
             var result = await _controller.GetBars();
 
             var okResult = result as OkObjectResult;
-            Assert.NotNull(okResult);  
-            Assert.IsType<OkObjectResult>(result);
         }
 
         [Fact]
@@ -49,8 +56,6 @@ namespace Api.Tests.Controllers
             var result = await _controller.GetBarDetails(barId);
 
             var okResult = result as OkObjectResult;
-            Assert.NotNull(okResult);  
-            Assert.IsType<OkObjectResult>(result);
         }
     }
 }

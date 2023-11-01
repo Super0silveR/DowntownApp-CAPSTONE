@@ -16,8 +16,8 @@ namespace Api.Controllers.Base
     {
         private IMediator _mediator;
 
-        protected IMediator Mediator => _mediator ??=
-            HttpContext.RequestServices.GetService<IMediator>();
+        protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
+
 
         /// <summary>
         /// Centralized function for handling the results of each MediatR call.
