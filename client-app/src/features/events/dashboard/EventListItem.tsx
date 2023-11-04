@@ -27,7 +27,6 @@ import { useTheme } from '@mui/material/styles';
 import { Favorite, GroupAdd, Share } from '@mui/icons-material';
 import EventOptionsMenu from '../../../app/layout/menus/EventOptionsMenu';
 import Image3 from '../../../assets/image.png';
-
 interface Props {
     event: Event;
 }
@@ -65,7 +64,7 @@ function EventListItem({ event }: Props) {
                 <CardHeader
                     avatar={
                         <Tooltip title={host?.displayName} arrow>
-                            <Avatar src={host?.photo || '../../../assets/girl.png'} sx={{  }} />
+                            <Avatar src={host?.photo || `url(${Image3})`} sx={{  }} />
                         </Tooltip>
                     }
                     action={<EventOptionsMenu event={event} />}
