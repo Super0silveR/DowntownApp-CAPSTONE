@@ -9,6 +9,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 import EventFilters from './EventFilters';
 import EventListItemPlaceholder from './EventListItemPlaceholder';
 import { PaginationParams } from '../../../app/models/pagination';
+import partyImage2HD from '../../../assets/party2.jpg';
 
 function EventDashboard() {
     const { eventStore } = useStore();
@@ -26,7 +27,15 @@ function EventDashboard() {
     }
 
     return (
-        <Box sx={{ backgroundColor: '#f7f7f7', minHeight: '100vh', padding: 3 }}>
+        <Box sx={{
+            backgroundImage: `url(${partyImage2HD})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            backgroundColor: '#f7f7f7',
+            minHeight: '100vh',
+            padding: 3
+        }}>
             <Stack
                 direction='row'
                 justifyContent='space-between'
