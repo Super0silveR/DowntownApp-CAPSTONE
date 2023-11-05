@@ -5,5 +5,6 @@ namespace ApplicationTests.Handlers.Events.Queries
 {
     public class ScheduledEventTest
     {
+
     }
 }
