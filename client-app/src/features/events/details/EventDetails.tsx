@@ -1,4 +1,4 @@
-import { Button, Grid, Paper, Typography } from '@mui/material';
+import { Button, Grid, Paper, Typography, Card, CardMedia, CardContent, CardActions, Box, Stack, Divider } from '@mui/material';
 import { useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { useStore } from '../../../app/stores/store';
@@ -8,6 +8,7 @@ import { Link, useParams } from 'react-router-dom';
 import EventContributors from './EventContributors';
 import EventRatings from './EventRatings';
 import EventRatingReviews from './EventRatingReviews';
+import Image3 from '../../../assets/party3.jpg';
 
 function EventDetails() {
     const { eventStore } = useStore();
@@ -20,154 +21,63 @@ function EventDetails() {
     }, [id, loadEvent]);
 
     if (loadingInitial || !event) return <LoadingComponent />;
-    
+
     return (
         <>
-            <Grid container>
-                <Grid container sx={{mb:2}} spacing={2}>
-                    <Grid item xs={12} md={9} sm={6}>
-                        <Typography
-                            sx={{ 
-                                display: 'inline',
-                                textDecoration: 'none',
-                                fontFamily:'monospace'
-                            }}
-                            component="span"
-                            variant="h6"
-                            color="text.secondary"
-                        >
-                            Your Event!
-                        </Typography>
-                        <Paper 
-                            sx={{
-                                textAlign: 'center',
-                                fontFamily: 'monospace',
-                                padding: theme.spacing(2),
-                                fontSize: 16
-                            }} 
-                            elevation={3}
-                        >
-                            Your event main informations and details.
-                        </Paper>   
-                    </Grid>
-                    <Grid item xs={12} md={3} sm={6}>
-                        <Typography
-                            sx={{ 
-                                display: 'inline',
-                                textDecoration: 'none',
-                                fontFamily:'monospace'
-                            }}
-                            component="span"
-                            variant="h6"
-                            color="text.secondary"
-                        >
-                            Upcoming!
-                        </Typography>
-                        <Paper 
-                            sx={{
-                                textAlign: 'center',
-                                fontFamily: 'monospace',
-                                padding: theme.spacing(2),
-                                fontSize: 16
-                            }} 
-                            elevation={3}
-                        >
-                            Your event upcoming schedule.
-                        </Paper>         
-                    </Grid>
-                </Grid>
-                <Grid container sx={{mb:2}} spacing={2}>
-                    <Grid item xs={12} md={9} sm={6}>
-                        <EventContributors contributors={event.contributors} /> 
-                    </Grid>
-                    <Grid item xs={12} md={3} sm={6}>
-                        <EventRatings rating={event.rating} />            
-                    </Grid>
-                    <Grid item xs={12} md={3} sm={6}>
-                        <Button
-                            variant='outlined'
-                            color='primary'
-                            size="small"
-                            sx={{ borderRadius: '0.2rem' }}
-                            component={Link}
-                            to={`/manageEvent/${event.id}`}
-                        >
-                            Edit
-                        </Button>           
-                    </Grid>
-                </Grid>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <EventRatingReviews ratings={event.rating.ratings} />
-                    </Grid>
-                </Grid>
-            </Grid>
-            {/* <Card
-                sx={{ml:2,my:1}}
-            >
-                <CardMedia
-                    component="img"
-                    alt="green iguana"
-                    height="200"
-                    image={`/assets/categoryImages/${randomIntFromInterval(1, 5)}.jpg`}
-                    sx={{
-                        p: 'none',
-                        objectFit: 'cover',
-                        height: '15em'
-                    }}
-                />
-                <CardContent sx={{ padding: theme.spacing(1.5) }}>
-                    <Typography
-                        className={"MuiTypography--heading"}
-                        variant={"h6"}
-                        gutterBottom
-                        sx={{
-                            color: 'secondary.dark'
-                        }}
-                    >
-                        {event.title}
-                    </Typography>
-                    <Typography
-                        className={"MuiTypography--subheading"}
-                        variant={"caption"}
-                        sx={{
-                            color: 'secondary.light'
-                        }}
-                    >
-                        {event.description}
-                    </Typography>
-                </CardContent>
-                <Box sx={{ padding: theme.spacing(1.5) }}>
-                    <CardActions>
-                        <Stack
-                            direction="row"
-                            divider={<Divider orientation="vertical" flexItem />}
-                            spacing={1}
-                        >
+            <Grid container spacing={3}>
+                <Grid item xs={12} lg={8}>
+                    <Card raised>
+                        <CardMedia
+                            component="img"
+                            alt="Event Image"
+                            height="200"
+                            image={Image3} 
+                            sx={{ objectFit: 'cover', height: '15em' }}
+                        />
+
+                        <CardContent>
+                            <Typography gutterBottom variant="h5">
+                                {event.title}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                {event.description}
+                            </Typography>
+                        </CardContent>
+                        <CardActions>
                             <Button
-                                variant='outlined'
+                                variant='contained'
                                 color='primary'
-                                size="small"
-                                sx={{ borderRadius: '0.2rem' }}
                                 component={Link}
                                 to={`/manageEvent/${event.id}`}
+                                sx={{ borderRadius: '0.2rem', marginLeft: theme.spacing(1) }}
                             >
-                                Edit
+                                Edit Event
                             </Button>
-                            <Button
-                                variant='outlined'
-                                color='warning'
-                                size="small"
-                                sx={{ borderRadius: '0.2rem' }}
-                                component={Link}
-                                to='/events'
-                            >
-                                Close
-                            </Button>
-                        </Stack>
-                    </CardActions>
-                </Box>
-            </Card> */}
+                        </CardActions>
+                    </Card>
+                </Grid>
+                <Grid item xs={12} lg={4}>
+                    <EventRatings rating={event.rating} />
+                </Grid>
+                <Grid item xs={12} lg={8}>
+                    <EventContributors contributors={event.contributors} />
+                </Grid>
+                <Grid item xs={12} lg={4}>
+                    <Button
+                        fullWidth
+                        variant='outlined'
+                        color='secondary'
+                        component={Link}
+                        to={`/events`}
+                        sx={{ borderRadius: '0.2rem' }}
+                    >
+                        Back to Events List
+                    </Button>
+                </Grid>
+                <Grid item xs={12}>
+                    <EventRatingReviews ratings={event.rating.ratings} />
+                </Grid>
+            </Grid>
         </>
     );
 }
