@@ -1,65 +1,46 @@
-import { Add, ExpandMore } from "@mui/icons-material";
-import { Accordion, AccordionSummary, Typography, AccordionDetails, ListItem, Card, Button, List } from "@mui/material";
-import React, { Fragment, useEffect, useState } from "react";
-import ReactDOM from "react-dom";
-import CreatorProfileContributions from "./CreatorProfileContribution";
+import { Edit, ExpandMore, FormatAlignLeft } from "@mui/icons-material";
+import { Accordion, AccordionSummary, Typography, AccordionDetails, IconButton, ToggleButton, Divider } from "@mui/material";
 import CreatorProfileContribution from "./CreatorProfileContribution";
+import theme from "../../../app/theme";
+import { Profile } from "../../../app/models/profile";
+import { useState, SyntheticEvent } from "react";
 
-interface CreatorCollaborations {
-    name: string;
-    description: string;
+interface Props {
+    profile: Profile;
 }
 
-function CreatorProfileGeneral() {
-    const [expanded, setExpanded] = React.useState<string | false>(false);
-    const [collaborations, setCollabs] = useState<CreatorCollaborations[]>([]);
-
-    useEffect(() => {
-        setCollabs([
-            {
-                name: 'collab 1',
-                description: 'collab 1 descrition'
-            }
-        ]);
-    }, [setCollabs])
+function CreatorProfileGeneral({ profile }: Props) {
+    const [expanded, setExpanded] = useState<string | false>("panel1");
   
-    const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+    const handleChange = (panel: string) => (event: SyntheticEvent, isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : false);
     };
-
-    const handleAddContribution = () => (event: React.SyntheticEvent) => {
-        const parent = ReactDOM.findDOMNode(event.currentTarget)?.parentElement;
-        setCollabs([
-            ...collaborations, 
-            {
-                name: "collab 2",
-                description: "collab 2 description"
-            }
-        ])
-        console.log(parent);
-    }
 
     return (
         <>
             <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                 <AccordionSummary
-                    expandIcon={<ExpandMore />}
+                    expandIcon={<ExpandMore sx={{color: theme.palette.primary.light}} />}
                     aria-controls="panel1bh-content"
                     id="panel1bh-header"
-                    sx={{backgroundColor: 'rgba(255, 255, 255, .05)'}}
+                    sx={{backgroundColor: 'rgba(255, 255, 255, .05)', borderBottom:'1px solid lightgrey'}}
                 >
                     <Typography sx={{ width: '33%', flexShrink: 0 }}>
                         Collaborations
                     </Typography>
                     <Typography sx={{ color: 'text.secondary' }}>List of past collaborations.</Typography>
                 </AccordionSummary>
-                <AccordionDetails>
-                    <Button onClick={handleAddContribution()} sx={{float:'right'}}>Add Contribution</Button>
-                    <List>
-                        {collaborations.map((collab, i) => (
-                            <CreatorProfileContribution key={i} collab={collab} />
-                        ))}
-                    </List>
+                <AccordionDetails sx={{border: '1px solid lightgrey', m:2, boxShadow: 'rgba(0, 0, 0, 0.05) 0px 1px 2px 0px', borderRadius:1, background: '#EEE'}}>
+                    <ToggleButton 
+                        value="left"
+                        size="small"
+                        aria-label="left aligned"
+                        aria-details='editor-tiptap'
+                        sx={{height:25,width:25,color:"black",mb:1,mt:1}}
+                    >
+                        <Edit sx={{height:20,width:20}} />
+                    </ToggleButton>
+                    <CreatorProfileContribution currentProfileUserName={profile.userName!} />
                 </AccordionDetails>
             </Accordion>
             <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>

@@ -1,4 +1,3 @@
-import { Stack, Typography } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import CustomTabPanel from '../../app/common/components/TabPanel';
 import { Profile } from '../../app/models/profile';
@@ -23,7 +22,7 @@ function ProfileGeneral({ profile }: Props) {
                 //     </Typography>
                 // </Stack>
                 // : null
-                <CreatorProfileGeneral />
+                <CreatorProfileGeneral profile={profile} />
             }
             id='general-profile-tab'
             value='0'

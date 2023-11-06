@@ -1,31 +1,13 @@
-import { IconButton, ListItem, Stack } from "@mui/material";
-import CreatorProfileSurface from "./CreatorProfileSurface";
-import { UpdateOutlined } from "@mui/icons-material";
+import RichTextEditor from "../../../app/common/components/RichTextEditor";
 
 interface Props {
-    collab: {name:string,description:string}
+  currentProfileUserName: string;
 }
 
-function CreatorProfileContribution({ collab }: Props) {
-    return (
-        <>
-            <CreatorProfileSurface 
-                content={
-                    <ListItem
-                        secondaryAction={
-                            <Stack direction='row' spacing={1}>
-                                <IconButton aria-label='Information'>
-                                    <UpdateOutlined fontSize="small" />
-                                </IconButton>
-                            </Stack>
-                        }
-                    >
-                        {collab.name}
-                    </ListItem>
-                }
-            />
-        </>
-    );
+const CreatorProfileContribution = (props: Props) => {
+  return (
+    <RichTextEditor currentProfileUserName={props.currentProfileUserName} />
+  );
 }
 
 export default CreatorProfileContribution;
