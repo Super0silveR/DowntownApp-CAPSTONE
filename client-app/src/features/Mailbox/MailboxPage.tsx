@@ -1,6 +1,5 @@
 import { Container } from '@mui/material';
 import { Grid } from '@mui/material';
-import React from 'react';
 import MailboxMessagesChatters from './MailboxMessagesChatters';
 import MailboxMessagesContents from './MailboxMessagesContents';
 

@@ -1,5 +1,6 @@
 import ReactDOM from 'react-dom/client';
 import './app/layout/styles.scss';
+import '@mantine/tiptap/styles.css';
 import { store, StoreContext } from './app/stores/store';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './app/router/Routes';

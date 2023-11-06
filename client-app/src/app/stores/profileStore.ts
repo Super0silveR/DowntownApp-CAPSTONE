@@ -6,6 +6,7 @@ import { store } from "./store";
 
 export default class ProfileStore {
     activeTab: number = 0;
+    creatorEditMode: boolean = false;
     profile?: Profile | null = null;
     followings: Profile[] = [];
     loading = false;
