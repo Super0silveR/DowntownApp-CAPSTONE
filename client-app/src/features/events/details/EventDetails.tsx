@@ -40,12 +40,11 @@ function EventDetails() {
         }}>
             <Grid container spacing={4}>
                 <Grid item xs={12} lg={8}>
-                    {/* Event details and image */}
                     <Card raised sx={{ borderRadius: 2, boxShadow: 3 }}>
                         <CardMedia
                             component="img"
                             alt="Event Image"
-                            image={event.image || Image3}
+                            image={Image3}
                             sx={{ height: 260, objectFit: 'cover' }}
                         />
                         <CardContent>
@@ -56,52 +55,60 @@ function EventDetails() {
                                 {event.description}
                             </Typography>
                         </CardContent>
-                        <CardActions sx={{ display: 'flex', justifyContent: 'space-between', padding: '0 16px 8px' }}>
-                            <Button
-                                startIcon={<EditIcon />}
-                                variant='contained'
-                                color='primary'
-                                component={Link}
-                                to={`/manageEvent/${event.id}`}
-                                sx={{ borderRadius: '0.2rem' }}
-                            >
-                                Edit Event
-                            </Button>
-                            <Button
-                                startIcon={<ArrowBackIcon />}
-                                variant='outlined'
-                                color='secondary'
-                                component={Link}
-                                to={`/events`}
-                                sx={{ borderRadius: '0.2rem' }}
-                            >
-                                Back to Events
-                            </Button>
+                        <CardActions sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            padding: '0 16px 8px',
+                            flexWrap: 'nowrap' 
+                        }}>
+                            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                                <Button
+                                    startIcon={<EditIcon />}
+                                    variant='contained'
+                                    color='primary'
+                                    component={Link}
+                                    to={`/manageEvent/${event.id}`}
+                                    sx={{ textTransform: 'none' }} // Optional: prevents uppercase transform
+                                >
+                                    Edit Event
+                                </Button>
+                                <Button
+                                    startIcon={<GroupIcon />}
+                                    variant='contained'
+                                    color='success'
+                                    sx={{ textTransform: 'none' }}
+                                // Add your onClick event handler for attending event
+                                >
+                                    Attend Event
+                                </Button>
+                                <Button
+                                    startIcon={<LiveTvIcon />}
+                                    variant='contained'
+                                    color='info'
+                                    sx={{ textTransform: 'none' }}
+                                // Add your onClick event handler for joining live event
+                                >
+                                    Join Live Event
+                                </Button>
+                                <Button
+                                    startIcon={<ArrowBackIcon />}
+                                    variant='outlined'
+                                    color='secondary'
+                                    component={Link}
+                                    to={`/events`}
+                                    sx={{ textTransform: 'none' }}
+                                >
+                                    Back to Events
+                                </Button>
+                            </Box>
                         </CardActions>
+
                     </Card>
                 </Grid>
 
                 <Grid item xs={12} lg={4}>
                     <EventRatings rating={event.rating} />
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: theme.spacing(2) }}>
-                        <Button
-                            variant='contained'
-                            startIcon={<GroupIcon />}
-                            color='success'
-                            sx={{ marginBottom: theme.spacing(1) }}
-                        // Add your onClick event handler for attending event
-                        >
-                            Attend Event
-                        </Button>
-                        <Button
-                            variant='contained'
-                            startIcon={<LiveTvIcon />}
-                            color='info'
-                        // Add your onClick event handler for joining live event
-                        >
-                            Join Live Event
-                        </Button>
-                    </Box>
                 </Grid>
 
                 <Grid item xs={12} lg={8}>
