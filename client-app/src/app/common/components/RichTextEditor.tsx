@@ -1,7 +1,7 @@
 import { Color } from '@tiptap/extension-color';
 import ListItem from '@tiptap/extension-list-item';
 import TextStyle, { TextStyleOptions } from '@tiptap/extension-text-style';
-import { EditorProvider } from '@tiptap/react';
+import { Content, EditorProvider } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import EditorMenuBar from './EditorMenuBar';
 import { useStore } from '../../stores/store';
@@ -26,34 +26,29 @@ const content = `
   Hi there,
 </h2>
 <p>
-  this is a <em>basic</em> example of <strong>tiptap</strong>. Sure, there are all kind of basic text styles you’d probably expect from a text editor. But wait until you see the lists:
+  this is a <em>basic</em> example of our text <strong>editor</strong>. Sure, there are all kind of basic text styles you’d probably expect from a text editor. But wait until you see the lists:
 </p>
 <ul>
   <li>
-    That’s a bullet list with one …
+    That’s a first contribution …
   </li>
   <li>
-    … or two list items.
+    … or a second one.
   </li>
 </ul>
 <p>
-  Isn’t that great? And all of that is editable. But wait, there’s more. Let’s try a code block:
-</p>
-<pre><code class="language-css">body {
-display: none;
-}</code></pre>
-<p>
-  I know, I know, this is impressive. It’s only the tip of the iceberg though. Give it a try and click a little bit around. Don’t forget to check the other examples too.
+  Isn’t that great? And all of that is editable. But wait, there’s more. Edit and customize your own <i>contribution section</i>.
 </p>
 <blockquote>
-  Wow, that’s amazing. Good work, boy! 👏
+  Wow, that’s amazing. Keep up the good work! 👏
   <br />
-  — Mom
+  — Downtown App Team.
 </blockquote>
 `;
 
 interface Props {
   currentProfileUserName: string;
+  content: Content | undefined | null;
 }
 
 export default (props: Props) => {
@@ -63,6 +58,11 @@ export default (props: Props) => {
   const isOwnProfile = userStore.user?.userName === props.currentProfileUserName;
 
   return (
-    <EditorProvider slotBefore={isOwnProfile && <EditorMenuBar />} extensions={extensions} content={content} children={<></>}></EditorProvider>
+    <EditorProvider 
+      slotBefore={isOwnProfile && <EditorMenuBar />}
+      extensions={extensions} 
+      content={props.content ?? content} 
+      children={null} 
+    />
   )
 }

@@ -6,7 +6,7 @@ interface Props {
 
 const CreatorProfileContribution = (props: Props) => {
   return (
-    <RichTextEditor currentProfileUserName={props.currentProfileUserName} />
+    <RichTextEditor currentProfileUserName={props.currentProfileUserName} content={null} />
   );
 }
 
