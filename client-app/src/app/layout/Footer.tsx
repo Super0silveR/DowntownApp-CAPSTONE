@@ -7,10 +7,9 @@ export const Footer: FC = (): ReactElement => {
         sx={{
             width: "100%",
             height: "auto",
-            bgcolor: "primary.main",
+            background: 'linear-gradient(135deg, #e91e63, #2D1638)',
             paddingTop: "0.3rem",
             paddingBottom: "0.3rem",
-            position:'fixed',
             left:0,
             bottom:0,
             right:0
@@ -25,7 +24,7 @@ export const Footer: FC = (): ReactElement => {
           </Grid>
           <Grid item xs={12}>
             <Typography color='#fff' variant="subtitle1" fontFamily='monospace'>
-              {`${new Date().getFullYear()} | About | Creator | Bars`}
+              {`Copyrights ${new Date().getFullYear()} | About | Our Team | Contact us | Terms of Service`}
             </Typography>
           </Grid>
         </Grid>
