@@ -43,7 +43,7 @@ namespace Persistence
         public DbSet<ChatRoomType> ChatRoomTypes => Set<ChatRoomType>();
         public DbSet<ContentGenres> ContentGenres => Set<ContentGenres>();
         public DbSet<CreatorContentGenres> CreatorContentGenres => Set<CreatorContentGenres>();
-        public DbSet<CreatorProfiles> CreatorsProfiles => Set<CreatorProfiles>();
+        public DbSet<CreatorProfiles> CreatorProfiles => Set<CreatorProfiles>();
         public DbSet<CreatorReviews> CreatorReviews => Set<CreatorReviews>();
         public DbSet<Event> Events => Set<Event>();
         public DbSet<EventCategory> EventCategories => Set<EventCategory>();

@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Persistence.Migrations
 {
-    public partial class InitialEventTickets : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -283,7 +283,7 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CreatorsProfiles",
+                name: "CreatorProfiles",
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -736,7 +736,7 @@ namespace Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_CREATOR_PROFILE_GENRE_ID",
                         column: x => x.CreatorProfileId,
-                        principalTable: "CreatorsProfiles",
+                        principalTable: "CreatorProfiles",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -760,7 +760,7 @@ namespace Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_REVIEWEE_ID",
                         column: x => x.RevieweeId,
-                        principalTable: "CreatorsProfiles",
+                        principalTable: "CreatorProfiles",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -1306,7 +1306,7 @@ namespace Persistence.Migrations
                 name: "ContentGenres");
 
             migrationBuilder.DropTable(
-                name: "CreatorsProfiles");
+                name: "CreatorProfiles");
 
             migrationBuilder.DropTable(
                 name: "Challenges");
