@@ -69,7 +69,7 @@ function EventDetails() {
                                     color='primary'
                                     component={Link}
                                     to={`/manageEvent/${event.id}`}
-                                    sx={{ textTransform: 'none' }} // Optional: prevents uppercase transform
+                                    sx={{ textTransform: 'none' }} 
                                 >
                                     Edit Event
                                 </Button>
@@ -78,7 +78,6 @@ function EventDetails() {
                                     variant='contained'
                                     color='success'
                                     sx={{ textTransform: 'none' }}
-                                // Add your onClick event handler for attending event
                                 >
                                     Attend Event
                                 </Button>
@@ -87,7 +86,6 @@ function EventDetails() {
                                     variant='contained'
                                     color='info'
                                     sx={{ textTransform: 'none' }}
-                                // Add your onClick event handler for joining live event
                                 >
                                     Join Live Event
                                 </Button>
