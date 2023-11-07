@@ -67,7 +67,6 @@ namespace Persistence
         public DbSet<UserGroup> UserGroups => Set<UserGroup>();
         public DbSet<UserPhoto> UserPhotos => Set<UserPhoto>();
         public DbSet<UserQuestion> UserQuestions => Set<UserQuestion>();
-
         public DbSet<EventTicket> EventTicket => throw new NotImplementedException();
 
         #region overrides
