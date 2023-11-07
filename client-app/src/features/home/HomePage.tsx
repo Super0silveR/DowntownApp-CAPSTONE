@@ -5,7 +5,7 @@ import { useStore } from '../../app/stores/store';
 import LoginForm from '../users/LoginForm';
 import RegisterForm from '../users/RegisterForm';
 import Footer from '../../app/layout/Footer';
-import homeBackgroundVideo from '../../../public/assets/homeBackgroundVideo.mp4'
+import homeBackgroundVideo from '../../assets/video/homeBackgroundVideo.mp4'
 import NavBar from '../../app/layout/NavBar';
 
 function HomePage() {
