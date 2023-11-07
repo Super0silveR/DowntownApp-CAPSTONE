@@ -37,6 +37,7 @@ namespace Application.Common.Interfaces
         public DbSet<EventTicket> ScheduledEventTickets { get; }
         public DbSet<Socials> Socials { get; }
         public DbSet<UserAddress> UserAddresses { get; }
+        public DbSet<User> Users { get; }
         public DbSet<UserChat> UserChats { get; }
         public DbSet<UserChatRoom> UserChatRooms { get; }
         public DbSet<UserFollowing> UserFollowings { get; }
