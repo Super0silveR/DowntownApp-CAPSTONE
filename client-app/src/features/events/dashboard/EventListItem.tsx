@@ -26,7 +26,7 @@ import dayjs from 'dayjs';
 import { useTheme } from '@mui/material/styles';
 import { Favorite, GroupAdd, Share } from '@mui/icons-material';
 import EventOptionsMenu from '../../../app/layout/menus/EventOptionsMenu';
-
+import Image3 from '../../../assets/image.png';
 interface Props {
     event: Event;
 }
@@ -52,11 +52,19 @@ function EventListItem({ event }: Props) {
 
     return (
         <Grid item xs={12} key={event.id} sx={{  }}>
-            <Card sx={{  }}>
+            <Card
+                sx={{
+                    backgroundImage: `url(${Image3})`,
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center',
+                }}
+
+            >
                 <CardHeader
                     avatar={
                         <Tooltip title={host?.displayName} arrow>
-                            <Avatar src={host?.photo || '/assets/user.png'} sx={{  }} />
+                            <Avatar src={host?.photo || `url(${Image3})`} sx={{  }} />
                         </Tooltip>
                     }
                     action={<EventOptionsMenu event={event} />}
