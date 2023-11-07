@@ -81,16 +81,18 @@ function RegisterForm() {
                                 />
                                 <Divider sx={{width:'50%'}} />
                                 <Stack direction='row' spacing={2}>
-                                    <LoadingButton 
+                                    <LoadingButton sx={{
+                      background: 'linear-gradient(135deg, #C75172, #C85DA3)'}}
                                         disabled={!isValid || !dirty || isSubmitting}
                                         loading={isSubmitting}
                                         variant='contained' 
                                         fullWidth 
                                         type="submit"
                                     >
-                                        <Typography fontFamily='monospace'>Register</Typography>
+                                        <Typography fontFamily='monospace' style={{ color: 'white'}}>Register</Typography>
                                     </LoadingButton>
-                                    <Button onClick={() => modalStore.closeModal()} color="warning" variant="contained" fullWidth>
+                                    <Button onClick={() => modalStore.closeModal()} sx={{
+                      background: 'linear-gradient(135deg, #785e7d, #2D1693)'}} variant="contained" fullWidth>
                                         <Typography fontFamily='monospace'>Cancel</Typography>
                                     </Button>
                                 </Stack>
