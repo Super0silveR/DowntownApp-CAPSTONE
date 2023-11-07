@@ -12,8 +12,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231030195136_InitialEventTickets")]
-    partial class InitialEventTickets
+    [Migration("20231107030303_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -375,7 +375,7 @@ namespace Persistence.Migrations
                     b.HasKey("UserId")
                         .HasName("PK_CREATOR_PROFILE_USER_ID");
 
-                    b.ToTable("CreatorsProfiles");
+                    b.ToTable("CreatorProfiles");
                 });
 
             modelBuilder.Entity("Domain.Entities.CreatorReviews", b =>

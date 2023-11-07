@@ -373,7 +373,7 @@ namespace Persistence.Migrations
                     b.HasKey("UserId")
                         .HasName("PK_CREATOR_PROFILE_USER_ID");
 
-                    b.ToTable("CreatorsProfiles");
+                    b.ToTable("CreatorProfiles");
                 });
 
             modelBuilder.Entity("Domain.Entities.CreatorReviews", b =>
