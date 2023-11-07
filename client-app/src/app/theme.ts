@@ -7,6 +7,7 @@ import green from "@mui/material/colors/green";
 import lightBlue from "@mui/material/colors/lightBlue";
 import grey from "@mui/material/colors/grey";
 import { deepPurple } from "@mui/material/colors";
+import { colors } from "@mui/material";
 
 const theme = createTheme({
     components: {
@@ -76,6 +77,20 @@ const theme = createTheme({
                 })
             }
         },
+        MuiToggleButton: {
+            styleOverrides: {
+                root: ({ownerState, theme}) => ({
+                    ...((ownerState['aria-details'] === 'editor-tiptap') && {
+                        color: theme.palette.primary.dark,
+                        outlineWidth: '2px',
+                        '&:hover': {
+                            color: theme.palette.primary.main,
+                            backgroundColor: theme.palette.action.hover
+                        }
+                    })
+                })
+            }
+        },
         MuiFilledInput: {
             styleOverrides: {
                 root: ({theme}) => ({
@@ -109,7 +124,7 @@ const theme = createTheme({
             dark: '#002884',
         },
         secondary: {
-            light: red[500],
+            light: grey[400],
             main: red[700],
             dark: red[900],
             contrastText: grey[50]
@@ -152,7 +167,7 @@ const theme = createTheme({
         },
         common: {
             black: grey[900],
-            white: grey[200]
+            white: grey[200],
         },
         tonalOffset: 0.1,
     }

@@ -27,7 +27,7 @@ function ProfilePage() {
         <Container maxWidth={false} disableGutters>
             {profile &&
                 <Grid container>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} mt={5}>
                         <ProfileHeader profile={profile} />
                     </Grid>
                     <Grid container spacing={1} textAlign='left'>

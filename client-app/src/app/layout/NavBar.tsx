@@ -24,7 +24,7 @@ function ResponsiveAppBar() {
                     <NavLink to="/"> {}
                         <img src={logo} alt="Logo" style={{ width: '250px', height: '100px', marginRight: '10px' }} />
                     </NavLink>
-                    {isLoggedIn && 
+                    {isLoggedIn &&
                     <>
                         <Divider
                             orientation="vertical"
@@ -39,7 +39,7 @@ function ResponsiveAppBar() {
                             }}
                         />
                         <Box textAlign='center' sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                            <Button 
+                            <Button
                                 component={NavLink}
                                 to='/bars'
                                 color='inherit'
@@ -53,7 +53,7 @@ function ResponsiveAppBar() {
                             >
                                 {pages[0]}
                             </Button>
-                            <Button 
+                            <Button
                                 component={NavLink}
                                 to='/events'
                                 color='inherit'
@@ -67,7 +67,7 @@ function ResponsiveAppBar() {
                             >
                                 {pages[1]}
                             </Button>
-                            <Button 
+                            {/* <Button
                                 component={NavLink}
                                 to='/errors'
                                 color='inherit'
@@ -80,10 +80,10 @@ function ResponsiveAppBar() {
                                 }}
                             >
                                 {pages[2]}
-                            </Button>
-                            <AccountMenu logout={logout} user={user} />
+                            </Button> */}
                         </Box>
                     </>}
+                    <AccountMenu logout={logout} user={user} />
                     <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
                             size="large"
