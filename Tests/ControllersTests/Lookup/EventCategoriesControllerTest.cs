@@ -1,29 +1,29 @@
-﻿using Api.Controllers;
-using Api.Controllers.Base;
+﻿using Api.Controllers.Lookup;
 using Application.Core;
+using Application.DTOs;
+using Application.DTOs.Commands;
 using Application.DTOs.Queries;
-using Application.Handlers.Events.Commands;
-using Application.Handlers.Events.Queries;
-using Application.Params;
+using Application.Handlers.EventCategories.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Xunit;
 
-namespace Api.Tests.Controllers
+namespace ControllersTests.Lookup
 {
-    public class EventsControllerTest
+    public class EventCategoriesControllerTest
     {
         private readonly Mock<IMediator> _mediatorMock;
-        private readonly EventsController _controller;
+        private readonly EventCategoriesController _controller;
 
-        public EventsControllerTest()
+        public EventCategoriesControllerTest()
         {
             _mediatorMock = new Mock<IMediator>();
-            _controller = new EventsController();
+            _controller = new EventCategoriesController();
             _controller.ControllerContext = new ControllerContext();
             _controller.ControllerContext.HttpContext = new DefaultHttpContext();
 
@@ -34,31 +34,32 @@ namespace Api.Tests.Controllers
         }
 
         [Fact]
-        public async Task ShouldGetEvents()
+        public async Task ShouldGetEventCategories()
         {
-            var mockResult = new Result<PagedList<EventDto>>(); 
+            var mockResult = new Result<List<EventCategoryDto>>();
             _mediatorMock.Setup(m => m.Send(It.IsAny<List.Query>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(mockResult);
 
-            var result = await _controller.GetEvents(new EventParams()); 
+            var result = await _controller.GetEventCategories();
 
             var okResult = result as OkObjectResult;
 
+            
         }
 
         [Fact]
-        public async Task ShouldGetEvent()
+        public async Task ShouldGetEventCategoryDetails()
         {
-            var eventId = Guid.NewGuid();
+            var eventCategoryId = Guid.NewGuid();
 
-            var mockDetailsResult = new Result<EventDto>();
+            var mockDetailsResult = new Result<EventCategoryDto>();
             _mediatorMock.Setup(m => m.Send(It.IsAny<Details.Query>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(mockDetailsResult);
 
-            var result = await _controller.GetEvent(eventId);
+            var result = await _controller.GetEventCategoryDetails(eventCategoryId);
 
             var okResult = result as OkObjectResult;
-           
+
         }
     }
 }

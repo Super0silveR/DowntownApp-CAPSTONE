@@ -11,7 +11,7 @@ using Xunit;
 using System.Collections.Generic; 
 using Application.DTOs.Queries;
 
-namespace Api.Tests.Controllers
+namespace ControllersTests
 {
     public class FollowersControllerTest
     {

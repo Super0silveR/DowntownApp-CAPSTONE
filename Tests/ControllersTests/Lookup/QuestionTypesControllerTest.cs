@@ -1,7 +1,9 @@
-using Api.Controllers.Lookup;
+﻿using Api.Controllers.Lookup;
 using Application.Core;
+using Application.DTOs;
+using Application.DTOs.Commands;
 using Application.DTOs.Queries;
-using Application.Handlers.Bars.Queries;
+using Application.Handlers.QuestionTypes.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,17 +13,17 @@ using System.Collections.Generic;
 using System.Threading;
 using Xunit;
 
-namespace Api.Tests.Controllers
+namespace ControllersTests.Lookup
 {
-    public class BarsControllerTest
+    public class QuestionTypesControllerTest
     {
         private readonly Mock<IMediator> _mediatorMock;
-        private readonly BarsController _controller;
+        private readonly QuestionTypesController _controller;
 
-        public BarsControllerTest()
+        public QuestionTypesControllerTest()
         {
             _mediatorMock = new Mock<IMediator>();
-            _controller = new BarsController(_mediatorMock.Object);
+            _controller = new QuestionTypesController();
             _controller.ControllerContext = new ControllerContext();
             _controller.ControllerContext.HttpContext = new DefaultHttpContext();
 
@@ -29,33 +31,35 @@ namespace Api.Tests.Controllers
             serviceProviderMock.Setup(sp => sp.GetService(typeof(IMediator))).Returns(_mediatorMock.Object);
 
             _controller.ControllerContext.HttpContext.RequestServices = serviceProviderMock.Object;
-
         }
 
         [Fact]
-        public async Task ShouldGetBars()
+        public async Task ShouldGetQuestionTypes()
         {
-            var mockResult = new Result<List<BarDto>>();
+            var mockResult = new Result<List<QuestionTypeDto>>();
             _mediatorMock.Setup(m => m.Send(It.IsAny<List.Query>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(mockResult);
 
-            var result = await _controller.GetBars();
+            var result = await _controller.GetQuestionType();
 
             var okResult = result as OkObjectResult;
+
+      
         }
 
         [Fact]
-        public async Task ShouldGetBarDetails()
+        public async Task ShouldGetQuestionTypeDetails()
         {
-            var barId = Guid.NewGuid();
+            var questionTypeId = Guid.NewGuid();
 
-            var mockDetailsResult = new Result<BarDto>();
+            var mockDetailsResult = new Result<QuestionTypeDto>();
             _mediatorMock.Setup(m => m.Send(It.IsAny<Details.Query>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(mockDetailsResult);
 
-            var result = await _controller.GetBarDetails(barId);
+            var result = await _controller.GetQuestionTypeDetails(questionTypeId);
 
             var okResult = result as OkObjectResult;
+
         }
     }
 }

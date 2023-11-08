@@ -8,7 +8,7 @@ using Application.Core;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 
-namespace Api.Tests.Controllers
+namespace ControllersTests.Base
 {
     public class BaseApiControllerTest
     {
