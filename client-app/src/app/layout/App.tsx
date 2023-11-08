@@ -36,32 +36,30 @@ function App() {
         <>
             {/** Providing the custom theme we created to the entire App. (see theme.ts) */}
             <ThemeProvider theme={theme}>
-                <MantineProvider>
-                    <ScrollRestoration />
-                    <ModalContainer />
-                    <Toaster
-                        position='bottom-right'
-                        gutter={8}
-                        toastOptions={{
-                            style: {
-                                border: '1px solid #713200',
-                                padding: '16px',
-                                color: '#713200',
-                            }
-                        }}
-                    />
-                    {location.pathname === '/' ? <HomePage /> : (
-                        <Box position='relative'>
-                            <ResponsiveAppBar />
-                            <Container sx={{ my: '7em' }}>
-                                {/** Route Outlet so we can swap in/out react components 
-                                 * when we navigate. */}
-                                <Outlet />
-                            </Container>
-                            {/** <Footer /> */}
-                        </Box>
-                    )}                    
-                </MantineProvider>
+                <ScrollRestoration />
+                <ModalContainer />
+                <Toaster
+                    position='bottom-right'
+                    gutter={8}
+                    toastOptions={{
+                        style: {
+                            border: '1px solid #713200',
+                            padding: '16px',
+                            color: '#713200',
+                        }
+                    }}
+                />
+                {location.pathname === '/' ? <HomePage /> : (
+                    <Box position='relative'>
+                        <ResponsiveAppBar />
+                        <Container sx={{ my: '7em' }}>
+                            {/** Route Outlet so we can swap in/out react components 
+                             * when we navigate. */}
+                            <Outlet />
+                        </Container>
+                        {/** <Footer /> */}
+                    </Box>
+                )}
             </ThemeProvider>
         </>
   );

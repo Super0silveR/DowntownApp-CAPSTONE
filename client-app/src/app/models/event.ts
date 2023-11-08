@@ -41,6 +41,7 @@ export interface Event {
     rating: Rating;
     attendees: ProfileDto[];
     contributors: Contributor[];
+    BgImage: string;
 }
 
 export const emptyEvent = (): Event => ({
@@ -55,5 +56,6 @@ export const emptyEvent = (): Event => ({
     isActive: true,
     rating: emptyRating(),
     attendees: [],
-    contributors: []
+    contributors: [],
+    BgImage: '1.jpg'
 });

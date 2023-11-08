@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Divider, Grid, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Divider, Grid, Paper, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
@@ -9,7 +9,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 import EventFilters from './EventFilters';
 import EventListItemPlaceholder from './EventListItemPlaceholder';
 import { PaginationParams } from '../../../app/models/pagination';
-import partyImage2HD from '../../../assets/party2.jpg';
+import theme from '../../../app/theme';
 
 function EventDashboard() {
     const { eventStore } = useStore();
@@ -27,15 +27,7 @@ function EventDashboard() {
     }
 
     return (
-        <Box sx={{
-            backgroundImage: `url(${partyImage2HD})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            backgroundColor: '#f7f7f7',
-            minHeight: '100vh',
-            padding: 3
-        }}>
+        <Box sx={{p:5,boxShadow: 'rgba(0, 0, 0, 0.2) 0px 1px 2px 0px',bgcolor:'rgba(249, 249, 249, 0.15)'}}>
             <Stack
                 direction='row'
                 justifyContent='space-between'
@@ -44,10 +36,8 @@ function EventDashboard() {
                 sx={{ marginBottom: 4 }}
             >
                 <Box>
-                    <Typography variant='h4' gutterBottom>
-                        Upcoming Events
-                    </Typography>
-                    <Typography variant='subtitle1' color='text.secondary'>
+                    <Typography variant='h3'>Event Listing</Typography>
+                    <Typography variant='subtitle1' color={theme.palette.primary.main} fontStyle='italic'>
                         Explore events, or create your own!
                     </Typography>
                 </Box>
@@ -57,14 +47,15 @@ function EventDashboard() {
                     size='large'
                     to='/createEvent'
                     sx={{
-                        borderRadius: '20px',
-                        backgroundColor: '#5c6bc0',
+                        borderRadius: '5px',
+                        backgroundColor: theme.palette.primary.main,
                         '&:hover': {
-                            backgroundColor: '#3f51b5',
+                            backgroundColor: theme.palette.action.hover,
+                            color: theme.palette.primary.dark
                         },
-                        padding: '10px 30px',
+                        padding: '10px 15px',
                         boxShadow: 1,
-                        transition: '0.3s',
+                        transition: '0.1s',
                     }}
                 >
                     + New Event

@@ -9,8 +9,8 @@ import { Divider } from '@mui/material';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../stores/store';
-import AccountMenu from './menus/AccountMenu';
 import logo from '../../assets/logo-4c-white-transparency@print.png';
+import { AccountMenu } from './menus/AccountMenu';
 
 const pages = ['Bars', 'Events', 'Errors'];
 
@@ -46,9 +46,6 @@ function ResponsiveAppBar() {
                                 sx={{
                                     my: 2,
                                     display: 'block',
-                                    '&:hover': {
-                                        color: 'purple',
-                                    }
                                 }}
                             >
                                 {pages[0]}
@@ -60,27 +57,10 @@ function ResponsiveAppBar() {
                                 sx={{
                                     my: 2,
                                     display: 'block',
-                                    '&:hover': {
-                                        color: 'purple',
-                                    }
                                 }}
                             >
                                 {pages[1]}
                             </Button>
-                            {/* <Button
-                                component={NavLink}
-                                to='/errors'
-                                color='inherit'
-                                sx={{
-                                    my: 2,
-                                    display: 'block',
-                                    '&:hover': {
-                                        color: 'purple',
-                                    }
-                                }}
-                            >
-                                {pages[2]}
-                            </Button> */}
                         </Box>
                     </>}
                     <AccountMenu logout={logout} user={user} />
