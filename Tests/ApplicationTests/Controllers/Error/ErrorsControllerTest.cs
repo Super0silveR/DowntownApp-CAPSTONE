@@ -2,7 +2,7 @@
 using Api.Controllers.Error;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ControllersTests.Error
+namespace Api.Tests.Controllers
 {
     public class ErrorsControllerTest
     {

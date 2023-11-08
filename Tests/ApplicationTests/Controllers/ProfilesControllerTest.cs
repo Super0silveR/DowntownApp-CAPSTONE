@@ -11,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ControllersTests
+namespace Api.Tests.Controllers
 {
     public class ProfilesControllerTest
     {

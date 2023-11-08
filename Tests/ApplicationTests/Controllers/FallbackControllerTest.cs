@@ -5,7 +5,7 @@ using Moq;
 using System.IO;
 using Xunit;
 
-namespace ControllersTests
+namespace Api.Tests.Controllers
 {
     public class FallbackControllerTest
     {

@@ -11,7 +11,7 @@
 //using Application.Common.Interfaces;
 //using Domain.Entities;
 
-//namespace ControllersTests.Identity
+//namespace ApplicationTests.Controllers.Identity
 //{
 //    public class AccountsControllerTest
 //    {

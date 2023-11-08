@@ -3,7 +3,7 @@ using Application.Core;
 using Application.DTOs;
 using Application.DTOs.Commands;
 using Application.DTOs.Queries;
-using Application.Handlers.ChatRoomTypes.Queries;
+using Application.Handlers.EventTypes.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,17 +13,17 @@ using System.Collections.Generic;
 using System.Threading;
 using Xunit;
 
-namespace ControllersTests.Lookup
+namespace Api.Tests.Controllers
 {
-    public class ChatRoomTypesControllerTest
+    public class EventTypesControllerTest
     {
         private readonly Mock<IMediator> _mediatorMock;
-        private readonly ChatRoomTypesController _controller;
+        private readonly EventTypesController _controller;
 
-        public ChatRoomTypesControllerTest()
+        public EventTypesControllerTest()
         {
             _mediatorMock = new Mock<IMediator>();
-            _controller = new ChatRoomTypesController();
+            _controller = new EventTypesController();
             _controller.ControllerContext = new ControllerContext();
             _controller.ControllerContext.HttpContext = new DefaultHttpContext();
 
@@ -34,32 +34,31 @@ namespace ControllersTests.Lookup
         }
 
         [Fact]
-        public async Task ShouldGetChatRoomTypes()
+        public async Task ShouldGetEventTypes()
         {
-            var mockResult = new Result<List<ChatRoomTypeDto>>();
+            var mockResult = new Result<List<EventTypeDto>>();
             _mediatorMock.Setup(m => m.Send(It.IsAny<List.Query>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(mockResult);
 
-            var result = await _controller.GetChatRoomTypes();
+            var result = await _controller.GetEventTypes();
 
             var okResult = result as OkObjectResult;
-
-           
         }
 
         [Fact]
-        public async Task ShouldGetChatRoomTypeDetails()
+        public async Task ShouldGetEventTypeDetails()
         {
-            var chatRoomTypeId = Guid.NewGuid();
+            var eventTypeId = Guid.NewGuid();
 
-            var mockDetailsResult = new Result<ChatRoomTypeDto>();
+            var mockDetailsResult = new Result<EventTypeDto>();
             _mediatorMock.Setup(m => m.Send(It.IsAny<Details.Query>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(mockDetailsResult);
 
-            var result = await _controller.GetChatRoomTypeDetails(chatRoomTypeId);
+            var result = await _controller.GetEventTypeDetails(eventTypeId);
 
             var okResult = result as OkObjectResult;
 
+      
         }
     }
 }
