@@ -8,7 +8,6 @@ import EventForm from "../../features/events/form/EventForm";
 import ProfilePage from "../../features/profiles/ProfilePage";
 import App from "../layout/App";
 import RequireAuthentication from "./RequireAuthentication";
-import RichTextEditorTests from "../common/components/RichTextEditor";
 
 /** Tree-like structure to represents the different routes in our Application. */
 export const routes: RouteObject[] = [

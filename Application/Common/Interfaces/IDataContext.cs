@@ -9,35 +9,42 @@ namespace Application.Common.Interfaces
     public interface IDataContext
     {
         // Entities
-        DbSet<Address> Addresses { get; }
-        DbSet<Avatar> Avatars { get; }
-        DbSet<Bar> Bars { get; }
-        DbSet<ScheduledEvent> ScheduledEvents { get; }
-        DbSet<EventAttendee> ScheduledEventAttendees { get; }
-        DbSet<EventChallenge> ScheduledEventChallenges { get; }
-        DbSet<EventComment> ScheduledEventComments { get; }
-        DbSet<BarLike> BarLikes { get; }
-        DbSet<Challenge> Challenges { get; }
-        DbSet<ChallengeType> ChallengeTypes { get; }
-        DbSet<ChatRoom> ChatRooms { get; }
-        DbSet<ChatRoomType> ChatRoomTypes { get; }
-        DbSet<Event> Events { get; }
-        DbSet<EventCategory> EventCategories { get; }
-        DbSet<EventContributor> EventContributors { get; }
-        DbSet<EventRating> EventRatings { get; }
-        DbSet<EventType> EventTypes { get; }
-        DbSet<EventTicket> EventTickets { get; }
-        DbSet<Group> Groups { get; }
-        DbSet<Question> Questions { get; }
-        DbSet<QuestionType> QuestionTypes { get; }
-        DbSet<User> Users { get; }
-        DbSet<UserAddress> UserAddresses { get; }
-        DbSet<UserChat> UserChats { get; }
-        DbSet<UserChatRoom> UserChatRooms { get; }
-        DbSet<UserFollowing> UserFollowings { get; }
-        DbSet<UserGroup> UserGroups { get; }
-        DbSet<UserPhoto> UserPhotos { get; }
-        DbSet<UserQuestion> UserQuestions { get; }
+        public DbSet<Address> Addresses { get; }
+        public DbSet<Avatar> Avatars { get; }
+        public DbSet<Bar> Bars { get; }
+        public DbSet<BarLike> BarLikes { get; }
+        public DbSet<Challenge> Challenges { get; }
+        public DbSet<ChallengeType> ChallengeTypes { get; }
+        public DbSet<ChatRoom> ChatRooms { get; }
+        public DbSet<ChatRoomType> ChatRoomTypes { get; }
+        public DbSet<ContentGenres> ContentGenres { get; }
+        public DbSet<CreatorContentGenres> CreatorContentGenres { get; }
+        public DbSet<CreatorProfiles> CreatorProfiles { get; }
+        public DbSet<CreatorReviews> CreatorReviews { get; }
+        public DbSet<Event> Events { get; }
+        public DbSet<EventCategory> EventCategories { get; }
+        public DbSet<EventContributor> EventContributors { get; }
+        public DbSet<EventRating> EventRatings { get; }
+        public DbSet<EventTicket> EventTickets { get; }
+        public DbSet<EventType> EventTypes { get; }
+        public DbSet<Group> Groups { get; }
+        public DbSet<Question> Questions { get; }
+        public DbSet<QuestionType> QuestionTypes { get; }
+        public DbSet<ScheduledEvent> ScheduledEvents { get; }
+        public DbSet<EventAttendee> ScheduledEventAttendees { get; }
+        public DbSet<EventChallenge> ScheduledEventChallenges { get; }
+        public DbSet<EventComment> ScheduledEventComments { get; }
+        public DbSet<EventTicket> ScheduledEventTickets { get; }
+        public DbSet<Socials> Socials { get; }
+        public DbSet<UserAddress> UserAddresses { get; }
+        public DbSet<User> Users { get; }
+        public DbSet<UserChat> UserChats { get; }
+        public DbSet<UserChatRoom> UserChatRooms { get; }
+        public DbSet<UserFollowing> UserFollowings { get; }
+        public DbSet<UserGroup> UserGroups { get; }
+        public DbSet<UserPhoto> UserPhotos { get; }
+        public DbSet<UserQuestion> UserQuestions { get; }
+        public DbSet<EventTicket> EventTicket { get; }
 
         // overrides
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
