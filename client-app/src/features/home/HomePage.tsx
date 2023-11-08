@@ -4,38 +4,35 @@ import { Link } from 'react-router-dom';
 import { useStore } from '../../app/stores/store';
 import LoginForm from '../users/LoginForm';
 import RegisterForm from '../users/RegisterForm';
-import Footer from '../../app/layout/Footer';
 import homeBackgroundVideo from '../../assets/video/homeBackgroundVideo.mp4'
 import NavBar from '../../app/layout/NavBar';
+import { Filter } from '@mui/icons-material';
 
 function HomePage() {
-  const { modalStore, userStore } = useStore();
- 
+  const { modalStore, userStore } = useStore()
+
   return (
-    <div style={{backgroundColor: 'black'}}>
-      <NavBar/>
-      <div style={{}}>
-      <video autoPlay loop muted id ='homeBackgroundVideo' style={{
-        justifyContent: 'center',
-        position: 'static',
-        top: '0px',
-        width: '100%',
-        zIndex: '-1',
-        filter: 'blur(0px)'      
-      }}>
-        <source src={homeBackgroundVideo} type='video/mp4'></source>
+    <div style={{ backgroundColor: 'black', overflow: 'hidden', position: 'relative', height: '100vh' }}>
+      <NavBar />
+      <video autoPlay loop muted id="homeBackgroundVideo" style={{
+    minWidth: '1920px',
+    width: '100%',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    filter: 'blur(5px)'
+  }}>
+        <source src={homeBackgroundVideo} type="video/mp4"></source>
       </video>
-      <Container>
+
+      <Container style={{ top: '80%', height: '100%', display: 'grid', alignItems: 'center' }}>
         <Box
           display="flex"
           flexDirection="column"
           alignItems="center"
           justifyContent="center"
-          height="0px"
-          position='relative'
-          top='-150px'
-          margin='0px'
-          padding='0px'
+          zIndex="1"
         >
           <Grid container spacing={2} justifyContent="center">
             {userStore.isLoggedIn ? (
@@ -43,7 +40,8 @@ function HomePage() {
                 <Button
                   variant="contained"
                   sx={{
-                    background: 'linear-gradient(135deg, #e91e63, #9c27b0)',
+                    background: 'linear-gradient(135deg, rgba(233, 30, 99, 1), rgba(156, 39, 176, 1))',
+              
                     color: 'white',
                     fontSize: '1.5rem',
                     padding: '1em 3em',
@@ -61,10 +59,11 @@ function HomePage() {
                   <Button
                     variant="contained"
                     sx={{
-                      background: 'linear-gradient(135deg, #e91e63, #9c27b0)',
+                      background: 'linear-gradient(135deg, rgba(233, 30, 99, 0.8), rgba(156, 39, 176, 0.8))',
                       color: 'white',
                       fontSize: '1.5rem',
                       padding: '1em 3em',
+                      minWidth: '335px'
                     }}
                     onClick={() => modalStore.openModal(<LoginForm />)}
                     size="large"
@@ -76,10 +75,11 @@ function HomePage() {
                   <Button
                     variant="contained"
                     sx={{
-                      background: 'linear-gradient(135deg, #9c27b0, #e91e63)',
+                      background: 'linear-gradient(135deg, rgba(156, 39, 176, 0.8), rgba(233, 30, 99, 0.8))',
                       color: 'white',
                       fontSize: '1.5rem',
                       padding: '1em 3em',
+                      minWidth: '335px'
                     }}
                     onClick={() => modalStore.openModal(<LoginForm />)}
                     size="large"
@@ -96,7 +96,8 @@ function HomePage() {
                     sx={{
                       fontSize: '1.5rem',
                       padding: '1em 3em',
-                      background: 'linear-gradient(135deg, #e91e63, #A38E31)',
+                      background: 'linear-gradient(135deg, rgba(233, 30, 99, 0.8), rgba(163, 142, 49, 0.8))',
+                      minWidth: '335px'
                     }}
                   >
                     Register
@@ -108,11 +109,6 @@ function HomePage() {
         </Box>
       </Container>
       </div>
-      <div style={{ position: 'static'}}>
-       <Footer/>
-      </div>
-
-    </div>
   );
 }
 
