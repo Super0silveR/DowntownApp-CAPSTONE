@@ -10,11 +10,11 @@ function CreatorProfileSurface(props : Props) {
         <>
             <Paper
                 sx={{
-                    textAlign: 'center',
                     fontFamily: 'monospace',
-                    padding: theme.spacing(2),
-                    fontSize: 16
-                }} 
+                    fontSize: 16,
+                    background: 'rgba(238, 238, 238, 0.85)',
+                    borderRadius: 0
+                }}
                 elevation={2}
             >
                 {props.content ?? null}

@@ -1,8 +1,13 @@
-import { Avatar, Chip, Divider, Grid, Paper, Stack, Typography, Tooltip } from '@mui/material';
+import { Avatar, Chip, Divider, Grid, Paper, Stack, Typography, Tooltip, Button, Badge } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { Profile } from '../../app/models/profile';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import FollowButton from './FollowButton';
+import { useStore } from '../../app/stores/store';
+import EditProfileForm from './forms/EditProfileForm';
+import { ColorCodeEnum, GetColor } from '../../app/common/constants';
+import theme from '../../app/theme';
+import { Edit } from '@mui/icons-material';
 
 interface Props {
     profile: Profile;
@@ -11,6 +16,11 @@ interface Props {
 /** Test Image : 'https://res.cloudinary.com/dwixnc66t/image/upload/v1641058233/samples/people/kitchen-bar.jpg' */
 
 function ProfileHeader({ profile }: Props) {
+
+    const { modalStore, userStore : { user } } = useStore();
+
+    const defaultColorCode = profile.colorCode ? GetColor(profile.colorCode) : GetColor('2');
+
     return (
         <Paper
             sx={{
@@ -20,12 +30,13 @@ function ProfileHeader({ profile }: Props) {
                 borderRadius: 0
             }}
             elevation={2}
+            className='profile-header'
         >
             <Grid container direction='row' minHeight={165}>
                 <Grid item xs={3}>
                     <Tooltip title="Edit my profile picture" placement="bottom">
                         <Avatar
-                            src={profile.photo ?? 'https://res.cloudinary.com/dwixnc66t/image/upload/v1641058233/samples/people/kitchen-bar.jpg'}
+                            src={profile.photo ?? ''}
                             sx={{
                                 width: { xs: 100, md: 175 },
                                 height: { xs: 100, md: 175 },
@@ -50,16 +61,17 @@ function ProfileHeader({ profile }: Props) {
                             <Typography sx={{ fontSize: 14, fontStyle: 'italic' }} variant='caption' color='secondary.dark'>@{profile?.userName}</Typography>
                             
                         </Stack>
-                        <Chip size='small' label="color-code" color='primary' variant="outlined" sx={{ width: 'fit-content' }} />
-                        {/* <Button
-                            variant='contained'
-                            size='small'
-                            sx={{ width: '25%' }}
-                            onClick={() => modalStore.openModal(<ProfileAvatarMaker />)}
-                            
-                        >
-                            <Typography fontFamily='monospace'>Make my Avatar!</Typography>
-                        </Button> */}
+                        <Chip label={defaultColorCode!.text} variant="outlined" sx={{ width: 'fit-content', color: defaultColorCode!.code, borderColor: defaultColorCode!.code }} />
+                        {(user?.userName === profile.userName) &&
+                            <Button
+                                variant='contained'
+                                size='small'
+                                sx={{ width: '25%', height: 20 }}
+                                onClick={() => modalStore.openModal(<EditProfileForm />)}
+                            >
+                                <Typography fontFamily='monospace'>Edit</Typography>
+                            </Button>
+                        }
                     </Stack>
                 </Grid>
                 <Grid item xs={2}>
@@ -104,6 +116,7 @@ function ProfileHeader({ profile }: Props) {
                         <Grid item xs={12}>
                             <FollowButton profile={profile} />
                         </Grid>
+                        {profile.isContentCreator && <div className="ribbon ribbon-top-right"><span>creator</span></div>}                        
                     </Grid>
                 </Grid>
             </Grid>

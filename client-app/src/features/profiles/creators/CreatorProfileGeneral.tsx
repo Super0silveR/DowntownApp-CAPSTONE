@@ -1,7 +1,5 @@
-import { Edit, ExpandMore, FormatAlignLeft } from "@mui/icons-material";
-import { Accordion, AccordionSummary, Typography, AccordionDetails, IconButton, ToggleButton, Divider } from "@mui/material";
+import { Accordion, Typography, AccordionDetails } from "@mui/material";
 import CreatorProfileContribution from "./CreatorProfileContribution";
-import theme from "../../../app/theme";
 import { Profile } from "../../../app/models/profile";
 import { useState, SyntheticEvent } from "react";
 import AccordionHeader from "../../../app/common/components/AccordionHeader";
@@ -30,7 +28,7 @@ function CreatorProfileGeneral({ profile }: Props) {
                     child={<CreatorProfileContribution currentProfileUserName={profile.userName!} />}
                 />
             </Accordion>
-            <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+            <Accordion expanded={expanded === 'past-experiences'} onChange={handleChange('past-experiences')}>
                 <AccordionHeader 
                     name="past-experiences"
                     title="Past Experiences"
@@ -40,7 +38,7 @@ function CreatorProfileGeneral({ profile }: Props) {
                     child={<CreatorProfileContribution currentProfileUserName={profile.userName!} />}
                 />
             </Accordion>
-            <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+            <Accordion expanded={expanded === 'stand-out'} onChange={handleChange('stand-out')}>
                 <AccordionHeader 
                     name='stand-out'
                     title='Stand Out'
