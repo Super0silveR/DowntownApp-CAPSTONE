@@ -65,15 +65,15 @@ export default observer(function EventFilters() {
                 value={view}
                 sx={{
                     '& .MuiToggleButtonGroup-grouped': {
-                        color: theme.palette.primary.contrastText, 
+                        color: theme.palette.primary.main, 
                         borderColor: theme.palette.divider,
                         '&.Mui-selected': {
                             color: theme.palette.secondary.contrastText,
                             backgroundColor: theme.palette.primary.main, 
                         },
                         '&:hover': {
-                            backgroundColor: theme.palette.primary.light, 
-                            color: theme.palette.secondary.contrastText, 
+                            backgroundColor: theme.palette.action.hover, 
+                            color: theme.palette.primary.dark, 
                         },
                     },
                 }}

@@ -1,5 +1,4 @@
 import { Paper } from "@mui/material";
-import theme from "../../../app/theme";
 
 interface Props {
     content?: JSX.Element | string | null;
