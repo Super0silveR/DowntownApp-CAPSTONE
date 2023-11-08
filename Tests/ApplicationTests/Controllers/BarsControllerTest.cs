@@ -35,27 +35,38 @@ namespace Api.Tests.Controllers
         [Fact]
         public async Task ShouldGetBars()
         {
-            var mockResult = new Result<List<BarDto>>();
+            // Arrange
+            var mockResult = new Result<List<BarDto>>() { Value = new List<BarDto>() };
             _mediatorMock.Setup(m => m.Send(It.IsAny<List.Query>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(mockResult);
 
+            // Act
             var result = await _controller.GetBars();
 
-            var okResult = result as OkObjectResult;
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var returnValue = Assert.IsType<Result<List<BarDto>>>(okResult.Value);
+            Assert.Equal(mockResult.Value, returnValue.Value);
         }
+
 
         [Fact]
         public async Task ShouldGetBarDetails()
         {
+            // Arrange
             var barId = Guid.NewGuid();
-
-            var mockDetailsResult = new Result<BarDto>();
+            var mockDetailsResult = new Result<BarDto>() { Value = new BarDto { Id = barId } };
             _mediatorMock.Setup(m => m.Send(It.IsAny<Details.Query>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(mockDetailsResult);
 
+            // Act
             var result = await _controller.GetBarDetails(barId);
 
-            var okResult = result as OkObjectResult;
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var returnValue = Assert.IsType<Result<BarDto>>(okResult.Value);
+            Assert.Equal(mockDetailsResult.Value, returnValue.Value);
         }
+
     }
 }
