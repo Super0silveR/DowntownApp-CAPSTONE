@@ -45,7 +45,7 @@ export class Profile implements IProfile {
         this.userName = user.userName;
         this.displayName = user.displayName;
         this.photo = user.photo;
-        this.colorCode = ColorCodeEnum.at(4)?.text!;
+        this.colorCode = '5';
     }
     
     followers = 0;

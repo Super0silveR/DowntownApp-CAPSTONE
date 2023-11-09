@@ -1,7 +1,5 @@
-import { useState } from 'react';
 import {
     Avatar,
-    AvatarGroup,
     Box,
     Card,
     CardActions,
@@ -12,16 +10,10 @@ import {
     IconButton,
     Tooltip,
     Typography,
-    Rating,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Button,
     CardMedia,
     CardActionArea,
 } from '@mui/material';
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Event } from '../../../app/models/event';
 import { observer } from 'mobx-react-lite';
 import dayjs from 'dayjs';

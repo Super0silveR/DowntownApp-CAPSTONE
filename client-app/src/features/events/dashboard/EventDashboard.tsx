@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Divider, Grid, Paper, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Divider, Grid, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';

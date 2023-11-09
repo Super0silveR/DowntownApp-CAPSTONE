@@ -1,5 +1,5 @@
 import { Edit } from "@mui/icons-material";
-import { Button, Divider, Stack, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
+import { Button, Stack, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import { useCurrentEditor } from "@tiptap/react"
 import { useEffect, useState } from "react";
 
@@ -38,7 +38,7 @@ const EditorMenuBar = () => {
                         aria-label="left aligned"
                         aria-details='editor-tiptap'
                         sx={{height:25,width:25,color:"black",mb:1,mt:1}}
-                        onClick={(_) => handleEditMode()}
+                        onClick={() => handleEditMode()}
                         className={editMode ? 'edit-mode-active' : ''}
                     >
                         <Edit sx={{height:20,width:20}} />

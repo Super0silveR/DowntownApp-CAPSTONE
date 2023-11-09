@@ -1,6 +1,5 @@
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { styled, Rating, Typography, Stack, Box, Divider, Button } from "@mui/material";
-import { useState } from "react";
 import { Rating as EventRating } from '../../../app/models/event';
 import TextInput from "../../../app/common/form/TextInput";
 import { Formik } from "formik";
@@ -23,13 +22,11 @@ interface Props {
 }
 
 const EventRatingModal = ({ rating }: Props) => {
-    const [voted, setVoted] = useState(false);
 
     const { modalStore } = useStore();
 
     function handleRatingChange(value: number | null) {
-        //setRating(value ?? 0);
-        setVoted(true);
+        console.log(value);
     }
 
     return (
@@ -38,12 +35,12 @@ const EventRatingModal = ({ rating }: Props) => {
             form={
                 <Formik
                     initialValues={{}}
-                    onSubmit={(values, { setErrors }) => {
+                    onSubmit={(values) => {
                         //TODO: Implement saving profile logic.
                         console.log(values);
                     }}
                 >
-                    {({handleSubmit, isSubmitting, errors}) => (
+                    {({handleSubmit, isSubmitting}) => (
                         <Form
                             className='ui-form'
                             onSubmit={handleSubmit}

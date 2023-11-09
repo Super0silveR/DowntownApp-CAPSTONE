@@ -10,7 +10,6 @@ import { useStore } from '../stores/store';
 import LoadingComponent from './LoadingComponent';
 import { observer } from 'mobx-react-lite';
 import ModalContainer from '../common/modals/ModalContainer';
-import { MantineProvider } from '@mantine/core';
 
 /** https://react-hot-toast.com/docs/styling */
 

@@ -1,7 +1,7 @@
 import { Accordion, Typography, AccordionDetails } from "@mui/material";
 import CreatorProfileContribution from "./CreatorProfileContribution";
 import { Profile } from "../../../app/models/profile";
-import { useState, SyntheticEvent } from "react";
+import { useState } from "react";
 import AccordionHeader from "../../../app/common/components/AccordionHeader";
 import AccordionContent from "../../../app/common/components/AccordionContent";
 
@@ -12,13 +12,13 @@ interface Props {
 function CreatorProfileGeneral({ profile }: Props) {
     const [expanded, setExpanded] = useState<string | false>("collaborations");
   
-    const handleChange = (panel: string) => (event: SyntheticEvent, isExpanded: boolean) => {
+    const handleChange = (panel: string) => (isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : false);
     };
 
     return (
         <>
-            <Accordion expanded={expanded === 'collaborations'} onChange={handleChange('collaborations')}>
+            <Accordion expanded={expanded === 'collaborations'} onChange={() => handleChange('collaborations')}>
                 <AccordionHeader 
                     name="collaborations"
                     title="Collaborations"
@@ -28,7 +28,7 @@ function CreatorProfileGeneral({ profile }: Props) {
                     child={<CreatorProfileContribution currentProfileUserName={profile.userName!} />}
                 />
             </Accordion>
-            <Accordion expanded={expanded === 'past-experiences'} onChange={handleChange('past-experiences')}>
+            <Accordion expanded={expanded === 'past-experiences'} onChange={() => handleChange('past-experiences')}>
                 <AccordionHeader 
                     name="past-experiences"
                     title="Past Experiences"
@@ -38,7 +38,7 @@ function CreatorProfileGeneral({ profile }: Props) {
                     child={<CreatorProfileContribution currentProfileUserName={profile.userName!} />}
                 />
             </Accordion>
-            <Accordion expanded={expanded === 'stand-out'} onChange={handleChange('stand-out')}>
+            <Accordion expanded={expanded === 'stand-out'} onChange={() => handleChange('stand-out')}>
                 <AccordionHeader 
                     name='stand-out'
                     title='Stand Out'

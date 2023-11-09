@@ -1,13 +1,11 @@
-import { Avatar, Chip, Divider, Grid, Paper, Stack, Typography, Tooltip, Button, Badge } from '@mui/material';
+import { Avatar, Chip, Divider, Grid, Paper, Stack, Typography, Tooltip, Button } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { Profile } from '../../app/models/profile';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import FollowButton from './FollowButton';
 import { useStore } from '../../app/stores/store';
 import EditProfileForm from './forms/EditProfileForm';
-import { ColorCodeEnum, GetColor } from '../../app/common/constants';
-import theme from '../../app/theme';
-import { Edit } from '@mui/icons-material';
+import { GetColor } from '../../app/common/constants';
 
 interface Props {
     profile: Profile;

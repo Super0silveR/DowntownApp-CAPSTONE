@@ -1,4 +1,4 @@
-import { Divider, FormControl, FormHelperText, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material';
+import { FormControl, FormHelperText, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material';
 import { useField } from 'formik';
 import FormValidationError from './FormValidationError';
 import { useState } from 'react';

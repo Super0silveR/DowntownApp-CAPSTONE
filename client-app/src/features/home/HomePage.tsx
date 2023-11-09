@@ -6,7 +6,6 @@ import LoginForm from '../users/LoginForm';
 import RegisterForm from '../users/RegisterForm';
 import homeBackgroundVideo from '../../assets/video/homeBackgroundVideo.mp4'
 import NavBar from '../../app/layout/NavBar';
-import { Filter } from '@mui/icons-material';
 
 function HomePage() {
   const { modalStore, userStore } = useStore()
