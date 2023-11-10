@@ -105,8 +105,8 @@ function EventDetails() {
                                         startIcon={<LiveTvIcon />}
                                         variant='contained'
                                         color='info'
-                                        component={link}
-                                        to={/events/${eventStore.id}/live}
+                                        component={Link}
+                                        to={`/events/${event.id}/live`}
                                         sx={{TextTransform: 'none'}}
                                     >
                                         Join Live Event

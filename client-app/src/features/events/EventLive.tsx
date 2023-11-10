@@ -1,7 +1,5 @@
 import { Box, Button, Card, CardMedia, Grid, Paper, Typography, useTheme } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import partyImage2HD from '../../../assets/party2.jpg';
-import Image3 from '../../../assets/party3.jpg';
 import { MonetizationOn } from '@mui/icons-material';
 import EventLiveChat from './EventLiveChat';
 
@@ -9,17 +7,7 @@ function EventLive() {
     const theme = useTheme();
     return (
         <>
-            <Box sx={{
-                backgroundImage: `url(${partyImage2HD})`,
-                padding: theme.spacing(1),
-                minHeight: '100vh',
-                paddingTop: theme.spacing(1),
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                backgroundColor: '#f7f7f7',
-            }}>
-                
+            <Box>                
                 <Grid container spacing={2}>
                     <Grid container item spacing={1}>
                         <Grid item xs={12} lg={8}>
@@ -27,7 +15,7 @@ function EventLive() {
                                 <CardMedia
                                     component="img"
                                     alt="Event Image"
-                                    image={Image3}
+                                    image={''}
                                     sx={{ objectFit: 'cover' }}
                                 />
                                 <Typography variant="h4" component="div" textAlign={"center"}>
