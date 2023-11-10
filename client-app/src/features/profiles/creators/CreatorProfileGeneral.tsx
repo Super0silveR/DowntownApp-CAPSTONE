@@ -12,7 +12,7 @@ interface Props {
 function CreatorProfileGeneral({ profile }: Props) {
     const [expanded, setExpanded] = useState<string | false>();
   
-    const handleChange = (panel: string) => (e: SyntheticEvent, isExpanded: boolean) => {
+    const handleChange = (panel: string) => (_e: SyntheticEvent, isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : false);
     };
 
