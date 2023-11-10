@@ -105,7 +105,9 @@ function EventDetails() {
                                         startIcon={<LiveTvIcon />}
                                         variant='contained'
                                         color='info'
-                                        sx={{ minWidth: '125px', m:0 }} 
+                                        component={link}
+                                        to={/events/${eventStore.id}/live}
+                                        sx={{TextTransform: 'none'}}
                                     >
                                         Join Live Event
                                     </Button>
