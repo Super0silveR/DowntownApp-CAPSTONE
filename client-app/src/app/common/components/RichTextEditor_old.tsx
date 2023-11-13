@@ -1,4 +1,4 @@
-import { useEditor, EditorContent, useCurrentEditor, EditorProvider } from '@tiptap/react';
+import { useCurrentEditor, EditorProvider } from '@tiptap/react';
 import TextStyle, { TextStyleOptions } from '@tiptap/extension-text-style';
 import StarterKit from '@tiptap/starter-kit';
 import TextAlign from '@tiptap/extension-text-align';
@@ -35,7 +35,7 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
  * Component representing the editorial abilities of the editor.
  * @returns 
  */
-const EditorMenu = () => {
+ export const EditorMenu = () => {
 
   const { editor } = useCurrentEditor();
 

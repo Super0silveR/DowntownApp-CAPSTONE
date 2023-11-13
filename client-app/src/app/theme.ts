@@ -7,7 +7,6 @@ import green from "@mui/material/colors/green";
 import lightBlue from "@mui/material/colors/lightBlue";
 import grey from "@mui/material/colors/grey";
 import { deepPurple } from "@mui/material/colors";
-import { colors } from "@mui/material";
 
 const theme = createTheme({
     components: {
@@ -30,6 +29,9 @@ const theme = createTheme({
                     ...(ownerState['aria-label'] === 'attendees' && {
                         backgroundColor: theme.palette.primary.light,
                         margin:-2
+                    }),
+                    ...(ownerState['aria-label'] === 'account-avatar' && {
+                        margin:-2
                     })
                 })
             }
@@ -37,9 +39,23 @@ const theme = createTheme({
         MuiButton: {
             styleOverrides: {
                 root: ({ownerState}) => ({
+                    color: theme.palette.common.white,
+                    marginRight: '10px',
+                    '&:hover': {
+                        color: theme.palette.primary.dark,
+                        backgroundColor: theme.palette.action.hover
+                    },
                     ...(ownerState.color === 'warning' && {
                         color: '#fff'
                      })
+                })
+            }
+        },
+        MuiBadge: {
+            styleOverrides: {
+                badge:  ({theme}) => ({
+                    backgroundColor: theme.palette.primary.light,
+                    color: "white"
                 })
             }
         },
@@ -60,7 +76,8 @@ const theme = createTheme({
             styleOverrides: {
                 root: ({ownerState, theme}) => ({
                     ...((ownerState['aria-details'] === 'socials' ||
-                         ownerState['aria-details'] === 'profile-photos') && {
+                         ownerState['aria-details'] === 'profile-photos' ||
+                         ownerState['aria-details'] === 'base') && {
                         color: theme.palette.common.white,
                         '&:hover': {
                             color: theme.palette.primary.main,
@@ -75,6 +92,20 @@ const theme = createTheme({
                         }
                     })
                 })
+            }
+        },
+        MuiListItemIcon: {
+            styleOverrides: {
+                root: ({ownerState, theme}) => ({
+                    ...((ownerState['aria-details'] === 'account-menu-icon') && {
+                        color: theme.palette.primary.main,
+                        '&:hover': {
+                            color: theme.palette.primary.dark,
+                            backgroundColor: theme.palette.action.hover
+                        }
+                    })
+                })
+                
             }
         },
         MuiToggleButton: {
@@ -114,7 +145,7 @@ const theme = createTheme({
         }
     },
     typography: {
-        fontFamily: 'sans-serif'
+        fontFamily: 'Roboto'
     },
     palette: {
         mode: 'light',

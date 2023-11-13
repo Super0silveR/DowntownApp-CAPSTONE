@@ -7,9 +7,8 @@ import { useStore } from "../../../app/stores/store";
 import { ProfileFormValues } from "../../../app/models/profile";
 import FormContainer from "../../../app/common/form/FormContainer";
 import TextInput from "../../../app/common/form/TextInput";
-import FormValidationError from "../../../app/common/form/FormValidationError";
-import { COLOR_CODE, ColorCodeEnum } from "../../../app/common/constants";
-import { Description, InfoOutlined, List, LocationCity } from "@mui/icons-material";
+import { ColorCodeEnum } from "../../../app/common/constants";
+import { Description, InfoOutlined, LocationCity } from "@mui/icons-material";
 import SelectInput from "../../../app/common/form/SelectInput";
 import { useEffect } from "react";
 
@@ -25,7 +24,7 @@ function EditProfileForm() {
         location: Yup.string()
     });
 
-    const { modalStore, profileStore } = useStore();
+    const { modalStore } = useStore();
 
     const label = { inputProps: { 'aria-label': 'switch for boolean.' } };
 
@@ -46,13 +45,13 @@ function EditProfileForm() {
                         isPrivate: false,
                         location: ''
                     }}
-                    onSubmit={(values, { setErrors }) => {
+                    onSubmit={(values) => {
                         //TODO: Implement saving profile logic.
                         console.log(values);
                     }}
                     validationSchema={validationSchema}
                 >
-                    {({handleSubmit, isSubmitting, errors}) => (
+                    {({handleSubmit, isSubmitting }) => (
                         <Form
                             className='ui-form'
                             onSubmit={handleSubmit}
@@ -95,7 +94,6 @@ function EditProfileForm() {
                                         )
                                     }}
                                 />
-                                {/* {errors.error && <FormValidationError error={errors.error ?? ''} />} */}
                                 <Divider sx={{width:'50%'}} />
                                 <Stack direction='row' spacing={2}>
                                     <LoadingButton sx={{

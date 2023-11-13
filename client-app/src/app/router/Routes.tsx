@@ -8,6 +8,7 @@ import EventForm from "../../features/events/form/EventForm";
 import ProfilePage from "../../features/profiles/ProfilePage";
 import App from "../layout/App";
 import RequireAuthentication from "./RequireAuthentication";
+import EventLive from "../../features/events/EventLive";
 
 /** Tree-like structure to represents the different routes in our Application. */
 export const routes: RouteObject[] = [
@@ -34,6 +35,7 @@ export const routes: RouteObject[] = [
                     {path: 'events', element: <EventDashboard />},
                     {path: 'events/:id', element: <EventDetails />},
                     {path: 'createEvent', element: <EventForm key='create' />},
+                    {path: 'events/:id/live', element: <EventLive />},
                     {path: 'manageEvent/:id', element: <EventForm key='manage' />},
 
                     /** User related routes. */

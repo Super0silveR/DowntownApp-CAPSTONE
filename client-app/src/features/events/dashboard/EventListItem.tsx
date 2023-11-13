@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
 import {
     Avatar,
-    AvatarGroup,
     Box,
     Card,
     CardActions,
@@ -12,71 +10,62 @@ import {
     IconButton,
     Tooltip,
     Typography,
-    Rating,
-    Dialog, 
-    DialogActions, 
-    DialogContent, 
-    DialogTitle, 
-    Button, 
+    CardMedia,
+    CardActionArea,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Event } from '../../../app/models/event';
 import { observer } from 'mobx-react-lite';
 import dayjs from 'dayjs';
 import { useTheme } from '@mui/material/styles';
-import { Favorite, GroupAdd, Share } from '@mui/icons-material';
-import EventOptionsMenu from '../../../app/layout/menus/EventOptionsMenu';
-import Image3 from '../../../assets/image.png';
+import { Favorite, GroupAdd, InfoOutlined, Share } from '@mui/icons-material';
+import { useStore } from '../../../app/stores/store';
+import { router } from '../../../app/router/Routes';
+import EventRatingModal from './EventRatingModal';
 
 interface Props {
     event: Event;
+    isAlone: boolean;
 }
 
-function EventListItem({ event }: Props) {
+function EventListItem({ event, isAlone }: Props) {
     const theme = useTheme();
     const host = event.contributors.find((c) => c.status === 'Creator')?.user;
-    const [ratingDialogOpen, setRatingDialogOpen] = useState(false);
-    const [userRating, setUserRating] = useState(0);
 
-    const handleOpenRatingDialog = () => {
-        setRatingDialogOpen(true);
-    };
+    const { userStore: { user }, modalStore } = useStore();
 
-    const handleCloseRatingDialog = () => {
-        setRatingDialogOpen(false);
-    };
-
-    const handleRateEvent = () => {
-        console.log(`Rated event "${event.title}" with ${userRating} stars.`);
-        setRatingDialogOpen(false);
-    };
+    const isHost = host?.userName === user?.userName;
 
     return (
-        <Grid item xs={12} key={event.id} sx={{  }}>
+        <Grid item xs={isAlone ? 12 : 6} key={event.id}>
             <Card
                 sx={{
-                    backgroundImage: `url(${Image3})`,
-                    backgroundSize: 'cover',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'center',
+                    mb:1
                 }}
-
+                variant='outlined'
             >
+                <CardActionArea onClick={() => router.navigate(`/events/${event.id}`)}>
+                    <CardMedia
+                        component="img"
+                        image={`/assets/categoryImages/${event.BgImage}`}
+                        alt={`Category${event.BgImage}.jpg`}
+                        sx={{p:0}}
+                    />
+                </CardActionArea>
                 <CardHeader
                     avatar={
                         <Tooltip title={host?.displayName} arrow>
-                            <Avatar src={host?.photo || `url(${Image3})`} sx={{  }} />
+                            <Avatar src={host?.photo} />
                         </Tooltip>
                     }
-                    action={<EventOptionsMenu event={event} />}
                     title={<Typography component="div" variant="body2" fontSize={18}>{event.title}</Typography>}
                     subheader={
                         <Box>
-                            <Typography component="span" variant="subtitle2" fontWeight="100" color={theme.palette.secondary.dark}>
+                            <Typography component="span" variant="subtitle2" fontWeight="100" color={theme.palette.primary.light}>
                                 {dayjs(event.date!).format('MMMM DD, YYYY — h:mm A')}
                             </Typography>
                             <Divider sx={{ mb: 2, width: '50%' }} />
-                            <Typography component="p" variant="caption" fontWeight="100" color={theme.palette.primary.dark}>
+                            <Typography component="p" variant="caption" fontWeight="100" color={theme.palette.primary.main}>
                                 Hosted by <Link to={host ? `/profiles/${host.userName}` : '#'}>{host?.displayName ?? 'Someone'}</Link>
                             </Typography>
                         </Box>
@@ -89,15 +78,9 @@ function EventListItem({ event }: Props) {
                     </Typography>
                 </CardContent>
                 <Divider />
-                <CardContent>
-                    <AvatarGroup max={4} sx={{ justifyContent: 'right', m: -1 }}>
-                        {}
-                    </AvatarGroup>
-                </CardContent>
-                <Divider />
                 <CardActions disableSpacing>
                     <Tooltip title="Rate this event">
-                        <IconButton aria-details="event-actions" aria-label="rate" onClick={handleOpenRatingDialog}>
+                        <IconButton aria-details="event-actions" aria-label="rate" onClick={() => modalStore.openModal(<EventRatingModal rating={event.rating} />)}>
                             <Favorite />
                         </IconButton>
                     </Tooltip>
@@ -106,24 +89,34 @@ function EventListItem({ event }: Props) {
                             <Share />
                         </IconButton>
                     </Tooltip>
-                    <Tooltip title="Attend this event">
-                        <IconButton aria-details="event-actions" aria-label="attend" sx={{ marginLeft: 'auto' }}>
-                            <GroupAdd />
-                        </IconButton>
-                    </Tooltip>
+                    {isHost ? 
+                        <Tooltip title={
+                            'You are hosting this event!'
+                        }>
+                            <IconButton aria-details="event-actions" aria-label="hosting" sx={{ marginLeft: 'auto' }}>
+                                <InfoOutlined />
+                            </IconButton>
+                        </Tooltip>
+                        :     
+                        <Tooltip title="Attend this event">
+                            <IconButton aria-details="event-actions" aria-label="attend" sx={{ marginLeft: 'auto' }}>
+                                <GroupAdd />
+                            </IconButton>
+                        </Tooltip>
+                    }
                 </CardActions>
             </Card>
-
-            {}
-            <Dialog open={ratingDialogOpen} onClose={handleCloseRatingDialog}>
+            {/** TODO: Use our MODAL STORE for using modals. (See ProfileHeader.tsx) */}
+            {/* <Dialog open={ratingDialogOpen} onClose={handleCloseRatingDialog}>
                 <DialogTitle>Rate "{event.title}"</DialogTitle>
                 <DialogContent>
                     <Rating
                         name="event-rating"
                         value={userRating}
                         precision={0.5}
-                        onChange={(event, newValue) => {
-                            setUserRating(newValue);
+                        onChange={(_, newValue) => {
+                            if (!newValue) return;
+                            setUserRating(newValue!);
                         }}
                     />
                 </DialogContent>
@@ -133,7 +126,7 @@ function EventListItem({ event }: Props) {
                         Rate
                     </Button>
                 </DialogActions>
-            </Dialog>
+            </Dialog> */}
         </Grid>
     );
 }

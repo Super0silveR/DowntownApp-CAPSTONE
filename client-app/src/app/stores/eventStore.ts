@@ -55,7 +55,7 @@ export default class EventStore {
     get groupedEventsByDate() {
         return Object.entries(
             this.eventsByDate.reduce((events, event) => {
-                const date = dayjs(event.date!).format('MMMM DD - YYYY');
+                const date = dayjs(event.date!).format('MMMM DD — YYYY');
                 events[date] = events[date] ? [...events[date], event] : [event];
                 return events;
             }, {} as {[key: string]: Event[]})
@@ -271,8 +271,10 @@ export default class EventStore {
 
     /** Add an event to the registry. */
     private setEvent = (event: Event) => {
+        const genRandomNumber = Math.floor((Math.random() * 6) + 1);
         event.date = new Date(event.date!);
         event.creatorUserName ??= store.userStore.user?.userName as string;
+        event.BgImage = `${genRandomNumber}.jpg`;
         this.eventRegistry.set(event.id, event);
     };
 }

@@ -1,7 +1,7 @@
 import { Accordion, Typography, AccordionDetails } from "@mui/material";
 import CreatorProfileContribution from "./CreatorProfileContribution";
 import { Profile } from "../../../app/models/profile";
-import { useState, SyntheticEvent } from "react";
+import { SyntheticEvent, useState } from "react";
 import AccordionHeader from "../../../app/common/components/AccordionHeader";
 import AccordionContent from "../../../app/common/components/AccordionContent";
 
@@ -10,9 +10,9 @@ interface Props {
 }
 
 function CreatorProfileGeneral({ profile }: Props) {
-    const [expanded, setExpanded] = useState<string | false>("collaborations");
+    const [expanded, setExpanded] = useState<string | false>();
   
-    const handleChange = (panel: string) => (event: SyntheticEvent, isExpanded: boolean) => {
+    const handleChange = (panel: string) => (_e: SyntheticEvent, isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : false);
     };
 
