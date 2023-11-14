@@ -40,7 +40,7 @@ namespace Api.Tests.Controllers
         {
             var mockResult = new Application.Core.Result<ProfileDto>();  
             _mediatorMock.Setup(m => m.Send(It.IsAny<ProfileDetails.Query>(), It.IsAny<CancellationToken>()))
-                .Returns(Task.FromResult(mockResult));  
+                .Returns(Task.FromResult(mockResult)!);  
 
             var result = await _controller.GetProfile("sampleUsername");
 

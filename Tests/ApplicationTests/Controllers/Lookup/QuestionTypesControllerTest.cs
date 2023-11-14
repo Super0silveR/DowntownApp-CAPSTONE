@@ -23,8 +23,10 @@ namespace Api.Tests.Controllers
         public QuestionTypesControllerTest()
         {
             _mediatorMock = new Mock<IMediator>();
-            _controller = new QuestionTypesController();
-            _controller.ControllerContext = new ControllerContext();
+            _controller = new QuestionTypesController
+            {
+                ControllerContext = new ControllerContext()
+            };
             _controller.ControllerContext.HttpContext = new DefaultHttpContext();
 
             var serviceProviderMock = new Mock<IServiceProvider>();
@@ -52,7 +54,7 @@ namespace Api.Tests.Controllers
         {
             var questionTypeId = Guid.NewGuid();
 
-            var mockDetailsResult = new Result<QuestionTypeDto>();
+            var mockDetailsResult = new Result<QuestionTypeDto?>();
             _mediatorMock.Setup(m => m.Send(It.IsAny<Details.Query>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(mockDetailsResult);
 

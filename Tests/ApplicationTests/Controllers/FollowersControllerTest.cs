@@ -41,7 +41,7 @@ namespace Api.Tests.Controllers
             var mockResult = new Application.Core.Result<MediatR.Unit>(); 
 
             _mediatorMock.Setup(m => m.Send(It.IsAny<FollowToggle.Command>(), It.IsAny<CancellationToken>()))
-                .Returns(Task.FromResult(mockResult));  
+                .Returns(Task.FromResult(mockResult)!);  
 
             var result = await _controller.Follow("sampleUsername");
 

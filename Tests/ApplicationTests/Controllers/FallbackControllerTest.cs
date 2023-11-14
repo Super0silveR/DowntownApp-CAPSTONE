@@ -13,10 +13,12 @@ namespace Api.Tests.Controllers
 
         public FallbackControllerTest()
         {
-            _controller = new FallbackController();
-            _controller.ControllerContext = new ControllerContext
+            _controller = new FallbackController
             {
-                HttpContext = new DefaultHttpContext()
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext()
+                }
             };
         }
 
@@ -30,6 +32,7 @@ namespace Api.Tests.Controllers
             Assert.IsType<PhysicalFileResult>(result);
             var physicalFileResult = result as PhysicalFileResult;
 
+            Assert.NotNull(physicalFileResult);
             Assert.Equal("text/HTML", physicalFileResult.ContentType);
 
             var expectedPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html");
