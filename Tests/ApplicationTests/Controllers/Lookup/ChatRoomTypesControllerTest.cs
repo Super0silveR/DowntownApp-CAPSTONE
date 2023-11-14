@@ -23,9 +23,13 @@ namespace Api.Tests.Controllers
         public ChatRoomTypesControllerTest()
         {
             _mediatorMock = new Mock<IMediator>();
-            _controller = new ChatRoomTypesController();
-            _controller.ControllerContext = new ControllerContext();
-            _controller.ControllerContext.HttpContext = new DefaultHttpContext();
+            _controller = new ChatRoomTypesController
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext()
+                }
+            };
 
             var serviceProviderMock = new Mock<IServiceProvider>();
             serviceProviderMock.Setup(sp => sp.GetService(typeof(IMediator))).Returns(_mediatorMock.Object);
@@ -52,7 +56,7 @@ namespace Api.Tests.Controllers
         {
             var chatRoomTypeId = Guid.NewGuid();
 
-            var mockDetailsResult = new Result<ChatRoomTypeDto>();
+            var mockDetailsResult = new Result<ChatRoomTypeDto?>();
             _mediatorMock.Setup(m => m.Send(It.IsAny<Details.Query>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(mockDetailsResult);
 

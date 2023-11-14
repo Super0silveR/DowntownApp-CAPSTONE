@@ -21,8 +21,10 @@ namespace Api.Tests.Controllers
         public BarsControllerTest()
         {
             _mediatorMock = new Mock<IMediator>();
-            _controller = new BarsController(_mediatorMock.Object);
-            _controller.ControllerContext = new ControllerContext();
+            _controller = new BarsController(_mediatorMock.Object)
+            {
+                ControllerContext = new ControllerContext()
+            };
             _controller.ControllerContext.HttpContext = new DefaultHttpContext();
 
             var serviceProviderMock = new Mock<IServiceProvider>();
@@ -55,7 +57,8 @@ namespace Api.Tests.Controllers
         {
             // Arrange
             var barId = Guid.NewGuid();
-            var mockDetailsResult = new Result<BarDto>() { Value = new BarDto { Id = barId } };
+
+            var mockDetailsResult = new Result<BarDto?>();
             _mediatorMock.Setup(m => m.Send(It.IsAny<Details.Query>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(mockDetailsResult);
 
