@@ -83,7 +83,16 @@ export default function EventContributors({ contributors }: Props) {
         variant="outlined"
         onClick={openInviteModal}
         size="small"
-        sx={{ ml: 2 }}
+              sx={{
+                  ml: 2,
+                  color: 'purple', 
+                  borderColor: 'purple', 
+                  '&:hover': {
+                      backgroundColor: 'pink', 
+                      borderColor: 'purple', 
+                  }
+
+              }}
       >
         Invite Contributor
       </Button>
