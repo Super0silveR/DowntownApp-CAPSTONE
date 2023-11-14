@@ -39,7 +39,7 @@ namespace Api.Tests.Controllers
             var mockResult = new Application.Core.Result<Domain.Entities.UserPhoto> { Value = mockPhoto };
 
             _mediatorMock.Setup(m => m.Send(It.IsAny<AddPhoto.Command>(), It.IsAny<CancellationToken>()))
-                .Returns(Task.FromResult(mockResult));
+                .Returns(Task.FromResult(mockResult)!);
 
             var result = await _controller.Upload(new AddPhoto.Command());
 
@@ -51,7 +51,7 @@ namespace Api.Tests.Controllers
         {
             var mockResult = new Application.Core.Result<MediatR.Unit>();
             _mediatorMock.Setup(m => m.Send(It.IsAny<SetMainPhoto.Command>(), It.IsAny<CancellationToken>()))
-                .Returns(Task.FromResult(mockResult));
+                .Returns(Task.FromResult(mockResult)!);
 
             var result = await _controller.SetMain("sampleId");
 
@@ -62,7 +62,7 @@ namespace Api.Tests.Controllers
         {
             var mockResult = new Application.Core.Result<MediatR.Unit>();
             _mediatorMock.Setup(m => m.Send(It.IsAny<DeletePhoto.Command>(), It.IsAny<CancellationToken>()))
-                .Returns(Task.FromResult(mockResult));
+                .Returns(Task.FromResult(mockResult)!);
 
             var result = await _controller.Remove("sampleId");
 
