@@ -8,6 +8,11 @@ export interface Review {
     user: UserDto;
 }
 
+export interface EventSchedule {
+    date: Date;
+    location: string;
+}
+
 export interface Rating {
     value: number;
     count: number;
@@ -42,6 +47,8 @@ export interface Event {
     attendees: ProfileDto[];
     contributors: Contributor[];
     BgImage: string;
+    schedules: EventSchedule[];
+
 }
 
 export const emptyEvent = (): Event => ({
@@ -57,5 +64,7 @@ export const emptyEvent = (): Event => ({
     rating: emptyRating(),
     attendees: [],
     contributors: [],
-    BgImage: '1.jpg'
+    BgImage: '1.jpg',
+    schedules: []
+
 });
