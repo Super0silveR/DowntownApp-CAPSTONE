@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { TextField, IconButton, Grid, Typography, Paper, Button } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
-import axios from 'axios';
 
 export interface EventSchedule {
     id: number;
@@ -21,7 +20,7 @@ export const EventSchedule: React.FC<Props> = ({ schedules, setSchedules }) => {
     const handleAddSchedule = () => {
         if (newSchedule.date && newSchedule.location) {
             setSchedules([...schedules, newSchedule]);
-            setNewSchedule({ id: Date.now(), date: '', location: '' }); // Reset for next input
+            setNewSchedule({ id: Date.now(), date: '', location: '' }); 
         }
     };
 
@@ -37,18 +36,7 @@ export const EventSchedule: React.FC<Props> = ({ schedules, setSchedules }) => {
         setSchedules(schedules.filter(schedule => schedule.id !== id));
     };
     const handleSaveSchedules = async () => {
-        try {
-            // Replace with your actual API endpoint
-            const endpoint = '/api/events/saveschedules';
-            const response = await axios.post(endpoint, { schedules });
-            if (response.status === 200) {
-                // Handle the successful save (e.g., show a message to the user)
-                console.log('Schedules saved successfully:', response.data);
-            }
-        } catch (error) {
-            // Handle errors (e.g., show an error message to the user)
-            console.error('Failed to save schedules:', error);
-        }
+
     };
 
     return (
