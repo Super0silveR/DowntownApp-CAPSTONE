@@ -197,10 +197,10 @@ const Profiles = {
         requests.get<ProfileDto[]>(`/followers/${username}?predicate=${predicate}`)
 }
 
+const handleUserSearch = {
+    search: (query: string) => requests.get<User[]>(`/userSearch?q=${query}`)
+};
 
-const handleUserSearch = (query: string) => {
-    return requests.userSearch<User[]>(query);
-  };
   
   
 

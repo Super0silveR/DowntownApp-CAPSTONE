@@ -38,6 +38,10 @@ export default function EventContributors({ contributors }: Props) {
   const [userSearchQuery, setUserSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<User[]>([]); 
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isSearchEmpty, setIsSearchEmpty] = useState(false);
+
+  
 
   const openInviteModal = () => {
     setInviteModalOpen(true);
@@ -47,17 +51,23 @@ export default function EventContributors({ contributors }: Props) {
     setInviteModalOpen(false);
   };
 
-  const handleUserSearch = async () => {
-    try {
-      setLoading(true);
-      const response = await agent.handleUserSearch(userSearchQuery);
-      setSearchResults(response as unknown as User[]); 
-    } catch (error) {
-      console.error('Error searching for users:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const handleUserSearch = async () => {
+        setErrorMessage('');
+        setIsSearchEmpty(false);
+        setLoading(true);
+        try {
+            const response = await agent.handleUserSearch.search(userSearchQuery);
+            setSearchResults(Array.isArray(response) ? response : []);
+            setIsSearchEmpty(response.length === 0);
+        } catch (error) {
+            console.error('Error searching for users:', error);
+            setErrorMessage('An error occurred while searching for users.');
+            setSearchResults([]);
+        } finally {
+            setLoading(false);
+        }
+    };
+
   
 
   const handleInvite = (user: User) => {
@@ -227,7 +237,9 @@ export default function EventContributors({ contributors }: Props) {
                 </Button>
               </div>
             ))
-          )}
+                  )}
+                  {errorMessage && <Typography color="error">{errorMessage}</Typography>}
+                  {isSearchEmpty && !loading && <Typography>No users found.</Typography>}
         </Paper>
       </Modal>
     </>
