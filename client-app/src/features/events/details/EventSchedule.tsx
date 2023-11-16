@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { TextField, IconButton, Grid, Typography, Paper, Button } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useStore } from '../../../app/stores/store';
 
 export interface EventSchedule {
     id: number;
     date: string;
     location: string;
+    barId: string;
 }
 
 interface Props {
@@ -15,12 +17,13 @@ interface Props {
 }
 
 export const EventSchedule: React.FC<Props> = ({ schedules, setSchedules }) => {
-    const [newSchedule, setNewSchedule] = useState<EventSchedule>({ id: Date.now(), date: '', location: '' });
+    const [newSchedule, setNewSchedule] = useState<EventSchedule>({ id: Date.now(), date: '', location: '', barId: '' });
+    const { eventStore } = useStore(); 
 
     const handleAddSchedule = () => {
         if (newSchedule.date && newSchedule.location) {
             setSchedules([...schedules, newSchedule]);
-            setNewSchedule({ id: Date.now(), date: '', location: '' }); 
+            setNewSchedule({ id: Date.now(), date: '', location: '', barId: '' }); 
         }
     };
 
@@ -36,7 +39,10 @@ export const EventSchedule: React.FC<Props> = ({ schedules, setSchedules }) => {
         setSchedules(schedules.filter(schedule => schedule.id !== id));
     };
     const handleSaveSchedules = async () => {
-
+        if (newSchedule.date && newSchedule.location) {
+            await eventStore.scheduleEvent(newSchedule); 
+            setNewSchedule({ id: Date.now(), date: '', location: '', barId: '' }); 
+        }
     };
 
     return (
