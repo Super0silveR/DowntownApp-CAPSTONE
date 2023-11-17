@@ -1,20 +1,14 @@
 ﻿using Application.Common.Interfaces;
 using Application.Core;
-using Application.DTOs.Queries;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Application.Handlers.Events.Queries
 {
     public class SearchUsers
     {
-        public class Query : IRequest<Result<List<UserDto>>>
+        public class Query : IRequest<Result<List<User>>>
         {
             public string SearchTerm { get; set; }
 
@@ -24,26 +18,23 @@ namespace Application.Handlers.Events.Queries
             }
         }
 
-        public class Handler : IRequestHandler<Query, Result<List<UserDto>>>
+        public class Handler : IRequestHandler<Query, Result<List<User>>>
         {
             private readonly IDataContext _context;
-            private readonly IMapper _mapper;
 
-            public Handler(IDataContext context, IMapper mapper)
+            public Handler(IDataContext context)
             {
                 _context = context;
-                _mapper = mapper;
             }
 
-            public async Task<Result<List<UserDto>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<User>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var users = await _context.Users
                     .Where(u => EF.Functions.Like(u.UserName, $"%{request.SearchTerm}%") ||
                                 EF.Functions.Like(u.DisplayName, $"%{request.SearchTerm}%"))
-                    .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
                     .ToListAsync(cancellationToken);
 
-                return Result<List<UserDto>>.Success(users);
+                return Result<List<User>>.Success(users);
             }
         }
     }
