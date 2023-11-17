@@ -17,8 +17,8 @@ import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import { useTheme } from '@mui/material/styles';
 import { Contributor } from '../../../app/models/event';
-import agent from '../../../app/api/agent';
 import { User } from '../../../app/models/user';
+import { useStore } from '../../../app/stores/store';
 
 // TEMPORARY.
 const faces = [
@@ -49,24 +49,29 @@ export default function EventContributors({ contributors }: Props) {
 
   const closeInviteModal = () => {
     setInviteModalOpen(false);
-  };
+    };
+    const { eventStore } = useStore(); 
+
 
     const handleUserSearch = async () => {
         setErrorMessage('');
         setIsSearchEmpty(false);
         setLoading(true);
         try {
-            const response = await agent.handleUserSearch.search(userSearchQuery);
-            setSearchResults(Array.isArray(response) ? response : []);
-            setIsSearchEmpty(response.length === 0);
+            await eventStore.searchUsers(userSearchQuery);
+            const results = eventStore.userSearchResults;
+            setSearchResults(results);
+            setIsSearchEmpty(results.length === 0);
         } catch (error) {
             console.error('Error searching for users:', error);
-            setErrorMessage('An error occurred while searching for users.');
-            setSearchResults([]);
+            setErrorMessage(eventStore.userSearchError);
         } finally {
             setLoading(false);
         }
     };
+
+
+
 
   
 

@@ -25,6 +25,8 @@ export default class EventStore {
     pagination: Pagination | null = null;
     paginationParams = new PaginationParams();
     predicate = new Map().set('all', true);
+    userSearchResults = [];
+    userSearchError = '';
 
     constructor() {
         makeAutoObservable(this);
@@ -291,6 +293,24 @@ export default class EventStore {
         }
     };
 
+    searchUsers = async (query: string) => {
+        this.setLoading(true);
+        try {
+            const users = await agent.Events.searchUsers(query);
+            runInAction(() => {
+                this.userSearchResults = users;
+                this.userSearchError = '';
+            });
+        } catch (error) {
+            console.error('Error searching for users:', error);
+            runInAction(() => {
+                this.userSearchError = 'An error occurred while searching for users.';
+                this.userSearchResults = [];
+            });
+        } finally {
+            this.setLoading(false);
+        }
+    };
 
 
 
