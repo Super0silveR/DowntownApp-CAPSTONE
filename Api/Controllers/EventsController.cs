@@ -83,6 +83,13 @@ namespace Api.Controllers
         {
             return HandleResult(await Mediator.Send(new Cancel.Command { Id = id }));   
         }
+        [HttpGet("SearchUsers")] // api/events/SearchUsers?query=someusername
+        public async Task<IActionResult> SearchUsers(string query)
+        {
+            var result = await Mediator.Send(new SearchUsers.Query { QueryString = query });
+            return HandleResult(result);
+        }
+
 
         #endregion
     }
