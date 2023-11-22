@@ -64,8 +64,20 @@ export default observer(function EventFilters() {
                 title='Use these options to filter the event listing.'
                 value={view}
                 sx={{
-                    color: theme.palette.primary.light
+                    '& .MuiToggleButtonGroup-grouped': {
+                        color: theme.palette.primary.main, 
+                        borderColor: theme.palette.divider,
+                        '&.Mui-selected': {
+                            color: theme.palette.secondary.contrastText,
+                            backgroundColor: theme.palette.primary.main, 
+                        },
+                        '&:hover': {
+                            backgroundColor: theme.palette.action.hover, 
+                            color: theme.palette.primary.dark, 
+                        },
+                    },
                 }}
+
             >
                 <ToggleButton 
                     value="all" 

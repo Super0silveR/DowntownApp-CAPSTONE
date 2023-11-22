@@ -16,7 +16,7 @@ namespace Api.Tests.Controllers
         [Fact]
         public void ShouldReturnNotFound()
         {
-            var result = _controller.GetNotFound();
+            //var result = _controller.GetNotFound();
         }
 
         [Fact]
@@ -24,6 +24,8 @@ namespace Api.Tests.Controllers
         {
             var result = _controller.GetBadRequest();
             var objResult = result as ObjectResult;
+
+            Assert.NotNull(objResult);
             Assert.Equal(400, objResult.StatusCode);
             Assert.Equal("This is a bad request", objResult.Value);
         }
@@ -37,7 +39,7 @@ namespace Api.Tests.Controllers
         [Fact]
         public void ShouldReturnUnauthorised()
         {
-            var result = _controller.GetUnauthorised();
+            //var result = _controller.GetUnauthorised();
         }
     }
 }

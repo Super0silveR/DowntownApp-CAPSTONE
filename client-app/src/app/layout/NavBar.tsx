@@ -9,8 +9,8 @@ import { Divider } from '@mui/material';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../stores/store';
-import AccountMenu from './menus/AccountMenu';
 import logo from '../../assets/logo-4c-white-transparency@print.png';
+import { AccountMenu } from './menus/AccountMenu';
 
 const pages = ['Bars', 'Events', 'Errors'];
 
@@ -24,7 +24,7 @@ function ResponsiveAppBar() {
                     <NavLink to="/"> {}
                         <img src={logo} alt="Logo" style={{ width: '250px', height: '100px', marginRight: '10px' }} />
                     </NavLink>
-                    {isLoggedIn && 
+                    {isLoggedIn &&
                     <>
                         <Divider
                             orientation="vertical"
@@ -39,51 +39,31 @@ function ResponsiveAppBar() {
                             }}
                         />
                         <Box textAlign='center' sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                            <Button 
+                            <Button
                                 component={NavLink}
                                 to='/bars'
                                 color='inherit'
                                 sx={{
                                     my: 2,
                                     display: 'block',
-                                    '&:hover': {
-                                        color: 'purple',
-                                    }
                                 }}
                             >
                                 {pages[0]}
                             </Button>
-                            <Button 
+                            <Button
                                 component={NavLink}
                                 to='/events'
                                 color='inherit'
                                 sx={{
                                     my: 2,
                                     display: 'block',
-                                    '&:hover': {
-                                        color: 'purple',
-                                    }
                                 }}
                             >
                                 {pages[1]}
                             </Button>
-                            <Button 
-                                component={NavLink}
-                                to='/errors'
-                                color='inherit'
-                                sx={{
-                                    my: 2,
-                                    display: 'block',
-                                    '&:hover': {
-                                        color: 'purple',
-                                    }
-                                }}
-                            >
-                                {pages[2]}
-                            </Button>
-                            <AccountMenu logout={logout} user={user} />
                         </Box>
                     </>}
+                    <AccountMenu logout={logout} user={user} />
                     <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
                             size="large"

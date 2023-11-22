@@ -1,6 +1,8 @@
-import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material';
+import { FormControl, FormHelperText, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material';
 import { useField } from 'formik';
 import FormValidationError from './FormValidationError';
+import { useState } from 'react';
+import theme from '../../theme';
 
 /** 
  * Right now the `options` are a static object.
@@ -10,7 +12,7 @@ interface Props {
     placeholder: string;
     name: string;
     label: string;
-    options?: { value: string, text: string }[];
+    options?: { value: string, text: string, description?: string, code?: string }[];
 }
 
 /** 
@@ -27,6 +29,8 @@ export default function SelectInput(props: Props) {
      */
     const [field, meta, helpers] = useField(props.name);
 
+    const [isOpen, setIsOpen] = useState(false);
+
     const hasError = meta.touched && !!meta.error;
 
     return (
@@ -41,17 +45,24 @@ export default function SelectInput(props: Props) {
                 value={field.value}
                 onChange={(e) => helpers.setValue(e.target.value)}
                 onBlur={() => helpers.setTouched(true)}
+                onOpen={() => setIsOpen(true)}
+                onClose={() => setIsOpen(false)}
                 size='small'
                 placeholder={props.placeholder}
                 error={hasError}
                 sx={{my:'0.2rem',textAlign:'left'}}
             >
-                <MenuItem value=''>
+                <MenuItem value='' divider>
                     <em>None</em>
                 </MenuItem>
                 {props.options &&
                     props.options.map((obj) => (
-                        <MenuItem key={obj.value} value={obj.value}>{obj.text}</MenuItem>
+                        <MenuItem key={obj.value} value={obj.value} divider>
+                            <Stack spacing={1}>
+                                {obj.text}
+                                {obj.description && isOpen && <Typography sx={{fontStyle: 'italic', color: theme.palette.primary.dark}} variant='caption'>{obj.description}</Typography>}
+                            </Stack>
+                        </MenuItem>
                     ))
                 }
             </Select>

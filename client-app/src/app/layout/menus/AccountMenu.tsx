@@ -14,34 +14,27 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useState } from 'react';
 import { AccountCircle } from '@mui/icons-material';
-import { User } from '../../models/user';
 import { Badge } from '@mui/material';
 import { Link, NavLink } from 'react-router-dom';
 import { router } from '../../router/Routes';
-import { observer } from 'mobx-react-lite';
+import { User } from '../../models/user';
 
 interface Props {
     user: User | null;
     logout: () => void;
 }
 
-function AccountMenu({ logout, user }: Props) {
+export function AccountMenu({ logout, user }: Props) {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const open = Boolean(anchorEl);
 
     const handleClick = (e: React.MouseEvent<HTMLElement>) => {
-        if (user) 
+        if (user)
             setAnchorEl(e.currentTarget);
+
         else
             router.navigate('/login');
     };
-    /** Test route for Mailboxpage */
-    const mailbox = (e: React.MouseEvent<HTMLElement>) => {
-        if (user)
-            router.navigate('/mailbox');
-        else
-            router.navigate('/login');
-    }
 
     const handleClose = (e: React.MouseEvent<HTMLElement>) => {
         if (e.currentTarget.id === 'user-logout')
@@ -51,22 +44,23 @@ function AccountMenu({ logout, user }: Props) {
 
     return (
         <>
-            <Box sx={{  display: { xs: 'none', md: 'flex' }, alignItems: 'center', textAlign: 'center' }}>
-                {
-                    user &&
+            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', textAlign: 'center' }}>
+                {user &&
                     <>
-                        <IconButton size="small" aria-label="show 4 new mails" color="inherit" component={NavLink}
-                            to='/mailbox'>
-                            <Badge badgeContent={4} color="secondary">
+                        <IconButton
+                            aria-label="show 4 new mails"
+                            aria-details='base'
+                            component={NavLink}
+                            to='/mailbox'
+                        >
+                            <Badge badgeContent={4}>
                                 <MailIcon />
                             </Badge>
                         </IconButton>
                         <IconButton
                             sx={{ ml: 1 }}
-                            size="small"
                             aria-label="show 17 new notifications"
-                            color="inherit"
-                            
+                            aria-details='base'
                         >
                             <Badge badgeContent={11} color="secondary">
                                 <NotificationsIcon />
@@ -78,10 +72,8 @@ function AccountMenu({ logout, user }: Props) {
                             style={{
                                 marginLeft: 12,
                                 borderWidth: '.1rem'
-                            }} 
-                        />
-                    </>
-                }
+                            }} />
+                    </>}
                 <Tooltip title={!user ? 'Login' : user.displayName}>
                     <IconButton
                         edge="end"
@@ -89,16 +81,18 @@ function AccountMenu({ logout, user }: Props) {
                         size="small"
                         sx={{ ml: 1 }}
                         aria-controls={open ? 'account-menu' : undefined}
+                        aria-details='base'
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
                         color="inherit"
                     >
-                        {user 
-                            ? <Avatar 
-                                src={user?.photo || '/assets/user.png'} 
-                                sx={{ width: 36, height: 36 }} 
-                                /> 
-                            : <AccountCircle />}
+                        {user
+                            ?
+                            <Avatar
+                                src={user?.photo || '/assets/user.png'}
+                                sx={{ width: 42, height: 42 }}
+                                aria-label='account-avatar' />
+                            : <AccountCircle sx={{ width: 42, height: 42 }} />}
                     </IconButton>
                 </Tooltip>
             </Box>
@@ -108,56 +102,30 @@ function AccountMenu({ logout, user }: Props) {
                 open={open}
                 onClose={handleClose}
                 onClick={handleClose}
-                PaperProps={{
-                elevation: 0,
-                sx: {
-                    overflow: 'visible',
-                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                    mt: 1.5,
-                    '& .MuiAvatar-root': {
-                    width: 32,
-                    height: 32,
-                    ml: -0.5,
-                    mr: 1,
-                    },
-                    '&:before': {
-                    content: '""',
-                    display: 'block',
-                    position: 'absolute',
-                    top: 0,
-                    right: 14,
-                    width: 10,
-                    height: 10,
-                    bgcolor: 'background.paper',
-                    transform: 'translateY(-50%) rotate(45deg)',
-                    zIndex: 0,
-                    },
-                },
-                }}
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
                 <MenuItem component={Link} to={`/profiles/${user?.userName}`} onClick={handleClose}>
-                    <ListItemIcon>
+                    <ListItemIcon aria-details='account-menu-icon'>
                         <AccountCircle fontSize="small" />
                     </ListItemIcon>
                     {user?.displayName}
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
+                    <ListItemIcon aria-details='account-menu-icon'>
                         <PersonAdd fontSize="small" />
                     </ListItemIcon>
                     Add another account
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
+                    <ListItemIcon aria-details='account-menu-icon'>
                         <Settings fontSize="small" />
                     </ListItemIcon>
                     Settings
                 </MenuItem>
                 <MenuItem id='user-logout' onClick={handleClose}>
-                    <ListItemIcon>
+                    <ListItemIcon aria-details='account-menu-icon'>
                         <Logout fontSize="small" />
                     </ListItemIcon>
                     Logout
@@ -166,5 +134,3 @@ function AccountMenu({ logout, user }: Props) {
         </>
     );
 }
-
-export default observer(AccountMenu);

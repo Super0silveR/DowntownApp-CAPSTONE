@@ -34,7 +34,7 @@ function LoginForm() {
                     validationSchema={validationSchema}
                 >
                     {({handleSubmit, isSubmitting, errors}) => (
-                        <Form 
+                        <Form
                             className='ui-form'
                             onSubmit={handleSubmit}
                             autoComplete='off'
@@ -66,7 +66,8 @@ function LoginForm() {
                                 {errors.error && <FormValidationError error={errors.error ?? ''} />}
                                 <Divider sx={{width:'50%'}} />
                                 <Stack direction='row' spacing={2}>
-                                    <LoadingButton 
+                                    <LoadingButton sx={{
+                      background: 'linear-gradient(135deg, #C75172, #C85DA3)'}}
                                         loading={isSubmitting}
                                         variant='contained' 
                                         fullWidth 
@@ -74,7 +75,8 @@ function LoginForm() {
                                     >
                                         <Typography fontFamily='monospace'>Login</Typography>
                                     </LoadingButton>
-                                    <Button onClick={() => modalStore.closeModal()} color="warning" variant="contained" fullWidth>
+                                    <Button onClick={() => modalStore.closeModal()} sx={{
+                      background: 'linear-gradient(135deg, #785e7d, #2D1693)'}} variant="contained" fullWidth>
                                         <Typography fontFamily='monospace'>Cancel</Typography>
                                     </Button>
                                 </Stack>

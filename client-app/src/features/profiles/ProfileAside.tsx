@@ -21,11 +21,10 @@ export default function ProfileAside({ profile } : Props) {
                     width={1.0}
                     flexWrap="wrap"
                 >
-                    <Typography variant='body2' fontSize={12} pt={2}>
+                    <Typography variant='body2' pt={2}>
                         {profile.bio ?? 'Missing Bio.'}
                     </Typography>
-                    <Typography>Location</Typography>
-                    <Typography>Status</Typography>
+                    <Typography variant='body2' pt={2}>{profile.location ?? 'Missing Location.'}</Typography>
                     <Divider />
                     <ButtonGroup sx={{justifyContent:'center'}}>
                         <IconButton aria-label='Instagram' aria-details='socials'>

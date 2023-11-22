@@ -1,123 +1,97 @@
 import { Box, Button, CircularProgress, Divider, Grid, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { observer } from 'mobx-react-lite';
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useStore } from '../../../app/stores/store';
 import EventList from './EventList';
-import { PaginationParams } from '../../../app/models/pagination';
 import InfiniteScroll from 'react-infinite-scroller';
 import EventFilters from './EventFilters';
 import EventListItemPlaceholder from './EventListItemPlaceholder';
+import { PaginationParams } from '../../../app/models/pagination';
+import theme from '../../../app/theme';
 
 function EventDashboard() {
-
     const { eventStore } = useStore();
-    const { eventRegistry,
-            loadEvents,  
-            pagination, 
-            setPaginationParams
-        } = eventStore;
+    const { eventRegistry, loadEvents, pagination, setPaginationParams } = eventStore;
     const [loadingNextPage, setLoadingNextPage] = useState(false);
 
-    /** Load the [filtered*(TODO)] events at the dashboard initialization. */
     useEffect(() => {
-        if (eventRegistry.size <= 1)
-            loadEvents();
+        if (eventRegistry.size <= 1) loadEvents();
     }, [loadEvents, eventRegistry.size]);
 
-    /**
-     * Method handling the action of loading the next page of events, triggered by the user.
-     * 
-     * IMPORTANT: Setting our pagination params here to a new object, i.e. updating their values,
-     * our computed property in our event store, named generateAxiosPaginationParams(), will be 
-     * re-computed to include the new ones. In this case here, we ask only for the next page.
-     */
     const handleNextPage = () => {
         setLoadingNextPage(true);
         setPaginationParams(new PaginationParams(pagination!.currentPage + 1));
-        loadEvents().then(() => {
-            setLoadingNextPage(false);
-        });
+        loadEvents().then(() => setLoadingNextPage(false));
     }
 
     return (
-        <Box sx={{ backgroundColor: '#fce7f3', minHeight: '100vh' }}>
-            <Stack 
-                direction='row' 
-                display='flex' 
-                sx={{
-                    alignContent:'center',
-                    alignItems:'center',
-                    justifyContent:'space-between'
-                }}>
-                <Stack>
-                    <Typography variant='h3'>
-                        Listed Events
+        <Box sx={{p:5,boxShadow: 'rgba(0, 0, 0, 0.2) 0px 1px 2px 0px',bgcolor:'rgba(249, 249, 249, 0.15)'}}>
+            <Stack
+                direction='row'
+                justifyContent='space-between'
+                alignItems='center'
+                spacing={2}
+                sx={{ marginBottom: 4 }}
+            >
+                <Box>
+                    <Typography variant='h3'>Event Listing</Typography>
+                    <Typography variant='subtitle1' color={theme.palette.primary.main} fontStyle='italic'>
+                        Explore events, or create your own!
                     </Typography>
-                    <Typography variant='subtitle1'>
-                        Note that these events might not be <i><b>scheduled</b></i> yet.
-                    </Typography>
-                </Stack>
-                <Button 
-                    variant='contained' 
+                </Box>
+                <Button
+                    variant='contained'
                     component={NavLink}
                     size='large'
                     to='/createEvent'
                     sx={{
-                        borderRadius: '50%',  
-                        backgroundColor: '#8b5cf6',  
-                        width: '15rem',  
-                        height: '4.25rem',  
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                }}
-            >
-                Create your new event!
-            </Button>
+                        borderRadius: '5px',
+                        backgroundColor: theme.palette.primary.main,
+                        '&:hover': {
+                            backgroundColor: theme.palette.action.hover,
+                            color: theme.palette.primary.dark
+                        },
+                        padding: '10px 15px',
+                        boxShadow: 1,
+                        transition: '0.1s',
+                    }}
+                >
+                    + New Event
+                </Button>
             </Stack>
-            <Divider sx={{ my:1, mb: 5 }} />
-            <Grid
-                container
-            >
-                <Grid item xs={8}>
-                    {eventStore.loadingInitial && 
-                     eventRegistry.size === 0 && 
-                     !loadingNextPage ? (
-                        <Fragment>
+            <Divider sx={{ my: 3 }} />
+            <Grid container spacing={3}>
+                <Grid item xs={12} md={8}>
+                    {eventStore.loadingInitial && eventRegistry.size === 0 && !loadingNextPage ? (
+                        <>
                             <EventListItemPlaceholder />
                             <EventListItemPlaceholder />
-                        </Fragment>
+                        </>
                     ) : (
                         <InfiniteScroll
-                            hasMore={
-                                !loadingNextPage &&
-                                !!pagination && 
-                                pagination.currentPage < pagination.totalPages
-                            }
-                            initialLoad={false}
+                            hasMore={!loadingNextPage && !!pagination && pagination.currentPage < pagination.totalPages}
                             loadMore={handleNextPage}
                             pageStart={0}
                         >
                             <EventList />
                         </InfiniteScroll>
-
                     )}
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={12} md={4}>
                     <EventFilters />
                 </Grid>
-                {/** TODO: Hidding when not loading and centering the content with the rest of the page. */}
-                <Grid item xs={8}>
+                <Grid item xs={12}>
                     <Box
                         sx={{
                             display: 'flex',
                             justifyContent: 'center',
-                            paddingTop: 2
+                            paddingTop: 2,
+                            paddingBottom: 2,
                         }}
                     >
-                        {loadingNextPage && <CircularProgress />}
+                        {loadingNextPage && <CircularProgress size={50} />}
                     </Box>
                 </Grid>
             </Grid>

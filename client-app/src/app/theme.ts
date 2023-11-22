@@ -29,6 +29,9 @@ const theme = createTheme({
                     ...(ownerState['aria-label'] === 'attendees' && {
                         backgroundColor: theme.palette.primary.light,
                         margin:-2
+                    }),
+                    ...(ownerState['aria-label'] === 'account-avatar' && {
+                        margin:-2
                     })
                 })
             }
@@ -36,9 +39,23 @@ const theme = createTheme({
         MuiButton: {
             styleOverrides: {
                 root: ({ownerState}) => ({
+                    color: theme.palette.common.white,
+                    marginRight: '10px',
+                    '&:hover': {
+                        color: theme.palette.primary.dark,
+                        backgroundColor: theme.palette.action.hover
+                    },
                     ...(ownerState.color === 'warning' && {
                         color: '#fff'
                      })
+                })
+            }
+        },
+        MuiBadge: {
+            styleOverrides: {
+                badge:  ({theme}) => ({
+                    backgroundColor: theme.palette.primary.light,
+                    color: "white"
                 })
             }
         },
@@ -59,7 +76,8 @@ const theme = createTheme({
             styleOverrides: {
                 root: ({ownerState, theme}) => ({
                     ...((ownerState['aria-details'] === 'socials' ||
-                         ownerState['aria-details'] === 'profile-photos') && {
+                         ownerState['aria-details'] === 'profile-photos' ||
+                         ownerState['aria-details'] === 'base') && {
                         color: theme.palette.common.white,
                         '&:hover': {
                             color: theme.palette.primary.main,
@@ -70,6 +88,34 @@ const theme = createTheme({
                         color: theme.palette.primary.main,
                         '&:hover': {
                             color: theme.palette.primary.dark,
+                            backgroundColor: theme.palette.action.hover
+                        }
+                    })
+                })
+            }
+        },
+        MuiListItemIcon: {
+            styleOverrides: {
+                root: ({ownerState, theme}) => ({
+                    ...((ownerState['aria-details'] === 'account-menu-icon') && {
+                        color: theme.palette.primary.main,
+                        '&:hover': {
+                            color: theme.palette.primary.dark,
+                            backgroundColor: theme.palette.action.hover
+                        }
+                    })
+                })
+                
+            }
+        },
+        MuiToggleButton: {
+            styleOverrides: {
+                root: ({ownerState, theme}) => ({
+                    ...((ownerState['aria-details'] === 'editor-tiptap') && {
+                        color: theme.palette.primary.dark,
+                        outlineWidth: '2px',
+                        '&:hover': {
+                            color: theme.palette.primary.main,
                             backgroundColor: theme.palette.action.hover
                         }
                     })
@@ -99,7 +145,7 @@ const theme = createTheme({
         }
     },
     typography: {
-        fontFamily: 'sans-serif'
+        fontFamily: 'Roboto'
     },
     palette: {
         mode: 'light',
@@ -109,7 +155,7 @@ const theme = createTheme({
             dark: '#002884',
         },
         secondary: {
-            light: red[500],
+            light: grey[400],
             main: red[700],
             dark: red[900],
             contrastText: grey[50]
@@ -152,7 +198,7 @@ const theme = createTheme({
         },
         common: {
             black: grey[900],
-            white: grey[200]
+            white: grey[200],
         },
         tonalOffset: 0.1,
     }

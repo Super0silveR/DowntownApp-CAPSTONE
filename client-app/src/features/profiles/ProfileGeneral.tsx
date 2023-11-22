@@ -1,7 +1,8 @@
-import { Stack, Typography } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import CustomTabPanel from '../../app/common/components/TabPanel';
 import { Profile } from '../../app/models/profile';
+import CreatorProfileGeneral from './creators/CreatorProfileGeneral';
+import { Stack, Typography } from '@mui/material';
 
 interface Props {
     profile: Profile;
@@ -11,6 +12,7 @@ function ProfileGeneral({ profile }: Props) {
     return (        
         <CustomTabPanel
             content={
+                !profile.isContentCreator ? (
                 profile.bio
                 ? <Stack direction='row'>
                     <Typography sx={{textDecoration:'underline', mr:1}}>
@@ -21,7 +23,8 @@ function ProfileGeneral({ profile }: Props) {
                         generation so that teams work as a united front, with expertise and purpose, to solve the world’s toughest health challenges.
                     </Typography>
                 </Stack>
-                : null
+                : null) :
+                <CreatorProfileGeneral profile={profile} />
             }
             id='general-profile-tab'
             value='0'
