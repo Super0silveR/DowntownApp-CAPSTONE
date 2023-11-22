@@ -28,7 +28,7 @@ function DateTimeInput(props: Props, dateProps: DatePickerProps<Dayjs>) {
 
     /** TODO: Styling the DatePicker... */
     return (
-        <FormControl>
+        <FormControl variant='filled'>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                     {...field}

@@ -111,7 +111,7 @@ const Events = {
     update: (event: Event) => requests.put<void>(`/events/${event.id}`, event),
     delete: (id: string) => requests.del<void>(`/events/${id}`), 
     schedule: (scheduledEvent: ScheduleEvent) => requests.post<void>('/events/scheduling', scheduledEvent),
-    searchUsers: (query: string) => requests.get<User[]>(`/events/searchUsers?q=${query}`),
+    searchUsers: (query: string) => requests.get<User[]>(`/events/searchUsers?searchTerm=${query}`),
 };
 /**
  * EventTypes related requests. 
