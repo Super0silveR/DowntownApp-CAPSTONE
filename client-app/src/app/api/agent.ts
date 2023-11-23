@@ -1,12 +1,12 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import toast from 'react-hot-toast';
-import { Event } from '../models/event';
+import { Event, ScheduleEvent } from '../models/event';
 import { EventType } from '../models/eventType';
 import { EventCategory } from '../models/eventCategory';
 import { ChallengeType } from '../models/challengeType';
 import { QuestionType } from '../models/questionType';
 import { ChatRoomType } from '../models/chatRoomType';
-import { User, UserFormValues } from '../models/user';
+import { User, UserDto, UserFormValues } from '../models/user';
 import { router } from '../router/Routes';
 import { store } from '../stores/store';
 import { Profile, ProfileDto } from '../models/profile';
@@ -109,9 +109,10 @@ const Events = {
     details: (id: string) => requests.get<Event>(`/events/${id}`),
     create: (event: Event) => requests.post<void>('/events/', event),
     update: (event: Event) => requests.put<void>(`/events/${event.id}`, event),
-    delete: (id: string) => requests.del<void>(`/events/${id}`)
-}
-
+    delete: (id: string) => requests.del<void>(`/events/${id}`), 
+    schedule: (scheduledEvent: ScheduleEvent) => requests.post<void>('/events/scheduling', scheduledEvent),
+    searchUsers: (query: string) => requests.get<UserDto[]>(`/events/searchUsers?searchTerm=${query}`),
+};
 /**
  * EventTypes related requests. 
  */
@@ -198,9 +199,6 @@ const Profiles = {
 }
 
 
-const handleUserSearch = (query: string) => {
-    return requests.userSearch<User[]>(query);
-  };
   
   
 
@@ -216,7 +214,6 @@ const agent = {
     EventCategories,
     Profiles,
     QuestionTypes,
-    handleUserSearch
 }
 
 /**

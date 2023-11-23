@@ -10,6 +10,7 @@ import EventFilters from './EventFilters';
 import EventListItemPlaceholder from './EventListItemPlaceholder';
 import { PaginationParams } from '../../../app/models/pagination';
 import theme from '../../../app/theme';
+import ContentBox from '../../../app/common/components/ContentBox';
 
 function EventDashboard() {
     const { eventStore } = useStore();
@@ -27,75 +28,79 @@ function EventDashboard() {
     }
 
     return (
-        <Box sx={{p:5,boxShadow: 'rgba(0, 0, 0, 0.2) 0px 1px 2px 0px',bgcolor:'rgba(249, 249, 249, 0.15)'}}>
-            <Stack
-                direction='row'
-                justifyContent='space-between'
-                alignItems='center'
-                spacing={2}
-                sx={{ marginBottom: 4 }}
-            >
-                <Box>
-                    <Typography variant='h3'>Event Listing</Typography>
-                    <Typography variant='subtitle1' color={theme.palette.primary.main} fontStyle='italic'>
-                        Explore events, or create your own!
-                    </Typography>
-                </Box>
-                <Button
-                    variant='contained'
-                    component={NavLink}
-                    size='large'
-                    to='/createEvent'
-                    sx={{
-                        borderRadius: '5px',
-                        backgroundColor: theme.palette.primary.main,
-                        '&:hover': {
-                            backgroundColor: theme.palette.action.hover,
-                            color: theme.palette.primary.dark
-                        },
-                        padding: '10px 15px',
-                        boxShadow: 1,
-                        transition: '0.1s',
-                    }}
-                >
-                    + New Event
-                </Button>
-            </Stack>
-            <Divider sx={{ my: 3 }} />
-            <Grid container spacing={3}>
-                <Grid item xs={12} md={8}>
-                    {eventStore.loadingInitial && eventRegistry.size === 0 && !loadingNextPage ? (
-                        <>
-                            <EventListItemPlaceholder />
-                            <EventListItemPlaceholder />
-                        </>
-                    ) : (
-                        <InfiniteScroll
-                            hasMore={!loadingNextPage && !!pagination && pagination.currentPage < pagination.totalPages}
-                            loadMore={handleNextPage}
-                            pageStart={0}
-                        >
-                            <EventList />
-                        </InfiniteScroll>
-                    )}
-                </Grid>
-                <Grid item xs={12} md={4}>
-                    <EventFilters />
-                </Grid>
-                <Grid item xs={12}>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            paddingTop: 2,
-                            paddingBottom: 2,
-                        }}
+        <ContentBox 
+            content={(
+                <>
+                    <Stack
+                        direction='row'
+                        justifyContent='space-between'
+                        alignItems='center'
+                        spacing={2}
+                        sx={{ marginBottom: 4 }}
                     >
-                        {loadingNextPage && <CircularProgress size={50} />}
-                    </Box>
-                </Grid>
-            </Grid>
-        </Box>
+                        <Box>
+                            <Typography variant='h3'>Event Listing</Typography>
+                            <Typography variant='subtitle1' color={theme.palette.primary.main} fontStyle='italic'>
+                                Explore events, or create your own!
+                            </Typography>
+                        </Box>
+                        <Button
+                            variant='contained'
+                            component={NavLink}
+                            size='large'
+                            to='/createEvent'
+                            sx={{
+                                borderRadius: '5px',
+                                backgroundColor: theme.palette.primary.main,
+                                '&:hover': {
+                                    backgroundColor: theme.palette.action.hover,
+                                    color: theme.palette.primary.dark
+                                },
+                                padding: '10px 15px',
+                                boxShadow: 1,
+                                transition: '0.1s',
+                            }}
+                        >
+                            + New Event
+                        </Button>
+                    </Stack>
+                    <Divider sx={{ my: 3 }} />
+                    <Grid container spacing={3}>
+                        <Grid item xs={12} md={8}>
+                            {eventStore.loadingInitial && eventRegistry.size === 0 && !loadingNextPage ? (
+                                <>
+                                    <EventListItemPlaceholder />
+                                    <EventListItemPlaceholder />
+                                </>
+                            ) : (
+                                <InfiniteScroll
+                                    hasMore={!loadingNextPage && !!pagination && pagination.currentPage < pagination.totalPages}
+                                    loadMore={handleNextPage}
+                                    pageStart={0}
+                                >
+                                    <EventList />
+                                </InfiniteScroll>
+                            )}
+                        </Grid>
+                        <Grid item xs={12} md={4}>
+                            <EventFilters />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    paddingTop: 2,
+                                    paddingBottom: 2,
+                                }}
+                            >
+                                {loadingNextPage && <CircularProgress size={50} />}
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </>
+            )}
+        />
     );
 }
 

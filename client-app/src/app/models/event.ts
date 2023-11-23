@@ -1,3 +1,4 @@
+import EventSchedule from "../../features/events/details/EventSchedule";
 import { ProfileDto } from "./profile";
 import { User, UserDto } from "./user";
 
@@ -6,6 +7,13 @@ export interface Review {
     vote: number;
     review: string;
     user: UserDto;
+}
+
+export interface ScheduleEvent {
+    id: string;
+    date: Date | null;
+    location: string;
+    barId: string;
 }
 
 export interface Rating {
@@ -42,6 +50,8 @@ export interface Event {
     attendees: ProfileDto[];
     contributors: Contributor[];
     BgImage: string;
+    schedules: EventSchedule[];
+    location: string;
 }
 
 export const emptyEvent = (): Event => ({
@@ -57,5 +67,8 @@ export const emptyEvent = (): Event => ({
     rating: emptyRating(),
     attendees: [],
     contributors: [],
-    BgImage: '1.jpg'
+    BgImage: '1.jpg',
+    schedules: [],
+    location: ''
+
 });

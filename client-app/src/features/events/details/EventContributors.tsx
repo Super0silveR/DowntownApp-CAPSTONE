@@ -17,8 +17,9 @@ import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import { useTheme } from '@mui/material/styles';
 import { Contributor } from '../../../app/models/event';
-import agent from '../../../app/api/agent';
 import { User } from '../../../app/models/user';
+import { useStore } from '../../../app/stores/store';
+import { observer } from 'mobx-react-lite';
 
 // TEMPORARY.
 const faces = [
@@ -32,12 +33,16 @@ interface Props {
   contributors: Contributor[];
 }
 
-export default function EventContributors({ contributors }: Props) {
+function EventContributors({ contributors }: Props) {
   const theme = useTheme();
   const [inviteModalOpen, setInviteModalOpen] = useState(false);
   const [userSearchQuery, setUserSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<User[]>([]); 
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isSearchEmpty, setIsSearchEmpty] = useState(false);
+
+  
 
   const openInviteModal = () => {
     setInviteModalOpen(true);
@@ -45,19 +50,30 @@ export default function EventContributors({ contributors }: Props) {
 
   const closeInviteModal = () => {
     setInviteModalOpen(false);
-  };
+    };
+    const { eventStore } = useStore(); 
 
-  const handleUserSearch = async () => {
-    try {
-      setLoading(true);
-      const response = await agent.handleUserSearch(userSearchQuery);
-      setSearchResults(response as unknown as User[]); 
-    } catch (error) {
-      console.error('Error searching for users:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+
+    const handleUserSearch = async () => {
+        setErrorMessage('');
+        setIsSearchEmpty(false);
+        setLoading(true);
+        try {
+            await eventStore.searchUsers(userSearchQuery);
+            const results = eventStore.userSearchResults;
+            setSearchResults(results);
+            setIsSearchEmpty(results.length === 0);
+        } catch (error) {
+            console.error('Error searching for users:', error);
+            setErrorMessage(eventStore.userSearchError);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+
+
   
 
   const handleInvite = (user: User) => {
@@ -66,7 +82,8 @@ export default function EventContributors({ contributors }: Props) {
   };
 
   return (
-    <>
+      <>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
       <Typography
         sx={{
           display: 'inline',
@@ -79,14 +96,34 @@ export default function EventContributors({ contributors }: Props) {
       >
         Contributors
       </Typography>
+
       <Button
-        variant="outlined"
-        onClick={openInviteModal}
-        size="small"
-        sx={{ ml: 2 }}
+        variant="contained"
+              color="primary"
+              onClick={openInviteModal}
+              style={{ marginTop: '2em' }}
+              sx={{
+                  mt: '0', 
+                  mb: '0',
+                  alignSelf: 'center' 
+              }}
+
       >
         Invite Contributor
-      </Button>
+              </Button>
+          </div>
+
+          {eventStore.userSearchResults.map((user) => (
+              <div key={user.userName}>
+                  <Typography>{user.displayName}</Typography>
+                  <Button
+                      variant="contained"
+                      onClick={() => handleInvite(user)}
+                  >
+                      Invite
+                  </Button>
+              </div>
+          ))}
 
       <Paper
         sx={{
@@ -172,16 +209,16 @@ export default function EventContributors({ contributors }: Props) {
             transform: 'translate(-50%, -50%)',
             padding: '2rem',
             borderRadius: '16px',
-            backgroundColor: '#ff86c3',
+            backgroundColor: 'white',
             boxShadow:
               'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
             maxWidth: '400px',
           }}
         >
-          <Typography variant='h5' color='white' sx={{ marginBottom: '1rem' }}>
+          <Typography variant='h5' color='purple' sx={{ marginBottom: '1rem' }}>
             Invite Contributor
           </Typography>
-          <TextField
+                  <TextField
             label='Search for users'
             variant='outlined'
             fullWidth
@@ -206,21 +243,18 @@ export default function EventContributors({ contributors }: Props) {
             <Typography>Loading...</Typography>
           ) : (
             searchResults.map((user) => (
-              <div key={user.userName}>
-                {}
-                <Typography>{user.displayName}</Typography>
-                {}
-                <Button
-                  variant="contained"
-                  onClick={() => handleInvite(user)}
-                >
-                  Invite
-                </Button>
-              </div>
+                <Typography key={user.userName} sx={{ mt: 2 }}>
+                    {user.displayName}
+                </Typography>
+
             ))
-          )}
+                  )}
+                  {errorMessage && <Typography color="error">{errorMessage}</Typography>}
+                  {isSearchEmpty && !loading && <Typography>No users found.</Typography>}
         </Paper>
       </Modal>
     </>
   );
 }
+
+export default observer(EventContributors);

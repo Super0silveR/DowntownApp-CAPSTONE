@@ -1,12 +1,16 @@
 /** Function from MobX allowing it to compute the observables by itself. */
 import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../api/agent";
-import { Event } from "../models/event";
+import { Event, ScheduleEvent } from "../models/event";
 import { v4 as uuid } from 'uuid';
 import dayjs from "dayjs";
 import { Photo } from "../models/photo";
 import { store } from "./store";
 import { Pagination, PaginationParams } from "../models/pagination";
+import toast from "react-hot-toast";
+import EventSchedule from "../../features/events/details/EventSchedule";
+import { User } from "../models/user";
+
 
 /**
  * MobX class that represents the state management (or store) for our event entities.
@@ -22,6 +26,8 @@ export default class EventStore {
     pagination: Pagination | null = null;
     paginationParams = new PaginationParams();
     predicate = new Map().set('all', true);
+    userSearchResults: User[] = []; 
+    userSearchError = '';
 
     constructor() {
         makeAutoObservable(this);
@@ -263,6 +269,54 @@ export default class EventStore {
             })
         })
     }
+
+    scheduleEvent = async (eventData: EventSchedule) => {
+        this.setLoading(true);
+        try {
+            const scheduledEvent: ScheduleEvent = {
+                id: uuid(), 
+                date: new Date(eventData.date), 
+                location: eventData.location,
+                barId: eventData.barId
+            };
+            await agent.Events.schedule(scheduledEvent);
+
+            toast.success('Event scheduled successfully!');
+        } catch (error) {
+            runInAction(() => {
+                this.setLoading(false);
+            });
+
+            console.error('Error scheduling event', error);
+            toast.error('Error scheduling event');
+        } finally {
+            this.setLoading(false);
+        }
+    };
+
+    searchUsers = async (query: string) => {
+        this.setLoading(true);
+        try {
+            const users = await agent.Events.searchUsers(query);
+            runInAction(() => {
+                this.userSearchResults = users;
+                this.userSearchError = '';
+            });
+        } catch (error) {
+            console.error('Error searching for users:', error);
+            runInAction(() => {
+                this.userSearchError = 'An error occurred while searching for users.';
+                this.userSearchResults = [];
+            });
+        } finally {
+            this.setLoading(false);
+        }
+    };
+
+
+
+
+
 
     /** PRIVATE METHODS */
 

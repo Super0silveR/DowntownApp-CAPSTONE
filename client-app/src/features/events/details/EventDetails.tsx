@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../app/stores/store';
@@ -12,16 +12,26 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LiveTvIcon from '@mui/icons-material/LiveTv';
 import GroupIcon from '@mui/icons-material/Group';
 import { useTheme } from '@mui/material/styles';
+import EventSchedule from './EventSchedule'; 
 
 function EventDetails() {
     const { eventStore, userStore: { user } } = useStore();
     const { selectedEvent: event, loadEvent, loadingInitial } = eventStore;
     const { id } = useParams();
     const theme = useTheme();
+    const [schedules, setSchedules] = useState<EventSchedule[]>([]);
+
 
     useEffect(() => {
-        if (id) loadEvent(id);
+        if (id) {
+            loadEvent(id).then((loadedEvent) => {
+                if (loadedEvent && loadedEvent.schedules) {
+                    setSchedules(loadedEvent.schedules as unknown as EventSchedule[]);
+                }
+            });
+        }
     }, [id, loadEvent]);
+
 
     const isCreator = user?.userName === event?.creatorUserName;
 
@@ -124,6 +134,7 @@ function EventDetails() {
 
                 <Grid item xs={12} lg={8}>
                     <EventContributors contributors={event.contributors} />
+                    <EventSchedule schedules={schedules} setSchedules={setSchedules} />
                 </Grid>
 
                 <Grid item xs={12}>

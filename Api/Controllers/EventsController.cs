@@ -83,6 +83,19 @@ namespace Api.Controllers
         {
             return HandleResult(await Mediator.Send(new Cancel.Command { Id = id }));   
         }
+        
+        [HttpGet("SearchUsers")] // api/events/SearchUsers?query=someusername
+        public async Task<IActionResult> SearchUsers(string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return BadRequest("Search term must not be empty.");
+            }
+
+            return HandleResult(await Mediator.Send(new SearchUsers.Query(searchTerm)));
+        }
+
+
 
         #endregion
     }
