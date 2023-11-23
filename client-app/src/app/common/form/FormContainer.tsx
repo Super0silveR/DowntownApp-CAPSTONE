@@ -1,4 +1,4 @@
-import { Container, Grid, Paper, Typography } from '@mui/material';
+import { Card, Container, Grid, Paper, Typography } from '@mui/material';
 import React from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/system';
@@ -25,14 +25,14 @@ export default function FormContainer({ title, form, minWidth }: Props) {
                 justifyContent: 'center'
             }}
         >
-            <Paper 
+            <Card
                 sx={{
                     textAlign: 'center',
                     padding: theme.spacing(2),
                     my: theme.spacing(1),
                     minWidth: {minWidth}
-                }} 
-                elevation={3}
+                }}
+                variant='outlined'
             >
                 <Typography
                     sx={{ 
@@ -54,7 +54,7 @@ export default function FormContainer({ title, form, minWidth }: Props) {
                         </Grid>
                     </Grid>
                 </Container>
-            </Paper>
+            </Card>
         </Box>
     );
 }

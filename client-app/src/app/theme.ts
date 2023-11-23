@@ -129,6 +129,13 @@ const theme = createTheme({
                 })
             }
         },
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: ({theme}) => ({
+                    backgroundColor: theme.palette.primary.light + '18'
+                })
+            }
+        },
         MuiInputBase: {
             styleOverrides: {
                 root: {
