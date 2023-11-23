@@ -82,7 +82,8 @@ function EventContributors({ contributors }: Props) {
   };
 
   return (
-    <>
+      <>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
       <Typography
         sx={{
           display: 'inline',
@@ -97,22 +98,21 @@ function EventContributors({ contributors }: Props) {
       </Typography>
 
       <Button
-        variant="outlined"
-        onClick={openInviteModal}
-        size="small"
+        variant="contained"
+              color="primary"
+              onClick={openInviteModal}
+              style={{ marginTop: '2em' }}
               sx={{
-                  ml: 2,
-                  color: 'purple', 
-                  borderColor: 'purple', 
-                  '&:hover': {
-                      backgroundColor: 'pink', 
-                      borderColor: 'purple', 
-                  }
-
+                  mt: '0', 
+                  mb: '0',
+                  alignSelf: 'center' 
               }}
+
       >
         Invite Contributor
-      </Button>
+              </Button>
+          </div>
+
           {eventStore.userSearchResults.map((user) => (
               <div key={user.userName}>
                   <Typography>{user.displayName}</Typography>
@@ -209,16 +209,16 @@ function EventContributors({ contributors }: Props) {
             transform: 'translate(-50%, -50%)',
             padding: '2rem',
             borderRadius: '16px',
-            backgroundColor: '#ff86c3',
+            backgroundColor: 'white',
             boxShadow:
               'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
             maxWidth: '400px',
           }}
         >
-          <Typography variant='h5' color='white' sx={{ marginBottom: '1rem' }}>
+          <Typography variant='h5' color='purple' sx={{ marginBottom: '1rem' }}>
             Invite Contributor
           </Typography>
-          <TextField
+                  <TextField
             label='Search for users'
             variant='outlined'
             fullWidth
@@ -243,17 +243,10 @@ function EventContributors({ contributors }: Props) {
             <Typography>Loading...</Typography>
           ) : (
             searchResults.map((user) => (
-              <div key={user.userName}>
-                {}
-                <Typography>{user.displayName}</Typography>
-                {}
-                <Button
-                  variant="contained"
-                  onClick={() => handleInvite(user)}
-                >
-                  Invite
-                </Button>
-              </div>
+                <Typography key={user.userName} sx={{ mt: 2 }}>
+                    {user.displayName}
+                </Typography>
+
             ))
                   )}
                   {errorMessage && <Typography color="error">{errorMessage}</Typography>}
