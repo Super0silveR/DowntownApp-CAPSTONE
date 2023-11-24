@@ -872,6 +872,9 @@ namespace Persistence.Migrations
                     b.Property<Guid?>("LastModifiedBy")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Location")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("Scheduled")
                         .HasColumnType("timestamp with time zone");
 

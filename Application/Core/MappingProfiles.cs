@@ -128,6 +128,20 @@ namespace Application.Core
             CreateMap<User, UserLightDto>()
                 .ForMember(pdto => pdto.Photo, options => options.MapFrom(u => u.Photos.FirstOrDefault(p => p.IsMain)!.Url));
 
+            CreateMap<EventTicket, EventTicketDto>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<EventTicketDto, EventTicket>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<EventTicket, EventTicketCommandDto>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<EventTicketCommandDto, EventTicket>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+
+
             #endregion
 
             /// Data transfert objects used for writing data.

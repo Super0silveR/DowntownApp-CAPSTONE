@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Persistence.Migrations
 {
-    public partial class Initial : Migration
+    public partial class LocationAndEventTickets : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -879,6 +879,7 @@ namespace Persistence.Migrations
                     BarId = table.Column<Guid>(type: "uuid", nullable: false),
                     EventId = table.Column<Guid>(type: "uuid", nullable: false),
                     Scheduled = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Location = table.Column<string>(type: "text", nullable: true),
                     IsHost = table.Column<bool>(type: "boolean", nullable: false),
                     Capacity = table.Column<int>(type: "integer", nullable: false),
                     Guidelines = table.Column<string>(type: "text", nullable: true),

@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Queries
 {
-    internal class EventTicketDto
+    public class EventTicketDto
     {
         public Guid? Id { get; set; }
         public Guid? ScheduledEventId { get; set; }
+        public double? Price { get; set; }
         public string? Description { get; set; }
-        public TicketClassification? Classification { get; set; }  
+        public TicketClassification? Classification { get; set; }
         public ScheduledEvent? ScheduledEvent { get; set; }
 
     }

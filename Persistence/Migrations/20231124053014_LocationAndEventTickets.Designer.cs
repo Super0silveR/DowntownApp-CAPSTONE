@@ -12,8 +12,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231107030303_Initial")]
-    partial class Initial
+    [Migration("20231124053014_LocationAndEventTickets")]
+    partial class LocationAndEventTickets
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -873,6 +873,9 @@ namespace Persistence.Migrations
 
                     b.Property<Guid?>("LastModifiedBy")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("Scheduled")
                         .HasColumnType("timestamp with time zone");
