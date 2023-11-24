@@ -24,7 +24,7 @@ namespace ApplicationTests.Handlers.Events.Commands
             using var context = Fixture.CreateContext();
             context.Database.BeginTransaction();
 
-            var command = new CancelCommand() { Id = new Guid };
+            var command = new CancelCommand() { Id = new Guid() };
             var handler = new CancelHandler(context);
 
             //Act
@@ -60,6 +60,7 @@ namespace ApplicationTests.Handlers.Events.Commands
             Assert.True(result.IsSuccess);
             Assert.Equal(Unit.Value, result.Value);
             Assert.Null(context.Events.FirstOrDefault(e => e.Id == scheduledEvent!.Id));
+            Assert.Equal(1, context.ScheduledEvents.Count()); // We have two (2) in the default db.  //Verify this
         }
     }
 }
