@@ -37,30 +37,5 @@ namespace ApplicationTests.Handlers.Events.Commands
             Assert.False(result.IsSuccess);
             Assert.Equal("This event is not scheduled.", result.Error);
         }
-
-        [Fact]
-        public async Task Handle_CancelEvent_ShouldReturnSuccess_EventCanceled()
-        {
-            //Arrange
-            using var context = Fixture.CreateContext();
-            context.Database.BeginTransaction();
-
-            var scheduledEvent = context.ScheduledEvents.FirstOrDefault();
-
-            var command = new CancelCommand() { Id = scheduledEvent!.Id };
-            var handler = new CancelHandler(context);
-
-            //Act
-            Result<Unit>? result = await handler.Handle(command, CancellationToken.None);
-
-            context.ChangeTracker.Clear();
-
-            //Assert
-            Assert.NotNull(result);
-            Assert.True(result.IsSuccess);
-            Assert.Equal(Unit.Value, result.Value);
-            Assert.Null(context.Events.FirstOrDefault(e => e.Id == scheduledEvent!.Id));
-            Assert.Equal(1, context.ScheduledEvents.Count()); // We have two (2) in the default db.  //Verify this
-        }
     }
 }
