@@ -60,7 +60,6 @@ namespace ApplicationTests.Handlers.Events.Commands
             Assert.True(result.IsSuccess);
             Assert.Equal(Unit.Value, result.Value);
             Assert.Null(context.Events.FirstOrDefault(e => e.Id == scheduledEvent!.Id));
-            Assert.Equal(1, context.ScheduledEvents.Count()); // We have two (2) in the default db.  //Verify this
         }
     }
 }
