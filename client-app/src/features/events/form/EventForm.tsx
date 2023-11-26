@@ -16,7 +16,6 @@ import SelectInput from '../../../app/common/form/SelectInput';
 import DateTimeInput from '../../../app/common/form/DateTimeInput';
 import FormContainer from '../../../app/common/form/FormContainer';
 import ContentBox from '../../../app/common/components/ContentBox';
-import theme from '../../../app/theme';
 import ContentHeader from '../../../app/common/components/ContentHeader';
 import { ArrowBack } from '@mui/icons-material';
 

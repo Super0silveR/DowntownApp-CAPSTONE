@@ -1,8 +1,9 @@
 import { Profile } from "../../app/models/profile";
-import { Avatar, Box, Card, CardContent, CardHeader, IconButton, Typography } from "@mui/material";
+import { Box, Card, CardActionArea, CardContent, CardMedia, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import FollowButton from "./FollowButton";
 import { Person } from "@mui/icons-material";
+import { router } from "../../app/router/Routes";
 
 interface Props {
     profile: Profile | null | undefined;
@@ -10,23 +11,24 @@ interface Props {
 
 export default observer(function ProfileCard({ profile }: Props) {
     return (
-        <Card sx={{ display: 'flex' }}>
+        <Card sx={{ display: 'flex', minHeight:150 }} variant="outlined">
             <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%'}}>
-                <CardHeader
-                    avatar={
-                        <Avatar src={profile?.photo} />
-                    }
-                />
+                <CardActionArea onClick={() => router.navigate(`/profiles/${profile?.userName}`)}>
+                    <CardMedia
+                        component="img"
+                        image={profile?.photo ?? `/assets/user.png`}
+                        alt={`${profile?.displayName}'s PFP`}
+                        sx={{p:0,objectFit: "contain",display:'flex', justiyContent:'space-between', flexDirection:'column'}}                   
+                    />
+                </CardActionArea>
                 <CardContent>
                     <Typography>
                         {profile?.displayName}
                     </Typography>
                     <Typography color="text.primary" component="div">
-                        <IconButton>
                             <Person />
-                            {profile?.followers}
+                            {profile?.followers}&nbsp;
                             followers
-                        </IconButton>
                     </Typography>
                 </CardContent>
                 <FollowButton profile={profile} />

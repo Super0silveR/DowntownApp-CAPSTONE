@@ -10,10 +10,10 @@ import TextInput from "../../../app/common/form/TextInput";
 import { ColorCodeEnum } from "../../../app/common/constants";
 import { Description, InfoOutlined, LocationCity } from "@mui/icons-material";
 import SelectInput from "../../../app/common/form/SelectInput";
-import { useEffect } from "react";
+import { useState } from "react";
+import TextArea from "../../../app/common/form/TextArea";
 
 function EditProfileForm() {
-
     /** Validation schema using Yup. */
     const validationSchema = Yup.object<ProfileFormValues>({
         bio: Yup.string().required().max(255),
@@ -24,50 +24,48 @@ function EditProfileForm() {
         location: Yup.string()
     });
 
-    const { modalStore } = useStore();
+    const { modalStore, profileStore: { profile, updateProfileGeneral, loading } } = useStore();
+
+    if (!profile) return; 
 
     const label = { inputProps: { 'aria-label': 'switch for boolean.' } };
 
-    useEffect(() => {
-        console.log('loaded from button click...');
-    });
+    const emptyFormValues = {
+        bio: profile?.bio ?? '',
+        colorCode: profile?.colorCode ?? '2',
+        displayName: profile.displayName,
+        isOpenForMessage: profile?.isOpenForMessage ?? true,
+        isPrivate: profile?.isPrivate ?? false,
+        location: profile?.location ?? ''
+    }
+
+    const [formValues, setFormValues] = useState<ProfileFormValues>(emptyFormValues);
+
+    const handleFormSubmit = (values: ProfileFormValues) => {
+        updateProfileGeneral(values).then(() => modalStore.closeModal());
+    }
 
     return (
         <FormContainer
             title='Profile'
             form={
                 <Formik
-                    initialValues={{
-                        bio: '',
-                        colorCode: '5',
-                        displayName: '',
-                        isOpenForMessage: true,
-                        isPrivate: false,
-                        location: ''
-                    }}
-                    onSubmit={(values) => {
-                        //TODO: Implement saving profile logic.
-                        console.log(values);
-                    }}
+                    enableReinitialize
+                    initialValues={formValues}
+                    onSubmit={(values) => handleFormSubmit(values)}
                     validationSchema={validationSchema}
                 >
-                    {({handleSubmit, isSubmitting }) => (
+                    {({ handleSubmit, isValid, isSubmitting, dirty }) => (
                         <Form
                             className='ui-form'
                             onSubmit={handleSubmit}
                             autoComplete='off'
                         >
                             <Stack direction='column' spacing={3}>   
-                                <TextInput 
+                                <TextArea 
                                     placeholder='Bio' 
                                     name='bio'
-                                    InputProps={{
-                                        endAdornment: (
-                                            <InputAdornment position='start'>
-                                                <Description fontSize="small" />
-                                            </InputAdornment>
-                                        )
-                                    }}
+                                    rows={5}
                                 />
                                 <SelectInput label='Color Code' placeholder='Color Code' name='colorCode' options={ColorCodeEnum} />    
                                 <TextInput 
@@ -96,17 +94,18 @@ function EditProfileForm() {
                                 />
                                 <Divider sx={{width:'50%'}} />
                                 <Stack direction='row' spacing={2}>
-                                    <LoadingButton sx={{
-                      background: 'linear-gradient(135deg, #C75172, #C85DA3)'}}
-                                        loading={isSubmitting}
-                                        variant='contained' 
+                                    
+                                    <LoadingButton 
+                                        disabled={isSubmitting || !dirty || !isValid}
+                                        loading={loading} 
+                                        color="primary" 
+                                        variant="contained" 
                                         fullWidth 
                                         type="submit"
                                     >
                                         <Typography fontFamily='monospace'>Save</Typography>
                                     </LoadingButton>
-                                    <Button onClick={() => modalStore.closeModal()} sx={{
-                      background: 'linear-gradient(135deg, #785e7d, #2D1693)'}} variant="contained" fullWidth>
+                                    <Button onClick={() => modalStore.closeModal()} variant="contained" fullWidth>
                                         <Typography fontFamily='monospace'>Cancel</Typography>
                                     </Button>
                                 </Stack>

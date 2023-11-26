@@ -5,6 +5,7 @@ import { Content, EditorProvider } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import EditorMenuBar from './EditorMenuBar';
 import { useStore } from '../../stores/store';
+import { Box } from '@mui/material';
 
 const extensions = [
   Color.configure({ types: [TextStyle.name, ListItem.name] }),
@@ -49,6 +50,7 @@ const content = `
 interface Props {
   currentProfileUserName: string;
   content: Content | undefined | null;
+  section: string;
 }
 
 export default (props: Props) => {
@@ -58,11 +60,13 @@ export default (props: Props) => {
   const isOwnProfile = userStore.user?.userName === props.currentProfileUserName;
 
   return (
-    <EditorProvider 
-      slotBefore={isOwnProfile && <EditorMenuBar />}
-      extensions={extensions} 
-      content={props.content ?? content} 
-      children={null} 
-    />
+    <Box>
+      <EditorProvider 
+          slotBefore={isOwnProfile && <EditorMenuBar section={props.section} />}
+          extensions={extensions} 
+          content={props.content ?? content} 
+          children={null}
+        />
+    </Box>
   )
 }

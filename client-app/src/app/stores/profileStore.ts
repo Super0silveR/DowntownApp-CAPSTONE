@@ -1,7 +1,7 @@
 import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Photo } from "../models/photo";
-import { Profile } from "../models/profile";
+import { CreatorFields, Profile, ProfileFormValues } from "../models/profile";
 import { store } from "./store";
 
 export default class ProfileStore {
@@ -38,7 +38,6 @@ export default class ProfileStore {
     }
 
     setActiveTab = (activeTab: number) => {
-        console.log(activeTab);
         this.activeTab = activeTab;
     }
 
@@ -47,6 +46,25 @@ export default class ProfileStore {
     setLoadingProfile = (state: boolean) => this.loadingProfile = state;
 
     setLoadingFollowings = (state: boolean) => this.loadingFollowings = state;
+
+    setProfile = (values: ProfileFormValues) => {
+        if (this.profile) {
+            this.profile.bio = values.bio;
+            this.profile.colorCode = values.colorCode;
+            this.profile.displayName = values.displayName;
+            this.profile.isOpenForMessage = values.isOpenForMessage;
+            this.profile.isPrivate = values.isPrivate;
+            this.profile.location = values.location;
+        }
+    }
+
+    setCreatorFields = (values: CreatorFields) => {
+        if (this.profile) {
+            this.profile.creatorProfile!.collaborations = values.collaborations ?? this.profile.creatorProfile?.collaborations;
+            this.profile.creatorProfile!.pastExperiences = values.pastExperiences ?? this.profile.creatorProfile?.pastExperiences;
+            this.profile.creatorProfile!.standOut = values.standOut ?? this.profile.creatorProfile?.standOut;
+        }
+    }
 
     setUploading = (state: boolean) => this.uploading = state;
 
@@ -59,6 +77,7 @@ export default class ProfileStore {
             console.log(e);
         } finally {
             this.setLoadingProfile(false);
+            console.log(this.profile);
         }
     }
 
@@ -75,6 +94,35 @@ export default class ProfileStore {
             console.log(error);
         } finally {
             this.setLoading(true);
+        }
+    }
+
+    updateProfileGeneral = async (values: ProfileFormValues) => { 
+        this.loading = true;
+        try {
+            await agent.Profiles.editProfile(values);
+            runInAction(() => {
+                this.setProfile(values);
+            })
+        } catch (e) {
+            console.log(e);
+            throw e;
+        } finally {
+            this.setLoading(false);
+        }
+    }
+
+    updateCreatorFields = async (values: CreatorFields) => {
+        this.loading = true;
+        console.log(values);
+        try {
+            await agent.Profiles.editCreatorFields(values);
+            this.setCreatorFields(values);
+        } catch (e) {
+            console.log(e);
+            throw e;
+        } finally {
+            this.setLoading(false);
         }
     }
 
