@@ -19,5 +19,11 @@ namespace Api.Controllers
         {
             return HandleResult(await Mediator.Send(new GeneralEdit.Command { Profile = @profile }));
         }
+
+        [HttpPut] /// api/Profiles
+        public async Task<IActionResult> EditCreatorFields(CreatorFieldsDto creatorFields)
+        {
+            return HandleResult(await Mediator.Send(new CreatorEdit.Command { CreatorFields = creatorFields }));
+        }
     }
 }

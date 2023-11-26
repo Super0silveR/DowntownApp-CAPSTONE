@@ -32,13 +32,12 @@ namespace Application.Handlers.Events.Queries
             {
                 var users = await _context.Users
                     .Where(u => EF.Functions.Like(u.UserName, $"%{request.SearchTerm}%") ||
-                                EF.Functions.Like(u.DisplayName, $"%{request.SearchTerm}%"))
+                                EF.Functions.Like(u.DisplayName ?? "", $"%{request.SearchTerm}%"))
                     .Select(u => new UserDto
                     {
                         UserName = u.UserName,
                         DisplayName = u.DisplayName,
                     })
-
                     .ToListAsync(cancellationToken);
 
                 return Result<List<UserDto>>.Success(users);
