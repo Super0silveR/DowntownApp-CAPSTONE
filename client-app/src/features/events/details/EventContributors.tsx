@@ -54,27 +54,22 @@ function EventContributors({ contributors }: Props) {
     const { eventStore } = useStore(); 
 
 
-    const handleUserSearch = async () => {
-        setErrorMessage('');
-        setIsSearchEmpty(false);
-        setLoading(true);
-        try {
-            await eventStore.searchUsers(userSearchQuery);
-            const results = eventStore.userSearchResults;
-            setSearchResults(results);
-            setIsSearchEmpty(results.length === 0);
-        } catch (error) {
-            console.error('Error searching for users:', error);
-            setErrorMessage(eventStore.userSearchError);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-
-
-
-  
+  const handleUserSearch = async () => {
+      setErrorMessage('');
+      setIsSearchEmpty(false);
+      setLoading(true);
+      try {
+          await eventStore.searchUsers(userSearchQuery);
+          const results = eventStore.userSearchResults;
+          setSearchResults(results);
+          setIsSearchEmpty(results.length === 0);
+      } catch (error) {
+          console.error('Error searching for users:', error);
+          setErrorMessage(eventStore.userSearchError);
+      } finally {
+          setLoading(false);
+      }
+  };
 
   const handleInvite = (user: User) => {
     console.log('Inviting user:', user);

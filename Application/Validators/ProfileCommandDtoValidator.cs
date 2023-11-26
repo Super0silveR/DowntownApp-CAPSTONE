@@ -15,7 +15,6 @@ namespace Application.Validators
                 .MinimumLength(6);
 
             RuleFor(pcdto => pcdto.Bio)
-                .MinimumLength(50)
                 .MaximumLength(255);
         }
     }

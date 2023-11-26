@@ -1,15 +1,12 @@
-import { ColorCodeEnum } from '../common/constants';
 import { Photo } from './photo';
 import { Question } from './question';
 import { User } from './user';
-
-/** Creating a type for our color code value object. */
-type ColorCode = typeof ColorCodeEnum;
 
 /** Profile interface. */
 export interface IProfile {
     bio?: string;
     colorCode: string;
+    creatorProfile?: CreatorFields;
     displayName?: string;
     followers: number;
     following: number;
@@ -48,16 +45,17 @@ export class Profile implements IProfile {
         this.colorCode = '5';
     }
     
+    creatorProfile?: CreatorFields;
     followers = 0;
     following = 0;
     isContentCreator = false;
     isFollowing = false;
     isOpenForMessage = true;
     isPrivate = false;
-    bio?: string;
-    colorCode: string;
-    displayName?: string;
-    location?: string;
+    bio?: string = "";
+    colorCode: string = "5";
+    displayName?: string = "";
+    location?: string = "";
     phoneNumber?: string;
     photo?: string;
     photos?: Photo[];
@@ -67,9 +65,16 @@ export class Profile implements IProfile {
 
 export interface ProfileFormValues {
     bio?: string;
-    colorCode: ColorCode;
+    colorCode: string;
     displayName?: string;
     isOpenForMessage: boolean;
     isPrivate: boolean;
     location?: string;
+}
+
+export interface CreatorFields {
+    collaborations?: string;
+    pastExperiences?: string;
+    standOut?: string;
+    logoUrl?: string;
 }

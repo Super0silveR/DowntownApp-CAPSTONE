@@ -93,7 +93,7 @@ function ProfileHeader({ profile }: Props) {
                                 <Typography variant='caption'>Followers</Typography>
                             </Stack>
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={12} md={3}>
                             <Stack direction='column' spacing={-1}>
                                 <Typography
                                     sx={{

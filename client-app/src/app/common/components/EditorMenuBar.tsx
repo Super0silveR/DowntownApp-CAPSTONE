@@ -2,11 +2,19 @@ import { Edit } from "@mui/icons-material";
 import { Button, Stack, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import { useCurrentEditor } from "@tiptap/react"
 import { useEffect, useState } from "react";
+import { useStore } from "../../stores/store";
+import { LoadingButton } from "@mui/lab";
 
-const EditorMenuBar = () => {
+interface Props {
+    section: string;
+}
+
+const EditorMenuBar = (props: Props) => {
     const { editor } = useCurrentEditor();
 
     const [editMode, setEditMode] = useState(false);
+
+    const { profileStore: { updateCreatorFields, loading, profile } } = useStore();
 
     const handleEditMode = () => {
         setEditMode(!editMode);
@@ -20,12 +28,27 @@ const EditorMenuBar = () => {
       return null
     }
 
-    /**
-     * TODO: Actual Functionality.
-     */
     const handleSaveEditor = () => {
-        console.log(editor?.getHTML());
-        setEditMode(false);
+        switch (props.section) {
+            case 'contributions': {
+                updateCreatorFields({collaborations: editor?.getHTML(), pastExperiences: profile?.creatorProfile?.pastExperiences, standOut: profile?.creatorProfile?.standOut})
+                    .then(() => setEditMode(false))
+                    .catch((e) => console.log(e));
+                break;
+            }
+            case 'past-experiences': {
+                updateCreatorFields({pastExperiences: editor?.getHTML(), collaborations: profile?.creatorProfile?.collaborations, standOut: profile?.creatorProfile?.standOut})
+                    .then(() => setEditMode(false))
+                    .catch((e) => console.log(e));
+                break;
+            }
+            case 'stand-out': {
+                updateCreatorFields({standOut: editor?.getHTML(), collaborations: profile?.creatorProfile?.collaborations, pastExperiences: profile?.creatorProfile?.pastExperiences})
+                    .then(() => setEditMode(false))
+                    .catch((e) => console.log(e));
+                break;
+            }
+        }
     }
   
     return (
@@ -45,7 +68,8 @@ const EditorMenuBar = () => {
                     </ToggleButton>
                 </ToggleButtonGroup>
                 {editMode &&
-                    <Button 
+                    <LoadingButton 
+                        loading={loading}
                         color="success" 
                         variant="contained"
                         size="small"
@@ -53,7 +77,7 @@ const EditorMenuBar = () => {
                         onClick={() => handleSaveEditor()}
                     >
                         <Typography fontFamily='monospace'>Save</Typography>
-                    </Button>
+                    </LoadingButton>
                 }
             </Stack>
             <div id='editor-menu-div' hidden={!editMode}>
