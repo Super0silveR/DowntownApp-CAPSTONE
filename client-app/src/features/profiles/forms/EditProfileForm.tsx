@@ -81,7 +81,7 @@ function EditProfileForm() {
                                 />
                                 <FormControlLabel control={<Switch {...label} name="isOpenForMessage" defaultChecked size="small" />} label="Open For Message" />
                                 <FormControlLabel control={<Switch {...label} name="isPrivate" size="small" /> } label="Profile Private" />
-                                <TextInput 
+                                {/* <TextInput 
                                     placeholder='Location' 
                                     name='location'
                                     InputProps={{
@@ -91,7 +91,7 @@ function EditProfileForm() {
                                             </InputAdornment>
                                         )
                                     }}
-                                />
+                                /> */}
                                 <Divider sx={{width:'50%'}} />
                                 <Stack direction='row' spacing={2}>
                                     
