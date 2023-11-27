@@ -16,13 +16,15 @@ interface Props {
 }
 
 function ProfileContent({ profile }: Props) {
-    const [value, setValue] = useState('0');
+    const [value, setValue] = useState(profile.isContentCreator ? '0' : '1');
     const {profileStore} = useStore();
 
     const handleChange = (newValue: string) => {
         profileStore.setActiveTab(Number.parseInt(newValue));
         setValue(newValue);
     };
+
+    const isCreator = profile.isContentCreator;
 
     return (
         <Box
@@ -43,13 +45,13 @@ function ProfileContent({ profile }: Props) {
 
                     centered
                 >
-                    <Tab label="General" value='0' icon={<PermIdentity fontSize='small' />} iconPosition='top' />
+                    {isCreator && <Tab label="General" value='0' icon={<PermIdentity fontSize='small' />} iconPosition='top' />}
                     <Tab label="Photos" value='1' icon={<CropOriginal fontSize='small' />} iconPosition='top' />
                     <Tab label="Events" value='2' icon={<EmojiEvents fontSize='small' />} iconPosition='top' />
                     <Tab label="Following" value='3' icon={<PeopleOutline fontSize='small' />} iconPosition='top' />
                     <Tab label="Followers" value='4' icon={<People fontSize='small' />} iconPosition='top' />
                 </TabList>
-                <ProfileGeneral profile={profile} />
+                {isCreator && <ProfileGeneral profile={profile} />}
                 <ProfilePhotos profile={profile} />
                 <ProfileEvents />
                 <ProfileFollowings key='following' />

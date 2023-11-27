@@ -1,13 +1,14 @@
 import { Instagram, Facebook, Pinterest } from '@mui/icons-material';
 import { Paper, Container, Stack, Typography, Divider, ButtonGroup, IconButton, useTheme } from '@mui/material';
 import { Profile } from '../../app/models/profile';
+import { observer } from 'mobx-react-lite';
 
 interface Props {
     profile: Profile;
 }
 
 // TODO: Make use of profile prop.
-export default function ProfileAside({ profile } : Props) {
+export default observer(function ProfileAside({ profile } : Props) {
 
     const theme = useTheme();
 
@@ -21,7 +22,7 @@ export default function ProfileAside({ profile } : Props) {
                     width={1.0}
                     flexWrap="wrap"
                 >
-                    <Typography variant='body2' pt={2}>
+                    <Typography variant='body2' pt={2} sx={{ wordBreak: "break-word" }}>
                         {profile.bio ?? 'Missing Bio.'}
                     </Typography>
                     <Typography variant='body2' pt={2}>{profile.location ?? 'Missing Location.'}</Typography>
@@ -41,4 +42,4 @@ export default function ProfileAside({ profile } : Props) {
             </Container>                           
         </Paper>        
     );
-}
+})
