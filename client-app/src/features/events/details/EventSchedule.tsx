@@ -8,7 +8,7 @@ export interface EventSchedule {
     location: string;
     barId: string;
     isRemote: boolean;
-    address?: string; // Optional address field for in-person events
+    address?: string; 
 }
 
 interface Props {
@@ -28,11 +28,6 @@ const EventScheduleComponent: React.FC<Props> = ({ schedules, setSchedules }) =>
     const handleDateChange = (id: number, date: string) => {
         setSchedules(schedules.map(schedule => schedule.id === id ? { ...schedule, date } : schedule));
     };
-
-    const handleLocationChange = (id: number, location: string) => {
-        setSchedules(schedules.map(schedule => schedule.id === id ? { ...schedule, location } : schedule));
-    };
-
     const handleAddressChange = (id: number, address: string) => {
         setSchedules(schedules.map(schedule => schedule.id === id ? { ...schedule, address } : schedule));
     };
@@ -60,15 +55,6 @@ const EventScheduleComponent: React.FC<Props> = ({ schedules, setSchedules }) =>
                                 type="date"
                                 value={schedule.date}
                                 onChange={(e) => handleDateChange(schedule.id, e.target.value)}
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={5}>
-                            <TextField
-                                label="Location"
-                                type="text"
-                                value={schedule.location}
-                                onChange={(e) => handleLocationChange(schedule.id, e.target.value)}
                                 fullWidth
                             />
                         </Grid>
@@ -109,15 +95,6 @@ const EventScheduleComponent: React.FC<Props> = ({ schedules, setSchedules }) =>
                         onChange={(e) => setNewSchedule({ ...newSchedule, date: e.target.value })}
                         fullWidth
                         InputLabelProps={{ shrink: true }}
-                    />
-                </Grid>
-                <Grid item xs={5}>
-                    <TextField
-                        label="New Location"
-                        type="text"
-                        value={newSchedule.location || ''}
-                        onChange={(e) => setNewSchedule({ ...newSchedule, location: e.target.value })}
-                        fullWidth
                     />
                 </Grid>
                 <Grid item xs={2}>
