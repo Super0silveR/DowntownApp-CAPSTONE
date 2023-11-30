@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { TextField, IconButton, Grid, Typography, Paper, Button, Switch, FormControlLabel } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import AddIcon from '@mui/icons-material/Add';
 
 export interface EventSchedule {
     id: number;
@@ -42,6 +44,15 @@ const EventScheduleComponent: React.FC<Props> = ({ schedules, setSchedules }) =>
 
     const handleSaveSchedules = async () => {
     };
+    const handleAddNewSchedule = () => {
+        setSchedules([...schedules, newSchedule]);
+        setNewSchedule({ id: Date.now(), date: '', location: '', barId: '', isRemote: true }); // Reset new schedule
+    };
+
+    const handleDeleteAllSchedules = () => {
+        setSchedules([]); // Clear all schedules
+    };
+
 
     return (
         <Paper style={{ padding: '1em', marginTop: '1em' }}>
@@ -119,7 +130,14 @@ const EventScheduleComponent: React.FC<Props> = ({ schedules, setSchedules }) =>
                         />
                     </Grid>
                 )}
-                <Grid item xs={12}>
+                <Grid item xs={12} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <IconButton onClick={handleAddNewSchedule} color="primary">
+                        <AddIcon />
+                    </IconButton>
+                    <IconButton onClick={handleDeleteAllSchedules} color="secondary">
+                        <DeleteForeverIcon />
+                    </IconButton>
+
                     <Button
                         variant="contained"
                         color="primary"
