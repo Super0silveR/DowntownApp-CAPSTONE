@@ -4,6 +4,8 @@ import { Profile } from "../../../app/models/profile";
 import { SyntheticEvent, useState } from "react";
 import AccordionHeader from "../../../app/common/components/AccordionHeader";
 import AccordionContent from "../../../app/common/components/AccordionContent";
+import CreatorProfilePastExperience from "./CreatorProfilePastExperience";
+import CreatorProfileStandOut from "./CreatorProfileStandOut";
 
 interface Props {
     profile: Profile;
@@ -25,7 +27,7 @@ function CreatorProfileGeneral({ profile }: Props) {
                     description="Detailed Collaborations."
                 />
                 <AccordionContent 
-                    child={<CreatorProfileContribution currentProfileUserName={profile.userName!} />}
+                    child={<CreatorProfileContribution currentProfileUserName={profile.userName!} profile={profile} />}
                 />
             </Accordion>
             <Accordion expanded={expanded === 'past-experiences'} onChange={handleChange('past-experiences')}>
@@ -35,7 +37,7 @@ function CreatorProfileGeneral({ profile }: Props) {
                     description="Detailed Past Experiences."
                 />
                 <AccordionContent 
-                    child={<CreatorProfileContribution currentProfileUserName={profile.userName!} />}
+                    child={<CreatorProfilePastExperience currentProfileUserName={profile.userName!} profile={profile} />}
                 />
             </Accordion>
             <Accordion expanded={expanded === 'stand-out'} onChange={handleChange('stand-out')}>
@@ -44,12 +46,9 @@ function CreatorProfileGeneral({ profile }: Props) {
                     title='Stand Out'
                     description='Detailed Stand Out Section.'
                 />
-                <AccordionDetails>
-                    <Typography>
-                    Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer sit
-                    amet egestas eros, vitae egestas augue. Duis vel est augue.
-                    </Typography>
-                </AccordionDetails>
+                <AccordionContent 
+                    child={<CreatorProfileStandOut currentProfileUserName={profile.userName!} profile={profile} />}
+                />
             </Accordion>
         </>
     );

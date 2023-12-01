@@ -14,10 +14,16 @@ namespace Api.Controllers
             return HandleResult(await Mediator.Send(new ProfileDetails.Query { UserName = username }));
         }
 
-        [HttpPost] /// api/Profiles
+        [HttpPut] /// api/Profiles
         public async Task<IActionResult> EditProfile(ProfileCommandDto @profile)
         {
             return HandleResult(await Mediator.Send(new GeneralEdit.Command { Profile = @profile }));
+        }
+
+        [HttpPut("creator")] /// api/Profiles
+        public async Task<IActionResult> EditCreatorFields(CreatorFieldsDto creatorFields)
+        {
+            return HandleResult(await Mediator.Send(new CreatorEdit.Command { CreatorFields = creatorFields }));
         }
     }
 }

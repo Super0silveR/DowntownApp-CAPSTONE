@@ -149,6 +149,8 @@ namespace Application.Core
 
             CreateMap<BarCommandDto, Bar>();
 
+            CreateMap<CreatorFieldsDto, CreatorProfiles>();
+
             CreateMap<EventCategoryCommandDto, EventCategory>()
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
             

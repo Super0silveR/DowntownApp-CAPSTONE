@@ -9,7 +9,7 @@ import { ChatRoomType } from '../models/chatRoomType';
 import { User, UserDto, UserFormValues } from '../models/user';
 import { router } from '../router/Routes';
 import { store } from '../stores/store';
-import { Profile, ProfileDto } from '../models/profile';
+import { CreatorFields, Profile, ProfileDto, ProfileFormValues } from '../models/profile';
 import { Photo } from '../models/photo';
 import { PaginatedResult } from '../models/pagination';
 
@@ -195,7 +195,9 @@ const Profiles = {
     deletePhoto: (id: string) => requests.del(`/photos/${id}`),
     updateFollowing: (username: string) => requests.post(`/followers/${username}`, {}),
     listFollowings: (username: string, predicate: string) => 
-        requests.get<ProfileDto[]>(`/followers/${username}?predicate=${predicate}`)
+        requests.get<ProfileDto[]>(`/followers/${username}?predicate=${predicate}`),
+    editProfile: (profileDto: ProfileFormValues) => requests.put<void>(`/profiles`, profileDto),
+    editCreatorFields: (creatorFields: CreatorFields) => requests.put<void>(`/profiles/creator`, creatorFields)
 }
 
 
