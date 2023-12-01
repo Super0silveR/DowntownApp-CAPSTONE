@@ -3,6 +3,7 @@ using Application.DTOs.Commands;
 using Application.DTOs.Queries;
 using Domain.Entities;
 using Domain.Enums;
+using Microsoft.VisualBasic.FileIO;
 
 namespace Application.Core
 {
@@ -127,6 +128,13 @@ namespace Application.Core
 
             CreateMap<User, UserLightDto>()
                 .ForMember(pdto => pdto.Photo, options => options.MapFrom(u => u.Photos.FirstOrDefault(p => p.IsMain)!.Url));
+
+            CreateMap<UserChat, UserChatDto>()
+                .ForMember(ucdto => ucdto.SentAt, options => options.MapFrom(uc => uc.Sent))
+                .ForMember(ucdto => ucdto.UserName, options => options.MapFrom(uc => uc.User!.UserName))
+                .ForMember(ucdto => ucdto.DisplayName, options => options.MapFrom(uc => uc.User!.DisplayName))
+                .ForMember(ucdto => ucdto.Image, options => options.MapFrom(uc => uc.User!.Photos.FirstOrDefault(p => p.IsMain)!.Url))
+                .ForMember(ucdto => ucdto.IsMe, options => options.MapFrom(uc => uc.User!.UserName == currentUserName));
 
             #endregion
 

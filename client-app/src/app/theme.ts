@@ -90,6 +90,13 @@ const theme = createTheme({
                             color: theme.palette.primary.dark,
                             backgroundColor: theme.palette.action.hover
                         }
+                    }),
+                    ...((ownerState['aria-details'] === 'base-invert') && {
+                        color: theme.palette.primary.main,
+                        '&:hover': {
+                            color: theme.palette.primary.dark,
+                            backgroundColor: theme.palette.action.hover
+                        }
                     })
                 })
             }
