@@ -9,7 +9,7 @@ import ProfilePage from "../../features/profiles/ProfilePage";
 import App from "../layout/App";
 import RequireAuthentication from "./RequireAuthentication";
 import EventLive from "../../features/events/EventLive";
-import MessageDashboard from "../../features/messages/MessageDashboard";
+import MessageDashboard from "../../features/chats/ChatDashboard";
 
 /** Tree-like structure to represents the different routes in our Application. */
 export const routes: RouteObject[] = [

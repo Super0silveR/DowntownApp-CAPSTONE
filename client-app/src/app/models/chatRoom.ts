@@ -10,8 +10,9 @@ export interface ChatRoom {
     users: UserChatRoom[]
 }
 
-export interface ChatRoomItemDto {
+export interface ChatRoomDto {
     id: string,
     name?: string,
-    description?: string
+    description?: string,
+    displayName: string
 }

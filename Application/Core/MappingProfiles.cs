@@ -136,6 +136,10 @@ namespace Application.Core
                 .ForMember(ucdto => ucdto.Image, options => options.MapFrom(uc => uc.User!.Photos.FirstOrDefault(p => p.IsMain)!.Url))
                 .ForMember(ucdto => ucdto.IsMe, options => options.MapFrom(uc => uc.User!.UserName == currentUserName));
 
+            /// TODO: Rework the 'displayName' field.
+            CreateMap<UserChatRoom, UserChatRoomDto>()
+                .ForMember(ucrdto => ucrdto.DisplayName, options => options.MapFrom(ucr => ucr.ChatRoom!.Name));
+
             #endregion
 
             /// Data transfert objects used for writing data.

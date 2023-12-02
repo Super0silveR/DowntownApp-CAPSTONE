@@ -7,7 +7,7 @@ import { store } from './store';
 export default class UserChatStore {
     chats: UserChat[] = [];
     selectedChatRoom: ChatRoom | undefined = undefined;
-    chatRooms: ChatRoom[] | undefined = undefined;
+    chatRooms: ChatRoom[] = [];
     hubConnection: HubConnection | null = null;
     
     /**
@@ -15,6 +15,22 @@ export default class UserChatStore {
      */
     constructor() {
         makeAutoObservable(this);
+
+        this.chatRooms?.push({
+            id: '1',
+            chats: [],
+            users: []
+        });
+        this.chatRooms?.push({
+            id: '2',
+            chats: [],
+            users: []
+        });
+        this.chatRooms?.push({
+            id: '3',
+            chats: [],
+            users: []
+        });
     }
 
     createHubConnection = (chatRoomId: string) => {
