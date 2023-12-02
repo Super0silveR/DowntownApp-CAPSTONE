@@ -34,7 +34,7 @@ namespace Application.Handlers.Chats.Queries
 
                 var chatRooms = await _context.UserChatRooms
                     .Where(ucr => ucr.UserId == user.Id)
-                    .OrderBy(ucr => ucr.LastSent)
+                    .OrderByDescending(ucr => ucr.LastSent)
                     .ProjectTo<UserChatRoomDto>(_mapper.ConfigurationProvider)
                     .ToListAsync(cancellationToken);
 

@@ -53,7 +53,7 @@ namespace Application.Handlers.Events.Commands
 
                 var user = await _context.Users.FindAsync(new object?[] { userId }, cancellationToken);
 
-                if (user is null) throw new Exception("This user is invalid.");
+                if (user is null) return null;
 
                 var @event = _mapper.Map<Event>(request.Event);
                 @event.CreatorId = user.Id;

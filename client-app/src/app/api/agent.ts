@@ -12,6 +12,7 @@ import { store } from '../stores/store';
 import { CreatorFields, Profile, ProfileDto, ProfileFormValues } from '../models/profile';
 import { Photo } from '../models/photo';
 import { PaginatedResult } from '../models/pagination';
+import { ChatRoomDto } from '../models/chatRoom';
 
 /** Adding a `fake` delay to the app for testing the `loading` indicators after requests. */
 const sleep = (delay: number) => {
@@ -200,15 +201,16 @@ const Profiles = {
     editCreatorFields: (creatorFields: CreatorFields) => requests.put<void>(`/profiles/creator`, creatorFields)
 }
 
-
-  
-  
+const Chats = {
+    listChatRooms: () => requests.get<ChatRoomDto[]>(`/chats/`)
+}
 
 /**
  * Building the `agent` object.
  * */
 const agent = {
     Accounts,
+    Chats,
     ChallengeTypes,
     ChatRoomTypes,
     Events,

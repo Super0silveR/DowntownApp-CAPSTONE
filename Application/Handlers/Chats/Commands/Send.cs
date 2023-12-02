@@ -15,7 +15,7 @@ namespace Application.Handlers.Chats.Commands
         public class Command : IRequest<Result<UserChatDto>?>
         {
             public string Message { get; set; } = string.Empty;
-            public Guid ChatRoomId { get; set; }
+            public string? ChatRoomId { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
@@ -48,7 +48,7 @@ namespace Application.Handlers.Chats.Commands
                     .SingleOrDefaultAsync(u => u.UserName == _userService.GetUserName(), cancellationToken);
 
                 var chatRoom = await _context.ChatRooms
-                    .FindAsync(new object?[] { request.ChatRoomId, user!.Id }, cancellationToken);
+                    .FindAsync(new object?[] { Guid.Parse(request.ChatRoomId!) }, cancellationToken);
 
                 if (chatRoom == null) return null;
 
@@ -59,9 +59,13 @@ namespace Application.Handlers.Chats.Commands
                     Message = request.Message,
                 };
 
+                await _context.UserChats.AddAsync(userChat);
+
                 var userChatDto = _mapper.Map<UserChatDto>(userChat);
 
-                chatRoom.UserChats.Add(userChat);
+                userChatDto.IsLastInGroup = true;
+                userChatDto.IsMe = true;
+                userChatDto.Id = userChat.Id;
 
                 var success = await _context.SaveChangesAsync(cancellationToken) > 0;
 

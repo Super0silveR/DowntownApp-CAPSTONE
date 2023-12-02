@@ -130,6 +130,7 @@ namespace Application.Core
                 .ForMember(pdto => pdto.Photo, options => options.MapFrom(u => u.Photos.FirstOrDefault(p => p.IsMain)!.Url));
 
             CreateMap<UserChat, UserChatDto>()
+                .ForMember(ucdto => ucdto.Id, options => options.MapFrom(uc => uc.Id))
                 .ForMember(ucdto => ucdto.SentAt, options => options.MapFrom(uc => uc.Sent))
                 .ForMember(ucdto => ucdto.UserName, options => options.MapFrom(uc => uc.User!.UserName))
                 .ForMember(ucdto => ucdto.DisplayName, options => options.MapFrom(uc => uc.User!.DisplayName))
@@ -138,7 +139,8 @@ namespace Application.Core
 
             /// TODO: Rework the 'displayName' field.
             CreateMap<UserChatRoom, UserChatRoomDto>()
-                .ForMember(ucrdto => ucrdto.DisplayName, options => options.MapFrom(ucr => ucr.ChatRoom!.Name));
+                .ForMember(ucrdto => ucrdto.Id, options => options.MapFrom(ucr => ucr.ChatRoomId))
+                .ForMember(ucrdto => ucrdto.DisplayName, options => options.MapFrom(ucr => ucr.DisplayName));
 
             #endregion
 

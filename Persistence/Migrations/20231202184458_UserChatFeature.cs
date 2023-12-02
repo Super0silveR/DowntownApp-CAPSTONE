@@ -581,6 +581,8 @@ namespace Persistence.Migrations
                 {
                     ChatRoomId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    LastSent = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DisplayName = table.Column<string>(type: "text", nullable: true),
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
