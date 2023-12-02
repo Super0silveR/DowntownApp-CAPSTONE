@@ -51,7 +51,7 @@ export function AccountMenu({ logout, user }: Props) {
                             aria-label="show 4 new mails"
                             aria-details='base'
                             component={NavLink}
-                            to='/mailbox'
+                            to='/messages'
                         >
                             <Badge badgeContent={4}>
                                 <MailIcon />

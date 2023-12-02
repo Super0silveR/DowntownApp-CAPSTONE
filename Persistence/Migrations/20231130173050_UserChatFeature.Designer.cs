@@ -12,8 +12,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231107030303_Initial")]
-    partial class Initial
+    [Migration("20231130173050_UserChatFeature")]
+    partial class UserChatFeature
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1054,6 +1054,7 @@ namespace Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Message")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("Sent")

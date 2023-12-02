@@ -10,8 +10,11 @@ interface Props {
 }
 
 export default observer(function ProfileCard({ profile }: Props) {
+
+    const opacity = profile?.isFollowing ? 1 : 0.5;
+
     return (
-        <Card sx={{ display: 'flex', minHeight:150 }} variant="outlined">
+        <Card sx={{ display: 'flex', minHeight:150, opacity:opacity}} variant="outlined">
             <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%'}}>
                 <CardActionArea onClick={() => router.navigate(`/profiles/${profile?.userName}`)}>
                     <CardMedia
