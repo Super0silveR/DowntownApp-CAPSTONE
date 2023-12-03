@@ -128,6 +128,7 @@ namespace Api.Extensions
                         builder
                         .AllowAnyHeader()
                         .AllowAnyMethod()
+                        .AllowCredentials()
                         .WithOrigins("https://localhost:3000", "http://localhost:3000");
                     });
             });

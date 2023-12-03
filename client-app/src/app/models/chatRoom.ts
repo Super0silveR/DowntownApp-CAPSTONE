@@ -12,7 +12,5 @@ export interface ChatRoom {
 
 export interface ChatRoomDto {
     id: string,
-    name?: string,
-    description?: string,
-    displayName: string
+    displayName?: string
 }

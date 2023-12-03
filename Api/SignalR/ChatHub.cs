@@ -64,7 +64,7 @@ namespace Api.SignalR
             if (comment is null) return;
 
             await Clients
-                .Group(command.ChatRoomId.ToString())
+                .Group(command.ChatRoomId!)
                 .SendAsync("ReceiveChat", comment.Value);
         }
 

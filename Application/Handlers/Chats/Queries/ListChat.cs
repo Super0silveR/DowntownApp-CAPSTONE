@@ -19,11 +19,13 @@ namespace Application.Handlers.Chats.Queries
         {
             private readonly IDataContext _context;
             private readonly IMapper _mapper;
+            private readonly ICurrentUserService _userService;
 
-            public Handler(IDataContext context, IMapper mapper)
+            public Handler(IDataContext context, IMapper mapper, ICurrentUserService userService)
             {
                 _context = context;
                 _mapper = mapper;
+                _userService = userService;
             }
 
             public async Task<Result<List<UserChatDto>>> Handle(Query request, CancellationToken cancellationToken)
@@ -44,6 +46,9 @@ namespace Application.Handlers.Chats.Queries
                         chat.IsLastInGroup = false;
                     else
                         chat.IsLastInGroup = true;
+
+                    if (chat.UserName!.Equals(_userService.GetUserName()))
+                        chat.IsMe = true;
                 }
 
                 return Result<List<UserChatDto>>.Success(userChats);

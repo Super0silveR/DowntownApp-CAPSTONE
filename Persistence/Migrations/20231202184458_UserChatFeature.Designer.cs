@@ -12,7 +12,7 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231130173050_UserChatFeature")]
+    [Migration("20231202184458_UserChatFeature")]
     partial class UserChatFeature
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1086,6 +1086,9 @@ namespace Persistence.Migrations
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("text");
+
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
@@ -1094,6 +1097,9 @@ namespace Persistence.Migrations
 
                     b.Property<Guid?>("LastModifiedBy")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("LastSent")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("ChatRoomId", "UserId")
                         .HasName("PK_USER_CHAT_ROOM_ID");

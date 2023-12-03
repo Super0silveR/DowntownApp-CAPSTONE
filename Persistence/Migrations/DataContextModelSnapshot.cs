@@ -1084,6 +1084,9 @@ namespace Persistence.Migrations
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("text");
+
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
@@ -1092,6 +1095,9 @@ namespace Persistence.Migrations
 
                     b.Property<Guid?>("LastModifiedBy")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("LastSent")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("ChatRoomId", "UserId")
                         .HasName("PK_USER_CHAT_ROOM_ID");
