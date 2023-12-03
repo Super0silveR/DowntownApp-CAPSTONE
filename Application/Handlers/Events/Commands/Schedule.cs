@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Core;
+using Application.DTOs.Commands;
 using Application.DTOs.Queries;
 using Ardalis.GuardClauses;
 using AutoMapper;
@@ -12,7 +13,7 @@ namespace Application.Handlers.Events.Commands
     {
         public class Command : IRequest<Result<Unit>?>
         {
-            public ScheduledEventDto ScheduledEvent { get; set; } = new ScheduledEventDto();
+            public ScheduledEventCommandDto ScheduledEvent { get; set; } = new ScheduledEventCommandDto();
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>?>
@@ -20,7 +21,7 @@ namespace Application.Handlers.Events.Commands
             private readonly IDataContext _context;
             private readonly IMapper _mapper;
 
-            public Handler(IDataContext context, IMapper mapper, ICurrentUserService currentUserService)
+            public Handler(IDataContext context, IMapper mapper)
             {
                 _context = context;
                 _mapper = mapper;
@@ -33,8 +34,8 @@ namespace Application.Handlers.Events.Commands
                 var bar = await _context.Bars.FindAsync(new object?[] { request.ScheduledEvent.BarId }, cancellationToken);
                 var @event = await _context.Events.FindAsync(new object?[] {request.ScheduledEvent.EventId}, cancellationToken);
 
-                if (bar == null) { return Result<Unit>.Failure("This bar is invalid"); }
-                if (@event == null) { return Result<Unit>.Failure("This event is invalid"); }
+                if (bar == null) throw new Exception("This bar is invalid.");
+                if (@event == null) throw new Exception("This event is invalid.");
 
                 var scheduledEvent = _mapper.Map<ScheduledEvent>(request.ScheduledEvent);
 

@@ -46,11 +46,11 @@ namespace Application.Handlers.Bars.Commands
             {
                 Guard.Against.Null(_context.Bars, nameof(_context.Bars));
 
-                if (!Guid.TryParse(_userService.GetUserId(), out Guid userId)) return null;
+                if (!Guid.TryParse(_userService.GetUserId(), out Guid userId)) return Result<Unit>.Failure("This user is invalid.");
 
                 var user = await _context.Users.FindAsync(new object?[] { userId }, cancellationToken);
 
-                if (user is null) return null;
+                if (user is null) throw new Exception("This user is invalid.");
 
                 var bar = _mapper.Map<Bar>(request.Bar);
                 bar.CreatorId = user.Id;

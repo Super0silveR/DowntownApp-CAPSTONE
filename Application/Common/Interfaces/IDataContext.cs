@@ -34,7 +34,6 @@ namespace Application.Common.Interfaces
         public DbSet<EventAttendee> ScheduledEventAttendees { get; }
         public DbSet<EventChallenge> ScheduledEventChallenges { get; }
         public DbSet<EventComment> ScheduledEventComments { get; }
-        public DbSet<EventTicket> ScheduledEventTickets { get; }
         public DbSet<Socials> Socials { get; }
         public DbSet<UserAddress> UserAddresses { get; }
         public DbSet<User> Users { get; }
@@ -44,7 +43,6 @@ namespace Application.Common.Interfaces
         public DbSet<UserGroup> UserGroups { get; }
         public DbSet<UserPhoto> UserPhotos { get; }
         public DbSet<UserQuestion> UserQuestions { get; }
-        public DbSet<EventTicket> EventTicket { get; }
 
         // overrides
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
