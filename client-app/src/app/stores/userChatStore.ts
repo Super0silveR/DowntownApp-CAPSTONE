@@ -1,11 +1,13 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, reaction, runInAction } from "mobx";
 import { UserChat, UserChatDto } from "../models/userChat";
 import { ChatRoomDto } from '../models/chatRoom';
 import { store } from './store';
 import agent from '../api/agent';
+import dayjs from 'dayjs';
 
 export default class UserChatStore {
+    chatRegistry = new Map<string, UserChatDto>();
     chats: UserChatDto[] = [];
     selectedChatRoom: ChatRoomDto | undefined = undefined;
     chatRooms: ChatRoomDto[] = [];
@@ -17,6 +19,21 @@ export default class UserChatStore {
      */
     constructor() {
         makeAutoObservable(this);
+    }
+
+    get chatsByDate() {
+        return Array.from(this.chatRegistry.values()).sort((e1, e2) => 
+            e1.sentAt!.getTime() - e2.sentAt!.getTime());
+    }
+
+    get groupedChatsByDate() {
+        return Object.entries(
+            this.chatsByDate.reduce((chats, chat) => {
+                const date = dayjs(chat.sentAt!).format('MMMM DD — YYYY');
+                chats[date] = chats[date] ? [...chats[date], chat] : [chat];
+                return chats;
+            }, {} as {[key: string]: UserChatDto[]})
+        );
     }
 
     setLoadingChatRooms = (state: boolean) => this.loadingChatRooms = state;
@@ -58,18 +75,24 @@ export default class UserChatStore {
 
             this.hubConnection.on('LoadChats', (chats: UserChatDto[]) => {
                 runInAction(() => {
+                    chats.forEach(chat => {
+                        this.setChat(chat);
+                    });
                     this.chats = chats;
-                    console.log(chats);
                 });
             });
 
             this.hubConnection.on('ReceiveChat', (chat: UserChatDto) => {
                 runInAction(() => {
+                    if (chat.userName !== store.userStore.user?.userName) chat.isMe = false;
                     const lastChat = this.chats.pop();
-                    if (lastChat?.userName === chat.userName) {
-                        lastChat.isLastInGroup = false;
+                    if (lastChat) {
+                        if (lastChat?.userName === chat.userName) {
+                            lastChat.isLastInGroup = false;
+                        }
                         this.chats.push(lastChat);
                     }
+                    this.setChat(chat);
                     this.chats.push(chat);
                 });
             });
@@ -95,4 +118,9 @@ export default class UserChatStore {
     }
 
     private getChatRoom = (id: string) => this.chatRooms.find(cr => cr.id === id);
+
+    private setChat = (chat: UserChatDto) => {
+        chat.sentAt = new Date(chat.sentAt!);
+        this.chatRegistry.set(chat.id, chat);
+    };
 }

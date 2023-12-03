@@ -8,7 +8,6 @@ import { Photo } from "../models/photo";
 import { store } from "./store";
 import { Pagination, PaginationParams } from "../models/pagination";
 import toast from "react-hot-toast";
-import EventSchedule from "../../features/events/details/EventSchedule";
 import { UserDto } from "../models/user";
 
 
@@ -270,29 +269,29 @@ export default class EventStore {
         })
     }
 
-    scheduleEvent = async (eventData: EventSchedule) => {
-        this.setLoading(true);
-        try {
-            const scheduledEvent: ScheduleEvent = {
-                id: uuid(), 
-                date: new Date(eventData.date), 
-                location: eventData.location,
-                barId: eventData.barId
-            };
-            await agent.Events.schedule(scheduledEvent);
+    // scheduleEvent = async (eventData: EventSchedule) => {
+    //     this.setLoading(true);
+    //     try {
+    //         const scheduledEvent: ScheduleEvent = {
+    //             id: uuid(), 
+    //             date: new Date(eventData.date), 
+    //             location: eventData.location,
+    //             barId: eventData.barId
+    //         };
+    //         await agent.Events.schedule(scheduledEvent);
 
-            toast.success('Event scheduled successfully!');
-        } catch (error) {
-            runInAction(() => {
-                this.setLoading(false);
-            });
+    //         toast.success('Event scheduled successfully!');
+    //     } catch (error) {
+    //         runInAction(() => {
+    //             this.setLoading(false);
+    //         });
 
-            console.error('Error scheduling event', error);
-            toast.error('Error scheduling event');
-        } finally {
-            this.setLoading(false);
-        }
-    };
+    //         console.error('Error scheduling event', error);
+    //         toast.error('Error scheduling event');
+    //     } finally {
+    //         this.setLoading(false);
+    //     }
+    // };
 
     searchUsers = async (query: string) => {
         this.setLoading(true);
