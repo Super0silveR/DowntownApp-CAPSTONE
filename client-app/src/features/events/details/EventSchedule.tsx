@@ -3,14 +3,20 @@ import { TextField, IconButton, Grid, Typography, Paper, Button, Switch, FormCon
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AddIcon from '@mui/icons-material/Add';
+import toast from 'react-hot-toast';
+import { useStore } from '../../../app/stores/store';
 
 export interface EventSchedule {
-    id: number;
+    id: number; 
     date: string;
     location: string;
-    barId: string;
     isRemote: boolean;
-    address?: string; 
+    address?: string;
+    barId?: string; 
+    barData?: { 
+        title: string;
+        description: string;
+    };
 }
 
 interface Props {
@@ -23,8 +29,12 @@ const EventScheduleComponent: React.FC<Props> = ({ schedules, setSchedules }) =>
         id: Date.now(),
         date: '',
         location: '',
-        barId: '',
         isRemote: true
+    });
+
+    const [newBar, setNewBar] = useState({
+        title: '',
+        description: ''
     });
 
     const handleDateChange = (id: number, date: string) => {
@@ -44,13 +54,35 @@ const EventScheduleComponent: React.FC<Props> = ({ schedules, setSchedules }) =>
 
     const handleSaveSchedules = async () => {
     };
-    const handleAddNewSchedule = () => {
-        setSchedules([...schedules, newSchedule]);
-        setNewSchedule({ id: Date.now(), date: '', location: '', barId: '', isRemote: true }); // Reset new schedule
+    const { eventStore } = useStore(); 
+
+    const handleAddNewSchedule = async () => {
+        const barData = {
+            title: newBar.title,
+            description: newBar.description,
+        };
+
+        const eventScheduleData = {
+            ...newSchedule,
+            barData: barData 
+        };
+
+        try {
+            await eventStore.scheduleEvent(eventScheduleData);
+
+            toast.success('Event and Bar scheduled successfully!');
+        } catch (error) {
+            console.error('Error scheduling event and creating bar:', error);
+            toast.error('Error scheduling event and creating bar');
+        }
+
+        setNewBar({ title: '', description: '' });
+        setNewSchedule({ id: Date.now(), date: '', location: '', barId: '', isRemote: true });
     };
 
+
     const handleDeleteAllSchedules = () => {
-        setSchedules([]); // Clear all schedules
+        setSchedules([]); 
     };
 
 

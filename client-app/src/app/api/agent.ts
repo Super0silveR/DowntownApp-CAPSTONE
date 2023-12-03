@@ -12,6 +12,8 @@ import { store } from '../stores/store';
 import { CreatorFields, Profile, ProfileDto, ProfileFormValues } from '../models/profile';
 import { Photo } from '../models/photo';
 import { PaginatedResult } from '../models/pagination';
+import { Bar } from '../models/bar';
+
 
 /** Adding a `fake` delay to the app for testing the `loading` indicators after requests. */
 const sleep = (delay: number) => {
@@ -200,6 +202,14 @@ const Profiles = {
     editCreatorFields: (creatorFields: CreatorFields) => requests.put<void>(`/profiles/creator`, creatorFields)
 }
 
+const Bars = {
+    create: (bar: Bar) => requests.post('/bars', bar),
+    update: (bar: Bar) => requests.put(`/bars/${bar.id}`, bar),
+    delete: (id: string) => requests.del(`/bars/${id}`),
+    details: (id: string) => requests.get(`/bars/${id}`),
+    list: () => requests.get('/bars'),
+};
+
 
   
   
@@ -216,6 +226,7 @@ const agent = {
     EventCategories,
     Profiles,
     QuestionTypes,
+    Bars
 }
 
 /**

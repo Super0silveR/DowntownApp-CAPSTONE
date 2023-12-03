@@ -1,4 +1,3 @@
-import EventSchedule from "../../features/events/details/EventSchedule";
 import { ProfileDto } from "./profile";
 import { User, UserDto } from "./user";
 
@@ -50,7 +49,6 @@ export interface Event {
     attendees: ProfileDto[];
     contributors: Contributor[];
     BgImage: string;
-    schedules: EventSchedule[];
     location: string;
 }
 
@@ -68,7 +66,6 @@ export const emptyEvent = (): Event => ({
     attendees: [],
     contributors: [],
     BgImage: '1.jpg',
-    schedules: [],
     location: ''
 
 });
