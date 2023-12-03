@@ -41,6 +41,12 @@ namespace Application.Core
             CreateMap<EventDto, Event>()
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 
+            CreateMap<EventTicket, EventTicketDto>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<EventTicketDto, EventTicket>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
             CreateMap<Event, EventDto>()
                 .ForMember(edto => edto.Contributors, options => 
                     options.MapFrom(e => e.Contributors.Where(c => !c.Status.Equals(ContributorStatus.Removed))))
@@ -178,7 +184,13 @@ namespace Application.Core
             CreateMap<ChatRoomTypeCommandDto, ChatRoomType>()
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 
-            CreateMap<ScheduledEventDto, ScheduledEvent>()
+            CreateMap<ScheduledEventCommandDto, ScheduledEvent>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<EventTicketCommandDto, EventTicket>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<EventTicket, EventTicketCommandDto>()
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 
 

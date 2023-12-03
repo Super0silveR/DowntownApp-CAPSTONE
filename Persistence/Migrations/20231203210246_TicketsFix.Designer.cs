@@ -12,13 +12,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-<<<<<<<< HEAD:Persistence/Migrations/20231124053014_LocationAndEventTickets.Designer.cs
-    [Migration("20231124053014_LocationAndEventTickets")]
-    partial class LocationAndEventTickets
-========
-    [Migration("20231202184458_UserChatFeature")]
-    partial class UserChatFeature
->>>>>>>> 68d1bb90cb0c0a77b74ec953abbf97af1748f082:Persistence/Migrations/20231202184458_UserChatFeature.Designer.cs
+    [Migration("20231203210246_TicketsFix")]
+    partial class TicketsFix
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -690,7 +685,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("ScheduledEventId");
 
-                    b.ToTable("EventTicket");
+                    b.ToTable("EventTickets");
                 });
 
             modelBuilder.Entity("Domain.Entities.EventType", b =>

@@ -683,7 +683,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("ScheduledEventId");
 
-                    b.ToTable("EventTicket");
+                    b.ToTable("EventTickets");
                 });
 
             modelBuilder.Entity("Domain.Entities.EventType", b =>

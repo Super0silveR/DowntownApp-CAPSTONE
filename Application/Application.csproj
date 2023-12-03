@@ -20,8 +20,6 @@
 
   <ItemGroup>
     <Folder Include="Handlers\Bars\Queries\" />
-    <Folder Include="Handlers\ScheduledEvent\Commands\" />
-    <Folder Include="Handlers\ScheduledEvent\Queries\" />
   </ItemGroup>
 
   <PropertyGroup>

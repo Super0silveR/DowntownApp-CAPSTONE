@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ApplicationTests.Handlers.Bars.Commands
 {
-    internal class EditBarTest
+    public class EditBarTest
     {
     }
 }

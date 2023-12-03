@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ApplicationTests.Handlers.Bars.Queries
 {
-    internal class ListBarTest
+    public class ListBarTest
     {
     }
 }

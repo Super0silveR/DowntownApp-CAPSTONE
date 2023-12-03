@@ -39,9 +39,9 @@ namespace Application.Handlers.Bars.Commands
             {
                 Guard.Against.Null(_context.Bars, nameof(_context.Bars));
 
-                var bar = await _context.Bars.FindAsync(new object?[] { request.Id }, cancellationToken);
+                var bar = await _context.Bars.FindAsync(new object?[] { request.Id }, cancellationToken: cancellationToken);
 
-                if (bar is null) return null;
+                if (bar is null) return Result<Unit>.Failure("This event does not exist.");
 
                 _context.Bars.Remove(bar);
 

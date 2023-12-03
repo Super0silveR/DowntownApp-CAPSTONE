@@ -1,17 +1,12 @@
 ﻿using Api.Controllers;
-using Api.Controllers.Base;
 using Application.Core;
 using Application.DTOs.Queries;
-using Application.Handlers.Events.Commands;
 using Application.Handlers.Events.Queries;
 using Application.Params;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
-using System.Threading;
-using Xunit;
 
 namespace Api.Tests.Controllers
 {
