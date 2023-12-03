@@ -23,6 +23,8 @@ export default observer(function FollowButton({profile} : Props) {
     const [endIcon, setEndIcon] = useState<React.ReactNode>(profile?.isFollowing ? <Favorite /> : <FavoriteBorder />);
     const [followText, setFollowText] = useState(profile?.isFollowing ? "Following" : "Not Following");
     const [buttonOpacity, setButtonOpacity] = useState(1.0);
+
+    const [target, setTarget] = useState('');
     
     /** User looking at their own profile won't be able to follow themselves. */
     if (userStore.user?.userName === profile?.userName) return null;
@@ -34,6 +36,8 @@ export default observer(function FollowButton({profile} : Props) {
      */
     function handleFollow(e: SyntheticEvent, username: string) {
         e.preventDefault();
+        setTarget(e.currentTarget.id);
+        
         if (profile?.isFollowing) {
             setEndIcon(<FavoriteBorder />);
             setFollowText("Not Following");
@@ -85,12 +89,13 @@ export default observer(function FollowButton({profile} : Props) {
 
     return (
         <LoadingButton
+            id={profile?.userName}
             key={profile?.userName}
             variant='contained'
             size='small'
             sx={{opacity:buttonOpacity,m:0,borderRadius:0}}
             endIcon={endIcon}
-            loading={loading}
+            loading={loading && (target === (profile?.userName as string))}
             onClick={(e) => handleFollow(e, (profile?.userName as string))}
             onMouseOver={(e) => handleMouseOver(e)}
             onMouseLeave={(e) => handleMouseLeave(e)}

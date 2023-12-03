@@ -1,6 +1,6 @@
 import { LoadingButton } from "@mui/lab";
-import { Stack, Typography, Button, Divider, InputAdornment, Switch, FormControlLabel } from "@mui/material";
-import { Form, Formik } from "formik";
+import { Stack, Typography, Button, Divider, InputAdornment, Switch, FormControlLabel, Input } from "@mui/material";
+import { Field, Form, Formik, useField } from "formik";
 import { observer } from "mobx-react-lite";
 import * as Yup from 'yup';
 import { useStore } from "../../../app/stores/store";
@@ -8,10 +8,11 @@ import { ProfileFormValues } from "../../../app/models/profile";
 import FormContainer from "../../../app/common/form/FormContainer";
 import TextInput from "../../../app/common/form/TextInput";
 import { ColorCodeEnum } from "../../../app/common/constants";
-import { Description, InfoOutlined, LocationCity } from "@mui/icons-material";
+import { InfoOutlined } from "@mui/icons-material";
 import SelectInput from "../../../app/common/form/SelectInput";
 import { useState } from "react";
 import TextArea from "../../../app/common/form/TextArea";
+import CheckboxInput from "../../../app/common/form/CheckboxInput";
 
 function EditProfileForm() {
     /** Validation schema using Yup. */
@@ -30,7 +31,7 @@ function EditProfileForm() {
 
     const label = { inputProps: { 'aria-label': 'switch for boolean.' } };
 
-    const emptyFormValues = {
+    const emptyFormValues: ProfileFormValues = {
         bio: profile?.bio ?? '',
         colorCode: profile?.colorCode ?? '2',
         displayName: profile.displayName,
@@ -42,7 +43,13 @@ function EditProfileForm() {
     const [formValues, setFormValues] = useState<ProfileFormValues>(emptyFormValues);
 
     const handleFormSubmit = (values: ProfileFormValues) => {
+        console.log(values);
+        const isOpen = document.getElementsByName('isOpenForMessage');
         updateProfileGeneral(values).then(() => modalStore.closeModal());
+    }
+
+    const handleSwitchChange = (value: any) => {
+        console.log(value.currentTarget.value);
     }
 
     return (
@@ -62,11 +69,7 @@ function EditProfileForm() {
                             autoComplete='off'
                         >
                             <Stack direction='column' spacing={3}>   
-                                <TextArea 
-                                    placeholder='Bio' 
-                                    name='bio'
-                                    rows={5}
-                                />
+                                <TextArea name='bio' placeholder='Bio' label='Bio' rows={6} />
                                 <SelectInput label='Color Code' placeholder='Color Code' name='colorCode' options={ColorCodeEnum} />    
                                 <TextInput 
                                     placeholder='Display Name' 
@@ -79,7 +82,9 @@ function EditProfileForm() {
                                         )
                                     }}
                                 />
-                                <FormControlLabel control={<Switch {...label} name="isOpenForMessage" defaultChecked size="small" />} label="Open For Message" />
+                                {/* <CheckboxInput name="isOpenForMessage" placeholder="Open For Message" />
+                                <CheckboxInput name="isPrivate" placeholder="" /> */}
+                                <FormControlLabel control={<Switch {...label} name="isOpenForMessage" defaultChecked size="small" onChange={handleSwitchChange} />} label="Open For Message" />
                                 <FormControlLabel control={<Switch {...label} name="isPrivate" size="small" /> } label="Profile Private" />
                                 {/* <TextInput 
                                     placeholder='Location' 

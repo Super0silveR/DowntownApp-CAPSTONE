@@ -9,8 +9,8 @@ namespace Domain.Entities
     {
         public Guid ChatRoomId { get; set; }
         public Guid UserId { get; set; }
-        public DateTime Sent { get; set; }
-        public string? Message { get; set; }
+        public DateTime Sent { get; set; } = DateTime.UtcNow;
+        public string Message { get; set; } = "";
 
         public virtual ChatRoom? ChatRoom { get; set; }
         public virtual User? User { get; set; }

@@ -5,6 +5,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
+using SendCommand = Application.Handlers.Chats.Commands.Send.Command;
+using ListQuery = Application.Handlers.Chats.Queries.ListChat.Query;
 
 namespace Api.SignalR
 {
@@ -23,6 +25,10 @@ namespace Api.SignalR
         /// 2. Foreach UserChatRooms, bind the User connection to each one of them.
         /// </summary>
         /// <returns></returns>
+        /// .
+        /// .
+        /// WORK IN PROGRESS.
+        [Obsolete("Work in progress")]
         public async Task AddUserToGroupsAsync()
         {
             Guard.Against.Null(Context.UserIdentifier, nameof(Context.UserIdentifier));
@@ -44,20 +50,46 @@ namespace Api.SignalR
             await Clients.Caller.SendAsync("LinkedToGroups", groups);
         }
 
+        /// <summary>
+        /// Method that handles the "sending a chat" feature.
+        /// 1 - Mediator call for adding chat to the domain, and database.
+        /// 2 - Send to all connected user of this group the same message.
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public async Task SendChat(SendCommand command)
+        {
+            var comment = await _mediator.Send(command);
+
+            if (comment is null) return;
+
+            await Clients
+                .Group(command.ChatRoomId!)
+                .SendAsync("ReceiveChat", comment.Value);
+        }
+
         #region overrides
 
         /// <summary>
-        /// When a client connects to our chat hub.
+        /// Method that handles when a client connects to our chat hub, specifically to a group (UserChatRoom).
+        /// 1 - Fetch the user chat room id from context
+        /// 2 - Add user to group.
+        /// 3 - Return all the chats for this room.
         /// </summary>
-        /// <returns>Valid Hub connection to the caller.</returns>
+        /// <returns>Valid Hub connection to the caller, and all the chats from this group.</returns>
         public override async Task OnConnectedAsync()
         {
             var hubHttpContext = Context.GetHttpContext();
 
-            Guard.Against.Null(hubHttpContext, nameof(hubHttpContext));
+            if (hubHttpContext is null) return;
 
-            await AddUserToGroupsAsync();
-            //await Clients.Caller.SendAsync("Connected", Context.UserIdentifier);
+            var ChatRoomId = hubHttpContext.Request.Query["chatRoomId"];
+
+            await Groups.AddToGroupAsync(Context.ConnectionId, ChatRoomId);
+
+            var result = await _mediator.Send(new ListQuery { ChatRoomId = Guid.Parse(ChatRoomId) });
+
+            await Clients.Caller.SendAsync("LoadChats", result.Value);
         }
 
         /// <summary>

@@ -1,13 +1,10 @@
 ﻿using Application.Common.Interfaces;
-using Ardalis.GuardClauses;
 using Domain.Entities;
 using Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System.Data.Odbc;
-using System.Diagnostics;
 using System.Drawing;
 
 namespace Persistence
@@ -15,21 +12,18 @@ namespace Persistence
     public class DataContextInitializer
     {
         private readonly IColorService _colorService;
-        private readonly IConfiguration _configuration;
         private readonly ILogger<DataContextInitializer> _logger;
         private readonly DataContext _context;
         private readonly RoleManager<Role> _roleManager;
         private readonly UserManager<User> _userManager;
 
         public DataContextInitializer(IColorService colorService,
-                                      IConfiguration configuration,
                                       ILogger<DataContextInitializer> logger,
                                       DataContext context,
                                       RoleManager<Role> roleManager,
                                       UserManager<User> userManager)
         {
             _colorService = colorService;
-            _configuration = configuration;
             _logger = logger;
             _context = context;
             _roleManager = roleManager;
@@ -160,66 +154,6 @@ namespace Persistence
                 await _context.ChatRoomTypes.AddRangeAsync(chatRoomTypes);
                 await _context.SaveChangesAsync();
             }
-
-            /// Chat Rooms seeding.
-            var chatRooms = new List<ChatRoom>
-            {
-                new ChatRoom
-                {
-                    ChatRoomType = chatRoomTypes[0],
-                    Name = "My First ChatRoom"
-                },
-                new ChatRoom
-                {
-                    ChatRoomType = chatRoomTypes[0],
-                    Name = "My Second ChatRoom"
-                }
-            };
-
-            if (!_context.ChatRooms.Any())
-            {
-                await _context.ChatRooms.AddRangeAsync(chatRooms);
-                await _context.SaveChangesAsync();
-            }
-
-            /// User Chat Rooms seeding.
-            var userChatRooms = new List<UserChatRoom>
-            {
-                new UserChatRoom
-                {
-                    ChatRoom = chatRooms[0],
-                    User = users[0]
-                },
-                new UserChatRoom
-                {
-                    ChatRoom = chatRooms[0],
-                    User = users[1]
-                },
-                new UserChatRoom
-                {
-                    ChatRoom = chatRooms[1],
-                    User = users[0]
-                }
-            };
-
-            /// User Chats seeding.
-            var userChats = new List<UserChat>
-            {
-                new UserChat
-                {
-                    Sent = DateTime.UtcNow,
-                    Message = "Hi Elias!",
-                    ChatRoom = chatRooms[0],
-                    User = users[0]
-                },
-                new UserChat
-                {
-                    Sent = DateTime.UtcNow.AddSeconds(5),
-                    Message = "Hi Vincent! How are you?",
-                    ChatRoom = chatRooms[0],
-                    User = users[1]
-                }
-            };
 
             /// Event Categories seeding.
             var eventCategories = new List<EventCategory>
@@ -404,18 +338,6 @@ namespace Persistence
             if (!_context.ChallengeTypes.Any())
             {
                 await _context.ChallengeTypes.AddRangeAsync(challengeTypes);
-                await _context.SaveChangesAsync();
-            }
-
-            if (!_context.UserChatRooms.Any())
-            {
-                await _context.UserChatRooms.AddRangeAsync(userChatRooms);
-                await _context.SaveChangesAsync();
-            }
-
-            if (!_context.UserChats.Any())
-            {
-                await _context.UserChats.AddRangeAsync(userChats);
                 await _context.SaveChangesAsync();
             }
 

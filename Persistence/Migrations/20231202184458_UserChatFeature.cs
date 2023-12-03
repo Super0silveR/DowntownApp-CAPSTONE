@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Persistence.Migrations
 {
-    public partial class Initial : Migration
+    public partial class UserChatFeature : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -581,6 +581,8 @@ namespace Persistence.Migrations
                 {
                     ChatRoomId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    LastSent = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DisplayName = table.Column<string>(type: "text", nullable: true),
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -612,7 +614,7 @@ namespace Persistence.Migrations
                     ChatRoomId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     Sent = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Message = table.Column<string>(type: "text", nullable: true)
+                    Message = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
