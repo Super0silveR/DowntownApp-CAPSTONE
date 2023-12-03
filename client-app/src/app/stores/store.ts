@@ -5,15 +5,17 @@ import LookupStore from "./lookupStore";
 import ModalStore from "./modalStore";
 import ProfileStore from "./profileStore";
 import UserStore from "./userStore";
+import UserChatStore from "./userChatStore";
 
 /** Main store interface. */
 interface Store {
-    commonStore: CommonStore,
-    eventStore: EventStore,
-    lookupStore: LookupStore,
-    modalStore: ModalStore,
-    userStore: UserStore,
-    profileStore: ProfileStore
+    commonStore: CommonStore;
+    eventStore: EventStore;
+    lookupStore: LookupStore;
+    modalStore: ModalStore;
+    userStore: UserStore;
+    userChatStore: UserChatStore;
+    profileStore: ProfileStore;
 }
 
 /** Instance of our main store, containing different stores. */
@@ -23,6 +25,7 @@ export const store: Store = {
     lookupStore: new LookupStore(),
     modalStore: new ModalStore(),
     userStore: new UserStore(),
+    userChatStore: new UserChatStore(),
     profileStore: new ProfileStore()
 }
 

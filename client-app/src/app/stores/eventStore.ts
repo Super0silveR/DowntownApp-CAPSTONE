@@ -9,7 +9,7 @@ import { store } from "./store";
 import { Pagination, PaginationParams } from "../models/pagination";
 import toast from "react-hot-toast";
 import EventSchedule from "../../features/events/details/EventSchedule";
-import { User } from "../models/user";
+import { UserDto } from "../models/user";
 
 
 /**
@@ -26,7 +26,7 @@ export default class EventStore {
     pagination: Pagination | null = null;
     paginationParams = new PaginationParams();
     predicate = new Map().set('all', true);
-    userSearchResults: User[] = []; 
+    userSearchResults: UserDto[] = []; 
     userSearchError = '';
 
     constructor() {

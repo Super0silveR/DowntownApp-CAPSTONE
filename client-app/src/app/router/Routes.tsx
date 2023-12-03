@@ -9,6 +9,7 @@ import ProfilePage from "../../features/profiles/ProfilePage";
 import App from "../layout/App";
 import RequireAuthentication from "./RequireAuthentication";
 import EventLive from "../../features/events/EventLive";
+import MessageDashboard from "../../features/chats/ChatDashboard";
 
 /** Tree-like structure to represents the different routes in our Application. */
 export const routes: RouteObject[] = [
@@ -42,8 +43,10 @@ export const routes: RouteObject[] = [
                     {path: 'profiles/:userName', element: <ProfilePage />},
 
                     /** Errors related routes */
-                    {path: 'errors', element: <TestErrors key='errors' />}
+                    {path: 'errors', element: <TestErrors key='errors' />},
 
+                    /** Messages & conversations routes. */
+                    {path: 'messages', element: <MessageDashboard />}
             ]}
         ]
     }

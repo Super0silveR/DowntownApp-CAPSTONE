@@ -3,6 +3,7 @@ using Application.DTOs.Commands;
 using Application.DTOs.Queries;
 using Domain.Entities;
 using Domain.Enums;
+using Microsoft.VisualBasic.FileIO;
 
 namespace Application.Core
 {
@@ -128,19 +129,18 @@ namespace Application.Core
             CreateMap<User, UserLightDto>()
                 .ForMember(pdto => pdto.Photo, options => options.MapFrom(u => u.Photos.FirstOrDefault(p => p.IsMain)!.Url));
 
-            CreateMap<EventTicket, EventTicketDto>()
-                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+            CreateMap<UserChat, UserChatDto>()
+                .ForMember(ucdto => ucdto.Id, options => options.MapFrom(uc => uc.Id))
+                .ForMember(ucdto => ucdto.SentAt, options => options.MapFrom(uc => uc.Sent))
+                .ForMember(ucdto => ucdto.UserName, options => options.MapFrom(uc => uc.User!.UserName))
+                .ForMember(ucdto => ucdto.DisplayName, options => options.MapFrom(uc => uc.User!.DisplayName))
+                .ForMember(ucdto => ucdto.Image, options => options.MapFrom(uc => uc.User!.Photos.FirstOrDefault(p => p.IsMain)!.Url))
+                .ForMember(ucdto => ucdto.IsMe, options => options.MapFrom(uc => uc.User!.UserName == currentUserName));
 
-            CreateMap<EventTicketDto, EventTicket>()
-                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
-
-            CreateMap<EventTicket, EventTicketCommandDto>()
-                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
-
-            CreateMap<EventTicketCommandDto, EventTicket>()
-                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
-
-
+            /// TODO: Rework the 'displayName' field.
+            CreateMap<UserChatRoom, UserChatRoomDto>()
+                .ForMember(ucrdto => ucrdto.Id, options => options.MapFrom(ucr => ucr.ChatRoomId))
+                .ForMember(ucrdto => ucrdto.DisplayName, options => options.MapFrom(ucr => ucr.DisplayName));
 
             #endregion
 

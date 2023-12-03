@@ -90,6 +90,20 @@ const theme = createTheme({
                             color: theme.palette.primary.dark,
                             backgroundColor: theme.palette.action.hover
                         }
+                    }),
+                    ...((ownerState['aria-details'] === 'base-invert') && {
+                        color: theme.palette.primary.main,
+                        '&:hover': {
+                            color: theme.palette.primary.dark,
+                            backgroundColor: theme.palette.action.hover
+                        }
+                    }),
+                    ...((ownerState['aria-details'] === 'base-userchat') && {
+                        color: theme.palette.primary.main + '95',
+                        '&:hover': {
+                            color: theme.palette.primary.dark + '40',
+                            background: 'transparent'
+                        }
                     })
                 })
             }
@@ -132,7 +146,8 @@ const theme = createTheme({
         MuiOutlinedInput: {
             styleOverrides: {
                 root: ({theme}) => ({
-                    backgroundColor: theme.palette.primary.light + '18'
+                    backgroundColor: theme.palette.common.white + '18',
+                    color: theme.palette.common.black
                 })
             }
         },
@@ -159,11 +174,11 @@ const theme = createTheme({
         primary: {
             light: '#757ce8',
             main: '#291752',
-            dark: '#002884',
+            dark: '#483248',
         },
         secondary: {
             light: grey[400],
-            main: red[700],
+            main: '#291752' + 50,
             dark: red[900],
             contrastText: grey[50]
         },
