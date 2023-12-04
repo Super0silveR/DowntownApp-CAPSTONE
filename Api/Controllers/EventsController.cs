@@ -72,7 +72,7 @@ namespace Api.Controllers
 
         [Authorize]
         [HttpPost("Scheduling")]
-        public async Task<IActionResult> CreateScheduledEvents(ScheduledEventDto scheduledEvent)
+        public async Task<IActionResult> CreateScheduledEvents(ScheduledEventCommandDto scheduledEvent)
         {
             return HandleResult(await Mediator.Send(new Schedule.Command { ScheduledEvent = scheduledEvent }));
         }

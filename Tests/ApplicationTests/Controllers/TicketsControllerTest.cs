@@ -1,8 +1,7 @@
 ﻿using Api.Controllers;
 using Application.Core;
 using Application.DTOs.Queries;
-using Application.Handlers.Events.Queries;
-using Application.Params;
+using Application.Handlers.Tickets.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,15 +9,15 @@ using Moq;
 
 namespace Api.Tests.Controllers
 {
-    public class EventsControllerTest
+    public class TicketsControllerTest
     {
         private readonly Mock<IMediator> _mediatorMock;
-        private readonly EventsController _controller;
+        private readonly TicketsController _controller;
 
-        public EventsControllerTest()
+        public TicketsControllerTest()
         {
             _mediatorMock = new Mock<IMediator>();
-            _controller = new EventsController
+            _controller = new TicketsController
             {
                 ControllerContext = new ControllerContext()
             };
@@ -31,13 +30,13 @@ namespace Api.Tests.Controllers
         }
 
         [Fact]
-        public async Task ShouldGetEvents()
+        public async Task ShouldGetTickets()
         {
-            var mockResult = new Result<PagedList<EventDto>>(); 
+            var mockResult = new Result<List<EventTicketDto>>();
             _mediatorMock.Setup(m => m.Send(It.IsAny<List.Query>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(mockResult);
 
-            var result = await _controller.GetEvents(new EventParams()); 
+            var result = await _controller.GetTickets();
 
             var okResult = result as OkObjectResult;
 
@@ -48,14 +47,14 @@ namespace Api.Tests.Controllers
         {
             var eventId = Guid.NewGuid();
 
-            var mockDetailsResult = new Result<EventDto?>();
+            var mockDetailsResult = new Result<EventTicketDto?>();
             _mediatorMock.Setup(m => m.Send(It.IsAny<Details.Query>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(mockDetailsResult);
 
-            var result = await _controller.GetEvent(eventId);
+            var result = await _controller.GetTicket(eventId);
 
             var okResult = result as OkObjectResult;
-           
+
         }
     }
 }

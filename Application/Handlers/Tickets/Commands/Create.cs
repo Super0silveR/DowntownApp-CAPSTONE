@@ -13,35 +13,39 @@ namespace Application.Handlers.Tickets.Commands
         public class Command : IRequest<Result<Unit>?>
         {
             public EventTicketCommandDto eventTicket { get; set; } = new EventTicketCommandDto();
+            public int? nbr;
         }
 
-        /*public class Handler : IRequestHandler<Command, Result<Unit>?>
+        public class Handler : IRequestHandler<Command, Result<Unit>?>
         {
             private readonly IDataContext _context;
             private readonly IMapper _mapper;
-            private readonly IEventService _eventService;
 
-            public Handler(IDataContext context, IMapper mapper, IEventService eventService)
+            public Handler(IDataContext context, IMapper mapper)
             {
                 _context = context;
                 _mapper = mapper;
-                _eventService = eventService;
             }
 
             public async Task<Result<Unit>?> Handle(Command request, CancellationToken cancellationToken)
             {
-                Guard.Against.Null(_context.EventTicket, nameof(_context.EventTicket));
+                Guard.Against.Null(_context.EventTickets, nameof(_context.EventTickets));
 
-                if (!Guid.TryParse(_eventService.GetEventId(), out Guid eventId)) return null;
+                var scheduledEvent = await _context.ScheduledEvents.FindAsync(new object?[] { request.eventTicket.ScheduledEventId }, cancellationToken);
 
-                var @event = await _context.Events.FindAsync(new object?[] { eventId }, cancellationToken);
+                if (scheduledEvent is null) return Result<Unit>.Failure("This Scheduled Event is invalid");
 
-                if (@event is null) return null;
+                if (request.nbr is null) { request.nbr = 1; }
 
-                var eventTicket = _mapper.Map<EventTicket>(request.eventTicket);
-                eventTicket.ScheduledEventId = @event.Id;
+                for (int i = 0; i < request.nbr; i++)
+                {
+                    var eventTicket = _mapper.Map<EventTicket>(request.eventTicket);
 
-                _context.EventTicket.Add(eventTicket);
+                    eventTicket.ScheduledEventId = scheduledEvent.Id;
+                    eventTicket.ScheduledEvent = scheduledEvent;
+
+                    _context.EventTickets.Add(eventTicket);
+                }
 
                 bool result = await _context.SaveChangesAsync(cancellationToken) > 0;
 
@@ -49,6 +53,6 @@ namespace Application.Handlers.Tickets.Commands
                     return Result<Unit>.Failure("Failed to create a new Ticket.");
                 return Result<Unit>.Success(Unit.Value);
             }
-        }*/
+        }
     }
 }

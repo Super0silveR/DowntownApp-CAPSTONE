@@ -683,7 +683,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("ScheduledEventId");
 
-                    b.ToTable("EventTicket");
+                    b.ToTable("EventTickets");
                 });
 
             modelBuilder.Entity("Domain.Entities.EventType", b =>
@@ -871,6 +871,9 @@ namespace Persistence.Migrations
 
                     b.Property<Guid?>("LastModifiedBy")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("Scheduled")
                         .HasColumnType("timestamp with time zone");

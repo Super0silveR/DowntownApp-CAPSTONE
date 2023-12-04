@@ -2,6 +2,7 @@
 using Application.Core;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -36,7 +37,7 @@ namespace ApplicationTests.Data
         private readonly Mock<ICurrentUserService> _userServiceMock;
         private readonly Mock<IDateTimeService> _dateTimeService;
 
-        private User _currentUser = new()
+        private static User _currentUser = new()
         {
             Email = "vinc@test.com",
             UserName = "heph",
@@ -107,6 +108,77 @@ namespace ApplicationTests.Data
                             );
 
                         dataContext.SaveChanges();
+
+                        dataContext.Bars.AddRange(
+                                new Bar
+                                {
+                                    CreatorId = _currentUser.Id,
+                                    Title = "Bar Nb1",
+                                    Description = "Bar1 Description",
+                                    CoverCost = 0,
+                                    IsActive = true,
+                                    Creator = _currentUser,
+                                    ScheduledEvents = new HashSet<ScheduledEvent>(),
+                                    Likes = new HashSet<BarLike>()
+                                },
+                                new Bar
+                                {
+                                    CreatorId = _currentUser.Id,
+                                    Title = "Bar Nb2",
+                                    Description = "Bar2 Description",
+                                    CoverCost = 0,
+                                    IsActive = true,
+                                    Creator = _currentUser,
+                                    ScheduledEvents = new HashSet<ScheduledEvent>(),
+                                    Likes = new HashSet<BarLike>()
+                                }
+                            );
+                        dataContext.SaveChanges();
+
+                        dataContext.ScheduledEvents.AddRange(
+                                new ScheduledEvent
+                                {
+                                    BarId = dataContext.Bars.First().Id,
+                                    EventId = dataContext.Events.First().Id,
+                                    Scheduled = DateTime.UtcNow.AddMonths(3),
+                                    Location = "Test Location 1",
+                                    IsHost = true,
+                                    Capacity = 68,
+                                    Guidelines = "Test Guidelines 1",
+                                },
+                                new ScheduledEvent
+                                {
+                                    BarId = dataContext.Bars.First().Id,
+                                    EventId = dataContext.Events.First().Id,
+                                    Scheduled = DateTime.UtcNow.AddMonths(3),
+                                    Location = "Test Location 2",
+                                    IsHost = true,
+                                    Capacity = 420,
+                                    Guidelines = "Test Guidelines 2",
+                                }
+                            );
+
+                        dataContext.SaveChanges();
+
+                        dataContext.EventTickets.AddRange(
+                                new EventTicket 
+                                { 
+                                    ScheduledEventId = dataContext.ScheduledEvents.First().Id,
+                                    Description = "Description ticket 1",
+                                    Price = 25.0,
+                                    TicketClassification = TicketClassification.Default,
+                                },
+                                new EventTicket
+                                {
+                                    ScheduledEventId = dataContext.ScheduledEvents.First().Id,
+                                    Description = "Description ticket 2",
+                                    Price = 25.1,
+                                    TicketClassification = TicketClassification.Default,
+                                }
+                            );
+
+                        dataContext.SaveChanges();
+
                     }
 
                     _databaseInitialized = true;

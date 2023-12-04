@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Security
+namespace ApplicationTests.Handlers.Bars.Queries
 {
-    internal class EventService
+    public class DetailsBarTest
     {
     }
 }

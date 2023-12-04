@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Core;
+using Application.DTOs.Commands;
 using Application.DTOs.Queries;
 using Ardalis.GuardClauses;
 using AutoMapper;
@@ -13,7 +14,7 @@ namespace Application.Handlers.Tickets.Queries
     {
         public class Query : IRequest<Result<EventTicketDto?>>
         {
-            public Guid Id { get; set; }  
+            public Guid Id { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, Result<EventTicketDto?>>
@@ -27,16 +28,15 @@ namespace Application.Handlers.Tickets.Queries
                 _mapper = mapper;
             }
 
-            async Task<Result<EventTicketDto?>> IRequestHandler<Query, Result<EventTicketDto?>>.Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<EventTicketDto?>> Handle(Query request, CancellationToken cancellationToken)
             {
                 Guard.Against.Null(_context.EventTickets, nameof(_context.EventTickets));
 
                 var eventTicketDto = await _context.EventTickets
-                    .ProjectTo<EventTicketDto>(_mapper.ConfigurationProvider)
-                    .FirstOrDefaultAsync(ec => ec.Id == request.Id, cancellationToken);
+                                           .ProjectTo<EventTicketDto>(_mapper.ConfigurationProvider)
+                                           .FirstOrDefaultAsync(edto => edto.Id == request.Id);
 
                 return Result<EventTicketDto?>.Success(eventTicketDto);
-             
             }
         }
     }
