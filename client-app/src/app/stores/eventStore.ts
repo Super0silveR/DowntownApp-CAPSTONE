@@ -286,6 +286,10 @@ export default class EventStore {
 
                 const eventDate = new Date(eventData.date);
 
+                if (!eventData.isRemote && !eventData.address) {
+                    throw new Error('Address is required for in-person events.');
+                }
+
                 const scheduledEvent: ScheduleEvent = {
                     ...eventData,
                     id: eventData.id.toString(),

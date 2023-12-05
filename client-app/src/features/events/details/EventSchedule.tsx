@@ -57,6 +57,11 @@ const EventScheduleComponent: React.FC<Props> = ({ schedules, setSchedules }) =>
     const { eventStore } = useStore(); 
 
     const handleAddNewSchedule = async () => {
+        if (!newSchedule.isRemote && !newSchedule.address) {
+            toast.error('Address is required for in-person events');
+            return;
+        }
+
         const barData = {
             title: newBar.title,
             description: newBar.description,
@@ -64,12 +69,11 @@ const EventScheduleComponent: React.FC<Props> = ({ schedules, setSchedules }) =>
 
         const eventScheduleData = {
             ...newSchedule,
-            barData: barData 
+            barData: barData
         };
 
         try {
             await eventStore.scheduleEvent(eventScheduleData);
-
             toast.success('Event and Bar scheduled successfully!');
         } catch (error) {
             console.error('Error scheduling event and creating bar:', error);
@@ -79,6 +83,7 @@ const EventScheduleComponent: React.FC<Props> = ({ schedules, setSchedules }) =>
         setNewBar({ title: '', description: '' });
         setNewSchedule({ id: Date.now(), date: '', location: '', barId: '', isRemote: true });
     };
+
 
 
     const handleDeleteAllSchedules = () => {
