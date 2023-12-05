@@ -8,8 +8,6 @@ import { Photo } from "../models/photo";
 import { store } from "./store";
 import { Pagination, PaginationParams } from "../models/pagination";
 import toast from "react-hot-toast";
-import EventSchedule from "../../features/events/details/EventSchedule";
-import { UserDto } from "../models/user";
 import {UserDto } from "../models/user";
 import { EventSchedule } from '../../features/events/details/EventSchedule'; 
 import { Bar, emptyBar } from "../models/bar";
