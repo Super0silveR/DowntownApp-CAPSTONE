@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
-import { TextField, IconButton, Grid, Typography, Paper, Button, Switch, FormControlLabel } from '@mui/material';
+import { TextField, IconButton, Grid, Typography, Paper, Switch, FormControlLabel } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AddIcon from '@mui/icons-material/Add';
+import toast from 'react-hot-toast';
+import { useStore } from '../../../app/stores/store';
 
 export interface EventSchedule {
-    id: number;
+    id: number; 
     date: string;
     location: string;
-    barId: string;
     isRemote: boolean;
-    address?: string; 
+    address?: string;
+    barId?: string; 
+    barData?: { 
+        title: string;
+        description: string;
+    };
 }
 
 interface Props {
@@ -23,8 +29,12 @@ const EventScheduleComponent: React.FC<Props> = ({ schedules, setSchedules }) =>
         id: Date.now(),
         date: '',
         location: '',
-        barId: '',
         isRemote: true
+    });
+
+    const [newBar, setNewBar] = useState({
+        title: '',
+        description: ''
     });
 
     const handleDateChange = (id: number, date: string) => {
@@ -33,7 +43,7 @@ const EventScheduleComponent: React.FC<Props> = ({ schedules, setSchedules }) =>
     const handleAddressChange = (id: number, address: string) => {
         setSchedules(schedules.map(schedule => schedule.id === id ? { ...schedule, address } : schedule));
     };
-
+    
     const handleToggleRemote = (id: number) => {
         setSchedules(schedules.map(schedule => schedule.id === id ? { ...schedule, isRemote: !schedule.isRemote } : schedule));
     };
@@ -42,15 +52,40 @@ const EventScheduleComponent: React.FC<Props> = ({ schedules, setSchedules }) =>
         setSchedules(schedules.filter(schedule => schedule.id !== id));
     };
 
-    const handleSaveSchedules = async () => {
-    };
-    const handleAddNewSchedule = () => {
-        setSchedules([...schedules, newSchedule]);
-        setNewSchedule({ id: Date.now(), date: '', location: '', barId: '', isRemote: true }); // Reset new schedule
+    const { eventStore } = useStore(); 
+
+    const handleAddNewSchedule = async () => {
+        if (!newSchedule.isRemote && !newSchedule.address) {
+            toast.error('Address is required for in-person events');
+            return;
+        }
+
+        const barData = {
+            title: newBar.title,
+            description: newBar.description,
+        };
+
+        const eventScheduleData = {
+            ...newSchedule,
+            barData: barData
+        };
+
+        try {
+            await eventStore.scheduleEvent(eventScheduleData);
+            toast.success('Event and Bar scheduled successfully!');
+        } catch (error) {
+            console.error('Error scheduling event and creating bar:', error);
+            toast.error('Error scheduling event and creating bar');
+        }
+
+        setNewBar({ title: '', description: '' });
+        setNewSchedule({ id: Date.now(), date: '', location: '', barId: '', isRemote: true });
     };
 
+
+
     const handleDeleteAllSchedules = () => {
-        setSchedules([]); // Clear all schedules
+        setSchedules([]); 
     };
 
 
@@ -137,16 +172,6 @@ const EventScheduleComponent: React.FC<Props> = ({ schedules, setSchedules }) =>
                     <IconButton onClick={handleDeleteAllSchedules} color="secondary">
                         <DeleteForeverIcon />
                     </IconButton>
-
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleSaveSchedules}
-                        fullWidth
-                        style={{ marginTop: '1em' }}
-                    >
-                        Save Schedules
-                    </Button>
                 </Grid>
             </Grid>
         </Paper>
