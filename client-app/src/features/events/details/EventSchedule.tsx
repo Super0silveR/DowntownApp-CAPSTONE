@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, IconButton, Grid, Typography, Paper, Button, Switch, FormControlLabel } from '@mui/material';
+import { TextField, IconButton, Grid, Typography, Paper, Switch, FormControlLabel } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AddIcon from '@mui/icons-material/Add';
@@ -43,7 +43,7 @@ const EventScheduleComponent: React.FC<Props> = ({ schedules, setSchedules }) =>
     const handleAddressChange = (id: number, address: string) => {
         setSchedules(schedules.map(schedule => schedule.id === id ? { ...schedule, address } : schedule));
     };
-
+    
     const handleToggleRemote = (id: number) => {
         setSchedules(schedules.map(schedule => schedule.id === id ? { ...schedule, isRemote: !schedule.isRemote } : schedule));
     };
@@ -52,8 +52,6 @@ const EventScheduleComponent: React.FC<Props> = ({ schedules, setSchedules }) =>
         setSchedules(schedules.filter(schedule => schedule.id !== id));
     };
 
-    const handleSaveSchedules = async () => {
-    };
     const { eventStore } = useStore(); 
 
     const handleAddNewSchedule = async () => {
@@ -174,16 +172,6 @@ const EventScheduleComponent: React.FC<Props> = ({ schedules, setSchedules }) =>
                     <IconButton onClick={handleDeleteAllSchedules} color="secondary">
                         <DeleteForeverIcon />
                     </IconButton>
-
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleSaveSchedules}
-                        fullWidth
-                        style={{ marginTop: '1em' }}
-                    >
-                        Save Schedules
-                    </Button>
                 </Grid>
             </Grid>
         </Paper>
