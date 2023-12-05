@@ -8,8 +8,9 @@ import { Photo } from "../models/photo";
 import { store } from "./store";
 import { Pagination, PaginationParams } from "../models/pagination";
 import toast from "react-hot-toast";
-import EventSchedule from "../../features/events/details/EventSchedule";
-import { UserDto } from "../models/user";
+import {UserDto } from "../models/user";
+import { EventSchedule } from '../../features/events/details/EventSchedule'; 
+import { Bar, emptyBar } from "../models/bar";
 
 
 /**
@@ -273,26 +274,44 @@ export default class EventStore {
     scheduleEvent = async (eventData: EventSchedule) => {
         this.setLoading(true);
         try {
-            const scheduledEvent: ScheduleEvent = {
-                id: uuid(), 
-                date: new Date(eventData.date), 
-                location: eventData.location,
-                barId: eventData.barId
-            };
-            await agent.Events.schedule(scheduledEvent);
+            if (eventData.barData) {
+                const barToCreate: Bar = {
+                    ...emptyBar(), 
+                    ...eventData.barData, 
+                    name: eventData.barData.title 
+                };
 
-            toast.success('Event scheduled successfully!');
+                const barResponse = await agent.Bars.create(barToCreate) as unknown as Bar;
+                const barId = barResponse.id;
+
+                const eventDate = new Date(eventData.date);
+
+                if (!eventData.isRemote && !eventData.address) {
+                    throw new Error('Address is required for in-person events.');
+                }
+
+                const scheduledEvent: ScheduleEvent = {
+                    ...eventData,
+                    id: eventData.id.toString(),
+                    date: eventDate,
+                    barId: barId,
+                };
+
+                await agent.Events.schedule(scheduledEvent);
+                toast.success('Event and Bar scheduled successfully!');
+            } else {
+                throw new Error('Bar data is missing.');
+            }
         } catch (error) {
-            runInAction(() => {
-                this.setLoading(false);
-            });
-
-            console.error('Error scheduling event', error);
+            console.error('Error in scheduling event:', error);
             toast.error('Error scheduling event');
         } finally {
             this.setLoading(false);
         }
     };
+
+
+
 
     searchUsers = async (query: string) => {
         this.setLoading(true);

@@ -13,6 +13,8 @@ import { CreatorFields, Profile, ProfileDto, ProfileFormValues } from '../models
 import { Photo } from '../models/photo';
 import { PaginatedResult } from '../models/pagination';
 import { ChatRoomDto } from '../models/chatRoom';
+import { Bar } from '../models/bar';
+
 
 /** Adding a `fake` delay to the app for testing the `loading` indicators after requests. */
 const sleep = (delay: number) => {
@@ -204,6 +206,14 @@ const Profiles = {
 const Chats = {
     listChatRooms: () => requests.get<ChatRoomDto[]>(`/chats/`)
 }
+const Bars = {
+    create: (bar: Bar) => requests.post('/bars', bar),
+    update: (bar: Bar) => requests.put(`/bars/${bar.id}`, bar),
+    delete: (id: string) => requests.del(`/bars/${id}`),
+    details: (id: string) => requests.get(`/bars/${id}`),
+    list: () => requests.get('/bars'),
+};
+
 
 /**
  * Building the `agent` object.
@@ -218,6 +228,7 @@ const agent = {
     EventCategories,
     Profiles,
     QuestionTypes,
+    Bars
 }
 
 /**
