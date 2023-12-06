@@ -24,8 +24,8 @@ namespace Api.Controllers
             return HandleResult(await Mediator.Send(new ListChatRooms.Query()));
         }
 
-        [HttpPost] //api/chats
-        public async Task<IActionResult> CreateEvent(Guid recipientId)
+        [HttpPost("{recipientId}")] //api/chats
+        public async Task<IActionResult> CreateChatRoom(Guid recipientId)
         {
             return HandleResult(await Mediator.Send(new CreateChatRoom.Command { RecipientId = recipientId }));
         }

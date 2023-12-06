@@ -1,5 +1,5 @@
 import { Send, SendOutlined } from "@mui/icons-material";
-import { Box, CircularProgress, IconButton, InputAdornment, Stack, TextField, styled } from "@mui/material";
+import { Box, CircularProgress, IconButton, InputAdornment, Stack, TextField, Typography, styled } from "@mui/material";
 import { Formik, Field, FieldProps } from "formik";
 import { Form } from "react-router-dom";
 import * as Yup from 'yup';
@@ -24,6 +24,7 @@ const ChatDetails = ({ id, chatRoomId }: Props) => {
     const boxRef = useRef<HTMLDivElement>(null);
 
     const { userChatStore } = useStore();
+    const { groupedChatsByDate } = userChatStore;
 
     /// TODO: Scroll to bottom of conversations doesn't work for some obscure reason.
     useEffect(() => {
@@ -63,15 +64,26 @@ const ChatDetails = ({ id, chatRoomId }: Props) => {
                     }}
                     ref={boxRef}
                 >
-                    <Stack 
-                        direction='column'
-                        justifyContent="space-evenly"
-                        spacing={0.6}
-                    >
-                        {userChatStore.chats.map((chat, i) => (
-                            <ChatBubble key={i} content={chat} />
-                        ))}
-                    </Stack>
+                        {/* {groupedChatsByDate && groupedChatsByDate.map(([group, chats]) => ( */}
+                            <Stack 
+                                direction='column'
+                                justifyContent="space-evenly"
+                                spacing={1}
+                                //key={group}
+                            >
+                                {/* <Typography
+                                    variant='subtitle2' 
+                                    color={theme.palette.primary.main}
+                                    pb={2}
+                                    sx={{fontFamily:'Roboto'}}
+                                    alignSelf='center'
+                                >
+                                    <u>{group}</u>
+                                </Typography> */}
+                                {userChatStore.chats.map((chat, i) => (
+                                    <ChatBubble key={i} content={chat} />
+                                ))}
+                            </Stack>
                 </Box>
                 <Formik
                     enableReinitialize
@@ -109,6 +121,8 @@ const ChatDetails = ({ id, chatRoomId }: Props) => {
                                                         aria-details='base-userchat'
                                                         aria-label="toggle password visibility"
                                                         edge="end"
+                                                        disabled={!isValid}
+                                                        onClick={() => handleSubmit()}
                                                     >
                                                         <Send sx={{fontSize:18}} />
                                                     </IconButton>

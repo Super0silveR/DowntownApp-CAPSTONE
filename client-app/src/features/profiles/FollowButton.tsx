@@ -93,7 +93,7 @@ export default observer(function FollowButton({profile} : Props) {
             key={profile?.userName}
             variant='contained'
             size='small'
-            sx={{opacity:buttonOpacity,m:0,borderRadius:0}}
+            sx={{opacity:buttonOpacity,m:0,borderRadius:1}}
             endIcon={endIcon}
             loading={loading && (target === (profile?.userName as string))}
             onClick={(e) => handleFollow(e, (profile?.userName as string))}

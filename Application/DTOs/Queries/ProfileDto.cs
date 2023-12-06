@@ -4,6 +4,7 @@ namespace Application.DTOs.Queries
 {
     public class ProfileDto
     {
+        public Guid? Id { get; set; }
         public string? Bio { get; set; }
         public string? ColorCode { get; set; }
         public string? DisplayName { get; set; }

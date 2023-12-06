@@ -310,9 +310,6 @@ export default class EventStore {
         }
     };
 
-
-
-
     searchUsers = async (query: string) => {
         this.setLoading(true);
         try {
