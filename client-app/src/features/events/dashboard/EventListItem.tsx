@@ -32,6 +32,8 @@ function EventListItem({ event, isAlone }: Props) {
     const theme = useTheme();
     const host = event.contributors.find((c) => c.status === 'Creator')?.user;
 
+    console.log(event);
+
     const { userStore: { user }, modalStore } = useStore();
 
     const isHost = host?.userName === user?.userName;

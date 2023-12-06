@@ -8,8 +8,9 @@ import { Photo } from "../models/photo";
 import { store } from "./store";
 import { Pagination, PaginationParams } from "../models/pagination";
 import toast from "react-hot-toast";
-import EventSchedule from "../../features/events/details/EventSchedule";
-import { UserDto } from "../models/user";
+import {UserDto } from "../models/user";
+import { Bar, emptyBar } from "../models/bar";
+import { EventSchedule } from "../models/eventSchedule";
 
 
 /**
@@ -273,21 +274,40 @@ export default class EventStore {
     scheduleEvent = async (eventData: EventSchedule) => {
         this.setLoading(true);
         try {
-            const scheduledEvent: ScheduleEvent = {
-                id: uuid(), 
-                date: new Date(eventData.date), 
-                location: eventData.location,
-                barId: eventData.barId
-            };
-            await agent.Events.schedule(scheduledEvent);
+            if (eventData.barData) {
+                const barToCreate: Bar = {
+                    ...emptyBar(), 
+                    ...eventData.barData, 
+                    name: eventData.barData.title
+                };
 
-            toast.success('Event scheduled successfully!');
+                const barId = await agent.Bars.create(barToCreate) as string;
+
+                const eventDate = new Date(eventData.scheduled);
+
+                if (!eventData.isRemote && !eventData.address) {
+                    throw new Error('Address is required for in-person events.');
+                }
+
+                const scheduledEvent: ScheduleEvent = {
+                    ...eventData,
+                    id: eventData.id.toString(),
+                    scheduled: eventDate,
+                    barId: barId,
+                };
+
+                console.log(eventData);
+
+                await agent.Events.schedule(scheduledEvent).then(() => {   
+                    runInAction(() => this.selectedEvent?.schedules.push(eventData));
+                });
+
+                toast.success('Event and Bar scheduled successfully!');
+            } else {
+                throw new Error('Bar data is missing.');
+            }
         } catch (error) {
-            runInAction(() => {
-                this.setLoading(false);
-            });
-
-            console.error('Error scheduling event', error);
+            console.error('Error in scheduling event:', error);
             toast.error('Error scheduling event');
         } finally {
             this.setLoading(false);
@@ -312,11 +332,6 @@ export default class EventStore {
             this.setLoading(false);
         }
     };
-
-
-
-
-
 
     /** PRIVATE METHODS */
 

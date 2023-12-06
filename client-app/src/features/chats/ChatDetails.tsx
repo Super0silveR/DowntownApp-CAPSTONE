@@ -1,10 +1,9 @@
-import { Send, SendOutlined } from "@mui/icons-material";
-import { Box, CircularProgress, IconButton, InputAdornment, Stack, TextField, styled } from "@mui/material";
+import { Send } from "@mui/icons-material";
+import { Box, CircularProgress, IconButton, InputAdornment, Stack, TextField } from "@mui/material";
 import { Formik, Field, FieldProps } from "formik";
 import { Form } from "react-router-dom";
 import * as Yup from 'yup';
 import theme from "../../app/theme";
-import { UserChatDto } from "../../app/models/userChat";
 import ChatBubble from "./ChatBubble";
 import { useEffect, useRef } from "react";
 import { useStore } from "../../app/stores/store";
@@ -19,7 +18,7 @@ interface Props {
     chatRoomId: string;
 }
 
-const ChatDetails = ({ id, chatRoomId }: Props) => {
+const ChatDetails = ({ chatRoomId }: Props) => {
 
     const boxRef = useRef<HTMLDivElement>(null);
 
@@ -63,15 +62,26 @@ const ChatDetails = ({ id, chatRoomId }: Props) => {
                     }}
                     ref={boxRef}
                 >
-                    <Stack 
-                        direction='column'
-                        justifyContent="space-evenly"
-                        spacing={0.6}
-                    >
-                        {userChatStore.chats.map((chat, i) => (
-                            <ChatBubble key={i} content={chat} />
-                        ))}
-                    </Stack>
+                        {/* {groupedChatsByDate && groupedChatsByDate.map(([group, chats]) => ( */}
+                            <Stack 
+                                direction='column'
+                                justifyContent="space-evenly"
+                                spacing={1}
+                                //key={group}
+                            >
+                                {/* <Typography
+                                    variant='subtitle2' 
+                                    color={theme.palette.primary.main}
+                                    pb={2}
+                                    sx={{fontFamily:'Roboto'}}
+                                    alignSelf='center'
+                                >
+                                    <u>{group}</u>
+                                </Typography> */}
+                                {userChatStore.chats.map((chat, i) => (
+                                    <ChatBubble key={i} content={chat} />
+                                ))}
+                            </Stack>
                 </Box>
                 <Formik
                     enableReinitialize
@@ -109,6 +119,8 @@ const ChatDetails = ({ id, chatRoomId }: Props) => {
                                                         aria-details='base-userchat'
                                                         aria-label="toggle password visibility"
                                                         edge="end"
+                                                        disabled={!isValid}
+                                                        onClick={() => handleSubmit()}
                                                     >
                                                         <Send sx={{fontSize:18}} />
                                                     </IconButton>

@@ -33,11 +33,6 @@ namespace Application.Core
             
             CreateMap<Event, Event>();
 
-            CreateMap<Event, EventDto>()
-                .ForMember(e => e.CreatorUserName, options => 
-                    options.MapFrom(src => src.Contributors.FirstOrDefault(c => c.IsAdmin)!.User!.UserName))
-                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
-
             CreateMap<EventDto, Event>()
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 
@@ -51,8 +46,9 @@ namespace Application.Core
                 .ForMember(edto => edto.Contributors, options => 
                     options.MapFrom(e => e.Contributors.Where(c => !c.Status.Equals(ContributorStatus.Removed))))
                 .ForMember(edto => edto.CreatorUserName, options =>
-                    options.MapFrom(src => src.Contributors.FirstOrDefault(c => c.Status.Equals(ContributorStatus.Creator))!.User!.UserName))
+                    options.MapFrom(src => src.Creator!.UserName))
                 .ForMember(edto => edto.Rating, options => options.MapFrom(e => e.Ratings))
+                .ForMember(edto => edto.Schedules, options => options.MapFrom(e => e.ScheduledEvents))
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 
             CreateMap<Event, EventLightDto>()

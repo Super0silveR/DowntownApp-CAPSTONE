@@ -15,5 +15,6 @@
 
         public virtual ICollection<EventContributorDto>? Contributors { get; set; }
         public virtual ICollection<EventAttendeeDto>? Attendees { get; set; }
+        public virtual ICollection<ScheduledEventDto>? Schedules { get; set; }
     }
 }

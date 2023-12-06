@@ -1,6 +1,6 @@
 import { LoadingButton } from "@mui/lab";
-import { Stack, Typography, Button, Divider, InputAdornment, Switch, FormControlLabel, Input } from "@mui/material";
-import { Field, Form, Formik, useField } from "formik";
+import { Stack, Typography, Button, Divider, InputAdornment, Switch, FormControlLabel } from "@mui/material";
+import { Form, Formik } from "formik";
 import { observer } from "mobx-react-lite";
 import * as Yup from 'yup';
 import { useStore } from "../../../app/stores/store";
@@ -10,9 +10,8 @@ import TextInput from "../../../app/common/form/TextInput";
 import { ColorCodeEnum } from "../../../app/common/constants";
 import { InfoOutlined } from "@mui/icons-material";
 import SelectInput from "../../../app/common/form/SelectInput";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import TextArea from "../../../app/common/form/TextArea";
-import CheckboxInput from "../../../app/common/form/CheckboxInput";
 
 function EditProfileForm() {
     /** Validation schema using Yup. */
@@ -27,14 +26,12 @@ function EditProfileForm() {
 
     const { modalStore, profileStore: { profile, updateProfileGeneral, loading } } = useStore();
 
-    if (!profile) return; 
-
     const label = { inputProps: { 'aria-label': 'switch for boolean.' } };
 
     const emptyFormValues: ProfileFormValues = {
         bio: profile?.bio ?? '',
         colorCode: profile?.colorCode ?? '2',
-        displayName: profile.displayName,
+        displayName: profile?.displayName ?? '',
         isOpenForMessage: profile?.isOpenForMessage ?? true,
         isPrivate: profile?.isPrivate ?? false,
         location: profile?.location ?? ''
@@ -43,12 +40,12 @@ function EditProfileForm() {
     const [formValues, setFormValues] = useState<ProfileFormValues>(emptyFormValues);
 
     const handleFormSubmit = (values: ProfileFormValues) => {
-        console.log(values);
-        const isOpen = document.getElementsByName('isOpenForMessage');
+        //console.log(values);
+        setFormValues(values);
         updateProfileGeneral(values).then(() => modalStore.closeModal());
     }
 
-    const handleSwitchChange = (value: any) => {
+    const handleSwitchChange = (value: ChangeEvent<HTMLInputElement>) => {
         console.log(value.currentTarget.value);
     }
 

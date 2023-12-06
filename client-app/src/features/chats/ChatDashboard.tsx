@@ -27,17 +27,16 @@ const ChatDashboard = () => {
             setValue(value);
             setSelectedChatRoom(value);
         }
-
-        if (chatRooms.length <= 1) 
-            loadChatRooms().then(() => {
-                runInAction(() => {
-                    if (chatRooms.length >= 1) {
-                        const chatRoom = chatRooms.at(0);
-                        updateTabsValue(chatRoom!.id);
-                    }
-                })
-            });
-    }, [chatRooms]);
+        
+        loadChatRooms().then(() => {
+            runInAction(() => {
+                if (chatRooms.length >= 1) {
+                    const chatRoom = chatRooms.at(0);
+                    updateTabsValue(chatRoom!.id);
+                }
+            })
+        });
+    }, [chatRooms, loadChatRooms, setSelectedChatRoom]);
 
     return (
         <>
@@ -74,7 +73,7 @@ const ChatDashboard = () => {
                                                     label={chatRoom.displayName!}
                                                     value={chatRoom.id} 
                                                     iconPosition='start'
-                                                    icon={<Avatar src={`/assets/user.png`} sx={{border:'1px solid lightgray',width:35,height:35}} />}
+                                                    icon={<Avatar src={`/assets/user.png`} sx={{border:'1px solid lightgray',width:35,height:35,marginRight:100}} />}
                                                     sx={{
                                                         ml:0.2,
                                                         mr:0.2,

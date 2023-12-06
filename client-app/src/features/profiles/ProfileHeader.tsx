@@ -1,4 +1,4 @@
-import { Avatar, Chip, Divider, Grid, Paper, Stack, Typography, Tooltip, Button } from '@mui/material';
+import { Avatar, Chip, Divider, Grid, Paper, Stack, Typography, Tooltip, Button, IconButton } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { Profile } from '../../app/models/profile';
 import VerifiedIcon from '@mui/icons-material/Verified';
@@ -6,6 +6,8 @@ import FollowButton from './FollowButton';
 import { useStore } from '../../app/stores/store';
 import EditProfileForm from './forms/EditProfileForm';
 import { GetColor } from '../../app/common/constants';
+import { Message } from '@mui/icons-material';
+import { router } from '../../app/router/Routes';
 
 interface Props {
     profile: Profile;
@@ -15,7 +17,7 @@ interface Props {
 
 function ProfileHeader({ profile }: Props) {
 
-    const { modalStore, userStore : { user } } = useStore();
+    const { modalStore, userStore : { user }, userChatStore: {createChatRoom} } = useStore();
 
     const defaultColorCode = profile.colorCode ? GetColor(profile.colorCode) : GetColor('2');
 
@@ -54,10 +56,9 @@ function ProfileHeader({ profile }: Props) {
                 </Grid>
                 <Grid item xs={4} alignSelf='center'>
                     <Stack spacing={1}>
-                        <Stack spacing={-0.5} justifyContent='center'>
+                        <Stack spacing={1} justifyContent='left' direction='row'>
                             <Typography component='span' fontSize={22}>{profile?.displayName}<VerifiedIcon sx={{fontSize:14,color:'royalblue'}} /></Typography>
                             <Typography sx={{ fontSize: 14, fontStyle: 'italic' }} variant='caption' color='secondary.dark'>@{profile?.userName}</Typography>
-                            
                         </Stack>
                         <Chip label={defaultColorCode!.text} variant="outlined" sx={{ width: 'fit-content', color: defaultColorCode!.code, borderColor: defaultColorCode!.code }} />
                         {(user?.userName === profile.userName) &&
@@ -70,6 +71,13 @@ function ProfileHeader({ profile }: Props) {
                                 <Typography fontFamily='monospace'>Edit</Typography>
                             </Button>
                         }
+                        <Grid item xs={2}> 
+                            {(user?.userName !== profile.userName) && 
+                                <IconButton aria-details='base-invert' sx={{border:'1px solid lightgray'}} onClick={() => createChatRoom(profile.id).then(() => router.navigate('/messages'))}>
+                                    <Message />
+                                </IconButton>
+                            }
+                        </Grid>
                     </Stack>
                 </Grid>
                 <Grid item xs={2}>

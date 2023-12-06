@@ -12,21 +12,22 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LiveTvIcon from '@mui/icons-material/LiveTv';
 import GroupIcon from '@mui/icons-material/Group';
 import { useTheme } from '@mui/material/styles';
-import EventSchedule from './EventSchedule'; 
+import { EventSchedule as EventScheduleModel } from '../../../app/models/eventSchedule';
+import EventSchedule from './EventSchedule';
 
 function EventDetails() {
     const { eventStore, userStore: { user } } = useStore();
     const { selectedEvent: event, loadEvent, loadingInitial } = eventStore;
     const { id } = useParams();
     const theme = useTheme();
-    const [schedules, setSchedules] = useState<EventSchedule[]>([]);
+    const [schedules, setSchedules] = useState<EventScheduleModel[]>([]);
 
 
     useEffect(() => {
         if (id) {
             loadEvent(id).then((loadedEvent) => {
                 if (loadedEvent && loadedEvent.schedules) {
-                    setSchedules(loadedEvent.schedules as unknown as EventSchedule[]);
+                    setSchedules(loadedEvent.schedules as EventScheduleModel[]);
                 }
             });
         }
@@ -117,7 +118,7 @@ function EventDetails() {
                                         color='info'
                                         component={Link}
                                         to={`/events/${event.id}/live`}
-                                        sx={{TextTransform: 'none'}}
+                                        sx={{TextTransform: 'none',mr:0}}
                                     >
                                         Join Live Event
                                     </Button>
@@ -131,12 +132,12 @@ function EventDetails() {
                 <Grid item xs={12} lg={4}>
                     <EventRatings rating={event.rating} />
                 </Grid>
-
-                <Grid item xs={12} lg={8}>
+                <Grid item xs={12} lg={12}>
                     <EventContributors contributors={event.contributors} />
+                </Grid>
+                <Grid item xs={12} lg={12}>
                     <EventSchedule schedules={schedules} setSchedules={setSchedules} />
                 </Grid>
-
                 <Grid item xs={12}>
                     <EventRatingReviews ratings={event.rating.ratings} />
                 </Grid>

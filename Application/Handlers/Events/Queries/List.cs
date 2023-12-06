@@ -43,7 +43,9 @@ namespace Application.Handlers.Events.Queries
             public async Task<Result<PagedList<EventDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 Guard.Against.Null(_context.Events, nameof(_context.Events));
-                Guard.Against.NullOrEmpty(_currentUserService.GetUserId(), nameof(_currentUserService));  
+                Guard.Against.NullOrEmpty(_currentUserService.GetUserId(), nameof(_currentUserService));
+
+                var @params = request.Params;
 
                 var eventDtoQuery = _context.Events
                     .Where(e => e.Date >= request.Params.StartDate)

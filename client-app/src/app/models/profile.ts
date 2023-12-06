@@ -4,6 +4,7 @@ import { User } from './user';
 
 /** Profile interface. */
 export interface IProfile {
+    id?: string;
     bio?: string;
     colorCode: string;
     creatorProfile?: CreatorFields;
@@ -45,6 +46,7 @@ export class Profile implements IProfile {
         this.colorCode = '5';
     }
     
+    id: string = "";
     creatorProfile?: CreatorFields;
     followers = 0;
     following = 0;

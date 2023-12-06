@@ -1,38 +1,32 @@
-import { Box, Button, Card, CardMedia, Grid, Paper, Typography, useTheme } from '@mui/material';
+import { Box, Button, Grid, Paper, Typography, useTheme } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { MonetizationOn } from '@mui/icons-material';
-import EventLiveChat from './EventLiveChat';
+
+import { useStore } from '../../app/stores/store';
+import EventRoom from './EventRoom';
 
 function EventLive() {
     const theme = useTheme();
+    const { eventStore, userStore: { user } } = useStore();
+    const { selectedEvent: event } = eventStore;
     return (
         <>
-            <Box>                
+            <Box>
                 <Grid container spacing={2}>
                     <Grid container item spacing={1}>
-                        <Grid item xs={12} lg={8}>
-                            <Card raised sx={{ borderRadius: 1, boxShadow: 1 }}>
-                                <CardMedia
-                                    component="img"
-                                    alt="Event Image"
-                                    image={''}
-                                    sx={{ objectFit: 'cover' }}
-                                />
-                                <Typography variant="h4" component="div" textAlign={"center"}>
-                                    Video Controls
-                                </Typography>
-                            </Card>
-                        </Grid>
-                        <Grid item xs={12} lg={4}>
-                            <EventLiveChat />
+                        <Grid item xs={12}>
+                            {user?.userName}
                         </Grid>
                         <Grid item>
                             <Typography variant="h4" component="div" >
-                                Event Title
+                                Title: {event?.title}
                             </Typography>
                         </Grid>
+                        <Grid item xs={12}>
+                            <EventRoom />
+                        </Grid>
                     </Grid>
-                    
+
 
                     <Grid item xs={12}>
                         <Typography
