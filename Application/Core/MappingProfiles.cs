@@ -48,6 +48,7 @@ namespace Application.Core
                 .ForMember(edto => edto.CreatorUserName, options =>
                     options.MapFrom(src => src.Creator!.UserName))
                 .ForMember(edto => edto.Rating, options => options.MapFrom(e => e.Ratings))
+                .ForMember(edto => edto.Schedules, options => options.MapFrom(e => e.ScheduledEvents))
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 
             CreateMap<Event, EventLightDto>()

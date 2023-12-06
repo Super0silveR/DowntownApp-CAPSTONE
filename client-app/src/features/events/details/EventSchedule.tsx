@@ -1,61 +1,56 @@
 import React, { useState } from 'react';
-import { TextField, IconButton, Grid, Typography, Paper, Switch, FormControlLabel } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import AddIcon from '@mui/icons-material/Add';
+import { Grid, Typography, Paper, Switch, FormControlLabel, Divider, Stack } from '@mui/material';
 import toast from 'react-hot-toast';
 import { useStore } from '../../../app/stores/store';
+import { EventSchedule } from '../../../app/models/eventSchedule';
+import { observer } from 'mobx-react-lite';
+import DateTimeInput from '../../../app/common/form/DateTimeInput';
+import { LoadingButton } from '@mui/lab';
+import { Formik } from 'formik';
+import { Form } from 'react-router-dom';
+import TextInput from '../../../app/common/form/TextInput';
+import dayjs from 'dayjs';
+import theme from '../../../app/theme';
 
-export interface EventSchedule {
-    id: number; 
-    date: string;
-    location: string;
-    isRemote: boolean;
-    address?: string;
-    barId?: string; 
-    barData?: { 
-        title: string;
-        description: string;
-    };
-}
+
 
 interface Props {
     schedules: EventSchedule[];
     setSchedules: React.Dispatch<React.SetStateAction<EventSchedule[]>>;
 }
 
-const EventScheduleComponent: React.FC<Props> = ({ schedules, setSchedules }) => {
+const EventScheduleComponent: React.FC<Props> = () => {
     const [newSchedule, setNewSchedule] = useState<EventSchedule>({
-        id: Date.now(),
-        date: '',
+        id: 1,
+        scheduled: new Date(),
         location: '',
         isRemote: true
     });
 
-    const [newBar, setNewBar] = useState({
-        title: '',
-        description: ''
-    });
+    const newBar = {
+        title: 'auto-bar-creation',
+        description: 'auto-bar-creation-for-event-'
+    };
 
-    const handleDateChange = (id: number, date: string) => {
-        setSchedules(schedules.map(schedule => schedule.id === id ? { ...schedule, date } : schedule));
-    };
-    const handleAddressChange = (id: number, address: string) => {
-        setSchedules(schedules.map(schedule => schedule.id === id ? { ...schedule, address } : schedule));
-    };
+    // const handleDateChange = (id: number, date: string) => {
+    //     setSchedules(schedules.map(schedule => schedule.id === id ? { ...schedule, date } : schedule));
+    // };
+    // const handleAddressChange = (id: number, address: string) => {
+    //     setSchedules(schedules.map(schedule => schedule.id === id ? { ...schedule, address } : schedule));
+    // };
     
-    const handleToggleRemote = (id: number) => {
-        setSchedules(schedules.map(schedule => schedule.id === id ? { ...schedule, isRemote: !schedule.isRemote } : schedule));
-    };
+    // const handleToggleRemote = (id: number) => {
+    //     setSchedules(schedules.map(schedule => schedule.id === id ? { ...schedule, isRemote: !schedule.isRemote } : schedule));
+    // };
 
-    const handleRemoveSchedule = (id: number) => {
-        setSchedules(schedules.filter(schedule => schedule.id !== id));
-    };
+    // const handleRemoveSchedule = (id: number) => {
+    //     setSchedules(schedules.filter(schedule => schedule.id !== id));
+    // };
 
-    const { eventStore } = useStore(); 
+    const { eventStore: { selectedEvent, scheduleEvent } } = useStore();
 
-    const handleAddNewSchedule = async () => {
-        if (!newSchedule.isRemote && !newSchedule.address) {
+    const handleAddNewSchedule = async (values: EventSchedule) => {
+        if (!values.isRemote && (values.location === '')) {
             toast.error('Address is required for in-person events');
             return;
         }
@@ -66,116 +61,145 @@ const EventScheduleComponent: React.FC<Props> = ({ schedules, setSchedules }) =>
         };
 
         const eventScheduleData = {
-            ...newSchedule,
-            barData: barData
+            ...values,
+            barData: barData,
+            eventId: selectedEvent!.id,
+            address: values.location,
+            date: values.scheduled
         };
 
         try {
-            await eventStore.scheduleEvent(eventScheduleData);
+            await scheduleEvent(eventScheduleData);
             toast.success('Event and Bar scheduled successfully!');
         } catch (error) {
             console.error('Error scheduling event and creating bar:', error);
             toast.error('Error scheduling event and creating bar');
         }
 
-        setNewBar({ title: '', description: '' });
-        setNewSchedule({ id: Date.now(), date: '', location: '', barId: '', isRemote: true });
+        setNewSchedule({ id: 1, scheduled: new Date(), location: '', barId: '', isRemote: true });
     };
 
-
-
-    const handleDeleteAllSchedules = () => {
-        setSchedules([]); 
-    };
-
-
+    // const handleDeleteAllSchedules = () => {
+    //     setSchedules([]); 
+    // };
+    
     return (
-        <Paper style={{ padding: '1em', marginTop: '1em' }}>
-            <Typography variant="h6">Event Schedules</Typography>
-            <Grid container spacing={2} alignItems="center">
-                {schedules.map(schedule => (
-                    <React.Fragment key={schedule.id}>
-                        <Grid item xs={5}>
-                            <TextField
-                                label="Event Date"
-                                type="date"
-                                value={schedule.date}
-                                onChange={(e) => handleDateChange(schedule.id, e.target.value)}
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={2}>
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        checked={schedule.isRemote}
-                                        onChange={() => handleToggleRemote(schedule.id)}
-                                    />
-                                }
-                                label={schedule.isRemote ? 'Remote' : 'In-Person'}
-                            />
-                        </Grid>
-                        {!schedule.isRemote && (
-                            <Grid item xs={10}>
-                                <TextField
-                                    label="Address"
-                                    type="text"
-                                    value={schedule.address || ''}
-                                    onChange={(e) => handleAddressChange(schedule.id, e.target.value)}
-                                    fullWidth
-                                />
-                            </Grid>
-                        )}
-                        <Grid item xs={12}>
-                            <IconButton onClick={() => handleRemoveSchedule(schedule.id)} color="error">
-                                <DeleteIcon />
-                            </IconButton>
-                        </Grid>
-                    </React.Fragment>
-                ))}
-                <Grid item xs={5}>
-                    <TextField
-                        label="New Event Date"
-                        type="date"
-                        value={newSchedule.date || ''}
-                        onChange={(e) => setNewSchedule({ ...newSchedule, date: e.target.value })}
-                        fullWidth
-                        InputLabelProps={{ shrink: true }}
-                    />
-                </Grid>
-                <Grid item xs={2}>
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                checked={newSchedule.isRemote}
-                                onChange={() => setNewSchedule({ ...newSchedule, isRemote: !newSchedule.isRemote })}
-                            />
-                        }
-                        label={newSchedule.isRemote ? 'Remote' : 'In-Person'}
-                    />
-                </Grid>
-                {!newSchedule.isRemote && (
-                    <Grid item xs={10}>
-                        <TextField
-                            label="New Address"
-                            type="text"
-                            value={newSchedule.address || ''}
-                            onChange={(e) => setNewSchedule({ ...newSchedule, address: e.target.value })}
-                            fullWidth
-                        />
+        <>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                <Stack direction='row' justifyContent='space-between' width='100%' mb={1}>
+                    <Typography
+                        sx={{
+                            display: 'inline',
+                            textDecoration: 'none'
+                        }}
+                        component="span"
+                        variant="h6"
+                        color="text.secondary"
+                    >
+                        Event Schedules
+                    </Typography>
+                </Stack>
+            </div>
+            <Paper
+                sx={{
+                textAlign: 'center',
+                fontFamily: 'monospace',
+                padding: theme.spacing(1),
+                fontSize: 16
+                }}
+                elevation={3}
+            >
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={12} mb={2}>
+                        <Formik<EventSchedule> 
+                            enableReinitialize 
+                            initialValues={newSchedule} 
+                            onSubmit={(values) => handleAddNewSchedule(values)}
+                        >
+                            {/** Deconstructing properties and functions form Formik that we'll use for our form. */}
+                            {({ handleSubmit, isValid, isSubmitting, dirty, values }) => { 
+                                return (
+                                    <Form onSubmit={handleSubmit} autoComplete='off'>
+                                        <Stack direction='column' spacing={2}>      
+                                            <DateTimeInput name='scheduled' label='Date' />
+                                            <FormControlLabel
+                                                name='isRemote'
+                                                control={
+                                                    <Switch
+                                                        checked={newSchedule.isRemote}
+                                                        onChange={() => setNewSchedule({ ...values, isRemote: !values.isRemote })}
+                                                    />
+                                                }
+                                                label={newSchedule.isRemote ? 'Remote' : 'In-Person'}
+                                            />
+                                            {!values.isRemote && (            
+                                                <TextInput name='location' placeholder='Location' label='Location' />
+                                            )}
+                                            <Stack direction='row' spacing={2}>
+                                                <LoadingButton 
+                                                    disabled={isSubmitting || !dirty || !isValid}
+                                                    color="primary" 
+                                                    variant="contained" 
+                                                    fullWidth 
+                                                    type="submit"
+                                                >
+                                                    <Typography fontFamily='monospace'>Schedule</Typography>
+                                                </LoadingButton>
+                                            </Stack>
+                                        </Stack>
+                                    </Form>                                
+                                )
+                            }}
+                        </Formik>
+                        <Divider sx={{mt: 2}} />
                     </Grid>
-                )}
-                <Grid item xs={12} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <IconButton onClick={handleAddNewSchedule} color="primary">
-                        <AddIcon />
-                    </IconButton>
-                    <IconButton onClick={handleDeleteAllSchedules} color="secondary">
-                        <DeleteForeverIcon />
-                    </IconButton>
+                    <Grid item xs={12}>
+                        {selectedEvent?.schedules.map((schedule: EventSchedule, index: number) => (
+                            <Typography key={index}>{`date: ${dayjs(schedule.scheduled!).format('MMMM DD — YYYY')}`}</Typography>
+                            // <React.Fragment key={schedule.id}>
+                            //     <Grid item xs={5}>
+                            //         <TextField
+                            //             label="Event Date"
+                            //             type="date"
+                            //             value={dayjs(schedule.scheduled!).format('yyyy-mm-dd')}
+                            //             onChange={(e) => handleDateChange(schedule.id, e.target.value)}
+                            //             fullWidth
+                            //         />
+                            //     </Grid>
+                            //     <Grid item xs={2}>
+                            //         <FormControlLabel
+                            //             control={
+                            //                 <Switch
+                            //                     checked={schedule.isRemote}
+                            //                     onChange={() => handleToggleRemote(schedule.id)}
+                            //                 />
+                            //             }
+                            //             label={schedule.isRemote ? 'Remote' : 'In-Person'}
+                            //         />
+                            //     </Grid>
+                            //     {!schedule.isRemote && (
+                            //         <Grid item xs={10}>
+                            //             <TextField
+                            //                 label="Address"
+                            //                 type="text"
+                            //                 value={schedule.address || ''}
+                            //                 onChange={(e) => handleAddressChange(schedule.id, e.target.value)}
+                            //                 fullWidth
+                            //             />
+                            //         </Grid>
+                            //     )}
+                            //     <Grid item xs={12}>
+                            //         <IconButton onClick={() => handleRemoveSchedule(schedule.id)} color="error">
+                            //             <DeleteIcon />
+                            //         </IconButton>
+                            //     </Grid>
+                            // </React.Fragment>
+                        ))}
+                    </Grid>
                 </Grid>
-            </Grid>
-        </Paper>
+            </Paper>
+        </>
     );
 };
 
-export default EventScheduleComponent;
+export default observer(EventScheduleComponent);

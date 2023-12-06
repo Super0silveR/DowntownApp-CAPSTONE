@@ -9,6 +9,8 @@ namespace Application.DTOs.Queries
         public Guid EventId { get; set; }
         public DateTime Scheduled { get; set; }
         public string? Location { get; set; }
+        public bool IsRemote { get; set; } = true;
+        public string? Address { get; set; }
         public int Capacity { get; set; }
         public string? Guidelines { get; set; } // This is potentially a JSON document.
         public int CommentCount { get; set; }

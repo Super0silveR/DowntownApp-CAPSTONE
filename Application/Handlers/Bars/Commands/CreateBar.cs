@@ -15,7 +15,7 @@ namespace Application.Handlers.Bars.Commands
         /// <summary>
         /// Command class used to start the request for creating a new Bar.
         /// </summary>
-        public class Command : IRequest<Result<Unit>?>
+        public class Command : IRequest<Result<Guid>?>
         {
             public BarCommandDto Bar { get; set; } = new BarCommandDto();
         }
@@ -23,7 +23,7 @@ namespace Application.Handlers.Bars.Commands
         /// <summary>
         /// Handler class used to handle the creation of the new Bar.
         /// </summary>
-        public class Handler : IRequestHandler<Command, Result<Unit>?>
+        public class Handler : IRequestHandler<Command, Result<Guid>?>
         {
             private readonly IDataContext _context;
             private readonly IMapper _mapper;
@@ -42,11 +42,11 @@ namespace Application.Handlers.Bars.Commands
             /// <param name="request">IRequest object, i.e. Create.Command</param>
             /// <param name="cancellationToken"></param>
             /// <returns>Result<Unit></returns>
-            public async Task<Result<Unit>?> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Guid>?> Handle(Command request, CancellationToken cancellationToken)
             {
                 Guard.Against.Null(_context.Bars, nameof(_context.Bars));
 
-                if (!Guid.TryParse(_userService.GetUserId(), out Guid userId)) return Result<Unit>.Failure("This user is invalid.");
+                if (!Guid.TryParse(_userService.GetUserId(), out Guid userId)) return Result<Guid>.Failure("This user is invalid.");
 
                 var user = await _context.Users.FindAsync(new object?[] { userId }, cancellationToken);
 
@@ -60,8 +60,8 @@ namespace Application.Handlers.Bars.Commands
                 bool result = await _context.SaveChangesAsync(cancellationToken) > 0;
 
                 if (!result)
-                    return Result<Unit>.Failure("Failed to create a new Bar.");
-                return Result<Unit>.Success(Unit.Value);
+                    return Result<Guid>.Failure("Failed to create a new Bar.");
+                return Result<Guid>.Success(bar.Id);
             }
         }
 

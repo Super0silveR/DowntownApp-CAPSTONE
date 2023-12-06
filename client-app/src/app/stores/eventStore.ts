@@ -9,8 +9,8 @@ import { store } from "./store";
 import { Pagination, PaginationParams } from "../models/pagination";
 import toast from "react-hot-toast";
 import {UserDto } from "../models/user";
-import { EventSchedule } from '../../features/events/details/EventSchedule'; 
 import { Bar, emptyBar } from "../models/bar";
+import { EventSchedule } from "../models/eventSchedule";
 
 
 /**
@@ -278,13 +278,12 @@ export default class EventStore {
                 const barToCreate: Bar = {
                     ...emptyBar(), 
                     ...eventData.barData, 
-                    name: eventData.barData.title 
+                    name: eventData.barData.title
                 };
 
-                const barResponse = await agent.Bars.create(barToCreate) as unknown as Bar;
-                const barId = barResponse.id;
+                const barId = await agent.Bars.create(barToCreate) as string;
 
-                const eventDate = new Date(eventData.date);
+                const eventDate = new Date(eventData.scheduled);
 
                 if (!eventData.isRemote && !eventData.address) {
                     throw new Error('Address is required for in-person events.');
@@ -293,11 +292,16 @@ export default class EventStore {
                 const scheduledEvent: ScheduleEvent = {
                     ...eventData,
                     id: eventData.id.toString(),
-                    date: eventDate,
+                    scheduled: eventDate,
                     barId: barId,
                 };
 
-                await agent.Events.schedule(scheduledEvent);
+                console.log(eventData);
+
+                await agent.Events.schedule(scheduledEvent).then(() => {   
+                    runInAction(() => this.selectedEvent?.schedules.push(eventData));
+                });
+
                 toast.success('Event and Bar scheduled successfully!');
             } else {
                 throw new Error('Bar data is missing.');
@@ -328,11 +332,6 @@ export default class EventStore {
             this.setLoading(false);
         }
     };
-
-
-
-
-
 
     /** PRIVATE METHODS */
 
