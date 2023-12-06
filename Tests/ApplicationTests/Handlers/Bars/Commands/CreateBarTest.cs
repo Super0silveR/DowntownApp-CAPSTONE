@@ -55,7 +55,7 @@ namespace ApplicationTests.Handlers.Bars.Commands
             _userServiceMock.Setup(x => x.GetUserId()).Returns(string.Empty);
 
             //Act
-            Result<Unit>? result = await handler.Handle(command, CancellationToken.None);
+            Result<Guid>? result = await handler.Handle(command, CancellationToken.None);
 
             context.ChangeTracker.Clear();
 
@@ -122,15 +122,16 @@ namespace ApplicationTests.Handlers.Bars.Commands
             _userServiceMock.Setup(x => x.GetUserId()).Returns(_currentUser.Id.ToString());
 
             //Act
-            Result<Unit>? result = await handler.Handle(command, CancellationToken.None);
+            Result<Guid>? result = await handler.Handle(command, CancellationToken.None);
 
             context.ChangeTracker.Clear();
 
             //Assert
             Assert.NotNull(result);
             Assert.True(result.IsSuccess);
-            Assert.Equal(Unit.Value, result.Value);
 
+            var bar = context.Bars.FirstOrDefault(b => b.Id == result.Value);
+            Assert.NotNull(bar);
         }
 
     }
