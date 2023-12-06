@@ -18,7 +18,7 @@ interface Props {
     chatRoomId: string;
 }
 
-const ChatDetails = ({ id, chatRoomId }: Props) => {
+const ChatDetails = ({ chatRoomId }: Props) => {
 
     const boxRef = useRef<HTMLDivElement>(null);
 
