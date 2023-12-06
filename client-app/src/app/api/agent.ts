@@ -204,7 +204,8 @@ const Profiles = {
 }
 
 const Chats = {
-    listChatRooms: () => requests.get<ChatRoomDto[]>(`/chats/`)
+    listChatRooms: () => requests.get<ChatRoomDto[]>(`/chats/`),
+    createChatRoom: (recipientId: string) => requests.post<void>(`/chats/${recipientId}`, {})
 }
 const Bars = {
     create: (bar: Bar) => requests.post('/bars', bar),

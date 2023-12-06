@@ -1,14 +1,14 @@
 import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Photo } from "../models/photo";
-import { CreatorFields, Profile, ProfileFormValues } from "../models/profile";
+import { CreatorFields, Profile, ProfileDto, ProfileFormValues } from "../models/profile";
 import { store } from "./store";
 
 export default class ProfileStore {
     activeTab: number = 0;
     creatorEditMode: boolean = false;
     profile?: Profile | null = null;
-    followings: Profile[] = [];
+    followings: ProfileDto[] = [];
     loading = false;
     loadingProfile = false;
     loadingFollowings = false;

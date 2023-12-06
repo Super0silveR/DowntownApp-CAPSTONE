@@ -8,13 +8,9 @@ import { Photo } from "../models/photo";
 import { store } from "./store";
 import { Pagination, PaginationParams } from "../models/pagination";
 import toast from "react-hot-toast";
-<<<<<<< HEAD
-import { UserDto } from "../models/user";
-=======
 import {UserDto } from "../models/user";
 import { EventSchedule } from '../../features/events/details/EventSchedule'; 
 import { Bar, emptyBar } from "../models/bar";
->>>>>>> 4a2509e10b5ba515679daa128dbbdc3ad9261fdf
 
 
 /**
@@ -275,47 +271,44 @@ export default class EventStore {
         })
     }
 
-    // scheduleEvent = async (eventData: EventSchedule) => {
-    //     this.setLoading(true);
-    //     try {
-    //         if (eventData.barData) {
-    //             const barToCreate: Bar = {
-    //                 ...emptyBar(), 
-    //                 ...eventData.barData, 
-    //                 name: eventData.barData.title 
-    //             };
+    scheduleEvent = async (eventData: EventSchedule) => {
+        this.setLoading(true);
+        try {
+            if (eventData.barData) {
+                const barToCreate: Bar = {
+                    ...emptyBar(), 
+                    ...eventData.barData, 
+                    name: eventData.barData.title 
+                };
 
-    //             const barResponse = await agent.Bars.create(barToCreate) as unknown as Bar;
-    //             const barId = barResponse.id;
+                const barResponse = await agent.Bars.create(barToCreate) as unknown as Bar;
+                const barId = barResponse.id;
 
-    //             const eventDate = new Date(eventData.date);
+                const eventDate = new Date(eventData.date);
 
-    //             if (!eventData.isRemote && !eventData.address) {
-    //                 throw new Error('Address is required for in-person events.');
-    //             }
+                if (!eventData.isRemote && !eventData.address) {
+                    throw new Error('Address is required for in-person events.');
+                }
 
-    //             const scheduledEvent: ScheduleEvent = {
-    //                 ...eventData,
-    //                 id: eventData.id.toString(),
-    //                 date: eventDate,
-    //                 barId: barId,
-    //             };
+                const scheduledEvent: ScheduleEvent = {
+                    ...eventData,
+                    id: eventData.id.toString(),
+                    date: eventDate,
+                    barId: barId,
+                };
 
-    //             await agent.Events.schedule(scheduledEvent);
-    //             toast.success('Event and Bar scheduled successfully!');
-    //         } else {
-    //             throw new Error('Bar data is missing.');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error in scheduling event:', error);
-    //         toast.error('Error scheduling event');
-    //     } finally {
-    //         this.setLoading(false);
-    //     }
-    // };
-
-
-
+                await agent.Events.schedule(scheduledEvent);
+                toast.success('Event and Bar scheduled successfully!');
+            } else {
+                throw new Error('Bar data is missing.');
+            }
+        } catch (error) {
+            console.error('Error in scheduling event:', error);
+            toast.error('Error scheduling event');
+        } finally {
+            this.setLoading(false);
+        }
+    };
 
     searchUsers = async (query: string) => {
         this.setLoading(true);

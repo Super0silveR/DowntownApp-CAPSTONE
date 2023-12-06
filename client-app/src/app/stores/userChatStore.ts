@@ -13,6 +13,7 @@ export default class UserChatStore {
     chatRooms: ChatRoomDto[] = [];
     hubConnection: HubConnection | null = null;
     loadingChatRooms: boolean = false;
+    loadingRoomCreation: boolean = false;
     
     /**
      *
@@ -37,6 +38,8 @@ export default class UserChatStore {
     }
 
     setLoadingChatRooms = (state: boolean) => this.loadingChatRooms = state;
+
+    setLoadingChatRoomCreation = (state: boolean) => this.loadingRoomCreation = state;
 
     setSelectedChatRoom = (id: string) => this.selectedChatRoom = this.getChatRoom(id);
 
@@ -114,6 +117,19 @@ export default class UserChatStore {
             await this.hubConnection?.invoke('SendChat', values);
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    createChatRoom = async (recipientId: string) => {
+        this.loadingRoomCreation = true;
+        try {
+            await agent.Chats.createChatRoom(recipientId);
+            console.log(recipientId);
+        } catch (e) {
+            console.log(e);
+            throw e;
+        } finally {
+            this.loadingRoomCreation = false;
         }
     }
 
