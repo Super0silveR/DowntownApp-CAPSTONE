@@ -1,10 +1,9 @@
-import { Send, SendOutlined } from "@mui/icons-material";
-import { Box, CircularProgress, IconButton, InputAdornment, Stack, TextField, Typography, styled } from "@mui/material";
+import { Send } from "@mui/icons-material";
+import { Box, CircularProgress, IconButton, InputAdornment, Stack, TextField } from "@mui/material";
 import { Formik, Field, FieldProps } from "formik";
 import { Form } from "react-router-dom";
 import * as Yup from 'yup';
 import theme from "../../app/theme";
-import { UserChatDto } from "../../app/models/userChat";
 import ChatBubble from "./ChatBubble";
 import { useEffect, useRef } from "react";
 import { useStore } from "../../app/stores/store";
@@ -24,7 +23,6 @@ const ChatDetails = ({ id, chatRoomId }: Props) => {
     const boxRef = useRef<HTMLDivElement>(null);
 
     const { userChatStore } = useStore();
-    const { groupedChatsByDate } = userChatStore;
 
     /// TODO: Scroll to bottom of conversations doesn't work for some obscure reason.
     useEffect(() => {

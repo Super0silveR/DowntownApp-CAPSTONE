@@ -1,5 +1,5 @@
 import { Edit } from "@mui/icons-material";
-import { Button, Stack, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
+import { Stack, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import { useCurrentEditor } from "@tiptap/react"
 import { useEffect, useState } from "react";
 import { useStore } from "../../stores/store";

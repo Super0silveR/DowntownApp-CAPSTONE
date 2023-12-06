@@ -1,4 +1,4 @@
-import { Card, Container, Grid, Paper, Typography } from '@mui/material';
+import { Card, Container, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/system';

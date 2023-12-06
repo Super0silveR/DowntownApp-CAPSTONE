@@ -1,6 +1,6 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
-import { makeAutoObservable, reaction, runInAction } from "mobx";
-import { UserChat, UserChatDto } from "../models/userChat";
+import { makeAutoObservable, runInAction } from "mobx";
+import { UserChatDto } from "../models/userChat";
 import { ChatRoomDto } from '../models/chatRoom';
 import { store } from './store';
 import agent from '../api/agent';
@@ -47,7 +47,7 @@ export default class UserChatStore {
         this.setLoadingChatRooms(true);
         /** Asynchronous code has got to be in a try/catch block. */
         try {
-            var result = await agent.Chats.listChatRooms();
+            const result = await agent.Chats.listChatRooms();
             runInAction(() => {
                 result.forEach(chatRoom => {
                     this.chatRooms.push(chatRoom);

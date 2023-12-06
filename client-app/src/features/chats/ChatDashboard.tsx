@@ -36,7 +36,7 @@ const ChatDashboard = () => {
                 }
             })
         });
-    }, []);
+    }, [chatRooms, loadChatRooms, setSelectedChatRoom]);
 
     return (
         <>

@@ -1,10 +1,10 @@
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useEffect, useState } from 'react';
 import { Event, emptyEvent } from '../../../app/models/event';
 import { useStore } from '../../../app/stores/store';
 import { observer } from 'mobx-react-lite';
-import { Link, NavLink, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { v4 as uuid } from 'uuid';
 import { Formik, Form } from 'formik';

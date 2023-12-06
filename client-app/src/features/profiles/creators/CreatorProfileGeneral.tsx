@@ -1,4 +1,4 @@
-import { Accordion, Typography, AccordionDetails } from "@mui/material";
+import { Accordion } from "@mui/material";
 import CreatorProfileContribution from "./CreatorProfileContribution";
 import { Profile } from "../../../app/models/profile";
 import { SyntheticEvent, useState } from "react";
