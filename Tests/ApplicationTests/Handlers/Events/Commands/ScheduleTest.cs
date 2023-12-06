@@ -1,10 +1,8 @@
-﻿using Application.Common.Interfaces;
-using CreateCommand = Application.Handlers.Events.Commands.Schedule.Command;
+﻿using CreateCommand = Application.Handlers.Events.Commands.Schedule.Command;
 using CreateHandler = Application.Handlers.Events.Commands.Schedule.Handler;
 using Application.Core;
 using AutoMapper;
 using Domain.Entities;
-using Moq;
 using Application.DTOs.Commands;
 using MediatR;
 using ApplicationTests.Data;

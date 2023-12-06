@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.DTOs.Commands;
 using Application.Params;
-using Application.DTOs.Queries;
 
 namespace Api.Controllers
 {
@@ -94,6 +93,29 @@ namespace Api.Controllers
 
             return HandleResult(await Mediator.Send(new SearchUsers.Query(searchTerm)));
         }
+
+        [Authorize]
+        [HttpPost("Attend")]
+        public async Task<IActionResult> AttendEvent(EventAtendeeCommandDto eventAttendee)
+        {
+            return HandleResult(await Mediator.Send(new AttendEvent.Command { EventAtendee = eventAttendee }));
+        }
+
+        [Authorize]
+        [HttpGet("Attend")]
+        public async Task<IActionResult> GetAtendees()
+        {
+            return HandleResult(await Mediator.Send(new AttendeeList.Query()));
+        }
+
+        [Authorize]
+        [HttpGet("Attend/{id}")]
+        public async Task<IActionResult> GetAtendee(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new AttendeDetails.Query { Id = id }));
+        }
+
+
 
 
 

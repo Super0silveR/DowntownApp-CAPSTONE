@@ -60,13 +60,7 @@ namespace Application.Core
                     options.MapFrom(src => src.Contributors.FirstOrDefault(c => c.Status.Equals(ContributorStatus.Creator))!.User!.UserName));
 
             CreateMap<EventAttendee, EventAttendeeDto>()
-                .ForMember(edto => edto.DisplayName, options => options.MapFrom(ea => ea.Attendee!.DisplayName))
-                .ForMember(edto => edto.UserName, options => options.MapFrom(ea => ea.Attendee!.UserName))
-                .ForMember(edto => edto.Bio, options => options.MapFrom(ea => ea.Attendee!.Bio))
-                .ForMember(edto => edto.Image, options => options.MapFrom(ea => ea.Attendee!.Photos.FirstOrDefault(p => p.IsMain)!.Url))
-                .ForMember(edto => edto.FollowersCount, options => options.MapFrom(ea => ea.Attendee!.Followers.Count))
-                .ForMember(edto => edto.FollowersCount, options => options.MapFrom(ea => ea.Attendee!.Followings.Count))
-                .ForMember(edto => edto.IsFollowing, options => options.MapFrom(ea => ea.Attendee!.Followers.Any(x => x.Observer!.UserName == currentUserName)));
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 
             CreateMap<EventCategory, EventCategoryDto>()
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
@@ -188,6 +182,9 @@ namespace Application.Core
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 
             CreateMap<EventTicketCommandDto, EventTicket>()
+                .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
+
+            CreateMap<EventAtendeeCommandDto, EventAttendee>()
                 .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember is not null));
 
             CreateMap<EventTicket, EventTicketCommandDto>()

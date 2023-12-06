@@ -5,6 +5,7 @@ using Application.Params;
 using Ardalis.GuardClauses;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -56,7 +57,7 @@ namespace Application.Handlers.Events.Queries
                 /// Updating the query to accommodate filtering, specifically for the currently logged in user.
                 if (request.Params.IsGoing && !request.Params.IsHosting)
                 {
-                    eventDtoQuery = eventDtoQuery.Where(edto => edto.Attendees!.Any(a => a.UserName == _currentUserService.GetUserName()));
+                    eventDtoQuery = eventDtoQuery.Where(edto => edto.Attendees!.Any(a => a.AttendeeId.ToString() == _currentUserService.GetUserId()));
                 }
 
                 if (request.Params.IsHosting && !request.Params.IsGoing)
