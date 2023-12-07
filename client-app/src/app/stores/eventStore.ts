@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import {UserDto } from "../models/user";
 import { Bar, emptyBar } from "../models/bar";
 import { EventSchedule } from "../models/eventSchedule";
+import { EventTicket } from "../models/eventTicket";
 
 
 /**
@@ -29,6 +30,7 @@ export default class EventStore {
     predicate = new Map().set('all', true);
     userSearchResults: UserDto[] = []; 
     userSearchError = '';
+    scheduledEventTickets: EventTicket[] = [];
 
     constructor() {
         makeAutoObservable(this);
@@ -85,6 +87,10 @@ export default class EventStore {
             }
         })
         return params;
+    }
+
+    get getScheduledEventTickets() {
+        return this.scheduledEventTickets;
     }
 
     /** Action that sets the `loadingInitial` property.  */
@@ -314,6 +320,58 @@ export default class EventStore {
         }
     };
 
+    generateTicket = async (ticketData: EventTicket[], nbr: number) => {
+        this.setLoading(true);
+    
+        try {
+          // Iterate through each ticket and schedule it
+          for (const ticket of ticketData) {
+            // Perform any necessary validation or modifications to the ticket data
+            const scheduledTicket: EventTicket = {
+              ...ticket,
+              id: "generate-unique-id-here", // You should generate a unique ID for the ticket
+            };
+    
+            // Perform any additional checks or modifications before scheduling the ticket
+    
+            // Schedule the ticket
+            await agent.EventTicket.create(scheduledTicket, nbr).then(() => {
+            });
+    
+            // You can add additional logic or checks here
+    
+            // Display a success message for each scheduled ticket
+            toast.success(`Ticket scheduled successfully: ${scheduledTicket.id}`);
+          }
+    
+          // Display a general success message after scheduling all tickets
+          toast.success("Tickets scheduled successfully!");
+        } catch (error) {
+          console.error("Error in scheduling tickets:", error);
+          toast.error("Error scheduling tickets");
+        } finally {
+          this.setLoading(false);
+        }
+      };
+
+      loadTickets = async (scheduledEventId) => {
+      
+        try {
+          // Fetch tickets from the API based on scheduledEventId
+          const response = await agent.EventTicket.list();
+      
+          // Filter tickets based on scheduledEventId
+          const filteredTickets = response.filter(ticket => ticket.scheduledEventId === scheduledEventId);
+      
+          // Store the filtered tickets in the store
+          this.scheduledEventTickets = filteredTickets;
+        } catch (error) {
+          console.error('Error loading tickets:', error);
+          // Handle the error, show a message, etc.
+        }
+      };
+
+
     searchUsers = async (query: string) => {
         this.setLoading(true);
         try {
@@ -346,4 +404,5 @@ export default class EventStore {
         event.BgImage = `${genRandomNumber}.jpg`;
         this.eventRegistry.set(event.id, event);
     };
+
 }

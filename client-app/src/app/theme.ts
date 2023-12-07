@@ -167,7 +167,7 @@ const theme = createTheme({
         }
     },
     typography: {
-        fontFamily: 'Roboto'
+        fontFamily: 'sans-serif'
     },
     palette: {
         mode: 'light',

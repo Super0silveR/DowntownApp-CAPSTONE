@@ -14,6 +14,8 @@ import { Photo } from '../models/photo';
 import { PaginatedResult } from '../models/pagination';
 import { ChatRoomDto } from '../models/chatRoom';
 import { Bar } from '../models/bar';
+import { EventAttendee } from '../models/eventAttendee';
+import { EventTicket } from '../models/eventTicket';
 
 
 /** Adding a `fake` delay to the app for testing the `loading` indicators after requests. */
@@ -114,7 +116,9 @@ const Events = {
     update: (event: Event) => requests.put<void>(`/events/${event.id}`, event),
     delete: (id: string) => requests.del<void>(`/events/${id}`), 
     schedule: (scheduledEvent: ScheduleEvent) => requests.post<void>('/events/scheduling', scheduledEvent),
+    // TODO : Cancel
     searchUsers: (query: string) => requests.get<UserDto[]>(`/events/searchUsers?searchTerm=${query}`),
+    AttendEvent: (attendee: EventAttendee) => requests.post<void>('/attend/', attendee)
 };
 /**
  * EventTypes related requests. 
@@ -213,6 +217,15 @@ const Bars = {
     delete: (id: string) => requests.del(`/bars/${id}`),
     details: (id: string) => requests.get(`/bars/${id}`),
     list: () => requests.get('/bars'),
+}
+
+const EventTicket = {
+    create: (ticket: EventTicket, nbr: number) => requests.post(`/tickets?Nbr=${nbr}`, ticket),
+    update: (ticket: EventTicket) => requests.put(`/tickets/${ticket.id}`, ticket),
+    delete: (id: string) => requests.del(`/tickets/${id}` ),
+    details : (id: string) => requests.get(`/tickets/${id}`),
+    list: () => requests.get('/tickets'),
+
 };
 
 
@@ -229,7 +242,8 @@ const agent = {
     EventCategories,
     Profiles,
     QuestionTypes,
-    Bars
+    Bars,
+    EventTicket
 }
 
 /**

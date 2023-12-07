@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Typography, Paper, Switch, FormControlLabel, Divider, Stack } from '@mui/material';
+import { Grid, Typography, Paper, Switch, FormControlLabel, Divider, Stack, Button } from '@mui/material';
 import toast from 'react-hot-toast';
 import { useStore } from '../../../app/stores/store';
 import { EventSchedule } from '../../../app/models/eventSchedule';
@@ -11,15 +11,18 @@ import { Form } from 'react-router-dom';
 import TextInput from '../../../app/common/form/TextInput';
 import dayjs from 'dayjs';
 import theme from '../../../app/theme';
+import TicketManager from './TicketManager';
+import TicketPurchase from './TicketPurchase';
 
 
 
 interface Props {
     schedules: EventSchedule[];
     setSchedules: React.Dispatch<React.SetStateAction<EventSchedule[]>>;
+    isCreator: boolean;
 }
 
-const EventScheduleComponent: React.FC<Props> = () => {
+const EventScheduleComponent: React.FC<Props> = ({isCreator}: Props) => {
     const [newSchedule, setNewSchedule] = useState<EventSchedule>({
         id: 1,
         scheduled: new Date(),
@@ -47,7 +50,7 @@ const EventScheduleComponent: React.FC<Props> = () => {
     //     setSchedules(schedules.filter(schedule => schedule.id !== id));
     // };
 
-    const { eventStore: { selectedEvent, scheduleEvent } } = useStore();
+    const { modalStore, eventStore: { selectedEvent, scheduleEvent } } = useStore();
 
     const handleAddNewSchedule = async (values: EventSchedule) => {
         if (!values.isRemote && (values.location === '')) {
@@ -155,7 +158,12 @@ const EventScheduleComponent: React.FC<Props> = () => {
                     </Grid>
                     <Grid item xs={12}>
                         {selectedEvent?.schedules.map((schedule: EventSchedule, index: number) => (
-                            <Typography key={index}>{`date: ${dayjs(schedule.scheduled!).format('MMMM DD — YYYY')}`}</Typography>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem'}} >
+                                <Typography key={index}>{`date: ${dayjs(schedule.scheduled!).format('MMMM DD — YYYY')} Tickets avaliable : ${schedule.availableTickets}`}</Typography>
+                                { isCreator ?  <Button style={{backgroundColor: 'black'}} color='info' onClick={() => modalStore.openModal(<TicketManager scheduledEventId={schedule?.id} />)}>Generate Ticket</Button> 
+                                : <Button style={{backgroundColor: 'black'}} color='info' onClick={() => modalStore.openModal(<TicketPurchase scheduledEventId={schedule?.id} />)} >Buy Ticket</Button>}      
+                            </div>
+                            
                             // <React.Fragment key={schedule.id}>
                             //     <Grid item xs={5}>
                             //         <TextField
