@@ -1,4 +1,4 @@
-import { Profile } from "../../app/models/profile";
+import { ProfileDto } from "../../app/models/profile";
 import { Box, Card, CardActionArea, CardContent, CardMedia, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import FollowButton from "./FollowButton";
@@ -6,7 +6,7 @@ import { Person } from "@mui/icons-material";
 import { router } from "../../app/router/Routes";
 
 interface Props {
-    profile: Profile | null | undefined;
+    profile: ProfileDto | null | undefined;
 }
 
 export default observer(function ProfileCard({ profile }: Props) {

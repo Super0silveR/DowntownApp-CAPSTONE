@@ -24,6 +24,7 @@ export interface IProfile {
 }
 
 export interface ProfileDto {
+    id?: string;
     bio?: string;
     colorCode: string;
     displayName?: string;

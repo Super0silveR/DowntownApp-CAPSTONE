@@ -186,21 +186,21 @@ namespace Persistence
             {
                 new EventType
                 {
-                    Title = "event type 1",
-                    Description = "Awesome event type1!",
+                    Title = "Meet & Greet",
+                    Description = "Come and meet your favorite artist, or just hang out with your friends!",
                     Color = _colorService.RgbConverter(Color.Blue),
                     CreatorId = users[1].Id
                 },
                 new EventType
                 {
-                    Title = "event type 2",
-                    Description = "Awesome event type2!",
+                    Title = "Concert",
+                    Description = "Top concerts in town!",
                     Color = _colorService.RgbConverter(Color.Red),
                     CreatorId = users[1].Id
                 },
                 new EventType
                 {
-                    Title = "event type 3",
+                    Title = "Speed Networking",
                     Description = "Awesome event type3!",
                     Color = _colorService.RgbConverter(Color.Green),
                     CreatorId = users[1].Id
@@ -229,7 +229,7 @@ namespace Persistence
                     EventCategoryId = eventCategories[0].Id,
                     EventTypeId = eventTypes[2].Id,
                     Title = "Past Event 1",
-                    Date = DateTime.UtcNow.AddMonths(1),
+                    Date = DateTime.UtcNow.AddMonths(6),
                     Description = "Event 2 months ago",
                     Creator = users[1]
                 },
@@ -332,7 +332,7 @@ namespace Persistence
 
                 events[0].Ratings.Add(new EventRating { Event = events[0], User = users[0], Vote = 5, Review = "Wow, incredible experience!" });
                 events[0].Ratings.Add(new EventRating { Event = events[0], User = users[1], Vote = 4, Review = "Wow, incredible experience!" });
-                events[0].Ratings.Add(new EventRating { Event = events[0], User = users[2], Vote = 3, Review = "I would certainly return!" });
+                events[0].Ratings.Add(new EventRating { Event = events[0], User = users[2], Vote = 3, Review = "I might return.." });
                 events[0].Ratings.Add(new EventRating { Event = events[0], User = users[3], Vote = 4, Review = "Wow, memorable experience!" });
                 events[0].Ratings.Add(new EventRating { Event = events[0], User = users[4], Vote = 5, Review = "Wow, incredible experience!" });
 
