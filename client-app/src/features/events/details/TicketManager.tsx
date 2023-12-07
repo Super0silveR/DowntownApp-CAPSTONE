@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Typography,
   Button,
@@ -10,7 +9,6 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { Add, Clear } from "@mui/icons-material";
 import { EventTicket, TicketClassification } from "../../../app/models/eventTicket";
 import { useStore } from "../../../app/stores/store";
 import { Formik, FieldArray, Field } from "formik";
@@ -21,15 +19,26 @@ import ReceiptIcon from '@mui/icons-material/Receipt';
 import AddIcon from '@mui/icons-material/Add';
 import ClearIcon from '@mui/icons-material/Clear';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { v4 as uuid } from 'uuid';
 
-function TicketManager({ scheduledEventId }) {
+interface Props {
+  scheduledEventId: number
+}
+
+function TicketManager({ scheduledEventId }: Props) {
   const { modalStore, eventStore } = useStore(); // Replace with the actual store name
 
-  const getTotalQuantity = (values) => {
+  const getTotalQuantity = (values : {
+    tickets: [
+      { quantity:number,classification:TicketClassification,price:number,description:string}
+    ]}) => {
     return values.tickets.reduce((total, ticket) => total + ticket.quantity, 0);
   };
 
-  const handleGenerateTickets = async (values) => {
+  const handleGenerateTickets = async (values : {
+    tickets: [
+      { quantity:number,classification:TicketClassification,price:number,description:string}
+    ]}) => {
     try {
       for (const ticket of values.tickets) {
         // Extract nbr from each ticket
@@ -37,11 +46,12 @@ function TicketManager({ scheduledEventId }) {
   
         // Map the ticket data to the EventTicket model
         const eventTicket: EventTicket = {
+          id: uuid(),
             ...values,
-          scheduledEventId: scheduledEventId, // Replace with the actual scheduled event ID
+          scheduledEventId: scheduledEventId.toString(), // Replace with the actual scheduled event ID
           description: ticket.description || null,
           price: ticket.price || null,
-          ticketClassification: ticket.classification,
+          ticketClassification: TicketClassification.default,
           scheduledEvent: null, // You may need to populate this based on your application logic
         };
   

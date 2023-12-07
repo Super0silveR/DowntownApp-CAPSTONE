@@ -1,20 +1,25 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../app/stores/store';
 import { EventTicket } from '../../../app/models/eventTicket';
 import { Typography, Button, Paper, List, ListItem, ListItemText, Grid } from '@mui/material';
 
-function TicketPurchase({ scheduledEventId }) {
+interface Props {
+  scheduledEventId: number
+}
+
+function TicketPurchase({ scheduledEventId }: Props) {
   const { modalStore, eventStore } = useStore();
 
   useEffect(() => {
     // Fetch or update ticket information when the component mounts or when scheduledEventId changes
     // Use an action in your store to fetch ticket information based on scheduledEventId
-    eventStore.loadTickets(scheduledEventId);
+    eventStore.loadTickets(scheduledEventId.toString());
   }, [eventStore, scheduledEventId]);
 
-  const handleBuyTicket = async (ticketId) => {
+  const handleBuyTicket = async (ticketId: string) => {
     try {
+      console.log(ticketId);
       // Implement your logic for purchasing the ticket
       // For example: await eventStore.buyTicket(ticketId);
 

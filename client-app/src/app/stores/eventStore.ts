@@ -352,11 +352,11 @@ export default class EventStore {
         }
       };
 
-      loadTickets = async (scheduledEventId) => {
+      loadTickets = async (scheduledEventId: string) => {
       
         try {
           // Fetch tickets from the API based on scheduledEventId
-          const response = await agent.EventTicket.list();
+          const response = await agent.EventTicket.list() as EventTicket[];
       
           // Filter tickets based on scheduledEventId
           const filteredTickets = response.filter(ticket => ticket.scheduledEventId === scheduledEventId);
