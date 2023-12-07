@@ -38,7 +38,7 @@ const ChatDashboard = () => {
                 })
             });
         else
-            setValue(chatRooms.at(0)?.id ?? '0')
+            setValue(chatRooms.at(0)?.id ?? '0');
     }, [chatRooms, loadChatRooms, setSelectedChatRoom]);
 
     return (

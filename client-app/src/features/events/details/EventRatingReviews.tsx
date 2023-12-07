@@ -54,7 +54,7 @@ function EventRatingReviews({ ratings, currentUsername }: Props) {
                                 }
                             >
                               <ListItemAvatar>
-                                <Avatar alt={rating.user.userName?.toLocaleUpperCase()} src={rating.user.photo ?? `/assets/user.jpg`} />
+                                <Avatar alt={rating.user.userName?.toLocaleUpperCase()} src={rating.user.photo ?? `/assets/user.png`} />
                               </ListItemAvatar>
                               <ListItemText
                                 primary={

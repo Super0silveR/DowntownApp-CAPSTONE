@@ -137,7 +137,7 @@ function EventContributors({ contributors }: Props) {
           }
         >
           <ListItemAvatar>
-            <Avatar alt={contributor.user.userName.toUpperCase()} src={contributor.user.photo ?? `/assets/user.jpg`} />
+            <Avatar alt={contributor.user.userName.toUpperCase()} src={contributor.user.photo ?? `/assets/user.png`} />
           </ListItemAvatar>
           <ListItemText
             primary={

@@ -39,6 +39,8 @@ export default class UserChatStore {
 
     setLoadingChatRooms = (state: boolean) => this.loadingChatRooms = state;
 
+    setChatRooms = (chatRooms: ChatRoomDto[]) => this.chatRooms = chatRooms;
+
     setLoadingChatRoomCreation = (state: boolean) => this.loadingRoomCreation = state;
 
     setSelectedChatRoom = (id: string) => this.selectedChatRoom = this.getChatRoom(id);

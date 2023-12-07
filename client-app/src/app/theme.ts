@@ -166,9 +166,6 @@ const theme = createTheme({
             }
         }
     },
-    typography: {
-        fontFamily: 'Roboto'
-    },
     palette: {
         mode: 'light',
         primary: {
