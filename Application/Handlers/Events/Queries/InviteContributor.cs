@@ -13,8 +13,8 @@ namespace Application.Handlers.Events.Queries
 	{
 		public class Command : IRequest<Result<Unit>>
 		{
-			public string EventId { get; set; }
-			public string UserId { get; set; }
+			public string? EventId { get; set; }
+			public string? UserId { get; set; }
 		}
 
 		public class Handler : IRequestHandler<Command, Result<Unit>>
