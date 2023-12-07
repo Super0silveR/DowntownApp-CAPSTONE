@@ -62,26 +62,17 @@ const ChatDetails = ({ chatRoomId }: Props) => {
                     }}
                     ref={boxRef}
                 >
-                        {/* {groupedChatsByDate && groupedChatsByDate.map(([group, chats]) => ( */}
-                            <Stack 
-                                direction='column'
-                                justifyContent="space-evenly"
-                                spacing={1}
-                                //key={group}
-                            >
-                                {/* <Typography
-                                    variant='subtitle2' 
-                                    color={theme.palette.primary.main}
-                                    pb={2}
-                                    sx={{fontFamily:'Roboto'}}
-                                    alignSelf='center'
-                                >
-                                    <u>{group}</u>
-                                </Typography> */}
-                                {userChatStore.chats.map((chat, i) => (
-                                    <ChatBubble key={i} content={chat} />
-                                ))}
-                            </Stack>
+                    <Stack 
+                        direction='column'
+                        justifyContent="space-evenly"
+                        spacing={1}
+                    >
+                        {
+                            userChatStore.chats.map((chat, i) => (
+                                <ChatBubble key={i} content={chat} previousDate={userChatStore.chats.at(i - 1)?.sentAt ?? new Date()} />
+                            )) 
+                        }
+                    </Stack>
                 </Box>
                 <Formik
                     enableReinitialize
@@ -96,13 +87,11 @@ const ChatDetails = ({ chatRoomId }: Props) => {
                                     <div style={{ position: 'relative' }}>
                                         {isSubmitting && <CircularProgress size={50} />}
                                         <TextField
-                                            placeholder='Enter your comment (Enter to submit, SHIFT + enter for new line)'
+                                            placeholder='Enter your comment (Enter to submit)'
                                             minRows={1}
                                             maxRows={5}
                                             {...props.field}
                                             onKeyDown={e => {
-                                                if (e.key === 'Enter' && e.shiftKey)
-                                                    console.log('new line');
                                                 if (e.key === 'Enter' && !e.shiftKey) {
                                                     e.preventDefault();
                                                     isValid && handleSubmit();

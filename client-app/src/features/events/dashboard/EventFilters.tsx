@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../app/stores/store';
 import { FilterAlt, TripOrigin, CalendarMonth } from '@mui/icons-material';
-import { Container, Typography, ToggleButtonGroup, ToggleButton, Divider, Slider } from '@mui/material';
+import { Container, Typography, ToggleButtonGroup, ToggleButton, Divider, Slider, Box } from '@mui/material';
 import { LocalizationProvider, DateCalendar } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import theme from '../../../app/theme';
@@ -122,29 +122,31 @@ export default observer(function EventFilters() {
                 color='primary'
             />
             <Divider sx={{pt:1,pb:1,mb:'1.1rem'}} />
-            <Typography 
-                variant='h4'
-                mt={'1.1em'}
-                pb={'1.1em'}
-                fontSize={18}
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    flexWrap: 'wrap',
-                    color: theme.palette.primary.main
-                }}
-            >
-                    <CalendarMonth />
-                    Calendar
-            </Typography>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateCalendar 
-                    showDaysOutsideCurrentMonth
-                    fixedWeekNumber={5} 
-                    onChange={(date) => handleCalendarDateChange(date)}
-                    value={predicate.get('startDate') || dayjs()}
-                />
-            </LocalizationProvider> 
+            <Box>
+                <Typography 
+                    variant='h4'
+                    mt={'1.1em'}
+                    pb={'1.1em'}
+                    fontSize={18}
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexWrap: 'wrap',
+                        color: theme.palette.primary.main
+                    }}
+                >
+                        <CalendarMonth />
+                        Calendar
+                </Typography>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DateCalendar 
+                        showDaysOutsideCurrentMonth
+                        fixedWeekNumber={5} 
+                        onChange={(date) => handleCalendarDateChange(date)}
+                        value={predicate.get('startDate') || dayjs()}
+                    />
+                </LocalizationProvider> 
+            </Box>
         </Container>
     )
 });

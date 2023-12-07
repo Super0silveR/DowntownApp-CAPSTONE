@@ -60,9 +60,9 @@ export default class ProfileStore {
 
     setCreatorFields = (values: CreatorFields) => {
         if (this.profile) {
-            this.profile.creatorProfile!.collaborations = values.collaborations ?? this.profile.creatorProfile?.collaborations;
-            this.profile.creatorProfile!.pastExperiences = values.pastExperiences ?? this.profile.creatorProfile?.pastExperiences;
-            this.profile.creatorProfile!.standOut = values.standOut ?? this.profile.creatorProfile?.standOut;
+            this.profile.creatorProfile!.collaborations = values.collaborations ?? this.profile.creatorProfile?.collaborations ?? '';
+            this.profile.creatorProfile!.pastExperiences = values.pastExperiences ?? this.profile.creatorProfile?.pastExperiences ?? '';
+            this.profile.creatorProfile!.standOut = values.standOut ?? this.profile.creatorProfile?.standOut ?? '';
         }
     }
 
@@ -77,7 +77,6 @@ export default class ProfileStore {
             console.log(e);
         } finally {
             this.setLoadingProfile(false);
-            console.log(this.profile);
         }
     }
 
@@ -114,7 +113,6 @@ export default class ProfileStore {
 
     updateCreatorFields = async (values: CreatorFields) => {
         this.loading = true;
-        console.log(values);
         try {
             await agent.Profiles.editCreatorFields(values);
             this.setCreatorFields(values);

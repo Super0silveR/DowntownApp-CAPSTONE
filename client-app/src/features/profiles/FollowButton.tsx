@@ -1,5 +1,5 @@
 import React, { SyntheticEvent, useState } from "react";
-import { Profile } from "../../app/models/profile";
+import { ProfileDto } from "../../app/models/profile";
 import { observer } from "mobx-react-lite";
 import { Favorite, FavoriteBorder, HeartBroken } from "@mui/icons-material";
 import { Typography } from "@mui/material";
@@ -7,7 +7,7 @@ import { useStore } from "../../app/stores/store";
 import { LoadingButton } from "@mui/lab";
 
 interface Props {
-    profile: Profile | null | undefined;
+    profile: ProfileDto | null | undefined;
 }
 
 /**

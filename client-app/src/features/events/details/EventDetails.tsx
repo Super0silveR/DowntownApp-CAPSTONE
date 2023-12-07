@@ -135,11 +135,11 @@ function EventDetails() {
                 <Grid item xs={12} lg={12}>
                     <EventContributors contributors={event.contributors} />
                 </Grid>
-                <Grid item xs={12} lg={12}>
+                {isCreator && <Grid item xs={12} lg={12}>
                     <EventSchedule schedules={schedules} setSchedules={setSchedules} isCreator={isCreator}/>
-                </Grid>
+                </Grid>}
                 <Grid item xs={12}>
-                    <EventRatingReviews ratings={event.rating.ratings} />
+                    <EventRatingReviews currentUsername={user?.userName ?? ''} ratings={event.rating.ratings} />
                 </Grid>
             </Grid>
         </Box>

@@ -1,7 +1,7 @@
 /** Function from MobX allowing it to compute the observables by itself. */
 import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../api/agent";
-import { Event, ScheduleEvent } from "../models/event";
+import { Contributor, Event, ScheduleEvent } from "../models/event";
 import { v4 as uuid } from 'uuid';
 import dayjs from "dayjs";
 import { Photo } from "../models/photo";
@@ -134,8 +134,6 @@ export default class EventStore {
                 this.predicate.delete('startDate');
                 this.predicate.set('startDate', value);
         }
-
-        console.log(predicate);
     }
 
     /** Action that recomputes the rating of an event. [TODO ; issues with displaying the changes.] */
@@ -390,6 +388,44 @@ export default class EventStore {
             this.setLoading(false);
         }
     };
+
+    inviteContributor = async (eventId: string, userDto: UserDto) => {
+        this.setLoading(true);
+        try {
+            if (!userDto.userName) {
+                throw new Error('Username is required');
+            }
+
+            await agent.Events.inviteUser(eventId, userDto.userName);
+            runInAction(() => {
+                const event = this.eventRegistry.get(eventId);
+                if (event) {
+                    const newContributor: Contributor = {
+                        isActive: true,
+                        isAdmin: false,
+                        created: new Date(),
+                        status: "", 
+                        user: {
+                            userName: "",
+                            displayName: userDto.displayName ?? '',
+                            photo: userDto.photo ?? '',
+                            token: ""
+                        },
+                    };
+                    event.contributors.push(newContributor);
+                }
+            });
+            toast.success('Contributor invited to the event');
+        } catch (error) {
+            console.error('Error inviting contributor:', error);
+            toast.error('Error inviting contributor to the event');
+        } finally {
+            this.setLoading(false);
+        }
+    };
+
+
+
 
     /** PRIVATE METHODS */
 

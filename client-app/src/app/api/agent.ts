@@ -118,7 +118,8 @@ const Events = {
     schedule: (scheduledEvent: ScheduleEvent) => requests.post<void>('/events/scheduling', scheduledEvent),
     // TODO : Cancel
     searchUsers: (query: string) => requests.get<UserDto[]>(`/events/searchUsers?searchTerm=${query}`),
-    AttendEvent: (attendee: EventAttendee) => requests.post<void>('/attend/', attendee)
+    AttendEvent: (attendee: EventAttendee) => requests.post<void>('/attend/', attendee),
+    inviteUser: (eventId: string, userId: string) => requests.post<void>(`/events/${eventId}/inviteUser`, { userId }),
 };
 /**
  * EventTypes related requests. 

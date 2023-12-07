@@ -1,4 +1,4 @@
-import { Avatar, Grid, Tab } from "@mui/material";
+import { Avatar, Box, Grid, Tab } from "@mui/material";
 import ContentBox from "../../app/common/components/ContentBox";
 import ContentHeader from "../../app/common/components/ContentHeader";
 import { MessageOutlined } from "@mui/icons-material";
@@ -28,14 +28,17 @@ const ChatDashboard = () => {
             setSelectedChatRoom(value);
         }
         
-        loadChatRooms().then(() => {
-            runInAction(() => {
-                if (chatRooms.length >= 1) {
-                    const chatRoom = chatRooms.at(0);
-                    updateTabsValue(chatRoom!.id);
-                }
-            })
-        });
+        if (chatRooms.length <= 0) 
+            loadChatRooms().then(() => {
+                runInAction(() => {
+                    if (chatRooms.length >= 1) {
+                        const chatRoom = chatRooms.at(0);
+                        updateTabsValue(chatRoom!.id);
+                    }
+                })
+            });
+        else
+            setValue(chatRooms.at(0)?.id ?? '0');
     }, [chatRooms, loadChatRooms, setSelectedChatRoom]);
 
     return (
@@ -59,6 +62,23 @@ const ChatDashboard = () => {
                                     value={value}
                                 >
                                     <Grid item xs={3}>
+                                        
+                                    <Box 
+                                        marginBottom={3} 
+                                        height={500} 
+                                        display='block' 
+                                        className='messages-box' 
+                                        sx={{
+                                            boxShadow: 'rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px',
+                                            borderRadius: 0.3,
+                                            color: theme.palette.primary.main,
+                                            scrollMargin: 1,
+                                            overflowY: 'auto',
+                                            scrollBehavior: 'smooth',
+                                            overscrollBehavior: 'contain',
+                                            padding:2
+                                        }}
+                                    >
                                         <TabList
                                             sx={{maxHeight:600, width:'100%'}}
                                             onChange={(_, data) => handleChange(data)}
@@ -89,8 +109,9 @@ const ChatDashboard = () => {
                                                     }}
                                                 />
                                             ))}
-                                            {value === '0' && <Tab hidden value='0' />}
+                                            {value === '0' && <Tab hidden value='0' label='No Conversation' />}
                                         </TabList>
+                                    </Box>
                                     </Grid>
                                     <Grid item xs={9}>
                                         <ChatDetails id={value} chatRoomId={value} />
