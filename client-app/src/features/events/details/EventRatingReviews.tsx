@@ -1,15 +1,17 @@
-import { Avatar, List, ListItemAvatar, ListItemText, Paper, Typography } from '@mui/material';
+import { Avatar, IconButton, List, ListItemAvatar, ListItemText, Paper, Stack, Typography } from '@mui/material';
 import ListItem from '@mui/material/ListItem/ListItem';
 import { useTheme } from '@mui/material/styles';
 import { Review } from '../../../app/models/event';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
+import { Delete } from '@mui/icons-material';
 
 interface Props {
     ratings: Review[];
+    currentUsername: string;
 }
 
-function EventRatingReviews({ ratings }: Props) {
+function EventRatingReviews({ ratings, currentUsername }: Props) {
     const theme = useTheme();
     
     return (
@@ -44,14 +46,25 @@ function EventRatingReviews({ ratings }: Props) {
                                     boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 1px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px',
                                     mb: (i < ratings.length) ? 1 : 0
                                 }}
+                                secondaryAction={
+                                    rating.user.userName === currentUsername &&
+                                    <IconButton edge="end" aria-label="delete" aria-details="base-invert">
+                                        <Delete />
+                                    </IconButton>
+                                }
                             >
                               <ListItemAvatar>
                                 <Avatar alt={rating.user.userName?.toLocaleUpperCase()} src={rating.user.photo ?? `/assets/user.jpg`} />
                               </ListItemAvatar>
                               <ListItemText
-                                primary={rating.review}
+                                primary={
+                                    <Stack direction='row' spacing={1}>
+                                        <Typography variant='body1'>{rating.review}</Typography>
+                                        <Typography variant='caption' alignSelf='center' color={theme.palette.primary.main}>({rating.vote}/5)</Typography>
+                                    </Stack>
+                                }
                                 secondary={
-                                  <>
+                                  <> 
                                     <Typography
                                       sx={{ display: 'inline' }}
                                       component="span"

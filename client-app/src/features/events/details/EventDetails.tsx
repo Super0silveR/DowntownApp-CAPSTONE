@@ -139,7 +139,7 @@ function EventDetails() {
                     <EventSchedule schedules={schedules} setSchedules={setSchedules} />
                 </Grid>}
                 <Grid item xs={12}>
-                    <EventRatingReviews ratings={event.rating.ratings} />
+                    <EventRatingReviews currentUsername={user?.userName ?? ''} ratings={event.rating.ratings} />
                 </Grid>
             </Grid>
         </Box>

@@ -21,14 +21,6 @@ import { UserDto } from '../../../app/models/user';
 import { useStore } from '../../../app/stores/store';
 import { observer } from 'mobx-react-lite';
 
-// TEMPORARY.
-const faces = [
-  "http://i.pravatar.cc/300?img=1",
-  "http://i.pravatar.cc/300?img=2",
-  "http://i.pravatar.cc/300?img=3",
-  "http://i.pravatar.cc/300?img=4"
-];
-
 interface Props {
   contributors: Contributor[];
 }
@@ -145,7 +137,7 @@ function EventContributors({ contributors }: Props) {
           }
         >
           <ListItemAvatar>
-            <Avatar alt={contributor.user.userName} src={contributor.user.photo ?? faces[i]} />
+            <Avatar alt={contributor.user.userName.toUpperCase()} src={contributor.user.photo ?? `/assets/user.jpg`} />
           </ListItemAvatar>
           <ListItemText
             primary={

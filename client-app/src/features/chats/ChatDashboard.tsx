@@ -28,7 +28,7 @@ const ChatDashboard = () => {
             setSelectedChatRoom(value);
         }
         
-        if (chatRooms.length <= 1) 
+        if (chatRooms.length <= 0) 
             loadChatRooms().then(() => {
                 runInAction(() => {
                     if (chatRooms.length >= 1) {
