@@ -128,8 +128,6 @@ export default class EventStore {
                 this.predicate.delete('startDate');
                 this.predicate.set('startDate', value);
         }
-
-        console.log(predicate);
     }
 
     /** Action that recomputes the rating of an event. [TODO ; issues with displaying the changes.] */

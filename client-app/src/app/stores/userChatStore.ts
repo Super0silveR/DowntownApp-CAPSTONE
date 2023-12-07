@@ -124,7 +124,6 @@ export default class UserChatStore {
         this.loadingRoomCreation = true;
         try {
             await agent.Chats.createChatRoom(recipientId);
-            console.log(recipientId);
         } catch (e) {
             console.log(e);
             throw e;
