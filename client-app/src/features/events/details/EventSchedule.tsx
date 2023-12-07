@@ -158,7 +158,7 @@ const EventScheduleComponent: React.FC<Props> = ({isCreator}: Props) => {
                     </Grid>
                     <Grid item xs={12}>
                         {selectedEvent?.schedules.map((schedule: EventSchedule, index: number) => (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem'}} >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem'}} key={index} >
                                 <Typography key={index}>{`date: ${dayjs(schedule.scheduled!).format('MMMM DD — YYYY')} Tickets avaliable : ${schedule.availableTickets}`}</Typography>
                                 { isCreator ?  <Button style={{backgroundColor: 'black'}} color='info' onClick={() => modalStore.openModal(<TicketManager scheduledEventId={schedule?.id} />)}>Generate Ticket</Button> 
                                 : <Button style={{backgroundColor: 'black'}} color='info' onClick={() => modalStore.openModal(<TicketPurchase scheduledEventId={schedule?.id} />)} >Buy Ticket</Button>}      
