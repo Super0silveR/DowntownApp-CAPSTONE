@@ -20,6 +20,7 @@ import { Contributor } from '../../../app/models/event';
 import { UserDto } from '../../../app/models/user';
 import { useStore } from '../../../app/stores/store';
 import { observer } from 'mobx-react-lite';
+import toast from 'react-hot-toast';
 
 interface Props {
   contributors: Contributor[];
@@ -61,12 +62,28 @@ function EventContributors({ contributors }: Props) {
       } finally {
           setLoading(false);
       }
-  };
+    };
 
-  const handleInvite = (user: UserDto) => {
-    console.log('Inviting user:', user);
-    closeInviteModal();
-  };
+    const handleInvite = async (user: UserDto) => {
+        const eventId = eventStore.selectedEvent?.id; 
+        if (!eventId) {
+            toast.error('No selected event to invite to');
+            return;
+        }
+        setLoading(true);
+        try {
+            await eventStore.inviteContributor(eventId, user);
+            toast.success('User invited successfully');
+        } catch (error) {
+            console.error('Error inviting user:', error);
+            toast.error('Failed to invite user');
+        } finally {
+            setLoading(false);
+            closeInviteModal();
+        }
+    };
+
+
 
   return (
     <>
