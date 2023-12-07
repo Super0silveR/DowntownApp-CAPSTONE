@@ -336,7 +336,6 @@ export default class EventStore {
     inviteContributor = async (eventId: string, userDto: UserDto) => {
         this.setLoading(true);
         try {
-            // Ensure that userDto.UserName exists and is a string
             if (!userDto.userName) {
                 throw new Error('Username is required');
             }
