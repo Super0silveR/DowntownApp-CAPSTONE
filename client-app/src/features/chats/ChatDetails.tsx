@@ -1,5 +1,5 @@
 import { Send } from "@mui/icons-material";
-import { Box, CircularProgress, IconButton, InputAdornment, Stack, TextField, Typography } from "@mui/material";
+import { Box, CircularProgress, IconButton, InputAdornment, Stack, TextField } from "@mui/material";
 import { Formik, Field, FieldProps } from "formik";
 import { Form } from "react-router-dom";
 import * as Yup from 'yup';
@@ -69,7 +69,7 @@ const ChatDetails = ({ chatRoomId }: Props) => {
                     >
                         {
                             userChatStore.chats.map((chat, i) => (
-                                <ChatBubble key={i} content={chat} previousDate={userChatStore.chats.at(i - 1)?.sentAt!} />
+                                <ChatBubble key={i} content={chat} previousDate={userChatStore.chats.at(i - 1)?.sentAt ?? new Date()} />
                             )) 
                         }
                     </Stack>
