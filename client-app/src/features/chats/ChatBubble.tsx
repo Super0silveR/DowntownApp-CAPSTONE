@@ -5,9 +5,10 @@ import dayjs from "dayjs";
 
 interface Props { 
     content: UserChatDto;
+    previousDate: Date;
 }
 
-const ChatBubble = ({ content } : Props) => { 
+const ChatBubble = ({ content } : Props) => {
     return (
         <>
             <Box 
@@ -25,7 +26,7 @@ const ChatBubble = ({ content } : Props) => {
             >
                 <Typography alignContent='center' display='block'>{content.message}</Typography>
             </Box>
-            {content.isLastInGroup &&    
+            {content.isLastInGroup &&   
                 <Typography 
                     component="span"
                     alignSelf={content.isMe ? 'flex-end' : 'flex-start'} 
