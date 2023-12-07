@@ -10,4 +10,5 @@ export interface EventSchedule {
         title: string;
         description: string;
     };
+    availableTickets?: number;
 }

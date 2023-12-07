@@ -166,6 +166,9 @@ const theme = createTheme({
             }
         }
     },
+    typography: {
+        fontFamily: 'sans-serif'
+    },
     palette: {
         mode: 'light',
         primary: {
