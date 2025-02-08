@@ -27,10 +27,10 @@ and re-platforming.
 
 ## Members [Roles]
 
-1. Anys, Younes [Developer]
-2. Harvey, Vincent [Business Analyst, Lead Architect, Lead Developer, Project Manager, Backend/Frontend, QA Manager]
-3. Mahamane Sidi, Elias [Developer, Backend/Frontend]
-4. Wahbi, Nabil [Developer]
+1. Anys, Younes [Software Engineer]
+2. Harvey, Vincent [Principal Software Engineer]
+3. Mahamane Sidi, Elias [Lead Software Engineer]
+4. Wahbi, Nabil [Software Engineer]
 
 ## Objectives
 
@@ -50,8 +50,6 @@ simulitanely, live streaming.
 
 7. (Ambition) Creating a more versatile mobile app for the users.
 
-8. [...]
-
 ## Anticipated Architecture
 
 1. Backend:		.NET Core 6.
@@ -69,12 +67,6 @@ financial APIs for these transactions.
 
 5. Avoid service to underage users
 
-6. [...]
+## Project Status 
 
-## Legal and Social Issues
-
-Todo.
-
-## Initial Plans
-
-Todo.
+Handower to Client was completed on Febuary 2024
